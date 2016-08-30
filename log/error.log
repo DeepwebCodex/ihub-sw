@@ -1,0 +1,473 @@
+2016/08/26 11:59:55 [error] 28363#28363: *26 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Log/Writer.php(202): Monolog\Logger->error(Object(UnexpectedValueException), Array)
+#4 /...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(Symfony\Component\Debug\Exception\FatalErrorException), Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Ill
+2016/08/26 12:58:56 [error] 28363#28363: *284 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected '$kernel' (T_VARIABLE) in /media/doomsentinel/Storage/www/integrations/public/index.php on line 58" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /fdgdfg HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/08/26 12:58:57 [error] 28363#28363: *284 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected '$kernel' (T_VARIABLE) in /media/doomsentinel/Storage/www/integrations/public/index.php on line 58" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /fdgdfg HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/08/26 12:58:58 [error] 28363#28363: *284 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected '$kernel' (T_VARIABLE) in /media/doomsentinel/Storage/www/integrations/public/index.php on line 58" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /fdgdfg HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/08/26 12:59:05 [error] 28363#28363: *284 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected end of file in /media/doomsentinel/Storage/www/integrations/public/index.php on line 59" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /fdgdfg HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/08/30 17:01:04 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:01:39 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:01:41 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:01:41 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:01:42 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:01:42 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:01:43 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:01:43 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:01:46 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:01:46 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:28:41 [error] 12808#12808: *275 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:29:22 [error] 12808#12808: *275 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:31:50 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:31:51 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:31:51 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:31:51 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:31:56 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:45 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:45 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:45 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:48 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:48 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:49 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:49 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:32:49 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:34:00 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:34:00 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:34:01 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:34:01 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:37:53 [error] 12808#12808: *393 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:37:54 [error] 12808#12808: *393 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/08/30 17:40:40 [error] 12808#12808: *418 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
+#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
