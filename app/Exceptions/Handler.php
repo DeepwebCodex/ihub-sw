@@ -2,12 +2,15 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Api\Traits\ApiHandlerTrait;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
 
 class Handler extends ExceptionHandler
 {
+    use ApiHandlerTrait;
     /**
      * A list of the exception types that should not be reported.
      *
@@ -44,6 +47,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($controller = $this->isApiCall()){
+            $response = $this->getApiExceptionResponse($controller, $exception);
+            if($response instanceof Response){
+                return $response;
+            }
+        }
+
         if ($this->isHttpException($exception))
         {
             return $this->renderHttpException($exception);
