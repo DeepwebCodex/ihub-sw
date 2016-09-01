@@ -15,11 +15,13 @@ trait ApiHandlerTrait
      */
     protected function isApiCall(){
         $currentAction = \Route::currentRouteAction();
-        list($controller, $method) = explode('@', $currentAction);
 
-        if (is_subclass_of($controller, BaseApiController::class))
-        {
-            return $controller;
+        if($currentAction) {
+            list($controller, $method) = explode('@', $currentAction);
+
+            if (is_subclass_of($controller, BaseApiController::class)) {
+                return $controller;
+            }
         }
 
         return false;

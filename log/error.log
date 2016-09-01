@@ -1423,3 +1423,207 @@ Stack trace:
 #0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
 #1 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalErrorException))
 #2 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/
+2016/09/01 16:35:48 [error] 12809#12809: *1172 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined offset: 1 in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', '/media/doomsent...', 18, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\HandleExceptions->renderHttpResponse(Object(ErrorException))
+#4 [internal function]: Illuminate\Foundation\B...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined offset: 1 in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', '/media/doomsent...', 18, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\
+2016/09/01 16:36:27 [error] 12809#12809: *1172 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined offset: 1 in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', '/media/doomsent...', 18, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\HandleExceptions->renderHttpResponse(Object(ErrorException))
+#4 [internal function]: Illuminate\Foundation\B...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined offset: 1 in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', '/media/doomsent...', 18, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\
+2016/09/01 16:36:28 [error] 12809#12809: *1172 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined offset: 1 in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', '/media/doomsent...', 18, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\HandleExceptions->renderHttpResponse(Object(ErrorException))
+#4 [internal function]: Illuminate\Foundation\B...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined offset: 1 in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', '/media/doomsent...', 18, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\
+2016/09/01 16:50:00 [error] 12814#12814: *1202 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 33
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 33
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "POST /casino HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/09/01 16:50:21 [error] 12814#12814: *1202 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 34
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 34
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "POST /casino HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/09/01 17:00:01 [error] 12814#12814: *1224 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined offset: 1 in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', '/media/doomsent...', 18, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\HandleExceptions->renderHttpResponse(Object(ErrorException))
+#4 [internal function]: Illuminate\Foundation\B...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined offset: 1 in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', '/media/doomsent...', 18, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\
+2016/09/01 17:33:31 [error] 12814#12814: *1342 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Class 'SoapBox\Formatter\Formatter' not found in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php:25
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php(41): App\Components\Formatters\JsonApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\JsonApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Compon...
+PHP message: PHP Fatal error:  Uncaught Error: Class 'SoapBox\Formatter\Formatter' not found in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php:25
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php(41): App\Components\Formatters\JsonApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\JsonApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\H
+2016/09/01 17:33:32 [error] 12814#12814: *1342 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Class 'SoapBox\Formatter\Formatter' not found in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php:25
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php(41): App\Components\Formatters\JsonApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\JsonApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Compon...
+PHP message: PHP Fatal error:  Uncaught Error: Class 'SoapBox\Formatter\Formatter' not found in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php:25
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php(41): App\Components\Formatters\JsonApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\JsonApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\H
+2016/09/01 17:44:14 [error] 12814#12814: *1348 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function Nathanmac\Utilities\Parser\Facades\Parser() in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php:27
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(43): App\Components\Formatters\XmlApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), ...
+PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function Nathanmac\Utilities\Parser\Facades\Parser() in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php:27
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(43): App\Components\Formatters\XmlApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(1
+2016/09/01 17:44:58 [error] 12814#12814: *1348 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function Nathanmac\Utilities\Parser\Facades\Parser() in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php:27
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(43): App\Components\Formatters\XmlApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), ...
+PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function Nathanmac\Utilities\Parser\Facades\Parser() in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php:27
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(43): App\Components\Formatters\XmlApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(1
+2016/09/01 17:45:14 [error] 12814#12814: *1348 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function Nathanmac\Utilities\Parser\Facades\Parser() in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php:27
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(43): App\Components\Formatters\XmlApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), ...
+PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function Nathanmac\Utilities\Parser\Facades\Parser() in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php:27
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(43): App\Components\Formatters\XmlApiFormatter->format(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#2 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(1
+2016/09/01 17:47:55 [error] 12814#12814: *1360 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(42): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Obj...
+PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(42): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.ph
+2016/09/01 17:47:56 [error] 12814#12814: *1360 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(42): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Obj...
+PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(42): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.ph
+2016/09/01 17:47:56 [error] 12814#12814: *1360 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(42): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Obj...
+PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(42): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.ph
+2016/09/01 17:47:56 [error] 12814#12814: *1360 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(42): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Obj...
+PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(42): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.ph
+2016/09/01 18:03:48 [error] 12814#12814: *1366 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(57): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->formatException(Obj...
+PHP message: PHP Fatal error:  Uncaught Nathanmac\Utilities\Parser\Exceptions\ParserException: Failed To Parse XML in /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Formats/XML.php:37
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(253): Nathanmac\Utilities\Parser\Formats\XML->parse(Array)
+#1 /media/doomsentinel/Storage/www/integrations/vendor/nathanmac/parser/src/Parser.php(269): Nathanmac\Utilities\Parser\Parser->parse(Array, Object(Nathanmac\Utilities\Parser\Formats\XML))
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): Nathanmac\Utilities\Parser\Parser->xml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(57): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.ph
+2016/09/01 18:04:12 [error] 12814#12814: *1366 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: SimpleXMLElement::__construct(): Entity: line 1: parser error : Start tag expected, '&lt;' not found in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php:35
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'SimpleXMLElemen...', '/media/doomsent...', 35, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(35): SimpleXMLElement->__construct('<?xml version="...')
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): App\Components\Formatters\XmlApiFormatter->arrayToXml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(57): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\XmlApiFormatter->...
+PHP message: PHP Fatal error:  Uncaught ErrorException: SimpleXMLElement::__construct(): Entity: line 1: parser error : Start tag expected, '&lt;' not found in /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php:35
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'SimpleXMLElemen...', '/media/doomsent...', 35, Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(35): SimpleXMLElement->__construct('<?xml version="...')
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(27): App\Components\Formatters\XmlApiFormatter->arrayToXml(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(57): App\Components\Formatters\XmlApiFormatter->format(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits

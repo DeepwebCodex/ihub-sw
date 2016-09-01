@@ -9,10 +9,10 @@
 namespace App\Components\Formatters;
 
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
-use SoapBox\Formatter\Formatter;
+use SimpleXMLElement;
+
 
 class XmlApiFormatter extends BaseApiFormatter
 {
@@ -24,11 +24,25 @@ class XmlApiFormatter extends BaseApiFormatter
     public function format(array $data)
     {
         if($data) {
-            $formatter = Formatter::make($data, Formatter::ARR);
-            return $formatter->toXml();
+            return $this->arrayToXml($data);
         }
 
         return '';
+    }
+
+    private function arrayToXml(array $data, $xml = null){
+        if (is_null($xml)) {
+            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><root/>');
+        }
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $this->arrayToXml($value, $xml->addChild($key));
+            } else {
+                $xml->addChild($key, $value);
+            }
+        }
+
+        return $xml->asXML();
     }
 
 

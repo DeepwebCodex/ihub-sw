@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Formatters\XmlApiFormatter;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\Templates\CasinoTemplate;
 use App\Http\Controllers\Api\Base\BaseApiController;
+use Illuminate\Http\Request;
 
 class CasinoController extends BaseApiController
 {
@@ -19,9 +19,7 @@ class CasinoController extends BaseApiController
         parent::__construct($formatter);
     }
 
-    public function index(){
-
-
+    public function index(Request $request){
         return $this->respondOk();
     }
 }

@@ -178,7 +178,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-        \Kozz\Laravel\Providers\Guzzle::class
+        \Kozz\Laravel\Providers\Guzzle::class,
+        \Nathanmac\Utilities\Parser\ParserServiceProvider::class
     ],
 
     /*
@@ -226,7 +227,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class
+        'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class,
+        'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class
     ],
 
 ];

@@ -11,7 +11,7 @@
         "filp/whoops": "~1.0",
         "jenssegers/mongodb": "^3.0",
         "kozz/laravel-guzzle-provider": "~6.0",
-        "soapbox/laravel-formatter": "2.x"
+        "Nathanmac/Parser": "3.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

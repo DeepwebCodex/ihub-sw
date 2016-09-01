@@ -14,4 +14,4 @@ use Illuminate\Http\Request;
 */
 
 /**Casino controller routes */
-Route::get('casino', "CasinoController@index");
+Route::post('casino', "CasinoController@index");

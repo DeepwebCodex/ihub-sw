@@ -9,10 +9,8 @@
 namespace App\Components\Formatters;
 
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
-use SoapBox\Formatter\Formatter;
 
 class JsonApiFormatter extends BaseApiFormatter
 {
@@ -22,8 +20,7 @@ class JsonApiFormatter extends BaseApiFormatter
      */
     public function format(array $data){
         if($data) {
-            $formatter = Formatter::make($data, Formatter::ARR);
-            return $formatter->toJson();
+            return json_encode($data);
         }
 
         return '';
