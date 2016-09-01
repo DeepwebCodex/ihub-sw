@@ -10,7 +10,9 @@ namespace App\Components\Formatters;
 
 
 
+use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\Templates\IExceptionTemplate;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\Debug\Exception\FlattenException;
 
@@ -19,6 +21,8 @@ use Symfony\Component\Debug\Exception\FlattenException;
 */
 abstract class BaseApiFormatter
 {
+    use MetaDataTrait;
+
     private $exceptionTemplate;
 
     /**
@@ -32,6 +36,14 @@ abstract class BaseApiFormatter
      * @return Response
      */
     abstract public function formatException(\Exception $exception);
+
+    /**
+     * @param $statusCode
+     * @param $message
+     * @param $payload
+     * @return Response
+     */
+    abstract public function formatResponse($statusCode, string $message, array $payload = []);
 
     public function setTemplate($templateClass){
         if($templateClass){
@@ -71,6 +83,15 @@ abstract class BaseApiFormatter
             $exceptionData['payload'] = json_decode($e->getMessage(), true);
         } else if($e->getMessage()) {
             $exceptionData['payload']['message'] = $e->getMessage();
+        }
+
+        if($e->getCode()){
+            $exceptionData['payload'] = array_merge($exceptionData['payload'], ['code' => $e->getCode()]);
+        }
+
+        $metaData = $this->getMetaData();
+        if($metaData) {
+            $exceptionData['payload'] = array_merge($exceptionData['payload'], $metaData);
         }
 
         $exceptionData['payload'] = $this->mapPayload($exceptionData['payload']);

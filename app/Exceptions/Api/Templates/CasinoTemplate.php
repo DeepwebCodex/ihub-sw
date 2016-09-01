@@ -23,8 +23,8 @@ class CasinoTemplate implements IExceptionTemplate
             'status' => false,
             'code' => (int)$this->useElement('code', 0),
             'message' => $this->useElement('message', 'Unknown'),
-            'token' => isset($item['token']) ? $item['token'] : '',
-            'signature' => isset($item['signature']) ? $item['signature'] : '',
+            'token' => $this->useElement('token', ''),
+            'signature' => $this->useElement('signature', ''),
             'time' => time()
         ];
 
