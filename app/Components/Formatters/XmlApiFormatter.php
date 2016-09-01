@@ -23,9 +23,12 @@ class XmlApiFormatter extends BaseApiFormatter
      */
     public function format(array $data)
     {
-        $formatter = Formatter::make($data, Formatter::ARR);
+        if($data) {
+            $formatter = Formatter::make($data, Formatter::ARR);
+            return $formatter->toXml();
+        }
 
-        return $formatter->toXml();
+        return '';
     }
 
 
@@ -44,7 +47,7 @@ class XmlApiFormatter extends BaseApiFormatter
 
     public function formatResponse($statusCode, string $message, array $payload = []){
 
-        $payload = array_merge($payload, compact('message'), $this->getMetaData()?:[]);
+        $payload = array_merge($payload, $message ? compact('message') : [], $this->getMetaData()?:[]);
 
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'application/xml'

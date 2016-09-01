@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Formatters\XmlApiFormatter;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\Templates\CasinoTemplate;
