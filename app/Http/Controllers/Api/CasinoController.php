@@ -17,9 +17,13 @@ class CasinoController extends BaseApiController
     public function __construct(XmlApiFormatter $formatter)
     {
         parent::__construct($formatter);
+
+        $this->middleware('check.json')->except('gen_token');
     }
 
     public function index(Request $request){
         return $this->respondOk();
     }
+
+
 }
