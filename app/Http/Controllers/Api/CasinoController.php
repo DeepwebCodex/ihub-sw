@@ -9,8 +9,15 @@ use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\CasinoTemplate;
 use App\Http\Controllers\Api\Base\BaseApiController;
+use App\Http\Requests\Simple\AuthRequest;
+use App\Http\Requests\Simple\PayInRequest;
+use App\Http\Requests\Simple\PayOutRequest;
 use Illuminate\Http\Request;
 
+/**
+ * Class CasinoController
+ * @package App\Http\Controllers\Api
+ */
 class CasinoController extends BaseApiController
 {
     use MetaDataTrait;
@@ -21,10 +28,11 @@ class CasinoController extends BaseApiController
     {
         parent::__construct($formatter);
 
-        $this->middleware('check.json')->except('gen_token');
+        $this->middleware('input.json')->except('gen_token');
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
         $accountManager = new AccountManager();
 
@@ -35,5 +43,58 @@ class CasinoController extends BaseApiController
         return $this->respondOk(200, '', $accountManager->getOperations(1452519, AccountManager::DEPOSIT, 504127515));
     }
 
+    /**
+     * @param AuthRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function auth(AuthRequest $request)
+    {
 
+    }
+
+    /**
+     * @param AuthRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getbalance(AuthRequest $request)
+    {
+
+    }
+
+    /**
+     * @param AuthRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refreshtoken(AuthRequest $request)
+    {
+
+    }
+
+    /**
+     * @param PayInRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function payin(PayInRequest $request)
+    {
+
+    }
+
+
+    /**
+     * @param PayOutRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function payout(PayOutRequest $request)
+    {
+
+    }
+
+    /**
+     * @param string $casino
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function gen_token($casino = '')
+    {
+
+    }
 }
