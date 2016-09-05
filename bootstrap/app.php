@@ -41,6 +41,23 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+if (env('LOG_MONGO_SERVER')) {
+    $app->configureMonologUsing(function ($monolog) {
+        $config = config('log.mongo');
+
+        $mongoHandler = new Monolog\Handler\MongoDBHandler(
+            new \MongoDB\Client($config['server']),
+            $config['db_name'],
+            $config['collection_name']
+        );
+
+        $mongoHandler->setFormatter(new \App\Log\Monolog\Formatter\AppFormatter());
+
+        /** @var \Monolog\Logger $monolog */
+        $monolog->pushHandler($mongoHandler);
+    });
+}
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

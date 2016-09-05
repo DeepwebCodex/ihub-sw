@@ -20,6 +20,8 @@ class CasinoController extends BaseApiController
     public function __construct(JsonApiFormatter $formatter)
     {
         parent::__construct($formatter);
+
+        $this->middleware('check.json')->except('gen_token');
     }
 
     public function index(Request $request){
@@ -32,4 +34,6 @@ class CasinoController extends BaseApiController
 
         return $this->respondOk(200, '', $accountManager->getOperations(1452519, AccountManager::DEPOSIT, 504127515));
     }
+
+
 }
