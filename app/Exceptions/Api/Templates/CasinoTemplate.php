@@ -11,7 +11,7 @@ namespace App\Exceptions\Api\Templates;
 
 class CasinoTemplate implements IExceptionTemplate
 {
-    private $strict = false;
+    private $strict = true;
 
     private $item;
 
