@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 use App\Exceptions\Api\ApiHttpException;
 
 /**
- * Class CheckJson
+ * Class InputJson
  * @package App\Http\Middleware
  */
 class InputJson
@@ -21,7 +21,7 @@ class InputJson
     {
         $bodyContent = $request->getContent();
         if (!$bodyContent) {
-            throw new ApiHttpException('Empty request body');
+            throw new ApiHttpException(500, trans('api/all.s_empty_source'));
         }
 
         $bodyContentDecoded = json_decode($bodyContent, true);
@@ -30,6 +30,6 @@ class InputJson
             return $next($request);
         }
 
-        throw new ApiHttpException('JSON format required');
+        throw new ApiHttpException(500, trans('api/all.s_cant_parse_source'));
     }
 }
