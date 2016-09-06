@@ -9,8 +9,15 @@ use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\CasinoTemplate;
 use App\Http\Controllers\Api\Base\BaseApiController;
+use App\Http\Requests\Simple\AuthRequest;
+use App\Http\Requests\Simple\PayInRequest;
+use App\Http\Requests\Simple\PayOutRequest;
 use Illuminate\Http\Request;
 
+/**
+ * Class CasinoController
+ * @package App\Http\Controllers\Api
+ */
 class CasinoController extends BaseApiController
 {
     use MetaDataTrait;
@@ -24,7 +31,8 @@ class CasinoController extends BaseApiController
         //$this->middleware('check.json')->except('gen_token');
     }
 
-    public function index(){
+    public function index(Request $request)
+    {
 
         $accountManager = new AccountManager();
 
@@ -40,5 +48,58 @@ class CasinoController extends BaseApiController
         return $this->respondOk(200, '', ['code' => $accountManager->getFreeCardId()]);
     }
 
+    /**
+     * @param AuthRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function auth(AuthRequest $request)
+    {
 
+    }
+
+    /**
+     * @param AuthRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getbalance(AuthRequest $request)
+    {
+
+    }
+
+    /**
+     * @param AuthRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refreshtoken(AuthRequest $request)
+    {
+
+    }
+
+    /**
+     * @param PayInRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function payin(PayInRequest $request)
+    {
+
+    }
+
+
+    /**
+     * @param PayOutRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function payout(PayOutRequest $request)
+    {
+
+    }
+
+    /**
+     * @param string $casino
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function gen_token($casino = '')
+    {
+
+    }
 }

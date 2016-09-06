@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'test' => 'test',
+    'error_methond_not_found' => 'Method not found ',
+    'auth_done' => 'Auth done',
+    'empty_input' => 'Empty input',
+    'not_find_token' => 'Can\'t find token',
+    'user_auth_fail' => 'Can\'t find user session',
+    'check_service' => 'Haven\'t info user',
+    'check_wallet' => 'Can\'t find wallet',
+    'not_find_element' => 'Can\'t find element',
+    'not_enough_money' => 'not enough money',
+    'fonds_done' => 'Found done',
+    'not_find_imprint' => 'Not find imprint',
+    'currency_not_much' => 'currency_not_much',
+    'not_find_element2' => 'Can\'t find element in bets array',
+    'finance_error' => 'Finance error',
+    'bet_done' => 'Operation done:',
+    'Finance_error2' => 'Answer is empty from finance rest. Curl obj:',
+    'Finance_error3' => 'Finansce rest returned error',
+    'cancel_error' => 'Can\'t cancell for operation',
+    'cant_find_element_bets' => 'Can\'t find element bets',
+    'rollback_error' => 'Can\'t find win operation',
+    'rollback_error_check_roll' => 'Duplicate rollback operation',
+    'duplicate' => 'Duplicate operation',
+];
