@@ -17,14 +17,14 @@ class CasinoController extends BaseApiController
 
     public static $exceptionTemplate = CasinoTemplate::class;
 
-    public function __construct(JsonApiFormatter $formatter)
+    public function __construct(XmlApiFormatter $formatter)
     {
         parent::__construct($formatter);
 
-        $this->middleware('check.json')->except('gen_token');
+        //$this->middleware('check.json')->except('gen_token');
     }
 
-    public function index(Request $request){
+    public function index(){
 
         $accountManager = new AccountManager();
 
@@ -32,7 +32,12 @@ class CasinoController extends BaseApiController
 
         //exit(dump($accountManager->createTransaction(27, -6, 1452573, 1, AccountManager::RUB, AccountManager::DEPOSIT, 514100864, 'Commnet')));
 
-        return $this->respondOk(200, '', $accountManager->getOperations(1452519, AccountManager::DEPOSIT, 504127515));
+        //exit(dump($accountManager->getCashDeskInfo(5)));
+        //exit(dump($accountManager->getCashDeskInfo(3001)));
+        exit(dump($accountManager->getPlayerInfoByPassportForSccs(83, 'xxx', 123)));
+        exit(dump($accountManager->getPlayerInfoByCcidForSccs(83, 7000007)));
+
+        return $this->respondOk(200, '', ['code' => $accountManager->getFreeCardId()]);
     }
 
 

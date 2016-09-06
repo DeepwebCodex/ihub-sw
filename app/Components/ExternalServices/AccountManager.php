@@ -9,10 +9,11 @@
 namespace App\Components\ExternalServices;
 
 
-use App\Exceptions\Api\ApiHttpException;
-use GuzzleHttp\RequestOptions;
+use App\Components\ExternalServices\Traits\CashDeskRohRequest;
+use App\Components\ExternalServices\Traits\RohRequest;
+use App\Components\ExternalServices\Traits\RohRestRequest;
+use App\Components\ExternalServices\Traits\SessionRequest;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Exception\InvalidResourceException;
 
 /**
@@ -20,6 +21,11 @@ use Symfony\Component\Translation\Exception\InvalidResourceException;
 */
 class AccountManager
 {
+    use RohRequest;
+    use SessionRequest;
+    use RohRestRequest;
+    use CashDeskRohRequest;
+
     const DEPOSIT = 0;
     const WITHDRAWAL = 1;
 
@@ -28,6 +34,7 @@ class AccountManager
     const RUB = 'RUB';
     const UAH = 'UAH';
     const USD = 'USD';
+    const BYR = 'BYR';
 
     //ROH erlang account manager
     private $accountRohHost;
@@ -40,6 +47,14 @@ class AccountManager
     //erlang card/stat manager
     private $restHost;
     private $restPort;
+
+    //erlang card manager ROH
+    private $cardsRohHost;
+    private $cardsRohPort;
+
+    //erlang cashdesk API point
+    private $cashdeskRohHost;
+    private $cashdeskRohPort;
 
     private $request;
 
@@ -54,7 +69,12 @@ class AccountManager
 
     private function setUpConfig(){
 
-        if(!config('external.api.account_roh') || !config('external.api.account_session') || !config('external.api.account_op')) {
+        if(!config('external.api.account_roh') ||
+            !config('external.api.account_session') ||
+            !config('external.api.account_op') ||
+            !config('external.api.cards_roh') ||
+            !config('external.api.cash_desk_roh')) {
+
             throw new InvalidResourceException("Invalid API configuration");
         }
 
@@ -66,8 +86,21 @@ class AccountManager
 
         $this->restHost = config('external.api.account_op.host');
         $this->restPort = config('external.api.account_op.port');
+
+        $this->cardsRohHost = config('external.api.cards_roh.host');
+        $this->cardsRohPort = config('external.api.cards_roh.port');
+
+        $this->cashdeskRohHost = config('external.api.cash_desk_roh.host');
+        $this->cashdeskRohPort = config('external.api.cash_desk_roh.port');
     }
 
+    /**
+     * Get user info by userID or ccid
+     *
+     * @param int $userId
+     * @param bool $ccid
+     * @return mixed
+     */
     public function getUserInfo(int $userId, bool $ccid = false)
     {
         $params = [
@@ -83,14 +116,28 @@ class AccountManager
         return $this->postMessageRoh('accounts/account/get', $params);
     }
 
+    /**
+     * @param string $login
+     * @return mixed
+     */
     public function checkLoginSession(string $login){
         return $this->getSession('session/exists', [
             'login' => $login
         ]);
     }
 
+    /**
+     * @return mixed
+     */
     public function getFreeOperationId(){
         return $this->postMessageRoh('accounts/operation/get_free_operation_id', []);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFreeCardId(){
+        return $this->postMessageCardRoh('cards/card/get_free_id',[]);
     }
 
     /**
@@ -184,113 +231,137 @@ class AccountManager
         ], 3);
     }
 
-    private function postMessageRoh(string $method, array $params, int $retry = 0)
-    {
-        try {
-            $response = app('Guzzle')::request(
-                'POST',
-                $this->buildRohHost($method),
+    /**
+     * Calculate card with bonus and taxes based on confagent $taxParams for specific partner
+     *
+     * @param int $partner_id
+     * @param float $sum_in
+     * @param string $currency
+     * @param float $sum_out
+     * @param array $taxParams
+     * @return mixed
+     */
+    public function calcCardWithBonusAndTaxes(int $partner_id, float $sum_in, string $currency, float $sum_out, array $taxParams){
+        return $this->postMessageCardRoh('cards/calculator/calc_card_with_bonus_and_tax',[
+            "sum_in" => (float) $sum_in,
+            "currency" => (string) $currency,
+            "containers" => [
                 [
-                    RequestOptions::HEADERS => [
-                        'Accept' => 'application/json'
-                    ],
-                    RequestOptions::JSON => $params
+                    "sum_out" => (float) $sum_out,
+                    "result" => "win"
                 ]
-            );
-
-            if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < Response::HTTP_BAD_REQUEST) {
-                if ($data = $response->getBody()) {
-                    if ($data = json_decode($data->getContents(), true)) {
-                        //validate response data
-                        if(isset($data['status']) && $data['status'] == 'error'){
-                            throw new \Exception(json_encode($data['error']), isset($data['code']) ? $data['code'] : 0);
-                        }
-
-                        if(isset($data['response']) && !empty($data['response'])){
-                            return $data['response'];
-                        }
-                    }
-                }
-            }
-
-        } catch (\Exception $e) {
-
-            /*Retry operation on fail*/
-
-            if($retry > 0){
-                $retry --;
-                $this->postMessageRoh($method, $params, $retry);
-            }
-
-            throw new ApiHttpException(500, $e->getMessage());
-        }
+            ],
+            "tax_type" => (int) $taxParams['tax_type'],
+            "tax_rate" => (double) $taxParams['tax_rate'],
+            "tax_type2" => (int) $taxParams['tax_type2'],
+            "tax_rate2" => (double) $taxParams['tax_rate2'],
+            "tax_type3" => (int) $taxParams['tax_type3'],
+            "tax_rate3" => (double) $taxParams['tax_rate3'],
+            "bonus_type" => (int) $taxParams['bonus_type'],
+            "bonus_rate" => (double) $taxParams['bonus_rate'],
+            "partner_id" => (int) $partner_id
+        ]);
     }
 
-    private function getSession(string $method, array $params, int $retry=0){
-        try {
-            $response = app('Guzzle')::request(
-                'GET',
-                $this->buildSessionHost($method),
-                [
-                    RequestOptions::QUERY => $params
-                ]
-            );
+    /**
+     * Returns aggregated taxes values based on calcCardWithBonusAndTaxes response
+     *
+     * @param array $data
+     * @return mixed
+     */
+    public function aggregateTaxes(array $data){
+        //TODO::ger real input parameters for this action
+        return $this->postMessageCardRoh('cards/select/aggr_taxes', $data);
+    }
 
-            if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < Response::HTTP_BAD_REQUEST) {
-                if ($data = $response->getBody()) {
-                    if ($data = json_decode($data->getContents(), true)) {
-                        if(isset($data['error'])){
-                            throw new ApiHttpException(500, '', $data['error']);
-                        }
+    /**
+     * Gets some user info maybe this function is deprecated
+     *
+     * @param int $partner_id
+     * @param int $ccid
+     * @return mixed
+     */
+    public function getPlayerInfoByCcidForSccs(int $partner_id, int $ccid){
+        return $this->postCashDesc('client_get_by_ccid.yaws', [
+            'partner_id'    => $partner_id,
+            'ccid'          => $ccid
+        ]);
+    }
 
-                        if(isset($data['exists']) && !empty($data['exists'])){
-                            return $data['exists'];
-                        }
-                    }
-                }
-            }
+    /**
+     * Gets some user info maybe this function is deprecated
+     *
+     * @param int $partner_id
+     * @param string $passport_se
+     * @param int $passport_no
+     * @return mixed
+     */
+    public function getPlayerInfoByPassportForSccs(int $partner_id, string $passport_se, int $passport_no){
+        //we are expecting internal array from this request so reset is required to get first element
+        $data = $this->postCashDesc('client_get_by_document', [
+            'partner_id'    => $partner_id,
+            'doc_seria'     => $passport_se,
+            'doc_number'    => $passport_no
+        ]);
 
-        } catch (\Exception $e) {
+        return is_array($data) ? reset($data) : $data;
+    }
 
-            /*Retry operation on fail*/
 
-            if($retry > 0){
-                $retry --;
-                $this->getSession($method, $params, $retry);
-            }
+    /**
+     * @param $cashDeskId
+     * @return mixed
+     */
+    public function getCashDeskInfo($cashDeskId){
+        return $this->postCashDesc('cashdesk_info.yaws', [
+            'cashdesk_id' => $cashDeskId
+        ]);
+    }
 
-            throw new ApiHttpException(500, $e->getMessage());
-        }
+    /*
+     *
+     * REST REQUEST PROXY FUNCTIONS --------------------------------------------
+     * postMessageRoh
+     * postMessageCardRoh
+     * getSession
+     * getRest
+     * getCashDesc
+     *
+     */
+
+    private function postMessageRoh(string $method, array $params, int $retry = 0)
+    {
+        return $this->sendPostRoh($this->buildRohHost($method), $params, $retry);
+    }
+
+    private function postMessageCardRoh(string $method, array $params, int $retry = 0)
+    {
+        return $this->sendPostRoh($this->buildCardsRohHost($method), $params, $retry);
+    }
+
+    private function getSession(string $method, array $params, int $retry = 0)
+    {
+        return $this->sendGetSession($this->buildSessionHost($method), $params, $retry);
     }
 
     private function getRest(string $method, array $params){
-        try {
-            $response = app('Guzzle')::request(
-                'GET',
-                $this->buildRestHost($method),
-                [
-                    RequestOptions::QUERY => $params
-                ]
-            );
-
-            if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < Response::HTTP_BAD_REQUEST) {
-                if ($data = $response->getBody()) {
-                    if ($data = json_decode($data->getContents(), true)) {
-                        if(isset($data['status']) && $data['status'] == "error"){
-                            throw new ApiHttpException(500, '');
-                        }
-
-                        if(isset($data['operations'])){
-                            return $data['operations'];
-                        }
-                    }
-                }
-            }
-
-        } catch (\Exception $e) {
-            throw new ApiHttpException(500, $e->getMessage());
-        }
+        return $this->sendGetRoh($this->buildRestHost($method), $params);
     }
+
+    private function postCashDesc(string $method, array $params){
+        return $this->sendPostCashDesk($this->buildCashdeskRohHost($method), $params);
+    }
+
+    /*
+     *
+     * HELPER FUNCTIONS TO BUILD REQUEST URLS --------------------------------------------
+     * buildRohHost
+     * buildSessionHost
+     * buildRestHost
+     * buildCardsRohHost
+     * buildCashdeskRohHost
+     *
+     */
 
     private function buildRohHost(string $method)
     {
@@ -305,5 +376,15 @@ class AccountManager
     private function buildRestHost(string $method)
     {
         return 'http://' . $this->restHost . ':' . $this->restPort . '/' . $method;
+    }
+
+    private function buildCardsRohHost(string $method)
+    {
+        return 'http://' . $this->cardsRohHost . ':' . $this->cardsRohPort . '/' . $method;
+    }
+
+    private function buildCashdeskRohHost(string $method)
+    {
+        return 'http://' . $this->cashdeskRohHost . ':' . $this->cashdeskRohPort . '/' . $method;
     }
 }

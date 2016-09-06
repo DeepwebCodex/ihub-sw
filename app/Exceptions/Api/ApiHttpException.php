@@ -20,13 +20,14 @@ class ApiHttpException extends HttpException
         $dataMessage = $payload;
 
         if($message) {
-            if(json_decode($message)){
-                $dataMessage = array_merge(json_decode($message, true), $dataMessage);
+            $messageData = json_decode($message, true);
+            if(is_array($messageData)){
+                $dataMessage = array_merge($messageData, $dataMessage);
             } else {
                 $dataMessage = array_merge(['message' => $message], $dataMessage);
             }
         }
 
-        parent::__construct($statusCode, json_encode($dataMessage), $previous, $headers, $code);
+        parent::__construct($statusCode, $dataMessage ? json_encode($dataMessage) : '', $previous, $headers, $code);
     }
 }

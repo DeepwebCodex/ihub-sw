@@ -17,7 +17,24 @@ return [
         'account_op' => [
             'host'  => 'ef01dev.favorit',
             'port'  => 8008
-        ]
+        ],
+
+        'cards_roh' => [
+            'host'  => 'ef01dev.favorit',
+            'port'  =>  7767
+        ],
+
+        'config_agent_roh' => [
+            'host'  => 'ef01dev.favorit',
+            'port'  => 7767
+        ],
+
+        'cash_desk_roh' => [
+            'host'  => 'ef01dev.favorit',
+            'port'  => 7763
+        ],
+
+        ''
     ]
 
 ];
