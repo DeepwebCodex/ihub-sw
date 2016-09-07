@@ -14,10 +14,13 @@ use Illuminate\Http\Request;
 */
 
 /**Casino controller routes */
-Route::post('casino', "CasinoController@index");
-Route::post('casino/auth', "CasinoController@auth");
-Route::post('casino/getbalance', "CasinoController@getbalance");
-Route::post('casino/refreshtoken', "CasinoController@refreshtoken");
-Route::post('casino/payin', "CasinoController@payin");
-Route::post('casino/payout', "CasinoController@payout");
-Route::post('casino/gen_token', "CasinoController@gen_token");
+Route::group(['prefix' => 'casino'], function () {
+    Route::get('/', "CasinoController@index"); // random test route
+    Route::post('auth', "CasinoController@auth");
+    Route::post('getbalance', "CasinoController@getBalance");
+    Route::post('refreshtoken', "CasinoController@refreshToken");
+    Route::post('payin', "CasinoController@payIn");
+    Route::post('payout', "CasinoController@payOut");
+    Route::post('gen_token', "CasinoController@genToken");
+    Route::any('{any}', "CasinoController@error");
+});

@@ -32,9 +32,12 @@ return [
         'cash_desk_roh' => [
             'host'  => 'ef01dev.favorit',
             'port'  => 7763
-        ],
+        ]
+    ],
 
-        ''
+    'hazlecast_sessions' => [
+        'host'  => 'ef01dev.favorit',
+        'port'  => 5701
     ]
 
 ];

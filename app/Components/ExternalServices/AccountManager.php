@@ -344,8 +344,8 @@ class AccountManager
         return $this->sendGetSession($this->buildSessionHost($method), $params, $retry);
     }
 
-    private function getRest(string $method, array $params){
-        return $this->sendGetRoh($this->buildRestHost($method), $params);
+    private function getRest(string $method, array $params, int $retry = 0){
+        return $this->sendGetRoh($this->buildRestHost($method), $params, $retry);
     }
 
     private function postCashDesc(string $method, array $params){

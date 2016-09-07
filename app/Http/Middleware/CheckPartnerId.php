@@ -7,7 +7,7 @@ use App\Exceptions\Api\ApiHttpException;
  * Class InputJson
  * @package App\Http\Middleware
  */
-class InputJson
+class CheckPartnerId
 {
     /**
      * @param \Illuminate\Http\Request $request
@@ -19,17 +19,12 @@ class InputJson
      */
     public function handle($request, \Closure $next)
     {
-        $bodyContent = $request->getContent();
-        if (!$bodyContent) {
-            throw new ApiHttpException(400, trans('api/all.s_empty_source'));
-        }
+        $partnerId = (int) $request->server('PARTNER_ID');
 
-        $bodyContentDecoded = json_decode($bodyContent, true);
-        if ($bodyContentDecoded && json_last_error() === JSON_ERROR_NONE) {
-            $request->merge($bodyContentDecoded);
+        if ($partnerId && is_numeric($partnerId)) {
             return $next($request);
         }
 
-        throw new ApiHttpException(400, trans('api/all.s_cant_parse_source'));
+        throw new ApiHttpException(503, "Service unavailable");
     }
 }

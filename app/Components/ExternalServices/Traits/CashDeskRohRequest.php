@@ -65,9 +65,9 @@ trait CashDeskRohRequest
             }
 
             if(!isset($response['ok']) && !isset($response['error'])){
-                throw new \Exception($response, 0);
+                throw new \Exception($response);
             } else if (isset($response['error'])){
-                throw new \Exception($response['error'], 0);
+                throw new \Exception($response['error']);
             }
 
             if(isset($response['ok']) && !empty($response['ok'])){
@@ -75,7 +75,7 @@ trait CashDeskRohRequest
             }
 
         } else {
-            throw new \Exception($data, 0);
+            throw new \Exception($data);
         }
     }
 }
