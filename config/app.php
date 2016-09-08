@@ -160,7 +160,7 @@ return [
         Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
-        Illuminate\Validation\ValidationServiceProvider::class,
+        \App\Providers\ApiValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
         /*
@@ -179,7 +179,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         \Kozz\Laravel\Providers\Guzzle::class,
-        \Nathanmac\Utilities\Parser\ParserServiceProvider::class
+        \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
+        \App\Providers\RemoteSessionServiceProvider::class
     ],
 
     /*
@@ -228,7 +229,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class,
-        'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class
+        'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
+        'RemoteSession' => \App\Components\ExternalServices\Facades\RemoteSession::class
     ],
 
 ];

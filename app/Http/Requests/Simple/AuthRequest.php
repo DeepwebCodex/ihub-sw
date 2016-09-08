@@ -2,36 +2,35 @@
 
 namespace App\Http\Requests\Simple;
 
+
+use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Exceptions\Api\ApiHttpException;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\ApiRequest;
+use App\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
 
 /**
  * Class AuthRequest
  * @package App\Http\Requests\Simple
  */
-class AuthRequest extends FormRequest
+class AuthRequest extends ApiRequest implements ApiValidationInterface
 {
-    private $errorCodes = [
-        'signature' => 11,
-        'time'      => 10,
-        'token'     => 6
-    ];
+    protected $errorCodesConfig = 'integrations.casino.error_codes';
 
     /**
      * Determine if the user is authorized to make this request.
      *
+     * @param Request $request
      * @return bool
      */
     public function authorize(Request $request)
     {
-        //exit(dump($request->all()));
-        return true;
+        return RemoteSession::start($request->input('token'))->get('user_id') ? true : false;
     }
 
-    protected function failedAuthorization()
+    public function failedAuthorization()
     {
-        throw new ApiHttpException('403', "User not found", ['code' => 4]);
+        throw new ApiHttpException('403', "User not found", ['code' => $this->getErrorCode('user_not_found')]);
     }
 
     /**
@@ -56,33 +55,8 @@ class AuthRequest extends FormRequest
         throw new ApiHttpException('400',
             array_get($firstError, 'message', 'Invalid input'),
             [
-                'code' => array_get($firstError, 'code', 0),
-                'validation' => $errors
+                'code' => array_get($firstError, 'code', 0)
             ]
         );
-    }
-
-    private function getFirstError(array $errors){
-        if($errors){
-            foreach ($errors as $attribute => $error){
-                if(is_array($error)){
-                    return [
-                        'message' => reset($error),
-                        'code'    => $this->getErrorCode($attribute)
-                    ];
-                } else {
-                    return [
-                        'message' => $error,
-                        'code'    => $this->getErrorCode($attribute)
-                    ];
-                }
-            }
-        }
-
-        return [];
-    }
-
-    private function getErrorCode($attribute){
-        return isset($this->errorCodes[$attribute]) ? $this->errorCodes[$attribute] : 0;
     }
 }

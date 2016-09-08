@@ -19,21 +19,27 @@ class RemoteSession
     private $sessionData;
     private $sessionId;
 
-    public function __construct($session_id)
+    /**
+     * RemoteSession constructor.
+     * @param bool $session_id
+     */
+    public function __construct($session_id = false)
     {
         $this->remoteHost = config('external.hazlecast_sessions.host');
         $this->remotePort = config('external.hazlecast_sessions.port');
 
         $this->setUp();
 
-        $this->reStart($session_id);
+        if($session_id) {
+            $this->start($session_id);
+        }
     }
 
     private function setUp()
     {
         $this->memCache = new \Memcache();
 
-        $this->session_prefix = ini_get("memcached.sess_prefix");
+        $this->session_prefix = ini_get("memcached.sess_prefix"); // 'memc.sess.key.' - for dev server
         $this->lifetime = ini_get("session.gc_maxlifetime");
 
         try {
@@ -43,7 +49,11 @@ class RemoteSession
         }
     }
 
-    public function reStart($session_id)
+    /**
+     * @param $session_id
+     * @return $this
+     */
+    public function start($session_id)
     {
         $this->sessionData = null;
 
@@ -52,6 +62,8 @@ class RemoteSession
         $this->sessionId = $session_id;
 
         $this->sessionData = $this->_unserialize($rawData);
+
+        return $this;
     }
 
     /**
@@ -97,6 +109,9 @@ class RemoteSession
         return (bool)array_get($this->sessionData, $key, false);
     }
 
+    /**
+     * @return bool
+     */
     public function getSessionId()
     {
         return $this->sessionId ?: false;
@@ -112,21 +127,23 @@ class RemoteSession
      * @param    array
      * @return    string
      */
-    private function _unserialize($data)
+    private function _unserialize($session_data)
     {
-        $data = @unserialize($this->strip_slashes($data));
-
-        if (is_array($data)) {
-            foreach ($data as $key => $val) {
-                if (is_string($val)) {
-                    $data[$key] = str_replace('{{slash}}', '\\', $val);
-                }
+        $return_data = array();
+        $offset = 0;
+        while ($offset < strlen($session_data)) {
+            if (!strstr(substr($session_data, $offset), "|")) {
+                throw new Exception("invalid data, remaining: " . substr($session_data, $offset));
             }
-
-            return $data;
+            $pos = strpos($session_data, "|", $offset);
+            $num = $pos - $offset;
+            $varname = substr($session_data, $offset, $num);
+            $offset += $num + 1;
+            $data = unserialize(substr($session_data, $offset));
+            $return_data[$varname] = $data;
+            $offset += strlen(serialize($data));
         }
-
-        return (is_string($data)) ? str_replace('{{slash}}', '\\', $data) : $data;
+        return $return_data;
     }
 
     /**
@@ -141,19 +158,24 @@ class RemoteSession
      */
     private function _serialize($data)
     {
-        if (is_array($data)) {
-            foreach ($data as $key => $val) {
-                if (is_string($val)) {
-                    $data[$key] = str_replace('\\', '{{slash}}', $val);
-                }
+        $raw = '' ;
+        $line = 0 ;
+        $keys = array_keys( $data ) ;
+        foreach( $keys as $key ) {
+            $value = $data[ $key ] ;
+            $line ++ ;
+
+            $raw .= $key .'|' ;
+
+            if( is_array( $value ) && isset( $value['huge_recursion_blocker_we_hope'] )) {
+                $raw .= 'R:'. $value['huge_recursion_blocker_we_hope'] . ';' ;
+            } else {
+                $raw .= serialize( $value ) ;
             }
-        } else {
-            if (is_string($data)) {
-                $data = str_replace('\\', '{{slash}}', $data);
-            }
+            $array[$key] = [ 'huge_recursion_blocker_we_hope' => $line ] ;
         }
 
-        return serialize($data);
+        return $raw ;
     }
 
     private function strip_slashes($str)
