@@ -1632,3 +1632,37 @@ Stack trace:
 PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 32768 bytes) in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Handler.php on line 1" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /casino HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
 2016/09/02 18:02:05 [error] 12814#12814: *1526 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 4096 bytes) in /media/doomsentinel/Storage/www/integrations/app/Components/ExternalServices/AccountManager.php on line 258" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /casino HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
 2016/09/02 18:03:48 [error] 12814#12814: *1526 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 4096 bytes) in /media/doomsentinel/Storage/www/integrations/app/Components/ExternalServices/AccountManager.php on line 258" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /casino HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/09/06 18:56:17 [error] 12807#12807: *2122 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected ';', expecting ',' or ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 44
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected ';', expecting ',' or ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 44
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /casino/ HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/09/06 18:56:19 [error] 12807#12807: *2122 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected ';', expecting ',' or ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 44
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected ';', expecting ',' or ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 44
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /casino/ HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/09/09 16:06:18 [error] 30346#30346: *487 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to undefined method Illuminate\Support\Facades\Request::input() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/CasinoTemplate.php:28
+Stack trace:
+#0 [internal function]: App\Exceptions\Api\Templates\CasinoTemplate->mapping(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(62): array_map(Array, Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(97): App\Components\Formatters\BaseApiFormatter->mapPayload(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php(36): App\Components\Formatters\BaseApiFormatter->transformException(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\JsonApiFormatter->formatException(Object(Symfony\Component\Debug\Except...
+PHP message: PHP Fatal error:  Uncaught Error: Call to undefined method Illuminate\Support\Facades\Request::input() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/CasinoTemplate.php:28
+Stack trace:
+#0 [internal function]: App\Exceptions\Api\Templates\CasinoTemplate->mapping(Array)
+#1 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(62): array_map(Array, Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(97): App\Components\Formatters\BaseApiFormatter->mapPayload(Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/JsonApiFormatter.php(36): App\Components\Formatters\BaseApiFormatter->transformException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#4 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Traits/ApiHandlerTrait.php(48): App\Components\Formatters\Jso
+2016/09/09 16:19:36 [error] 30346#30346: *493 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 135
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected ')' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 135
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/09/09 16:32:52 [error] 30346#30346: *528 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected ']' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 138
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected ']' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 138
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
+2016/09/09 16:32:54 [error] 30346#30346: *528 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected ']' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 138
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected ']' in /media/doomsentinel/Storage/www/integrations/app/Http/Controllers/Api/CasinoController.php on line 138
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"

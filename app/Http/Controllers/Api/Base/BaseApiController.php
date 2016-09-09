@@ -12,6 +12,7 @@ class BaseApiController extends Controller
 
     public static $exceptionTemplate;
 
+    protected $options;
 
     public function __construct(BaseApiFormatter $formatter)
     {
@@ -26,6 +27,10 @@ class BaseApiController extends Controller
 
     public function respondOk($statusCode = Response::HTTP_OK, string $message = "", array $payload = []){
         return $this->respond($statusCode, $message, $payload);
+    }
+
+    public function getOption(string $name, $default = null){
+        return array_get($this->options, $name, $default);
     }
 
 }

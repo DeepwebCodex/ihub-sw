@@ -41,6 +41,23 @@ trait MetaDataTrait
         return $this;
     }
 
+    public function pullMetaField(string $name){
+        if($request = $this->getRequest()){
+            if($request->has($this->metaStorageKey)){
+                $data = $request->input($this->metaStorageKey);
+                foreach ($data as $itemName => $value){
+                    if($itemName == $name){
+                        unset($data[$itemName]);
+                        $request->offsetSet($this->metaStorageKey, $data);
+                        return $value;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function getMetaField(string $name){
         if($request = $this->getRequest()){
             if($request->has($this->metaStorageKey)){

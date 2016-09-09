@@ -9,6 +9,8 @@
 namespace App\Exceptions\Api\Templates;
 
 
+use App\Components\Integrations\Casino\CasinoHelper;
+
 class CasinoTemplate implements IExceptionTemplate
 {
     private $strict = false;
@@ -23,8 +25,8 @@ class CasinoTemplate implements IExceptionTemplate
             'status' => false,
             'code' => (int)$this->useElement('code', 0),
             'message' => $this->useElement('message', 'Unknown'),
-            'token' => $this->useElement('token', ''),
-            'signature' => $this->useElement('signature', ''),
+            'token' => $this->useElement('token', app('Request')::input('token')),
+            'signature' => CasinoHelper::generateActionSignature([]),
             'time' => time()
         ];
 

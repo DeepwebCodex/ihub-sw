@@ -4,6 +4,7 @@ namespace App\Http\Requests\Simple;
 
 
 use App\Components\ExternalServices\Facades\RemoteSession;
+use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
 use App\Http\Requests\ApiValidationInterface;
@@ -15,6 +16,8 @@ use Illuminate\Http\Request;
  */
 class AuthRequest extends ApiRequest implements ApiValidationInterface
 {
+    use MetaDataTrait;
+
     protected $errorCodesConfig = 'integrations.casino.error_codes';
 
     /**
@@ -25,7 +28,15 @@ class AuthRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-        return RemoteSession::start($request->input('token'))->get('user_id') ? true : false;
+        $userId = RemoteSession::start($request->input('token'))->get('user_id');
+
+        if($userId){
+            $this->addMetaField('user_id', $userId);
+            $this->addMetaField('token', $request->input('token'));
+            return true;
+        }
+
+        return false;
     }
 
     public function failedAuthorization()
@@ -43,8 +54,8 @@ class AuthRequest extends ApiRequest implements ApiValidationInterface
         return [
             'api_id' => 'bail|required|integer',
             'token' => 'bail|required|string|session_token',
-            'signature' => 'bail|required|string|check_signature',
-            'time' => 'bail|required|numeric|check_time'
+            //'signature' => 'bail|required|string|check_signature',
+            //'time' => 'bail|required|numeric|check_time'
         ];
     }
 

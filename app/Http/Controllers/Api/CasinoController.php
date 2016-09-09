@@ -8,6 +8,7 @@ use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Formatters\XmlApiFormatter;
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Traits\MetaDataTrait;
+use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\CasinoTemplate;
 use App\Http\Controllers\Api\Base\BaseApiController;
@@ -15,6 +16,7 @@ use App\Http\Requests\Simple\AuthRequest;
 use App\Http\Requests\Simple\PayInRequest;
 use App\Http\Requests\Simple\PayOutRequest;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -32,6 +34,8 @@ class CasinoController extends BaseApiController
     {
         parent::__construct($formatter);
 
+        $this->options = config('integrations.casino');
+
         $this->middleware('input.json')->except(['genToken','index']);
 
         Validator::extend('check_signature', 'App\Http\Requests\Validation\CasinoValidation@CheckSignature');
@@ -40,6 +44,10 @@ class CasinoController extends BaseApiController
 
     public function index(Request $request)
     {
+        $user = IntegrationUser::get(1452514, $this->getOption('service_id', 0));
+        exit(dump(
+            $user->getAttributes()
+        ));
         /*exit(dump(
             CasinoHelper::generateActionSignature(['api_id' => 15, 'token' => 'sdfsdfdsfsdfdsfdsfds', 'time' => time()]),
             time()
@@ -52,7 +60,15 @@ class CasinoController extends BaseApiController
      */
     public function auth(AuthRequest $request)
     {
-        return $this->respondOk(200, "All ok", $request->all());
+        $user = IntegrationUser::get($this->getMetaField('user_id'), $this->getOption('service_id'));
+        $user->storeSessionCurrency($user->getCurrency());
+
+        return $this->respondOk(200, 'success', [
+            'user_id'   => $user->id,
+            'user_name' => $user->login,
+            'currency'  => $user->getCurrency(),
+            'balance'   => $user->getBalance()
+        ]);
     }
 
     /**
@@ -61,7 +77,12 @@ class CasinoController extends BaseApiController
      */
     public function getBalance(AuthRequest $request)
     {
+        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'));
+        $user->checkSessionCurrency();
 
+        return $this->respondOk(200, 'success', [
+           'balance' => $user->getBalance()
+        ]);
     }
 
     /**
@@ -70,7 +91,10 @@ class CasinoController extends BaseApiController
      */
     public function refreshToken(AuthRequest $request)
     {
+        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'));
+        $user->checkSessionCurrency();
 
+        return $this->respondOk();
     }
 
     /**
@@ -79,7 +103,12 @@ class CasinoController extends BaseApiController
      */
     public function payIn(PayInRequest $request)
     {
+        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'));
 
+        return $this->respondOk(200, 'success', [
+            'balance'           => '',
+            'transaction_id'    => ''
+        ]);
     }
 
 
@@ -89,7 +118,12 @@ class CasinoController extends BaseApiController
      */
     public function payOut(PayOutRequest $request)
     {
+        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'));
 
+        return $this->respondOk(200, 'success', [
+            'balance'           => '',
+            'transaction_id'    => ''
+        ]);
     }
 
     /**
@@ -103,5 +137,18 @@ class CasinoController extends BaseApiController
 
     public function error(Request $request){
         throw new NotFoundHttpException("Page not found");
+    }
+
+    public function respondOk($statusCode = Response::HTTP_OK, string $message = "", array $payload = []){
+        $payload = array_merge([
+            'status'    => true,
+            'code'      => 1,
+            'message'   => 'success',
+            'time'      => time()
+        ], $payload);
+
+        $payload = array_merge($payload, ['signature' => CasinoHelper::generateActionSignature($payload)]);
+
+        return parent::respondOk($statusCode, $message, $payload);
     }
 }

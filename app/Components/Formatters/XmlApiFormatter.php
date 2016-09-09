@@ -61,7 +61,9 @@ class XmlApiFormatter extends BaseApiFormatter
 
     public function formatResponse($statusCode, string $message, array $payload = []){
 
-        $payload = array_merge($payload, $message ? compact('message') : [], $this->getMetaData()?:[]);
+        $payload = array_merge($message ? compact('message') : [], $this->getMetaData()?:[], $payload);
+
+        ksort($payload);
 
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'application/xml'

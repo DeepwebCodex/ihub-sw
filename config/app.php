@@ -180,7 +180,8 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         \Kozz\Laravel\Providers\Guzzle::class,
         \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
-        \App\Providers\RemoteSessionServiceProvider::class
+        \App\Providers\RemoteSessionServiceProvider::class,
+        \App\Providers\AccountManagerServiceProvider::class
     ],
 
     /*
