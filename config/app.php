@@ -181,7 +181,8 @@ return [
         \Kozz\Laravel\Providers\Guzzle::class,
         \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
         \App\Providers\RemoteSessionServiceProvider::class,
-        \App\Providers\AccountManagerServiceProvider::class
+        \App\Providers\AccountManagerServiceProvider::class,
+        \App\Providers\AppLogServiceProvider::class,
     ],
 
     /*
@@ -231,7 +232,8 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class,
         'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
-        'RemoteSession' => \App\Components\ExternalServices\Facades\RemoteSession::class
+        'RemoteSession' => \App\Components\ExternalServices\Facades\RemoteSession::class,
+        'AppLog' => \App\Facades\AppLog::class
     ],
 
 ];

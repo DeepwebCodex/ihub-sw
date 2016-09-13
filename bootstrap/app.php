@@ -41,22 +41,24 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
-if (env('LOG_MONGO_SERVER')) {
-    $app->configureMonologUsing(function ($monolog) {
-        $config = config('log.mongo');
+$app->configureMonologUsing(function ($monolog) {
+    $config = config('log.mongo');
 
-        $mongoHandler = new Monolog\Handler\MongoDBHandler(
-            new \MongoDB\Client($config['server']),
-            $config['db_name'],
-            $config['collection_name']
-        );
+    if (!$config['server']) {
+        return;
+    }
 
-        $mongoHandler->setFormatter(new \App\Log\Monolog\Formatter\AppFormatter());
+    $mongoHandler = new Monolog\Handler\MongoDBHandler(
+        new \MongoDB\Client($config['server']),
+        $config['db_name'],
+        $config['collection_name']
+    );
 
-        /** @var \Monolog\Logger $monolog */
-        $monolog->pushHandler($mongoHandler);
-    });
-}
+    $mongoHandler->setFormatter(new \App\Log\Monolog\Formatter\AppFormatter());
+
+    /** @var \Monolog\Logger $monolog */
+    $monolog->pushHandler($mongoHandler);
+});
 
 /*
 |--------------------------------------------------------------------------
