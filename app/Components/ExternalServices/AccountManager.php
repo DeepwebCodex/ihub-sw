@@ -35,6 +35,8 @@ class AccountManager
     const UAH = 'UAH';
     const USD = 'USD';
     const BYR = 'BYR';
+    const HRK = 'HRK';
+    const AZN = 'AZN';
 
     //ROH erlang account manager
     private $accountRohHost;
@@ -143,17 +145,19 @@ class AccountManager
     /**
      * Creates Account manager transaction operation for any account data manipulations
      *
-     * @param int $service_id   //integration service id - config
-     * @param int $cashdesk     //cachdesk id - config
-     * @param $user_id          //integration user_id
-     * @param $amount           //sum amount to operate in wholes eg. 1, 0.5, 0.005
-     * @param string $currency  //currency EUR|GBP|RUB|UAH|USD
-     * @param int $direction    //transaction direction 0 - deposit, 1 - withdrawal
-     * @param int $object_id    //unique id of transaction integration side
-     * @param string $comment   //transaction comment
+     * @param string $status - pending|completed
+     * @param int $service_id //integration service id - config
+     * @param int $cashdesk //cachdesk id - config
+     * @param int $user_id //integration user_id
+     * @param $amount //sum amount to operate in wholes eg. 1, 0.5, 0.005
+     * @param string $currency //currency EUR|GBP|RUB|UAH|USD
+     * @param int $direction //transaction direction 0 - deposit, 1 - withdrawal
+     * @param int $object_id //unique id of transaction integration side
+     * @param string $comment //transaction comment
      * @return mixed
      */
     public function createTransaction(
+        string $status,
         int $service_id, int $cashdesk, int $user_id,
         $amount, string $currency, int $direction, int $object_id, string $comment){
 
@@ -165,7 +169,7 @@ class AccountManager
             'currency'      => $currency,
             'client_ip'     => $this->request->ip() ?: '127.0.0.1',
             'move'          => $direction,
-            'status'        => 'pending',
+            'status'        => $status,
             'object_id'     => $object_id,
             'comment'       => $comment,
             'partner_id'    => (int) $this->request->server('PARTNER_ID')

@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\ExternalServices\AccountManager;
-use App\Components\ExternalServices\RemoteSession;
 use App\Components\Formatters\JsonApiFormatter;
-use App\Components\Formatters\XmlApiFormatter;
 use App\Components\Integrations\Casino\CasinoHelper;
+use App\Components\Integrations\Casino\CodeMapping;
 use App\Components\Traits\MetaDataTrait;
+use App\Components\Transactions\Strategies\ProcessCasino;
+use App\Components\Transactions\TransactionHandler;
+use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\CasinoTemplate;
-use App\Http\Controllers\Api\Base\BaseApiController;
-use App\Http\Requests\Simple\AuthRequest;
-use App\Http\Requests\Simple\PayInRequest;
-use App\Http\Requests\Simple\PayOutRequest;
+use App\Http\Requests\Casino\AuthRequest;
+use App\Http\Requests\Casino\PayInRequest;
+use App\Http\Requests\Casino\PayOutRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\Response as ResponseFacade;
 
 /**
  * Class CasinoController
@@ -40,13 +40,14 @@ class CasinoController extends BaseApiController
 
         Validator::extend('check_signature', 'App\Http\Requests\Validation\CasinoValidation@CheckSignature');
         Validator::extend('check_time', 'App\Http\Requests\Validation\CasinoValidation@CheckTime');
+        Validator::extend('check_amount', 'App\Http\Requests\Validation\CasinoValidation@CheckAmount');
     }
 
     public function index(Request $request)
     {
-        $user = IntegrationUser::get(1452514, $this->getOption('service_id', 0));
+        //$response = app('AccountManager')->getOperations(1454153, null, null, null);
         exit(dump(
-            $user->getAttributes()
+            CodeMapping::getByErrorCode(1024)
         ));
         /*exit(dump(
             CasinoHelper::generateActionSignature(['api_id' => 15, 'token' => 'sdfsdfdsfsdfdsfdsfds', 'time' => time()]),
@@ -60,14 +61,14 @@ class CasinoController extends BaseApiController
      */
     public function auth(AuthRequest $request)
     {
-        $user = IntegrationUser::get($this->getMetaField('user_id'), $this->getOption('service_id'));
+        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
         $user->storeSessionCurrency($user->getCurrency());
 
         return $this->respondOk(200, 'success', [
             'user_id'   => $user->id,
             'user_name' => $user->login,
             'currency'  => $user->getCurrency(),
-            'balance'   => $user->getBalance()
+            'balance'   => $user->getBalance() * 100
         ]);
     }
 
@@ -77,11 +78,11 @@ class CasinoController extends BaseApiController
      */
     public function getBalance(AuthRequest $request)
     {
-        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'));
+        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
         $user->checkSessionCurrency();
 
         return $this->respondOk(200, 'success', [
-           'balance' => $user->getBalance()
+           'balance' => $user->getBalance() * 100
         ]);
     }
 
@@ -91,7 +92,7 @@ class CasinoController extends BaseApiController
      */
     public function refreshToken(AuthRequest $request)
     {
-        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'));
+        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
         $user->checkSessionCurrency();
 
         return $this->respondOk();
@@ -103,11 +104,25 @@ class CasinoController extends BaseApiController
      */
     public function payIn(PayInRequest $request)
     {
-        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'));
+        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
+        $user->checkSessionCurrency();
+
+        $transactionRequest = new TransactionRequest(
+            $this->getOption('service_id'),
+            $request->input('object_id'),
+            $user->id,
+            $user->getCurrency(),
+            TransactionRequest::D_WITHDRAWAL,
+            $request->input('amount') / 100
+        );
+
+        $transactionHandler = new TransactionHandler($transactionRequest, $user);
+
+        $transactionResponse = $transactionHandler->handle(new ProcessCasino());
 
         return $this->respondOk(200, 'success', [
-            'balance'           => '',
-            'transaction_id'    => ''
+            'balance'           => $transactionResponse->getBalance() * 100,
+            'transaction_id'    => $transactionResponse->operation_id
         ]);
     }
 
@@ -118,25 +133,76 @@ class CasinoController extends BaseApiController
      */
     public function payOut(PayOutRequest $request)
     {
-        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'));
+        $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
+        $user->checkSessionCurrency();
+
+        $transactionRequest = new TransactionRequest(
+            $this->getOption('service_id'),
+            $request->input('object_id'),
+            $user->id,
+            $user->getCurrency(),
+            TransactionRequest::D_DEPOSIT,
+            $request->input('amount') / 100
+        );
+
+        $transactionHandler = new TransactionHandler($transactionRequest, $user);
+
+        $transactionResponse = $transactionHandler->handle(new ProcessCasino());
 
         return $this->respondOk(200, 'success', [
-            'balance'           => '',
-            'transaction_id'    => ''
+            'balance'           => $transactionResponse->getBalance() * 100,
+            'transaction_id'    => $transactionResponse->operation_id
         ]);
     }
 
     /**
-     * @param string $casino
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return Response
+     * @internal param string $casino
      */
-    public function genToken($casino = '')
+    public function genToken(Request $request)
     {
+        $casino = $request->input('casino');
 
+        $token = $request->cookie('PHPSESSID');
+
+        $user_id = \RemoteSession::start($token)->get('user_id');
+
+        if($user_id)
+        {
+            $payload = [
+                'status'    => true,
+                'token'     => $token,
+                'message'   => ''
+            ];
+        } else {
+            $payload = [
+                'status'    => false,
+                'token'     => '',
+                'message'   => "auth failed"
+            ];
+        }
+
+        /**@var Response $response*/
+        $response = ResponseFacade::make(json_encode($payload), 200, [
+            'Content-type' => 'application/json'
+        ]);
+
+        if($casino){
+            $response = $response->withHeaders([
+                'Access-Control-Allow-Origin' => '*'
+            ]);
+        } else {
+            $response = $response->withHeaders([
+                'Access-Control-Allow-Origin' => 'https://casino.favbet.ro'
+            ]);
+        }
+
+        return $response;
     }
 
-    public function error(Request $request){
-        throw new NotFoundHttpException("Page not found");
+    public function error(){
+        throw new NotFoundHttpException("Page not found", null, 5404);
     }
 
     public function respondOk($statusCode = Response::HTTP_OK, string $message = "", array $payload = []){

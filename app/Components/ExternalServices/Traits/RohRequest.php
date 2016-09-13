@@ -19,8 +19,20 @@ trait RohRequest
         '1027' => 400, //Not enough money
         '1024' => 404, //Account not found
         '1020' => 409, //TODO::what the message is ?
-        '-2' => 500, //TODO::what the message is ?
-        '-3' => 500  //Server error
+        '1408' => 404, //Operation not found
+        '1410' => 409, //Invalid club card id
+        '1411' => 409, //Club card already assigned
+        '1412' => 409, //Club card already used
+        '1413' => 409, //User deposit limit not verified
+        '1401' => 400, //Operation bad currency
+        '1404' => 400, //Bad operation object
+        '1405' => 400, //Operation bad limits
+        '1406' => 409, //Operation already canceled
+        '1407' => 409, //Operation already completed
+        '1409' => 409, //Director no money
+        '-2'   => 500, //TODO::what the message is ?
+        '-3'   => 500, //Server error
+        '-1'   => 503  //Server unavailable
     ];
 
     private function getHttpCode($code, $default = 500)
@@ -63,14 +75,16 @@ trait RohRequest
 
         } catch (\Exception $e) {
 
+            $statusCode = $this->getHttpCode($e->getCode());
+
             /*Retry operation on fail*/
 
-            if ($retry > 0) {
+            if ($retry > 0 && ($statusCode >= Response::HTTP_INTERNAL_SERVER_ERROR || $statusCode == Response::HTTP_SERVICE_UNAVAILABLE)) {
                 $retry--;
                 $this->sendPostRoh($url, $params, $retry);
             }
 
-            throw new ApiHttpException($this->getHttpCode($e->getCode()), $e->getMessage());
+            throw new ApiHttpException($statusCode, $e->getMessage());
         }
     }
 }

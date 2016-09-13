@@ -4,9 +4,8 @@ namespace App\Exceptions\Api\Traits;
 
 
 use App\Components\Formatters\BaseApiFormatter;
-use App\Http\Controllers\Api\Base\BaseApiController;
+use App\Http\Controllers\Api\BaseApiController;
 use Exception;
-use Illuminate\Http\Request;
 
 trait ApiHandlerTrait
 {

@@ -31,7 +31,9 @@ class ApiHttpException extends HttpException
         parent::__construct($statusCode, $dataMessage ? json_encode($dataMessage) : '', $previous, $headers, $code);
     }
 
-    public function getPayloadCode(){
+    public function getPayload(string $key){
+        $data = json_decode($this->getMessage(), true);
 
+        return array_get($data, $key, null);
     }
 }

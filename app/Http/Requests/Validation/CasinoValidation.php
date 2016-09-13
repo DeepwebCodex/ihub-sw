@@ -29,6 +29,14 @@ class CasinoValidation
         return false;
     }
 
+    public static function CheckAmount($attribute, $value, $parameters, $validator){
+        if($value <= 0){
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @return \Illuminate\Http\Request
      */

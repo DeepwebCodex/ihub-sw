@@ -177,7 +177,6 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
         \Kozz\Laravel\Providers\Guzzle::class,
         \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
         \App\Providers\RemoteSessionServiceProvider::class,
@@ -228,7 +227,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class,
         'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
         'RemoteSession' => \App\Components\ExternalServices\Facades\RemoteSession::class

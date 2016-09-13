@@ -25,24 +25,21 @@ class UserFactory
 
     private $userData;
 
-    public function make(int $userId, int $serviceId, string $className){
+    public function make(int $userId, int $serviceId, string $className, string $integration){
         $this->accountManager = $this->getAccountManager();
 
-        try {
-            $this->getUser($userId);
-        } catch (ApiHttpException $e){
-            throw new UserGetException($e->getStatusCode(), $e->getMessage(), 4);
-        }
+
+        $this->getUser($userId);
 
         /**@var UserInterface $user*/
-        $user = new $className($this->userData);
+        $user = new $className($this->userData, $integration);
 
         if(!$user->validateService($serviceId)){
-            throw new UserServiceException(400, "Invalid service", 13);
+            throw new UserServiceException(400, "Invalid service", 5001);
         }
 
         if(!$user->getActiveWallet()){
-            throw new UserWalletException(400, "Invalid wallet" , 14);
+            throw new UserWalletException(400, "Invalid wallet" , 5002);
         }
 
         return $user;

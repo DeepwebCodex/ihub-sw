@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Base;
+namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\BaseApiFormatter;
 use App\Http\Controllers\Controller;

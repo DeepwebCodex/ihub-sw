@@ -10,6 +10,7 @@ namespace App\Exceptions\Api\Templates;
 
 
 use App\Components\Integrations\Casino\CasinoHelper;
+use App\Components\Integrations\Casino\CodeMapping;
 
 class CasinoTemplate implements IExceptionTemplate
 {
@@ -21,10 +22,20 @@ class CasinoTemplate implements IExceptionTemplate
     {
         $this->item = $item;
 
+        $code = (int)$this->useElement('code', 0);
+        $message = $this->useElement('message', 'Unknown');
+
+        $codeMap = CodeMapping::getByErrorCode($code);
+
+        if($codeMap){
+            $code = $codeMap['code'];
+            $message = $code == 0 ? $message : $codeMap['message'];
+        }
+
         $view = [
             'status' => false,
-            'code' => (int)$this->useElement('code', 0),
-            'message' => $this->useElement('message', 'Unknown'),
+            'code' => $code,
+            'message' => $message,
             'token' => $this->useElement('token', app('Request')::input('token')),
             'signature' => CasinoHelper::generateActionSignature([]),
             'time' => time()

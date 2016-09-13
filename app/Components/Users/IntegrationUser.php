@@ -26,16 +26,17 @@ class IntegrationUser implements UserInterface
     /**
      * @param int $userId
      * @param int $serviceId
+     * @param string $integration
      * @return IntegrationUser
      */
-    public static function get(int $userId, int $serviceId){
-        return (new UserFactory())->make($userId, $serviceId, self::class);
+    public static function get(int $userId, int $serviceId, string $integration){
+        return (new UserFactory())->make($userId, $serviceId, self::class, $integration);
     }
 
-    public function __construct(array $userData)
+    public function __construct(array $userData, string $integration)
     {
         $this->load($userData);
-        $this->redisKey = env('REDIS_PREFIX', 'app') . ':' . 'users:' ;
+        $this->redisKey = env('REDIS_PREFIX', 'app') . ':' . $integration . ':users:';
     }
 
     public function __get($name)
@@ -50,7 +51,7 @@ class IntegrationUser implements UserInterface
     public function getBalance(){
         $activeWallet = $this->getActiveWallet();
         if($activeWallet){
-            return $activeWallet->deposit * 100;
+            return $activeWallet->deposit;
         }
 
         return null;
@@ -62,7 +63,7 @@ class IntegrationUser implements UserInterface
 
     public function checkSessionCurrency(){
         if(!$this->validateSessionCurrency($this->getCurrency(), $this->id)){
-            throw new UserCurrencyException(409, "Currency mismatch", 3);
+            throw new UserCurrencyException(409, "Currency mismatch", 1401);
         }
     }
 

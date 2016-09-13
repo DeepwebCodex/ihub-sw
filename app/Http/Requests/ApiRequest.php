@@ -9,13 +9,16 @@
 namespace App\Http\Requests;
 
 
+use App\Components\Integrations\CodeMappingBase;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property CodeMappingBase $codeMapClass
+*/
 class ApiRequest extends FormRequest
 {
     private $errorCodes;
-
-    protected $errorCodesConfig = '';
+    protected $codeMapClass = null;
     protected $authAfterValidate = true;
     protected $bailAfterAttributeError = true;
 
@@ -42,12 +45,12 @@ class ApiRequest extends FormRequest
     protected function getErrorCode($attribute){
         $this->getErrorCodes();
 
-        return isset($this->errorCodes[$attribute]) ? $this->errorCodes[$attribute] : 0;
+        return array_get($this->errorCodes, $attribute . '.code');
     }
 
     private function getErrorCodes(){
-        if(!empty($this->errorCodesConfig) && !$this->errorCodes){
-            $this->errorCodes = config($this->errorCodesConfig);
+        if($this->codeMapClass && !$this->errorCodes){
+            $this->errorCodes = call_user_func(array($this->codeMapClass, 'getAttributeMessages'));
         }
     }
 

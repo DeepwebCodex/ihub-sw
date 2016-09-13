@@ -31,7 +31,7 @@ trait RohRestRequest
                         }
 
                         if(isset($data['operations'])){
-                            return $data['operations'];
+                            return $this->sanitize($data['operations']);
                         }
                     }
                 }
@@ -42,5 +42,19 @@ trait RohRestRequest
         } catch (\Exception $e) {
             throw new ApiHttpException(500, $e->getMessage());
         }
+    }
+
+    private function sanitize(array $data){
+        $tempData = [];
+
+        foreach ($data as $key => $value){
+            if($value == "null"){
+                $value = null;
+            }
+
+            $tempData[$key] = $value;
+        }
+
+        return $tempData;
     }
 }
