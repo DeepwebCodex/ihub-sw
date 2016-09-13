@@ -15,14 +15,14 @@ class AppFormatter implements FormatterInterface
      */
     public function format(array $record)
     {
-        return [
-            'level' => strtolower($record['level_name']),
-            'time' => $record['datetime']->getTimestamp(),
-            'msg' => wordwrap(utf8_encode($record['message']), 150),
-            'node' => $record['node'] ?? '',
-            '_module' => $record['module'] ?? '',
-            '_line' => $record['line'] ?? '',
-        ];
+        return array_merge(
+            [
+                'level' => strtolower($record['level_name']),
+                'time' => $record['datetime']->getTimestamp(),
+                'msg' => wordwrap(utf8_encode($record['message']), 150),
+            ],
+            $record['context']
+        );
     }
 
     /**

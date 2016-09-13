@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'erlybet'),
 
     /*
     |--------------------------------------------------------------------------
@@ -45,40 +45,53 @@ return [
     */
 
     'connections' => [
-
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-        ],
-
-        'mysql' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
-        ],
-
-        'pgsql' => [
+        'account' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => 'db01dev.favorit',
+            'port' => '5432',
+            'database' => 'account',
+            'username' => 'u_developer',
+            'password' => 'Caeph1NaingEe9Sh',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'account',
+            'sslmode' => 'prefer',
+        ],
+        'erlybet' => [
+            'driver' => 'pgsql',
+            'host' => 'db01dev.favorit',
+            'port' => '5432',
+            'database' => 'erlybet',
+            'username' => 'u_developer',
+            'password' => 'Caeph1NaingEe9Sh',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'sslmode' => 'prefer',
+        ],
+        'erlybet_slave' => [
+            'driver' => 'pgsql',
+            'host' => 'db01dev.favorit',
+            'port' => '5432',
+            'database' => 'erlybet_slave',
+            'username' => 'u_developer',
+            'password' => 'Caeph1NaingEe9Sh',
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-
+        'line' => [
+            'driver' => 'pgsql',
+            'host' => 'db01dev.favorit',
+            'port' => '5432',
+            'database' => 'line',
+            'username' => 'u_developer',
+            'password' => 'Caeph1NaingEe9Sh',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
     ],
 
     /*
