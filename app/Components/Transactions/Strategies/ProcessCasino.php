@@ -6,6 +6,7 @@ namespace App\Components\Transactions\Strategies;
 use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\Casino\CodeMapping;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
+use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
 
@@ -54,14 +55,16 @@ class ProcessCasino implements TransactionProcessorInterface
     /**
      * @return array
      */
-    public function getTransactionData(){
+    public function getTransactionData()
+    {
         return $this->responseData;
     }
 
     /**
      * @return bool
      */
-    public function isDuplicate(){
+    public function isDuplicate()
+    {
         return $this->isDuplicate;
     }
 
@@ -69,29 +72,27 @@ class ProcessCasino implements TransactionProcessorInterface
      * @param ApiHttpException $e
      * @return bool
      */
-    protected function handleError($e){
+    protected function handleError($e)
+    {
         $errorCode = (int) $e->getPayload('code');
 
-        switch ($errorCode){
-            case 1402:
+        switch (TransactionHelper::getTransactionErrorState($errorCode))
+        {
+            case TransactionHelper::DUPLICATE:
                 return $this->onTransactionDuplicate($e);
-                break;
-            case 1403:
+            case TransactionHelper::BAD_OPERATION_ORDER:
                 return $this->onHaveNotBet($e);
-                break;
-            case 1027:
+            case TransactionHelper::INSUFFICIENT_FUNDS:
                 return $this->onInsufficientFunds($e);
-                break;
-            case 1020:
-            case -2:
+            case TransactionHelper::ACCOUNT_DENIED:
                 return $this->onAccountDenied($e);
-                break;
             default:
                 throw $e;
         }
     }
 
-    protected function onInvalidResponse(){
+    protected function onInvalidResponse()
+    {
         throw new ApiHttpException(409, null, CodeMapping::getByMeaning(CodeMapping::INVALID_RESULT));
     }
 
@@ -99,7 +100,8 @@ class ProcessCasino implements TransactionProcessorInterface
      * @param ApiHttpException $e
      * @return $this
      */
-    protected function onTransactionDuplicate($e){
+    protected function onTransactionDuplicate($e)
+    {
         $operation = $this->getAccountManager()->getOperations(
             $this->request->user_id,
             $this->request->direction,
@@ -118,14 +120,22 @@ class ProcessCasino implements TransactionProcessorInterface
      * @param ApiHttpException $e
      * @return $this
      */
-    protected function onHaveNotBet($e){
-        $this->isDuplicate = true;
+    protected function onHaveNotBet($e)
+    {
+        if($this->request->transaction_type == TransactionRequest::TRANS_REFUND)
+        {
+            $this->responseData['operation_id'] = null;
+            $this->isDuplicate = true;
+        }
+
+        throw $e;
     }
 
     /**
      * @param ApiHttpException $e
      */
-    protected function onInsufficientFunds($e){
+    protected function onInsufficientFunds($e)
+    {
         throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByMeaning(CodeMapping::NO_MONEY));
     }
 
@@ -133,14 +143,16 @@ class ProcessCasino implements TransactionProcessorInterface
      * @param ApiHttpException $e
      * @return bool
      */
-    protected function onAccountDenied($e){
+    protected function onAccountDenied($e)
+    {
         throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByMeaning(CodeMapping::INVALID_RESPONSE));
     }
 
     /**
      * @return AccountManager
      */
-    protected function getAccountManager(){
+    protected function getAccountManager()
+    {
         return app('AccountManager');
     }
 }

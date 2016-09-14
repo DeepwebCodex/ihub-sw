@@ -12,7 +12,55 @@ use App\Components\Users\Exceptions\UserCurrencyException;
 use App\Components\Users\Interfaces\UserInterface;
 use App\Components\Users\Traits\SessionCurrency;
 
-
+/**
+ * @property integer $id
+ * @property integer $group
+ * @property string $login
+ * @property string $email
+ * @property string $sess
+ * @property string $password
+ * @property integer $hash_type
+ * @property string $password_hach_old
+ * @property string $last_ip
+ * @property integer $status_id
+ * @property string $first_name
+ * @property string $middle_name,
+ * @property string $last_name,
+ * @property string $lang
+ * @property string $timezone
+ * @property integer $tzoffset
+ * @property string $phone_number
+ * @property string $date_of_birth
+ * @property string $country_id
+ * @property string $city
+ * @property string $zip
+ * @property string $adress
+ * @property string $question
+ * @property string $answer
+ * @property string $registration_date
+ * @property string $title
+ * @property integer $cashdesk
+ * @property integer $deleted
+ * @property integer $trust_level
+ * @property boolean $blacklist
+ * @property integer $loyalty_rating
+ * @property integer $loyalty_points
+ * @property integer $loyalty_months
+ * @property integer $loyalty_deposit_count
+ * @property integer $loyalty_rating_level
+ * @property boolean $fav_bet_club_user,
+ * @property $coupon
+ * @property boolean $mobile_is_active
+ * @property boolean $email_is_active
+ * @property integer $spam_ok
+ * @property integer $partner_id
+ * @property string $data
+ * @property string $token
+ * @property string $oib
+ * @property string $nationality
+ * @property string $region
+ * @property string $fullname
+*/
 class IntegrationUser implements UserInterface
 {
     use SessionCurrency;

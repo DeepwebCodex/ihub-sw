@@ -39,7 +39,7 @@ class RemoteSession
     {
         $this->memCache = new \Memcache();
 
-        $this->session_prefix = 'memc.sess.key.';//ini_get("memcached.sess_prefix"); // 'memc.sess.key.' - for dev server
+        $this->session_prefix = ini_get("memcached.sess_prefix"); // 'memc.sess.key.' - for dev server
         $this->lifetime = ini_get("session.gc_maxlifetime");
 
         try {
@@ -176,18 +176,5 @@ class RemoteSession
         }
 
         return $raw ;
-    }
-
-    private function strip_slashes($str)
-    {
-        if (is_array($str)) {
-            foreach ($str as $key => $val) {
-                $str[$key] = $this->strip_slashes($val);
-            }
-        } else {
-            $str = stripslashes($str);
-        }
-
-        return $str;
     }
 }

@@ -4,7 +4,6 @@ namespace App\Components\Transactions;
 
 
 use App\Components\ExternalServices\AccountManager;
-use App\Exceptions\Api\ApiHttpException;
 
 /**
  * @property  AccountManager $accountManager
@@ -16,6 +15,11 @@ class TransactionRequest
 
     const STATUS_PENDING = 'pending';
     const STATUS_COMPLETED = 'completed';
+    const STATUS_CANCELED = 'canceled';
+
+    const TRANS_BET = 'bet';
+    const TRANS_WIN = 'win';
+    const TRANS_REFUND = 'refund';
 
     public $service_id;
     public $cashdesk_id;
@@ -26,7 +30,9 @@ class TransactionRequest
     public $object_id;
     public $comment;
 
-    public function __construct(int $service_id, int $object_id, int $user_id, string $currency, int $direction, float $amount)
+    public $transaction_type;
+
+    public function __construct(int $service_id, int $object_id, int $user_id, string $currency, int $direction, float $amount, $transaction_type)
     {
         $this->service_id  = $service_id;
         $this->object_id   = $object_id;
@@ -34,6 +40,8 @@ class TransactionRequest
         $this->direction   = $direction;
         $this->amount      = $amount;
         $this->currency    = $currency;
+
+        $this->transaction_type = $transaction_type;
 
         $this->comment     = json_encode($this->getComment());
 

@@ -113,7 +113,8 @@ class CasinoController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
-            $request->input('amount') / 100
+            $request->input('amount') / 100,
+            TransactionRequest::TRANS_BET
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
@@ -142,7 +143,8 @@ class CasinoController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
-            $request->input('amount') / 100
+            $request->input('amount') / 100,
+            $request->input('type_operation') == 'rollback' ? TransactionRequest::TRANS_REFUND : TransactionRequest::TRANS_WIN
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
@@ -188,15 +190,10 @@ class CasinoController extends BaseApiController
             'Content-type' => 'application/json'
         ]);
 
-        if($casino){
-            $response = $response->withHeaders([
-                'Access-Control-Allow-Origin' => '*'
-            ]);
-        } else {
-            $response = $response->withHeaders([
-                'Access-Control-Allow-Origin' => 'https://casino.favbet.ro'
-            ]);
-        }
+
+        $response = $response->withHeaders([
+            'Access-Control-Allow-Origin' => $casino ? '*' : 'https://casino.favbet.ro'
+        ]);
 
         return $response;
     }
