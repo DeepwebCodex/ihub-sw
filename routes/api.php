@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 
 /**Casino controller routes */
 Route::group(['prefix' => 'casino'], function () {
-    Route::get('/', "CasinoController@index"); // random test route
     Route::post('auth', "CasinoController@auth");
     Route::post('getbalance', "CasinoController@getBalance");
     Route::post('refreshtoken', "CasinoController@refreshToken");

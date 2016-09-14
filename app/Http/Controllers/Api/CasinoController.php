@@ -43,18 +43,6 @@ class CasinoController extends BaseApiController
         Validator::extend('check_amount', 'App\Http\Requests\Validation\CasinoValidation@CheckAmount');
     }
 
-    public function index(Request $request)
-    {
-        //$response = app('AccountManager')->getOperations(1454153, null, null, null);
-        exit(dump(
-            CodeMapping::getByErrorCode(1024)
-        ));
-        /*exit(dump(
-            CasinoHelper::generateActionSignature(['api_id' => 15, 'token' => 'sdfsdfdsfsdfdsfdsfds', 'time' => time()]),
-            time()
-        ));*/
-    }
-
     /**
      * @param AuthRequest $request
      * @return \Illuminate\Http\JsonResponse
