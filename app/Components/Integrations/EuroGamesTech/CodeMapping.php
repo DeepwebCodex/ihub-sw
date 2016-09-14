@@ -47,7 +47,7 @@ class CodeMapping extends CodeMappingBase
             ],
             2000 => [
                 'message'   => 'Timed out',
-                'map'       => [],
+                'map'       => [-1],
                 'attribute' => null,
                 'meanings'  => [self::TIMED_OUT]
             ],

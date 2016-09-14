@@ -67,6 +67,8 @@ class EuroGamesTechController extends BaseApiController
 
     public function withdraw(WithdrawRequest $request)
     {
+        //ROUND_BEGIN - REASON
+
 
         return $this->respondOk(200, null, [
             'Balance' => 0,
