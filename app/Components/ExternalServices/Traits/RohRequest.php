@@ -65,7 +65,7 @@ trait RohRequest
                         }
 
                         if (isset($data['response']) && !empty($data['response'])) {
-                            return $data['response'];
+                            return $this->sanitize($data['response']);
                         }
                     }
                 }
@@ -86,5 +86,19 @@ trait RohRequest
 
             throw new ApiHttpException($statusCode, $e->getMessage());
         }
+    }
+
+    private function sanitize(array $data){
+        $tempData = [];
+
+        foreach ($data as $key => $value){
+            if($value == "null"){
+                $value = null;
+            }
+
+            $tempData[$key] = $value;
+        }
+
+        return $tempData;
     }
 }
