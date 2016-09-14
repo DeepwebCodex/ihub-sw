@@ -55,6 +55,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'input.json' => \App\Http\Middleware\InputJson::class,
-        'check.partner_id' => \App\Http\Middleware\CheckPartnerId::class
+        'check.partner_id' => \App\Http\Middleware\CheckPartnerId::class,
+        'input.xml' => \App\Http\Middleware\InputXml::class
     ];
 }

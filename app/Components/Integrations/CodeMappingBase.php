@@ -26,6 +26,9 @@ class CodeMappingBase
     const INVALID_SUM       = 'invalid_sum';
     const INVALID_SERVICE   = 'invalid_service';
     const INVALID_WALLET    = 'invalid_wallet';
+    const TIMED_OUT         = 'timed_out';
+    const DUPLICATE         = 'duplicate';
+    const BET_LIMIT         = 'bet_limit';
 
     public static function getMapping(){
         return [];

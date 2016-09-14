@@ -10,6 +10,7 @@ use App\Components\Transactions\Strategies\ProcessCasino;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
+use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\CasinoTemplate;
 use App\Http\Requests\Casino\AuthRequest;
 use App\Http\Requests\Casino\PayInRequest;
@@ -17,7 +18,6 @@ use App\Http\Requests\Casino\PayOutRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 
 /**
@@ -36,7 +36,7 @@ class CasinoController extends BaseApiController
 
         $this->options = config('integrations.casino');
 
-        $this->middleware('input.json')->except(['genToken','index']);
+        $this->middleware('input.json')->except(['genToken']);
 
         Validator::extend('check_signature', 'App\Http\Requests\Validation\CasinoValidation@CheckSignature');
         Validator::extend('check_time', 'App\Http\Requests\Validation\CasinoValidation@CheckTime');
@@ -187,7 +187,7 @@ class CasinoController extends BaseApiController
     }
 
     public function error(){
-        throw new NotFoundHttpException("Page not found", null, 5404);
+        throw new ApiHttpException(404, null, CodeMapping::getByMeaning(CodeMapping::UNKNOWN_METHOD));
     }
 
     public function respondOk($statusCode = Response::HTTP_OK, string $message = "", array $payload = []){

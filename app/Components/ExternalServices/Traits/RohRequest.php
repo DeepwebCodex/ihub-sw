@@ -65,7 +65,7 @@ trait RohRequest
                         }
 
                         if (isset($data['response']) && !empty($data['response'])) {
-                            return $this->sanitize($data['response']);
+                            return $this->sanitizeResponse($data['response']);
                         }
                     }
                 }
@@ -88,7 +88,7 @@ trait RohRequest
         }
     }
 
-    private function sanitize(array $data){
+    private function sanitizeResponse(array $data){
         $tempData = [];
 
         foreach ($data as $key => $value){
