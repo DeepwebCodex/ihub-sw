@@ -6,6 +6,10 @@ use App\Components\Formatters\EgtXmlApiFormatter;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
 use App\Components\Traits\MetaDataTrait;
+use App\Components\Transactions\Strategies\EuroGamesTech\ProcessEuroGamesTech;
+use App\Components\Transactions\Strategies\EuroGamesTech\ProcessWithdraw;
+use App\Components\Transactions\TransactionHandler;
+use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\EuroGamesTechTemplate;
@@ -67,30 +71,95 @@ class EuroGamesTechController extends BaseApiController
 
     public function withdraw(WithdrawRequest $request)
     {
-        //ROUND_BEGIN - REASON
+        $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
+        if($user->getCurrency() != $request->input('Currency')){
+            throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
+        }
+
+        $transactionRequest = new TransactionRequest(
+            $this->getOption('service_id'),
+            $request->input('GameNumber'),
+            $user->id,
+            $user->getCurrency(),
+            TransactionRequest::D_WITHDRAWAL,
+            $request->input('Amount') / 100,
+            EgtHelper::getTransactionType($request->input('Reason')),
+            $request->input('TransferId')
+        );
+
+        $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, null, [
-            'Balance' => 0,
-            'CasinoTransferId' => 0
+            'Balance' => $transactionResponse->getBalance() * 100,
+            'CasinoTransferId' => $transactionResponse->operation_id
         ]);
     }
 
     public function deposit(DepositRequest $request)
     {
+        $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
+
+        if($user->getCurrency() != $request->input('Currency')){
+            throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
+        }
+
+        $transactionRequest = new TransactionRequest(
+            $this->getOption('service_id'),
+            $request->input('GameNumber'),
+            $user->id,
+            $user->getCurrency(),
+            TransactionRequest::D_DEPOSIT,
+            $request->input('Amount') / 100,
+            EgtHelper::getTransactionType($request->input('Reason'), true),
+            $request->input('TransferId')
+        );
+
+        $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, null, [
-            'Balance' => 0,
-            'CasinoTransferId' => 0
+            'Balance' => $transactionResponse->getBalance() * 100,
+            'CasinoTransferId' => $transactionResponse->operation_id
         ]);
     }
 
     public function withdrawAndDeposit(WithdrawAndDepositRequest $request)
     {
+        $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
+
+        if($user->getCurrency() != $request->input('Currency')){
+            throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
+        }
+
+        $transactionRequest = new TransactionRequest(
+            $this->getOption('service_id'),
+            $request->input('GameNumber'),
+            $user->id,
+            $user->getCurrency(),
+            TransactionRequest::D_WITHDRAWAL,
+            $request->input('Amount') / 100,
+            EgtHelper::getTransactionType($request->input('Reason')),
+            $request->input('TransferId')
+        );
+
+        EgtHelper::handleTransaction($transactionRequest, $user);
+
+        $transactionRequest = new TransactionRequest(
+            $this->getOption('service_id'),
+            $request->input('GameNumber'),
+            $user->id,
+            $user->getCurrency(),
+            TransactionRequest::D_DEPOSIT,
+            $request->input('WinAmount') / 100,
+            TransactionRequest::TRANS_WIN,
+            $request->input('TransferId')
+        );
+
+        $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, null, [
-            'Balance' => 0,
-            'CasinoTransferId' => 0
+            'Balance' => $transactionResponse->getBalance() * 100,
+            'CasinoTransferId' => $transactionResponse->operation_id
         ]);
     }
 

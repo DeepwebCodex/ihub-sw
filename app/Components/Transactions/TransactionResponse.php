@@ -60,6 +60,10 @@ class TransactionResponse
         return $this->balance;
     }
 
+    public function isDuplicate(){
+        return $this->isDuplicate;
+    }
+
     public function __get($name)
     {
         return array_get($this->attributes, $name);

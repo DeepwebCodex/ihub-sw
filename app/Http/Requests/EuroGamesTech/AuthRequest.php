@@ -31,7 +31,7 @@ class AuthRequest extends BaseEgtRequest
             'UserName' => 'bail|required|string',
             'Password' => 'bail|required|string',
             'PlayerId' => 'bail|required|integer',
-            'DefenceCode' => 'bail|required|string|check_defence_code|check_expiration_time',
+            //'DefenceCode' => 'bail|required|string|check_defence_code|check_expiration_time',
             'PortalCode' => 'bail|required|string',
             'SessionId' => 'bail|required|string'
         ];

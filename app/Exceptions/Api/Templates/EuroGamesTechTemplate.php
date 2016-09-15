@@ -29,10 +29,21 @@ class EuroGamesTechTemplate implements IExceptionTemplate
             $message = ($code == 3000 || ($code == 3100 && $message != 'Unknown')) ? $message : $codeMap['message'];
         }
 
+        $balance = $this->useElement('Balance', null);
+        $transferId = $this->useElement('CasinoTransferId', null);
+
         $view = [
             'ErrorCode' => $code,
             'ErrorMessage' => $message,
         ];
+
+        if(!is_null($transferId)) {
+            $view = array_merge(['CasinoTransferId' => (int) $transferId],$view);
+        }
+
+        if(!is_null($balance)) {
+            $view = array_merge(['Balance' => (int) $balance],$view);
+        }
 
         return $view;
     }
