@@ -6,9 +6,7 @@ use App\Components\Formatters\EgtXmlApiFormatter;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
 use App\Components\Traits\MetaDataTrait;
-use App\Components\Transactions\Strategies\EuroGamesTech\ProcessEuroGamesTech;
 use App\Components\Transactions\Strategies\EuroGamesTech\ProcessWithdraw;
-use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
@@ -41,6 +39,8 @@ class EuroGamesTechController extends BaseApiController
 
         Validator::extend('check_defence_code', 'App\Http\Requests\Validation\EuroGamesTechValidation@checkDefenceCode');
         Validator::extend('check_expiration_time', 'App\Http\Requests\Validation\EuroGamesTechValidation@checkExpirationTime');
+        Validator::extend('validate_deposit', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateDepositReason');
+        Validator::extend('validate_withdraw', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateWithdrawReason');
     }
 
     public function authenticate(AuthRequest $request)

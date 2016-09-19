@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Components\Transactions\TransactionRequest;
 use Illuminate\Database\Eloquent\Model;
 
 class Transactions extends Model
@@ -9,14 +10,12 @@ class Transactions extends Model
     /**
      * {@inheritdoc}
      */
-    //protected $connection = 'account'; //TODO::fill
+    protected $connection = 'local_test'; //TODO::fill
 
     /**
      * {@inheritdoc}
      */
-    protected $table = 'transactions';
-
-    public $timestamps = false;
+    protected $table = 'transaction_history';
 
     protected $fillable = [
         'user_id',
@@ -26,22 +25,19 @@ class Transactions extends Model
         'move',
         'partner_id',
         'cashdesk',
-        'payment_instrument_id',
-        'wallet_id',
-        'wallet_account_id',
         'status',
         'currency',
         'foreign_id',
+        'object_id',
         'transaction_type'
     ];
 
-    public function getOperationIdAttribute($value)
-    {
-        if(!$this->attributes['operation_id']) {
-            return $this->id;
-        } else {
-            return $this->attributes['operation_id'];
-        }
+    public function getAmountAttribute($value){
+        return abs($value) / 100;
+    }
+
+    public function setAmountAttribute($value){
+        $this->attributes['amount'] = abs($value) * 100;
     }
 
     /**
@@ -61,14 +57,16 @@ class Transactions extends Model
     /**
      * @param int $serviceId
      * @param int $userId
-     * @param int $objectId
+     * @param $objectId
      * @return Transactions
      */
-    public static function getBetTransaction(int $serviceId, int $userId, int $objectId){
+    public static function getBetTransaction(int $serviceId, int $userId, $objectId){
         return Transactions::where([
             ['service_id', $serviceId],
             ['user_id', $userId],
-            ['operation_id', $objectId]
+            ['object_id', $objectId],
+            ['transaction_type', TransactionRequest::TRANS_BET],
+            ['status', TransactionRequest::STATUS_COMPLETED]
         ])->first();
     }
 }

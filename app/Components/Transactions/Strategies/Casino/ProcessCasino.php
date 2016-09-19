@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Transactions\Strategies;
+namespace App\Components\Transactions\Strategies\Casino;
 
 
 use App\Components\ExternalServices\AccountManager;

@@ -18,7 +18,7 @@ class CasinoTemplate implements IExceptionTemplate
 
     private $item;
 
-    public function mapping($item)
+    public function mapping($item, $statusCode)
     {
         $this->item = $item;
 

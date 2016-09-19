@@ -1702,3 +1702,89 @@ Stack trace:
 #2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(62): array_map(Array, Array)
 #3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(97): App\Components\Formatters\BaseApiFormatter->mapPayload(Array)
 #4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(55): App\Components\Formatters\BaseApiFormatter->transformException(Object
+2016/09/16 13:05:12 [error] 3195#3195: *469 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined variable: codeMap in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:27
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(27): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined varia...', '/media/doomsent...', 27, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(62): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(97): App\Components\Formatters\BaseApiFormatter->mapPayload(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(55): App\Components\Formatters\BaseApiFormatter->transformException(Object(ErrorException))
+#5 /media/doomsentinel/Sto...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Undefined variable: codeMap in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:27
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(27): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined varia...', '/media/doomsent...', 27, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(62): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(97): App\Components\Formatters\BaseApiFormatter->mapPayload(Array)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(55): App\Components\Formatters\BaseApiFormatter->tra
+2016/09/19 11:01:05 [error] 3195#3195: *654 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Missing argument 2 for App\Exceptions\Api\Templates\EuroGamesTechTemplate::mapping() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'Missing argumen...', '/media/doomsent...', 18, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(62): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(99): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(55): App\Components\Formatters\BaseApiFormatter->transfo...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Missing argument 2 for App\Exceptions\Api\Templates\EuroGamesTechTemplate::mapping() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'Missing argumen...', '/media/doomsent...', 18, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(62): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(99): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiForm
+2016/09/19 11:01:13 [error] 3195#3195: *654 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Missing argument 2 for App\Exceptions\Api\Templates\EuroGamesTechTemplate::mapping() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'Missing argumen...', '/media/doomsent...', 18, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(62): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(99): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(55): App\Components\Formatters\BaseApiFormatter->transfo...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Missing argument 2 for App\Exceptions\Api\Templates\EuroGamesTechTemplate::mapping() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'Missing argumen...', '/media/doomsent...', 18, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(62): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(99): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiForm
+2016/09/19 11:03:33 [error] 3195#3195: *657 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Missing argument 2 for App\Exceptions\Api\Templates\EuroGamesTechTemplate::mapping() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'Missing argumen...', '/media/doomsent...', 18, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(64): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(101): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(55): App\Components\Formatters\BaseApiFormatter->transf...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Missing argument 2 for App\Exceptions\Api\Templates\EuroGamesTechTemplate::mapping() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'Missing argumen...', '/media/doomsent...', 18, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(64): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(101): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFor
+2016/09/19 11:07:11 [error] 3195#3195: *661 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Missing argument 2 for App\Exceptions\Api\Templates\EuroGamesTechTemplate::mapping() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'Missing argumen...', '/media/doomsent...', 18, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(64): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(101): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(55): App\Components\Formatters\BaseApiFormatter->transf...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Missing argument 2 for App\Exceptions\Api\Templates\EuroGamesTechTemplate::mapping() in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:18
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(18): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'Missing argumen...', '/media/doomsent...', 18, Array)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping(Array)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(64): array_map(Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(101): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFor
+2016/09/19 11:07:45 [error] 3195#3195: *661 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Cannot unset string offsets in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:55
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(24): App\Exceptions\Api\Templates\EuroGamesTechTemplate->useElement('code', 3000)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping('Cannot unset st...', 500)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(64): array_map(Array, Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(101): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(55): App\Components\Formatters\BaseApiFormatter->transformException(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#5 /me...
+PHP message: PHP Fatal error:  Uncaught Error: Cannot unset string offsets in /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php:55
+Stack trace:
+#0 /media/doomsentinel/Storage/www/integrations/app/Exceptions/Api/Templates/EuroGamesTechTemplate.php(24): App\Exceptions\Api\Templates\EuroGamesTechTemplate->useElement('code', 3000)
+#1 [internal function]: App\Exceptions\Api\Templates\EuroGamesTechTemplate->mapping('Uncaught Error:...', 500)
+#2 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(64): array_map(Array, Array, Array)
+#3 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/BaseApiFormatter.php(101): App\Components\Formatters\BaseApiFormatter->mapPayload(Array, 500)
+#4 /media/doomsentinel/Storage/www/integrations/app/Components/Formatters/XmlApiFormatter.php(55): App\Components\Formatters\BaseApiFormatter->transformException(Obj

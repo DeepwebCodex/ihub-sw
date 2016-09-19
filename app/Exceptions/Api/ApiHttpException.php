@@ -24,7 +24,7 @@ class ApiHttpException extends HttpException
             if(is_array($messageData)){
                 $dataMessage = array_merge($messageData, $dataMessage);
             } else {
-                $dataMessage = array_merge(['message' => $message], $dataMessage);
+                $dataMessage = array_merge($dataMessage, ['message' => $message]);
             }
         }
 

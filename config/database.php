@@ -45,6 +45,18 @@ return [
     */
 
     'connections' => [
+        'local_test' => [
+            'driver' => 'pgsql',
+            'host' => 'localhost',
+            'port' => '5432',
+            'database' => 'integrations',
+            'username' => 'postgres',
+            'password' => 'a',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
         'account' => [
             'driver' => 'pgsql',
             'host' => 'db01dev.favorit',

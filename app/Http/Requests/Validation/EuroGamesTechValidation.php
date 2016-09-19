@@ -35,6 +35,24 @@ class EuroGamesTechValidation
         return true;
     }
 
+    public static function validateDepositReason($attribute, $value, $parameters, $validator){
+        if(!in_array($value, ['ROUND_END', 'ROUND_CANCEL', 'JACKPOT_END']))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function validateWithdrawReason($attribute, $value, $parameters, $validator){
+        if($value != 'ROUND_BEGIN')
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @return \Illuminate\Http\Request
      */

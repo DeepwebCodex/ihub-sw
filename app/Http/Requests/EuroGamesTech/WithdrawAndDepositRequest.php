@@ -9,6 +9,19 @@ namespace App\Http\Requests\EuroGamesTech;
 class WithdrawAndDepositRequest extends BaseEgtRequest
 {
     /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'Reason.validate_withdraw' => 'Invalid reason',
+        ];
+    }
+
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -25,7 +38,7 @@ class WithdrawAndDepositRequest extends BaseEgtRequest
             'SessionId'     => 'bail|required|string',
             'Amount'        => 'bail|required|numeric|min:0',
             'Currency'      => 'bail|required|string',
-            'Reason'        => 'bail|required|string',
+            'Reason'        => 'bail|required|string|validate_withdraw',
             'PortalCode'    => 'bail|required|string',
             'WinAmount'     => 'bail|required|numeric|min:0'
         ];

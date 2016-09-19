@@ -56,10 +56,12 @@ abstract class BaseApiFormatter
         }
     }
 
-    private function mapPayload(array $payload){
+    private function mapPayload(array $payload, int $statusCode){
         if($this->exceptionTemplate && $this->exceptionTemplate instanceof IExceptionTemplate)
         {
-            $result = array_map([$this->exceptionTemplate, 'mapping'], [$payload]);
+
+            //exit(dump($payload, compact('statusCode')));
+            $result = array_map([$this->exceptionTemplate, 'mapping'], [$payload], [$statusCode]);
 
             return reset($result);
         }
@@ -94,9 +96,9 @@ abstract class BaseApiFormatter
             $exceptionData['payload'] = array_merge($exceptionData['payload'], $metaData);
         }
 
-        $exceptionData['payload'] = $this->mapPayload($exceptionData['payload']);
-
         $exceptionData['statusCode'] = $e->getStatusCode();
+
+        $exceptionData['payload'] = $this->mapPayload($exceptionData['payload'], $exceptionData['statusCode']);
 
         return $exceptionData;
     }

@@ -88,15 +88,19 @@ trait RohRequest
         }
     }
 
-    private function sanitizeResponse(array $data){
+    private function sanitizeResponse($data){
         $tempData = [];
 
-        foreach ($data as $key => $value){
-            if($value == "null"){
-                $value = null;
-            }
+        if(is_array($data)) {
+            foreach ($data as $key => $value) {
+                if ($value === "null") {
+                    $value = null;
+                }
 
-            $tempData[$key] = $value;
+                $tempData[$key] = $value;
+            }
+        } else {
+            return $data;
         }
 
         return $tempData;

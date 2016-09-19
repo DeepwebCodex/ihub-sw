@@ -15,14 +15,19 @@ class EuroGamesTechTemplate implements IExceptionTemplate
 {
     private $item;
 
-    public function mapping($item)
+    public function mapping($item, $statusCode)
     {
         $this->item = $item;
 
         $code = (int)$this->useElement('code', 3000);
         $message = $this->useElement('message', 'Unknown');
 
-        $codeMap = CodeMapping::getByErrorCode($code);
+        //503 error case
+        if($statusCode == 503){
+            $codeMap = CodeMapping::getByMeaning(CodeMapping::TIMED_OUT);
+        } else {
+            $codeMap = CodeMapping::getByErrorCode($code);
+        }
 
         if($codeMap){
             $code = $codeMap['code'];

@@ -6,7 +6,7 @@ use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Integrations\Casino\CodeMapping;
 use App\Components\Traits\MetaDataTrait;
-use App\Components\Transactions\Strategies\ProcessCasino;
+use App\Components\Transactions\Strategies\Casino\ProcessCasino;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
@@ -176,10 +176,7 @@ class CasinoController extends BaseApiController
         /**@var Response $response*/
         $response = ResponseFacade::make(json_encode($payload), 200, [
             'Content-type' => 'application/json'
-        ]);
-
-
-        $response = $response->withHeaders([
+        ])->withHeaders([
             'Access-Control-Allow-Origin' => $casino ? '*' : 'https://casino.favbet.ro'
         ]);
 

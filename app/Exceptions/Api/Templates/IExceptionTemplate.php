@@ -15,5 +15,5 @@ interface IExceptionTemplate
      * @param array $item
      * @return array
      */
-    public function mapping($item);
+    public function mapping($item, $statusCode);
 }
