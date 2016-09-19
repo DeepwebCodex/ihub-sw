@@ -16,6 +16,11 @@ class CardItemModel extends Model
     protected $connection = 'erlybet_slave';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $table = 'carditem';
+
+    /**
      * @param $eventId
      * @return mixed
      */

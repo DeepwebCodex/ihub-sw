@@ -38,6 +38,11 @@ class Kernel extends HttpKernel
             'bindings',
             'check.partner_id'
         ],
+
+        'internal' => [
+            'throttle:60,1',
+            'bindings'
+        ],
     ];
 
     /**
