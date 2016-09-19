@@ -102,7 +102,8 @@ class CasinoController extends BaseApiController
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
             $request->input('amount') / 100,
-            TransactionRequest::TRANS_BET
+            TransactionRequest::TRANS_BET,
+            $request->input('transaction_id')
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
@@ -132,7 +133,8 @@ class CasinoController extends BaseApiController
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
             $request->input('amount') / 100,
-            $request->input('type_operation') == 'rollback' ? TransactionRequest::TRANS_REFUND : TransactionRequest::TRANS_WIN
+            $request->input('type_operation') == 'rollback' ? TransactionRequest::TRANS_REFUND : TransactionRequest::TRANS_WIN,
+            $request->input('transaction_id')
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);

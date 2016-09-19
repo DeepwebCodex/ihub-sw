@@ -36,7 +36,7 @@ class CasinoTemplate implements IExceptionTemplate
             'status' => false,
             'code' => $code,
             'message' => $message,
-            'token' => $this->useElement('token', app('Request')::input('token')),
+            'token' => $this->useElement('token', app('Request')::input('token', '')),
             'signature' => CasinoHelper::generateActionSignature([]),
             'time' => time()
         ];

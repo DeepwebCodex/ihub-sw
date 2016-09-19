@@ -5,6 +5,7 @@ namespace App\Components\Transactions\Strategies\Casino;
 
 use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\Casino\CodeMapping;
+use App\Components\Transactions\BaseSeamlessWalletProcessor;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
@@ -13,13 +14,8 @@ use App\Exceptions\Api\ApiHttpException;
 /**
  * @property  TransactionRequest $request
  */
-class ProcessCasino implements TransactionProcessorInterface
+class ProcessCasino extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
-
-    private $request;
-
-    private $responseData = [];
-    private $isDuplicate = false;
     /**
      * @param TransactionRequest $request
      * @return array
@@ -40,6 +36,8 @@ class ProcessCasino implements TransactionProcessorInterface
                 $request->object_id,
                 $request->comment
             );
+
+            $this->writeTransaction();
 
             if(!$this->responseData){
                 $this->onInvalidResponse();
