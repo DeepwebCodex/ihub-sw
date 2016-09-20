@@ -182,6 +182,7 @@ return [
         \App\Providers\RemoteSessionServiceProvider::class,
         \App\Providers\AccountManagerServiceProvider::class,
         \App\Providers\AppLogServiceProvider::class,
+        Spatie\Fractal\FractalServiceProvider::class
     ],
 
     /*
@@ -231,7 +232,8 @@ return [
         'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class,
         'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
         'RemoteSession' => \App\Components\ExternalServices\Facades\RemoteSession::class,
-        'AppLog' => \App\Facades\AppLog::class
+        'AppLog' => \App\Facades\AppLog::class,
+        'Fractal' => Spatie\Fractal\FractalFacade::class,
     ],
 
 ];

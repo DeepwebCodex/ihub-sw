@@ -113,5 +113,6 @@ return [
     'attributes' => [],
     'check_signature'   => 'Invalid signature',
     'check_time'        => 'Time expired',
-    'session_token'     => 'Invalid token'
+    'session_token'     => 'Invalid token',
+    'date_value'        => 'The :attribute is not a valid date',
 ];
