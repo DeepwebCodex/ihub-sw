@@ -13,12 +13,11 @@ class CreateTransactionsHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::connection('local_test')->create('transaction_history', function (Blueprint $table) {
+        Schema::connection('erlybet')->create('integration.transaction_history', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->string('operation_id');
-            $table->integer('service_id');
             $table->integer('operation_id');
+            $table->integer('service_id');
             $table->integer('amount')->default(0);
             $table->smallInteger('move');
             $table->integer('partner_id');
@@ -27,6 +26,7 @@ class CreateTransactionsHistoryTable extends Migration
             $table->string('currency');
             $table->string('foreign_id');
             $table->string('transaction_type');
+            $table->bigInteger('object_id');
             $table->timestamps();
 
             $table->unique('operation_id');
@@ -43,6 +43,6 @@ class CreateTransactionsHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::connection('local_test')->dropIfExists('transaction_history');
+        Schema::connection('erlybet')->dropIfExists('integration.transaction_history');
     }
 }

@@ -45,18 +45,6 @@ return [
     */
 
     'connections' => [
-        'local_test' => [
-            'driver' => 'pgsql',
-            'host' => 'localhost',
-            'port' => '5432',
-            'database' => 'integrations',
-            'username' => 'postgres',
-            'password' => 'a',
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
         'account' => [
             'driver' => 'pgsql',
             'host' => 'db01dev.favorit',
@@ -71,14 +59,26 @@ return [
         ],
         'erlybet' => [
             'driver' => 'pgsql',
-            'host' => 'db01dev.favorit',
-            'port' => '5432',
-            'database' => 'erlybet',
-            'username' => 'u_developer',
-            'password' => 'Caeph1NaingEe9Sh',
+            'host' => env('DB_HOST', 'db01dev.favorit'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'erlybet'),
+            'username' => env('DB_USERNAME', 'u_developer'),
+            'password' => env('DB_PASSWORD', 'Caeph1NaingEe9Sh'),
             'charset' => 'utf8',
             'prefix' => '',
             'sslmode' => 'prefer',
+        ],
+        'integration' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST', 'db01dev.favorit'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'erlybet'),
+            'username' => env('DB_USERNAME', 'u_developer'),
+            'password' => env('DB_PASSWORD', 'Caeph1NaingEe9Sh'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'sslmode' => 'prefer',
+            'schema' => 'integration',
         ],
         'erlybet_slave' => [
             'driver' => 'pgsql',

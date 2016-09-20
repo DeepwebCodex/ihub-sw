@@ -6,7 +6,6 @@ use App\Components\Formatters\EgtXmlApiFormatter;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
 use App\Components\Traits\MetaDataTrait;
-use App\Components\Transactions\Strategies\EuroGamesTech\ProcessWithdraw;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;

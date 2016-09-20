@@ -50,45 +50,6 @@ class ProcessCasino extends BaseSeamlessWalletProcessor implements TransactionPr
         return $this->responseData;
     }
 
-    /**
-     * @return array
-     */
-    public function getTransactionData()
-    {
-        return $this->responseData;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDuplicate()
-    {
-        return $this->isDuplicate;
-    }
-
-    /**
-     * @param ApiHttpException $e
-     * @return bool
-     */
-    protected function handleError($e)
-    {
-        $errorCode = (int) $e->getPayload('code');
-
-        switch (TransactionHelper::getTransactionErrorState($errorCode))
-        {
-            case TransactionHelper::DUPLICATE:
-                return $this->onTransactionDuplicate($e);
-            case TransactionHelper::BAD_OPERATION_ORDER:
-                return $this->onHaveNotBet($e);
-            case TransactionHelper::INSUFFICIENT_FUNDS:
-                return $this->onInsufficientFunds($e);
-            case TransactionHelper::ACCOUNT_DENIED:
-                return $this->onAccountDenied($e);
-            default:
-                throw $e;
-        }
-    }
-
     protected function onInvalidResponse()
     {
         throw new ApiHttpException(409, null, CodeMapping::getByMeaning(CodeMapping::INVALID_RESULT));
@@ -144,13 +105,5 @@ class ProcessCasino extends BaseSeamlessWalletProcessor implements TransactionPr
     protected function onAccountDenied($e)
     {
         throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByMeaning(CodeMapping::INVALID_RESPONSE));
-    }
-
-    /**
-     * @return AccountManager
-     */
-    protected function getAccountManager()
-    {
-        return app('AccountManager');
     }
 }
