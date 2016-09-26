@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if($controller = $this->isApiCall()){
+        if($controller = $this->isApiCall($request)){
             $response = $this->getApiExceptionResponse($controller, $exception);
             if($response instanceof Response){
                 return $response;
