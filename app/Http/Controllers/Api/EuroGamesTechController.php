@@ -34,7 +34,7 @@ class EuroGamesTechController extends BaseApiController
 
         $this->options = config('integrations.egt');
 
-        $this->middleware('input.xml');
+        $this->middleware('input.xml')->except(['error']);
 
         Validator::extend('check_defence_code', 'App\Http\Requests\Validation\EuroGamesTechValidation@checkDefenceCode');
         Validator::extend('check_expiration_time', 'App\Http\Requests\Validation\EuroGamesTechValidation@checkExpirationTime');

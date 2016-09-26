@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 Route::group(['prefix' => 'internal'], function () {
     Route::get('ivg/cancel_event/{limit?}/{type?}/{categoryId?}', 'IvgController@cancelEvent');
 

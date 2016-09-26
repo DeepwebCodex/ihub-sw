@@ -36,7 +36,7 @@ class CasinoController extends BaseApiController
 
         $this->options = config('integrations.casino');
 
-        $this->middleware('input.json')->except(['genToken']);
+        $this->middleware('input.json')->except(['genToken', 'error']);
 
         Validator::extend('check_signature', 'App\Http\Requests\Validation\CasinoValidation@CheckSignature');
         Validator::extend('check_time', 'App\Http\Requests\Validation\CasinoValidation@CheckTime');

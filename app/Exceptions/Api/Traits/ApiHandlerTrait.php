@@ -6,6 +6,7 @@ namespace App\Exceptions\Api\Traits;
 use App\Components\Formatters\BaseApiFormatter;
 use App\Http\Controllers\Api\BaseApiController;
 use Exception;
+use Illuminate\Support\Facades\Route;
 
 trait ApiHandlerTrait
 {
@@ -13,7 +14,7 @@ trait ApiHandlerTrait
      * @return mixed bool|string
      */
     protected function isApiCall(){
-        $currentAction = \Route::currentRouteAction();
+        $currentAction = Route::currentRouteAction();
 
         if($currentAction) {
             list($controller, $method) = explode('@', $currentAction);

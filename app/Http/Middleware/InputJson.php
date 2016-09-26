@@ -21,7 +21,7 @@ class InputJson
     {
         $bodyContent = $request->getContent();
         if (!$bodyContent) {
-            throw new ApiHttpException(400, trans('api/all.s_empty_source'));
+            throw new ApiHttpException(400, trans('Empty source'));
         }
 
         $bodyContentDecoded = json_decode($bodyContent, true);
@@ -30,6 +30,6 @@ class InputJson
             return $next($request);
         }
 
-        throw new ApiHttpException(400, trans('api/all.s_cant_parse_source'));
+        throw new ApiHttpException(400, trans('Can\'t parse source'));
     }
 }
