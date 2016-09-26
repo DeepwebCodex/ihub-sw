@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Integrations\Casino\CodeMapping;
 use App\Components\Traits\MetaDataTrait;
+use App\Components\Transactions\Decorators\BalanceTransactionCents;
 use App\Components\Transactions\Strategies\Casino\ProcessCasino;
 use App\Components\Transactions\TransactionHandler;
+use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\Decorators\UserBalanceCents;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\CasinoTemplate;
@@ -56,7 +60,7 @@ class CasinoController extends BaseApiController
             'user_id'   => $user->id,
             'user_name' => $user->login,
             'currency'  => $user->getCurrency(),
-            'balance'   => $user->getBalance() * 100
+            'balance'   => (new UserBalanceCents($user))->getBalanceInCents()
         ]);
     }
 
@@ -70,7 +74,7 @@ class CasinoController extends BaseApiController
         $user->checkSessionCurrency();
 
         return $this->respondOk(200, 'success', [
-           'balance' => $user->getBalance() * 100
+           'balance' => (new UserBalanceCents($user))->getBalanceInCents()
         ]);
     }
 
@@ -101,7 +105,7 @@ class CasinoController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
-            $request->input('amount') / 100,
+            TransactionHelper::amountCentsToWhole($request->input('amount')),
             TransactionRequest::TRANS_BET,
             $request->input('transaction_id')
         );
@@ -111,7 +115,7 @@ class CasinoController extends BaseApiController
         $transactionResponse = $transactionHandler->handle(new ProcessCasino());
 
         return $this->respondOk(200, 'success', [
-            'balance'           => $transactionResponse->getBalance() * 100,
+            'balance'           => (new BalanceTransactionCents($transactionResponse))->getBalanceInCents(),
             'transaction_id'    => $transactionResponse->operation_id
         ]);
     }
@@ -132,7 +136,7 @@ class CasinoController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
-            $request->input('amount') / 100,
+            TransactionHelper::amountCentsToWhole($request->input('amount')),
             $request->input('type_operation') == 'rollback' ? TransactionRequest::TRANS_REFUND : TransactionRequest::TRANS_WIN,
             $request->input('transaction_id')
         );
@@ -142,7 +146,7 @@ class CasinoController extends BaseApiController
         $transactionResponse = $transactionHandler->handle(new ProcessCasino());
 
         return $this->respondOk(200, 'success', [
-            'balance'           => $transactionResponse->getBalance() * 100,
+            'balance'           => (new BalanceTransactionCents($transactionResponse))->getBalanceInCents(),
             'transaction_id'    => $transactionResponse->operation_id
         ]);
     }
@@ -158,7 +162,7 @@ class CasinoController extends BaseApiController
 
         $token = $request->cookie('PHPSESSID');
 
-        $user_id = \RemoteSession::start($token)->get('user_id');
+        $user_id = RemoteSession::start($token)->get('user_id');
 
         if($user_id)
         {

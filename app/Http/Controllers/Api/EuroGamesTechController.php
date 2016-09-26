@@ -6,7 +6,11 @@ use App\Components\Formatters\EgtXmlApiFormatter;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
 use App\Components\Traits\MetaDataTrait;
+use App\Components\Transactions\Decorators\BalanceTransactionCents;
+use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\Decorators\UserBalanceCents;
+use App\Components\Users\Decorators\UserEgt;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\EuroGamesTechTemplate;
@@ -46,12 +50,10 @@ class EuroGamesTechController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
-        if($user->getActiveWallet()->currency != EgtHelper::getCurrencyFromPortalCode($request->input('PortalCode'))){
-            throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
-        }
+        (new UserEgt($user))->checkInputCurrency(EgtHelper::getCurrencyFromPortalCode($request->input('PortalCode')));
 
         return $this->respondOk(200, null,[
-            'Balance' => $user->getBalance() * 100
+            'Balance' => (new UserBalanceCents($user))->getBalanceInCents()
         ]);
     }
 
@@ -59,12 +61,11 @@ class EuroGamesTechController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
-        if($user->getCurrency() != $request->input('Currency')){
-            throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
-        }
+
+        (new UserEgt($user))->checkInputCurrency($request->input('Currency'));
 
         return $this->respondOk(200, null,[
-            'Balance' => $user->getBalance() * 100
+            'Balance' => (new UserBalanceCents($user))->getBalanceInCents()
         ]);
     }
 
@@ -72,9 +73,7 @@ class EuroGamesTechController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
-        if($user->getCurrency() != $request->input('Currency')){
-            throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
-        }
+        (new UserEgt($user))->checkInputCurrency($request->input('Currency'));
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -82,7 +81,7 @@ class EuroGamesTechController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
-            $request->input('Amount') / 100,
+            TransactionHelper::amountCentsToWhole($request->input('Amount')),
             EgtHelper::getTransactionType($request->input('Reason')),
             $request->input('TransferId')
         );
@@ -90,7 +89,7 @@ class EuroGamesTechController extends BaseApiController
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, null, [
-            'Balance' => $transactionResponse->getBalance() * 100,
+            'Balance' => (new BalanceTransactionCents($transactionResponse))->getBalanceInCents(),
             'CasinoTransferId' => $transactionResponse->operation_id
         ]);
     }
@@ -99,9 +98,7 @@ class EuroGamesTechController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
-        if($user->getCurrency() != $request->input('Currency')){
-            throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
-        }
+        (new UserEgt($user))->checkInputCurrency($request->input('Currency'));
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -109,7 +106,7 @@ class EuroGamesTechController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
-            $request->input('Amount') / 100,
+            TransactionHelper::amountCentsToWhole($request->input('Amount')),
             EgtHelper::getTransactionType($request->input('Reason'), true),
             $request->input('TransferId')
         );
@@ -117,7 +114,7 @@ class EuroGamesTechController extends BaseApiController
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, null, [
-            'Balance' => $transactionResponse->getBalance() * 100,
+            'Balance' => (new BalanceTransactionCents($transactionResponse))->getBalanceInCents(),
             'CasinoTransferId' => $transactionResponse->operation_id
         ]);
     }
@@ -126,9 +123,7 @@ class EuroGamesTechController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
-        if($user->getCurrency() != $request->input('Currency')){
-            throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
-        }
+        (new UserEgt($user))->checkInputCurrency($request->input('Currency'));
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -136,7 +131,7 @@ class EuroGamesTechController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
-            $request->input('Amount') / 100,
+            TransactionHelper::amountCentsToWhole($request->input('Amount')),
             EgtHelper::getTransactionType($request->input('Reason')),
             $request->input('TransferId')
         );
@@ -149,7 +144,7 @@ class EuroGamesTechController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
-            $request->input('WinAmount') / 100,
+            TransactionHelper::amountCentsToWhole($request->input('WinAmount')),
             TransactionRequest::TRANS_WIN,
             $request->input('TransferId')
         );
@@ -157,7 +152,7 @@ class EuroGamesTechController extends BaseApiController
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, null, [
-            'Balance' => $transactionResponse->getBalance() * 100,
+            'Balance' => (new BalanceTransactionCents($transactionResponse))->getBalanceInCents(),
             'CasinoTransferId' => $transactionResponse->operation_id
         ]);
     }

@@ -27,4 +27,8 @@ class TransactionHelper
                 return self::UNKNOWN;
         }
     }
+
+    public static function amountCentsToWhole(int $amount){
+        return $amount / 100;
+    }
 }
