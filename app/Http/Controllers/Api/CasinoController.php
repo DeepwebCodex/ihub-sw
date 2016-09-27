@@ -7,12 +7,10 @@ use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Integrations\Casino\CodeMapping;
 use App\Components\Traits\MetaDataTrait;
-use App\Components\Transactions\Decorators\BalanceTransactionCents;
 use App\Components\Transactions\Strategies\Casino\ProcessCasino;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\Decorators\UserBalanceCents;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\CasinoTemplate;
@@ -60,7 +58,7 @@ class CasinoController extends BaseApiController
             'user_id'   => $user->id,
             'user_name' => $user->login,
             'currency'  => $user->getCurrency(),
-            'balance'   => (new UserBalanceCents($user))->getBalanceInCents()
+            'balance'   => $user->getBalanceInCents()
         ]);
     }
 
@@ -74,7 +72,7 @@ class CasinoController extends BaseApiController
         $user->checkSessionCurrency();
 
         return $this->respondOk(200, 'success', [
-           'balance' => (new UserBalanceCents($user))->getBalanceInCents()
+           'balance' => $user->getBalanceInCents()
         ]);
     }
 
@@ -115,7 +113,7 @@ class CasinoController extends BaseApiController
         $transactionResponse = $transactionHandler->handle(new ProcessCasino());
 
         return $this->respondOk(200, 'success', [
-            'balance'           => (new BalanceTransactionCents($transactionResponse))->getBalanceInCents(),
+            'balance'           => $transactionResponse->getBalanceInCents(),
             'transaction_id'    => $transactionResponse->operation_id
         ]);
     }
@@ -146,7 +144,7 @@ class CasinoController extends BaseApiController
         $transactionResponse = $transactionHandler->handle(new ProcessCasino());
 
         return $this->respondOk(200, 'success', [
-            'balance'           => (new BalanceTransactionCents($transactionResponse))->getBalanceInCents(),
+            'balance'           => $transactionResponse->getBalanceInCents(),
             'transaction_id'    => $transactionResponse->operation_id
         ]);
     }

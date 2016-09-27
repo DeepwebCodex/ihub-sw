@@ -61,4 +61,14 @@ class EgtHelper
 
         return $transactionResponse;
     }
+
+    /**
+     * @param string $userCurrency
+     * @param string $inputCurrency
+     */
+    public static function checkInputCurrency(string $userCurrency, string $inputCurrency){
+        if($userCurrency != $inputCurrency){
+            throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
+        }
+    }
 }

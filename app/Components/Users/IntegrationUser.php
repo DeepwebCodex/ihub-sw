@@ -105,6 +105,16 @@ class IntegrationUser implements UserInterface
         return null;
     }
 
+    public function getBalanceInCents(){
+        $balance = $this->getBalance();
+
+        if($balance !== null){
+            return $balance * 100;
+        }
+
+        return null;
+    }
+
     public function storeSessionCurrency($currency){
         $this->setSessionCurrency($currency, $this->id);
     }

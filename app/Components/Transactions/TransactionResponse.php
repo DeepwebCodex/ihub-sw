@@ -60,6 +60,17 @@ class TransactionResponse
         return $this->balance;
     }
 
+    public function getBalanceInCents()
+    {
+        $balance = $this->getBalance();
+
+        if($balance !== null){
+            return $balance * 100;
+        }
+
+        return null;
+    }
+
     public function isDuplicate(){
         return $this->isDuplicate;
     }
