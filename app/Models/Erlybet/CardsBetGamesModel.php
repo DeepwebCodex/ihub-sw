@@ -3,10 +3,10 @@
 namespace App\Models\Erlybet;
 
 /**
- * Class CardsBgModel
+ * Class CardsBetGamesModel
  * @package App\Models\Erlybet
  */
-class CardsBgModel extends BaseErlybetModel
+class CardsBetGamesModel extends BaseErlybetModel
 {
     /**
      * {@inheritdoc}

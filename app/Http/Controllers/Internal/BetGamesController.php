@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Internal;
 
 use App\Http\Controllers\Controller;
-use App\Models\Erlybet\CardsBgModel;
-use App\Transformers\Internal\Bg\CashdeskCardsTransformer;
-use App\Transformers\Internal\Bg\CashdeskCardTransformer;
+use App\Models\Erlybet\CardsBetGamesModel;
+use App\Transformers\Internal\BetGames\CashdeskCardsTransformer;
+use App\Transformers\Internal\BetGames\CashdeskCardTransformer;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Fractal\ArraySerializer;
 
 /**
- * Class BgController
+ * Class BetGamesController
  * @package App\Http\Controllers\Internal
  */
-class BgController extends Controller
+class BetGamesController extends Controller
 {
-    const NODE = 'bg';
+    const NODE = 'bet_games';
 
     /**
-     * BgController constructor.
+     * BetGamesController constructor.
      */
     public function __construct()
     {
@@ -39,7 +39,7 @@ class BgController extends Controller
             return $this->wrongInputResponse();
         }
 
-        $cardInfo = (new CardsBgModel)->getCard(Input::get('barcode'), Input::get('cashdesk_id'));
+        $cardInfo = (new CardsBetGamesModel)->getCard(Input::get('barcode'), Input::get('cashdesk_id'));
         if ($cardInfo) {
             $cardInfo = fractal()
                 ->item($cardInfo, new CashdeskCardTransformer())
@@ -69,7 +69,7 @@ class BgController extends Controller
         $states = explode(',', Input::get('states'));
         $states = array_map('trim', $states);
 
-        $cardsInfo = (new CardsBgModel)->getCards(
+        $cardsInfo = (new CardsBetGamesModel)->getCards(
             $states,
             Input::get('cashdesk_id'),
             Input::get('from'),

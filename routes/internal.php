@@ -6,8 +6,8 @@ Route::group(['prefix' => 'internal'], function () {
     Route::get('ivg/cancel_event/{limit?}/{type?}/{categoryId?}', 'IvgController@cancelEvent');
 
     Route::group(['prefix' => 'bg'], function () {
-        Route::get('cashdeskCard', 'BgController@cashdeskCard');
-        Route::get('cashdeskCards', 'BgController@cashdeskCards');
+        Route::get('cashdeskCard', 'BetGamesController@cashdeskCard');
+        Route::get('cashdeskCards', 'BetGamesController@cashdeskCards');
     });
 
     Route::group(['prefix' => 'gr'], function () {
