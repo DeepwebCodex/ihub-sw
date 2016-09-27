@@ -11,9 +11,9 @@ Route::group(['prefix' => 'internal'], function () {
     });
 
     Route::group(['prefix' => 'gr'], function () {
-        Route::get('get_report', 'GrController@getReport');
-        Route::get('get_report_cashdesk', 'GrController@getReportCashdesk');
-        Route::get('get_card_cashdesk', 'GrController@getCardCashdesk');
+        Route::get('get_report', 'GoldenRaceController@getReport');
+        Route::get('get_report_cashdesk', 'GoldenRaceController@getReportCashdesk');
+        Route::get('get_card_cashdesk', 'GoldenRaceController@getCardCashdesk');
     });
 
     Route::get('ld', 'LdController@checkTransactions');
