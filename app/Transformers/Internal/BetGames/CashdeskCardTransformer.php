@@ -1,17 +1,21 @@
 <?php
 
-namespace App\Transformers\Internal\Bg;
+namespace App\Transformers\Internal\BetGames;
 
-use App\Models\Erlybet\CardsBgModel;
+use App\Models\Erlybet\CardsBetGamesModel;
 use League\Fractal\TransformerAbstract;
 
 /**
  * Class CashdeskCardTransformer
- * @package App\Transformers\Internal\Bg
+ * @package App\Transformers\Internal\BetGames
  */
 class CashdeskCardTransformer extends TransformerAbstract
 {
-    public function transform(CardsBgModel $item)
+    /**
+     * @param CardsBetGamesModel $item
+     * @return array
+     */
+    public function transform(CardsBetGamesModel $item)
     {
         return [
             'status' => $item->status,
