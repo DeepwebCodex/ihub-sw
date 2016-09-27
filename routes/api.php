@@ -35,3 +35,9 @@ Route::group(['prefix' => 'egt'], function () {
     Route::any('{any}', "EuroGamesTechController@error");
     Route::any('/', "EuroGamesTechController@error");
 });
+
+/**MicroGaming controller routes */
+Route::group(['prefix' => 'mg'], function () {
+    Route::any('{any}', "MicroGamingController@error");
+    Route::any('/', "MicroGamingController@index");
+});

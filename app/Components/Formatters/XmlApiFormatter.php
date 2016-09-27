@@ -9,10 +9,9 @@
 namespace App\Components\Formatters;
 
 
+use App\Components\ThirdParty\Array2Xml;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
-use SimpleXMLElement;
-
 
 class XmlApiFormatter extends BaseApiFormatter
 {
@@ -24,27 +23,11 @@ class XmlApiFormatter extends BaseApiFormatter
     public function format(array $data)
     {
         if($data) {
-            return $this->arrayToXml($data);
+            return Array2Xml::createXML('root', $data)->saveXML();
         }
 
         return '';
     }
-
-    private function arrayToXml(array $data, $xml = null){
-        if (is_null($xml)) {
-            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><root/>');
-        }
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $this->arrayToXml($value, $xml->addChild($key));
-            } else {
-                $xml->addChild($key, $value);
-            }
-        }
-
-        return $xml->asXML();
-    }
-
 
     /**
      * @param \Exception $exception
@@ -59,7 +42,8 @@ class XmlApiFormatter extends BaseApiFormatter
         ]);
     }
 
-    public function formatResponse($statusCode, string $message, array $payload = []){
+    public function formatResponse($statusCode, string $message, array $payload = [])
+    {
 
         $payload = array_merge($message ? compact('message') : [], $this->getMetaData()?:[], $payload);
 

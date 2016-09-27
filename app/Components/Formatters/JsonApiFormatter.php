@@ -18,7 +18,8 @@ class JsonApiFormatter extends BaseApiFormatter
      * @param array $data
      * @return string
      */
-    public function format(array $data){
+    public function format(array $data)
+    {
         if($data) {
             return json_encode($data);
         }
@@ -31,7 +32,8 @@ class JsonApiFormatter extends BaseApiFormatter
      * @param \Exception $exception
      * @return Response
      */
-    public function formatException(\Exception $exception){
+    public function formatException(\Exception $exception)
+    {
 
         list($payload, $statusCode) = array_values($this->transformException($exception));
 
@@ -40,7 +42,8 @@ class JsonApiFormatter extends BaseApiFormatter
         ]);
     }
 
-    public function formatResponse($statusCode, string $message, array $payload = []){
+    public function formatResponse($statusCode, string $message, array $payload = [])
+    {
 
         $payload = array_merge($message ? compact('message') : [], $this->getMetaData()?:[], $payload);
 

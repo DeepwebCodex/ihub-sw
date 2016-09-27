@@ -12,7 +12,8 @@
         "jenssegers/mongodb": "^3.0",
         "kozz/laravel-guzzle-provider": "~6.0",
         "Nathanmac/Parser": "3.*",
-        "spatie/laravel-fractal": "^1.9"
+        "spatie/laravel-fractal": "^1.9",
+        "danielstjules/stringy": "~2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

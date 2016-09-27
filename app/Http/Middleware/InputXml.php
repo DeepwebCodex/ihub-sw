@@ -27,11 +27,34 @@ class InputXml
 
         try {
             $bodyContentDecoded = Parser::xml($bodyContent);
+
+            $bodyContentDecoded = $this->collapseAttributes($bodyContentDecoded);
+
         } catch (\Exception $e){
             throw new ApiHttpException(400, trans('Can\'t parse source'));
         }
 
         $request->merge($bodyContentDecoded);
         return $next($request);
+    }
+
+    private function collapseAttributes(array $data)
+    {
+        $temp = [];
+        if ($data) {
+            foreach ($data as $name => $item) {
+                if (is_array($item)) {
+                    if ($name == '@attributes') {
+                        $temp = $item;
+                    } else {
+                        $temp[$name] = $this->collapseAttributes($item);
+                    }
+                } else {
+                    $temp[$name] = $item;
+                }
+            }
+        }
+
+        return $temp;
     }
 }
