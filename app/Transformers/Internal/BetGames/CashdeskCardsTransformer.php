@@ -11,6 +11,10 @@ use League\Fractal\TransformerAbstract;
  */
 class CashdeskCardsTransformer extends TransformerAbstract
 {
+    /**
+     * @param CardsBetGamesModel $item
+     * @return array
+     */
     public function transform(CardsBetGamesModel $item)
     {
         return [
