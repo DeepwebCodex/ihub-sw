@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Formatters\MicroGamingApiFormatter;
 use App\Components\Integrations\Casino\CodeMapping;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use App\Components\Traits\MetaDataTrait;
+use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGaming;
+use App\Components\Transactions\TransactionHandler;
+use App\Components\Transactions\TransactionHelper;
+use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\IntegrationUser;
 use App\Http\Requests\MicroGaming\BalanceRequest;
 use App\Http\Requests\MicroGaming\EndGameRequest;
 use App\Http\Requests\MicroGaming\LogInRequest;
@@ -16,6 +22,7 @@ use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\MicroGamingTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class CasinoController
@@ -33,7 +40,11 @@ class MicroGamingController extends BaseApiController
 
         $this->options = config('integrations.microGaming');
 
-        $this->middleware('input.xml')->except(['test']);
+        $this->middleware('input.xml');
+
+        Validator::extend('validate_token', 'App\Http\Requests\Validation\MicroGamingValidation@validateToken');
+        Validator::extend('validate_time', 'App\Http\Requests\Validation\MicroGamingValidation@validateTime');
+        Validator::extend('validate_play_type', 'App\Http\Requests\Validation\MicroGamingValidation@validatePlayType');
     }
 
     public function index(Request $request)
@@ -51,66 +62,100 @@ class MicroGamingController extends BaseApiController
 
     public function logIn(LogInRequest $request)
     {
+        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
+
+        MicroGamingHelper::confirmTokenHash($request->input('methodcall.call.token'), RemoteSession::getSessionId(), $user->getCurrency());
+
         return $this->respondOk(200, "", [
-            'loginname'     => '',
-            'currency'      => '',
-            'country'       => '',
-            'city'          => '',
-            'balance'       => '',
-            'bonusbalance'  => '',
-            'wallet'        => '',
-            'idnumber'      => ''
+            'loginname'     => $user->id . $user->getCurrency(),
+            'currency'      => $user->getCurrency(),
+            'country'       => $user->country_id,
+            'city'          => $user->city,
+            'balance'       => $user->getBalanceInCents(),
+            'bonusbalance'  => '0',
+            'wallet'        => 'local',
+            'idnumber'      => '0'
         ]);
     }
 
     public function getBalance(BalanceRequest $request)
     {
-        return $this->respondOk(200, "", [
+        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
 
+        MicroGamingHelper::confirmTokenHash($request->input('methodcall.call.token'), RemoteSession::getSessionId(), $user->getCurrency());
+
+        return $this->respondOk(200, "", [
+            'balance'       => $user->getBalanceInCents(),
+            'bonusbalance'  => '0',
         ]);
     }
 
     public function play(PlayRequest $request)
     {
-        return $this->respondOk(200, "", [
+        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
 
+        MicroGamingHelper::confirmTokenHash($request->input('methodcall.call.token'), RemoteSession::getSessionId(), $user->getCurrency());
+
+        $transactionRequest = new TransactionRequest(
+            $this->getOption('service_id'),
+            $request->input('methodcall.call.gameid'),
+            $user->id,
+            $user->getCurrency(),
+            MicroGamingHelper::getTransactionDirection($request->input('methodcall.call.playtype')),
+            TransactionHelper::amountCentsToWhole($request->input('methodcall.call.amount')),
+            MicroGamingHelper::getTransactionType($request->input('methodcall.call.playtype')),
+            $request->input('methodcall.call.actionid')
+        );
+
+        $transactionHandler = new TransactionHandler($transactionRequest, $user);
+
+        $transactionResponse = $transactionHandler->handle(new ProcessMicroGaming());
+
+        return $this->respondOk(200, "", [
+            'balance'           => $transactionResponse->getBalanceInCents(),
+            'bonusbalance'      => '0',
+            'exttransactionid'  => $transactionResponse->operation_id
         ]);
     }
 
     public function endGame(EndGameRequest $request)
     {
-        return $this->respondOk(200, "", [
+        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
 
+        MicroGamingHelper::confirmTokenHash($request->input('methodcall.call.token'), RemoteSession::getSessionId(), $user->getCurrency());
+
+        return $this->respondOk(200, "", [
+            'balance'       => $user->getBalanceInCents(),
+            'bonusbalance'  => '0',
         ]);
     }
 
     public function refreshToken(RefreshTokenRequest $request)
     {
-        return $this->respondOk(200, "", [
+        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
 
-        ]);
+        MicroGamingHelper::confirmTokenHash($request->input('methodcall.call.token'), RemoteSession::getSessionId(), $user->getCurrency());
+
+        return $this->respondOk(200);
     }
 
-    public function test(Request $request){
-        //exit(dump($request->all()));
-
-        return $this->respondOk(201, "After Redirect", [
-            'test' => 1
-        ]);
-    }
-
-    public function error(){
-        throw new ApiHttpException(404, null, [
-            'code'      => array_get('code', CodeMapping::getByMeaning(CodeMapping::UNKNOWN_METHOD)),
-            'message'   => 'Неизвестный метод'
-        ]);
+    public function error()
+    {
+        throw new ApiHttpException(404, 'Неизвестный метод', CodeMapping::getByMeaning(CodeMapping::UNKNOWN_METHOD));
     }
 
     public function respondOk($statusCode = Response::HTTP_OK, string $message = "", array $payload = []){
 
+        $token = request()->input('methodcall.call.token');
+
+        if(RemoteSession::getSessionId())
+        {
+            $token = MicroGamingHelper::generateToken(RemoteSession::getSessionId(), $this->getMetaField('currency'));
+        }
+
         $attributes = [
             'seq'   => request()->input('methodcall.call.seq'),
-            'token' => request()->input('methodcall.call.token') //TODO::generate token
+            'token' => $token
         ];
 
         $attributes = array_merge($attributes, $payload);

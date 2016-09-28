@@ -16,7 +16,7 @@ class MicroGamingTemplate implements IExceptionTemplate
 {
     private $item;
 
-    public function mapping($item, $statusCode)
+    public function mapping($item, $statusCode, $isApiException)
     {
         $this->item = $item;
 
@@ -27,7 +27,7 @@ class MicroGamingTemplate implements IExceptionTemplate
 
         if($codeMap){
             $code = $codeMap['code'];
-            $message = $code == 6000 ? $message : $codeMap['message'];
+            $message = ($code == 6000 && $isApiException === true) ? $message : $codeMap['message'];
         }
 
         $request = request();

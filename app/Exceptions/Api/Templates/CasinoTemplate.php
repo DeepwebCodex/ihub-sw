@@ -18,7 +18,7 @@ class CasinoTemplate implements IExceptionTemplate
 
     private $item;
 
-    public function mapping($item, $statusCode)
+    public function mapping($item, $statusCode, $isApiException)
     {
         $this->item = $item;
 
@@ -29,7 +29,7 @@ class CasinoTemplate implements IExceptionTemplate
 
         if($codeMap){
             $code = $codeMap['code'];
-            $message = $code == 0 ? $message : $codeMap['message'];
+            $message = ($code == 0 && $isApiException === true) ? $message : $codeMap['message'];
         }
 
         $view = [

@@ -16,8 +16,8 @@ class BalanceRequest extends BaseMicroGamingRequest
     public function messages()
     {
         return [
-            /*'DefenceCode.check_defence_code' => 'Invalid defence code',
-            'DefenceCode.check_expiration_time'  => 'Expired defence code',*/
+            'methodcall.call.token.validate_token' => 'Invalid token',
+            'methodcall.call.token.validate_time'  => 'Token is no longer valid',
         ];
     }
     /**
@@ -28,7 +28,9 @@ class BalanceRequest extends BaseMicroGamingRequest
     public function rules()
     {
         return [
-            //'UserName' => 'bail|required|string',
+            'methodcall.system'     => 'bail|required|string|in:casino',
+            'methodcall.call.seq'   => 'bail|required|string',
+            'methodcall.call.token' => 'bail|required|string|validate_token|validate_time',
         ];
     }
 }

@@ -13,7 +13,9 @@ interface IExceptionTemplate
 {
     /**
      * @param array $item
+     * @param $statusCode
+     * @param $isApiException
      * @return array
      */
-    public function mapping($item, $statusCode);
+    public function mapping($item, $statusCode, $isApiException);
 }

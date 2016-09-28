@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \Validator::extend('session_token', 'App\Http\Requests\Validation\GlobalValidation@CheckSessionToken');
+        Validator::extend('session_token', 'App\Http\Requests\Validation\GlobalValidation@CheckSessionToken');
     }
 
     /**

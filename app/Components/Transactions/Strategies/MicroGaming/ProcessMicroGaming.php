@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Components\Transactions\Strategies\EuroGamesTech;
+namespace App\Components\Transactions\Strategies\MicroGaming;
 
 use App\Components\Integrations\CodeMappingBase;
-use App\Components\Integrations\EuroGamesTech\CodeMapping;
+use App\Components\Integrations\MicroGaming\CodeMapping;
 use App\Components\Transactions\BaseSeamlessWalletProcessor;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Transactions\TransactionRequest;
@@ -14,7 +14,7 @@ use App\Models\Transactions;
  * @property  TransactionRequest $request
  * @property  CodeMapping $codeMapping;
  */
-class ProcessEuroGamesTech extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
+class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
 
     protected $codeMapping = CodeMapping::class;
@@ -66,5 +66,29 @@ class ProcessEuroGamesTech extends BaseSeamlessWalletProcessor implements Transa
         }
 
         return $this->responseData;
+    }
+
+    /**
+     * @param ApiHttpException $e
+     * @return $this
+     */
+    protected function onTransactionDuplicate($e)
+    {
+        $operation = $this->getAccountManager()->getOperations(
+            $this->request->user_id,
+            $this->request->direction,
+            $this->request->object_id,
+            $this->request->service_id);
+
+        if(!$operation){
+            throw new ApiHttpException(409, "Finance error", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
+        }
+        else if (count($operation) > 1)
+        {
+            throw new ApiHttpException(409, "Finance error, duplicated duplication", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
+        }
+
+        $this->responseData = $operation;
+        $this->isDuplicate = true;
     }
 }

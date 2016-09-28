@@ -15,7 +15,7 @@ class EuroGamesTechTemplate implements IExceptionTemplate
 {
     private $item;
 
-    public function mapping($item, $statusCode)
+    public function mapping($item, $statusCode, $isApiException)
     {
         $this->item = $item;
 
@@ -31,7 +31,7 @@ class EuroGamesTechTemplate implements IExceptionTemplate
 
         if($codeMap){
             $code = $codeMap['code'];
-            $message = ($code == 3000 || ($code == 3100 && $message != 'Unknown')) ? $message : $codeMap['message'];
+            $message = (($code == 3000 || ($code == 3100 && $message != 'Unknown')) && $isApiException == true) ? $message : $codeMap['message'];
         }
 
         $balance = $this->useElement('Balance', null);

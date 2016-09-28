@@ -11,6 +11,7 @@ namespace App\Components\Formatters;
 
 
 use App\Components\Traits\MetaDataTrait;
+use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\IExceptionTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -56,12 +57,10 @@ abstract class BaseApiFormatter
         }
     }
 
-    private function mapPayload(array $payload, int $statusCode){
+    private function mapPayload(array $payload, int $statusCode, bool $isApiException){
         if($this->exceptionTemplate && $this->exceptionTemplate instanceof IExceptionTemplate)
         {
-
-            //exit(dump($payload, compact('statusCode')));
-            $result = array_map([$this->exceptionTemplate, 'mapping'], [$payload], [$statusCode]);
+            $result = array_map([$this->exceptionTemplate, 'mapping'], [$payload], [$statusCode], [$isApiException]);
 
             return reset($result);
         }
@@ -98,7 +97,9 @@ abstract class BaseApiFormatter
 
         $exceptionData['statusCode'] = $e->getStatusCode();
 
-        $exceptionData['payload'] = $this->mapPayload($exceptionData['payload'], $exceptionData['statusCode']);
+        $exceptionData['isApiException'] = config('app.debug') ? true : $exception instanceof ApiHttpException;
+
+        $exceptionData['payload'] = $this->mapPayload($exceptionData['payload'], $exceptionData['statusCode'], $exceptionData['isApiException']);
 
         return $exceptionData;
     }

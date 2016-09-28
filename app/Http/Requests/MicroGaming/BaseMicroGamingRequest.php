@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\MicroGaming;
 
+use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\MicroGaming\CodeMapping;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
@@ -33,6 +34,18 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
         }
     }
 
+    public function authorizeUser(Request $request){
+        list($remoteSession, $time, $hash) = $request->input('methodcall.call.token');
+
+        $remoteSession = trim($remoteSession);
+
+        $userId = RemoteSession::start($remoteSession)->get('user_id');
+
+        if(!$userId){
+            throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
+        }
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -41,13 +54,15 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
      */
     public function authorize(Request $request)
     {
-        //$this->isSecureRequest();
+        $this->isSecureRequest();
 
         $config_user = config('integrations.microGaming.login_server');
         $config_password = config('integrations.microGaming.password_server');
 
         if($config_user == $request->input('methodcall.auth.login') && $config_password == $request->input('methodcall.auth.password'))
         {
+            $this->authorizeUser($request);
+
             return true;
         }
 
