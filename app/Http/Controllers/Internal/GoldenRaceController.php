@@ -37,7 +37,7 @@ class GoldenRaceController extends Controller
         }
 
         $partnerId = Input::get('partner_id');
-        $from = Input::get('from');
+        $from = get_formatted_date(Input::get('from'));
 
         $reportsRepository = new GoldenRaceReportsRepository();
 
@@ -76,8 +76,8 @@ class GoldenRaceController extends Controller
                 ->getCards(
                     $states,
                     Input::get('cashdesk_id'),
-                    Input::get('from'),
-                    Input::get('to'),
+                    get_formatted_date(Input::get('from')),
+                    get_formatted_date(Input::get('to')),
                     $partnerId
                 );
             if ($cardsInfo) {
