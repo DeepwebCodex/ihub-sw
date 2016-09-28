@@ -18,11 +18,6 @@ use Spatie\Fractal\ArraySerializer;
  */
 class GoldenRaceController extends Controller
 {
-    const PARTNERS = [
-        'ua' => [1, 18],
-        'hr' => [50]
-    ];
-
     /**
      * @return \Illuminate\Http\JsonResponse
      */
@@ -37,7 +32,7 @@ class GoldenRaceController extends Controller
         }
 
         $partnerId = Input::get('partner_id');
-        $from = Input::get('from');
+        $from = get_formatted_date(Input::get('from'));
 
         $reportsRepository = new GoldenRaceReportsRepository();
 
@@ -49,7 +44,7 @@ class GoldenRaceController extends Controller
             'report3_3' => $reportsRepository->getReport33($partnerId, $from),
         ];
 
-        return $this->makeResponse(true, $reportsInfo);
+        return $this->makeResponse($reportsInfo, true);
     }
 
     /**
@@ -68,31 +63,29 @@ class GoldenRaceController extends Controller
         }
 
         $partnerId = (int)request()->server('PARTNER_ID');
-        if (\in_array($partnerId, \array_flatten(self::PARTNERS), true)) {
-            $states = explode(',', Input::get('states'));
-            $states = array_map('trim', $states);
-
-            $cardsInfo = (new GoldenRaceTransactionCashdesk())
-                ->getCards(
-                    $states,
-                    Input::get('cashdesk_id'),
-                    Input::get('from'),
-                    Input::get('to'),
-                    $partnerId
-                );
-            if ($cardsInfo) {
-                $cardsInfo = fractal()
-                    ->collection($cardsInfo, $this->getCardTransformer($partnerId))
-                    ->serializeWith(new ArraySerializer())
-                    ->toArray();
-            }
-        } else {
+        if ($this->checkPartnerId($partnerId) === false) {
             return $this->wrongPartnerResponse();
         }
 
-        $status = $cardsInfo !== null;
+        $states = explode(',', Input::get('states'));
+        $states = array_map('trim', $states);
 
-        return $this->makeResponse($status, $cardsInfo);
+        $cardsInfo = (new GoldenRaceTransactionCashdesk())
+            ->getCards(
+                $states,
+                Input::get('cashdesk_id'),
+                get_formatted_date(Input::get('from')),
+                get_formatted_date(Input::get('to')),
+                $partnerId
+            );
+        if ($cardsInfo) {
+            $cardsInfo = fractal()
+                ->collection($cardsInfo, $this->getCardTransformer($partnerId))
+                ->serializeWith(new ArraySerializer())
+                ->toArray();
+        }
+
+        return $this->makeResponse($cardsInfo);
     }
 
     /**
@@ -109,25 +102,46 @@ class GoldenRaceController extends Controller
         }
 
         $partnerId = (int)request()->server('PARTNER_ID');
-        if (\in_array($partnerId, \array_flatten(self::PARTNERS), true)) {
-            $cardInfo = (new GoldenRaceTransactionCashdesk())
-                ->getCard(
-                    Input::get('barcode'),
-                    Input::get('cashdesk_id'),
-                    $partnerId
-                );
-            if ($cardInfo) {
-                $cardInfo = fractal()
-                    ->item($cardInfo, $this->getCardTransformer($partnerId))
-                    ->serializeWith(new ArraySerializer())
-                    ->toArray();
-            }
-        } else {
+        if ($this->checkPartnerId($partnerId) === false) {
             return $this->wrongPartnerResponse();
         }
-        $status = $cardInfo !== null;
 
-        return $this->makeResponse($status, $cardInfo);
+        $cardInfo = (new GoldenRaceTransactionCashdesk())
+            ->getCard(
+                Input::get('barcode'),
+                Input::get('cashdesk_id'),
+                $partnerId
+            );
+        if ($cardInfo) {
+            $cardInfo = fractal()
+                ->item($cardInfo, $this->getCardTransformer($partnerId))
+                ->serializeWith(new ArraySerializer())
+                ->toArray();
+        }
+
+        return $this->makeResponse($cardInfo);
+    }
+
+    /**
+     * @param int $partnerId
+     * @return bool
+     */
+    protected function checkPartnerId($partnerId)
+    {
+        return \in_array($partnerId, \array_flatten($this->getPartnersByCountryList()), true);
+    }
+
+    /**
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getPartnersByCountryList()
+    {
+        $value = config('integrations.goldenRace.partners_id_by_country');
+        if (!$value || !is_array($value)) {
+            throw new \RuntimeException;
+        }
+        return $value;
     }
 
     /**
@@ -136,7 +150,7 @@ class GoldenRaceController extends Controller
      */
     protected function getCardTransformer($partnerId)
     {
-        foreach (self::PARTNERS as $lang => $partnersIdList) {
+        foreach ($this->getPartnersByCountryList() as $lang => $partnersIdList) {
             if (\in_array($partnerId, $partnersIdList, true)) {
                 $className = ucfirst($lang) . 'CashdeskCardTransformer';
                 if (class_exists($className)) {
@@ -153,7 +167,7 @@ class GoldenRaceController extends Controller
      */
     protected function wrongPartnerResponse()
     {
-        return $this->makeResponse(false, 'Not match partner id');
+        return $this->makeResponse('Not match partner id', false);
     }
 
     /**
@@ -161,18 +175,18 @@ class GoldenRaceController extends Controller
      */
     protected function wrongInputResponse()
     {
-        return $this->makeResponse(false, 'Miss params');
+        return $this->makeResponse('Miss params', false);
     }
 
     /**
-     * @param bool $status
      * @param mixed $msg
+     * @param bool $status
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function makeResponse($status, $msg)
+    protected function makeResponse($msg, $status = null)
     {
         return response()->json([
-            'status' => $status,
+            'status' => $status ?? ($msg !== null),
             'msg' => $msg
         ]);
     }

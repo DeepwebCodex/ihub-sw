@@ -39,7 +39,10 @@ class BetGamesController extends Controller
             return $this->wrongInputResponse();
         }
 
-        $cardInfo = (new CardsBetGamesModel)->getCard(Input::get('barcode'), Input::get('cashdesk_id'));
+        $cardInfo = (new CardsBetGamesModel)->getCard(
+            Input::get('barcode'),
+            Input::get('cashdesk_id')
+        );
         if ($cardInfo) {
             $cardInfo = fractal()
                 ->item($cardInfo, new CashdeskCardTransformer())
@@ -72,8 +75,8 @@ class BetGamesController extends Controller
         $cardsInfo = (new CardsBetGamesModel)->getCards(
             $states,
             Input::get('cashdesk_id'),
-            Input::get('from'),
-            Input::get('to')
+            get_formatted_date(Input::get('from')),
+            get_formatted_date(Input::get('to'))
         );
 
         if ($cardsInfo) {

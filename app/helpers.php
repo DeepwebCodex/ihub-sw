@@ -13,3 +13,23 @@ if (! function_exists('number_to_string')) {
         return number_format((float)$number, 2, '.', '');
     }
 }
+
+if (! function_exists('get_formatted_date')) {
+    /**
+     * @param $value
+     * @param string $format
+     * @return false|string
+     */
+    function get_formatted_date($value, $format = 'Y-m-d H:i:s')
+    {
+        if (is_numeric($value)) {
+            $date = date_create_from_format('U', $value);
+        } else {
+            $date = date_create_from_format('Y-m-d H:i:s', $value);
+        }
+        if ($date && $date = date_format($date, $format)) {
+            return $date;
+        }
+        throw new \InvalidArgumentException;
+    }
+}
