@@ -14,6 +14,13 @@ return [
         'secret'        => 'Qasdf3QEFDDCS2'
     ],
 
+    'goldenRace' => [
+        'partners_id_by_country' => [
+            'ua' => [1, 18],
+            'hr' => [50]
+        ]
+    ],
+
     'microGaming' => [
         'service_id'        => 17,
         'login_server'      => 'microgaming',
