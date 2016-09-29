@@ -2,7 +2,7 @@
 
 namespace App\Transformers\Internal\BetGames;
 
-use App\Models\Erlybet\CardsBetGamesModel;
+use App\Models\Erlybet\CardsBetGames;
 use League\Fractal\TransformerAbstract;
 
 /**
@@ -12,10 +12,10 @@ use League\Fractal\TransformerAbstract;
 class CashdeskCardsTransformer extends TransformerAbstract
 {
     /**
-     * @param CardsBetGamesModel $item
+     * @param CardsBetGames $item
      * @return array
      */
-    public function transform(CardsBetGamesModel $item)
+    public function transform(CardsBetGames $item)
     {
         return [
             'status' => $item->status,

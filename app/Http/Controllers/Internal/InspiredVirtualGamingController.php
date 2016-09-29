@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Internal;
 
 use App\Facades\AppLog;
 use App\Http\Controllers\Controller;
-use App\Models\Erlybet\CardItemModel;
-use App\Models\Line\StatusDescModel;
+use App\Models\Erlybet\CardItem;
+use App\Models\Line\StatusDesc;
 use App\Repositories\FailedEventsRepository;
 
 /**
@@ -32,8 +32,8 @@ class InspiredVirtualGamingController extends Controller
             $closedEvents = [];
             $unclosedEvents = [];
             foreach ($eventIdList as $eventId) {
-                if (CardItemModel::checkExistsByEventId($eventId) === false) {
-                    StatusDescModel::create([
+                if (CardItem::checkExistsByEventId($eventId) === false) {
+                    StatusDesc::create([
                         'status_type' => 'cancelled',
                         'name' => 'cancelled',
                         'event_id' => $eventId
