@@ -13,5 +13,8 @@ class AppLog extends Facade
     /**
      * {@inheritdoc}
      */
-    protected static function getFacadeAccessor() { return 'AppLog'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'AppLog';
+    }
 }
