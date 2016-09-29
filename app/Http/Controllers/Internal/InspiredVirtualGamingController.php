@@ -9,10 +9,10 @@ use App\Models\Line\StatusDescModel;
 use App\Repositories\FailedEventsRepository;
 
 /**
- * Class IvgController
+ * Class InspiredVirtualGamingController
  * @package App\Http\Controllers\Internal
  */
-class IvgController extends Controller
+class InspiredVirtualGamingController extends Controller
 {
     const NODE = 'ivg_cancel';
 

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'internal'], function () {
-    Route::get('ivg/cancel_event/{limit?}/{type?}/{categoryId?}', 'IvgController@cancelEvent');
+    Route::get('ivg/cancel_event/{limit?}/{type?}/{categoryId?}', 'InspiredVirtualGamingController@cancelEvent');
 
     Route::group(['prefix' => 'bg'], function () {
         Route::get('cashdeskCard', 'BetGamesController@cashdeskCard');
@@ -16,7 +16,7 @@ Route::group(['prefix' => 'internal'], function () {
         Route::get('get_card_cashdesk', 'GoldenRaceController@getCardCashdesk');
     });
 
-    Route::get('ld', 'LdController@checkTransactions');
+    Route::get('ld', 'LiveDealerController@checkTransactions');
 
     Route::group(['prefix' => 'games'], function () {
         Route::get('allgametypes/{lang?}', 'CasinoController@allGameTypes');
