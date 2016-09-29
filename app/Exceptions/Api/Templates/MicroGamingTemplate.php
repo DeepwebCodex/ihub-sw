@@ -10,6 +10,7 @@ namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\MicroGaming\CodeMapping;
 use Carbon\Carbon;
+use Illuminate\Http\Response;
 use Stringy\StaticStringy as S;
 
 class MicroGamingTemplate implements IExceptionTemplate
@@ -18,6 +19,11 @@ class MicroGamingTemplate implements IExceptionTemplate
 
     public function mapping($item, $statusCode, $isApiException)
     {
+        if($statusCode == Response::HTTP_SERVICE_UNAVAILABLE)
+        {
+            sleep(10);
+        }
+
         $this->item = $item;
 
         $code = (int)$this->useElement('code', 6000);
