@@ -21,7 +21,7 @@ Route::group(['prefix' => 'internal'], function () {
     Route::group(['prefix' => 'games'], function () {
         Route::get('allgametypes/{lang?}', 'CasinoController@allGameTypes');
         Route::get('allproviders', 'CasinoController@allProviders');
-        Route::get('game/{gameType?}/{gameName?}/{lang?}/{mobile?}/{demo?}/', 'CasinoController@game');
+        Route::get('game/{gameType?}/{gameUrl?}/{lang?}/{isMobile?}/{isDemo?}/', 'CasinoController@game');
         Route::get('allgames/{provider?}/{gameType?}/{lang?}', 'CasinoController@allGames');
         Route::get('allseo/{typeEntity?}/{entityName?}/{lang?}', 'CasinoController@allSeo');
     });

@@ -56,12 +56,12 @@ class CasinoGamesRepository
     }
 
     /**
-     * @param string $gameName
+     * @param string $gameUrl
      * @param string $lang
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function getGame($gameName, $lang)
+    public function getGame($gameUrl, $lang)
     {
         return \DB::connection($this->dbConnection)
             ->table('cms.games AS g')
@@ -81,7 +81,7 @@ class CasinoGamesRepository
                     ->where('gf.lang', 'gd.lang');
             })
             ->where([
-                'g.url' => $gameName,
+                'g.url' => $gameUrl,
                 'g.enable' => true
             ])
             ->get()

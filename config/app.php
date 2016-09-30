@@ -182,7 +182,8 @@ return [
         \App\Providers\RemoteSessionServiceProvider::class,
         \App\Providers\AccountManagerServiceProvider::class,
         \App\Providers\AppLogServiceProvider::class,
-        Spatie\Fractal\FractalServiceProvider::class
+        Spatie\Fractal\FractalServiceProvider::class,
+        \App\Providers\CasinoGameLauncherServiceProvider::class
     ],
 
     /*
