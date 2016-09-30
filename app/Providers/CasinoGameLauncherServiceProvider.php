@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Components\ExternalServices\CasinoGameLauncher;
+use App\Components\Integrations\CasinoGameLauncher;
 use Illuminate\Support\ServiceProvider;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\ExternalServices;
+namespace App\Components\Integrations;
 
 /**
  * Class CasinoGameLauncherResult

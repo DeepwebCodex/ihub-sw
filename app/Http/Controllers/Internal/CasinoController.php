@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\Components\ExternalServices\CasinoGameLauncherResult;
+use App\Components\Integrations\CasinoGameLauncherResult;
 use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Http\Controllers\Controller;
 use App\Repositories\CasinoGamesRepository;
