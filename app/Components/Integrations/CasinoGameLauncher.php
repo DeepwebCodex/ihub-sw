@@ -75,7 +75,7 @@ class CasinoGameLauncher
      * @param $typeError
      * @param $codeError
      * @param $partnerId
-     * @param string $mixa
+     * @param string $mixDescription
      * @return CasinoGameLauncherResult
      */
     protected function errorResultWithDescription(
@@ -83,10 +83,10 @@ class CasinoGameLauncher
         $typeError,
         $codeError,
         $partnerId,
-        $mixa = null
+        $mixDescription = null
     ):CasinoGameLauncherResult
     {
-        $errorDescription = $this->getErrorDescription($lang, $typeError, $codeError, $partnerId, $mixa);
+        $errorDescription = $this->getErrorDescription($lang, $typeError, $codeError, $partnerId, $mixDescription);
         return $this->errorResult($errorDescription);
     }
 

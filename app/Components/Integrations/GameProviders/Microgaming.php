@@ -2,22 +2,16 @@
 
 namespace App\Components\Integrations\GameProviders;
 
+use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
-use App\Exceptions\Internal\GameNotFoundException;
 use App\Models\Erlybet\MIcrogaming\GamesNew;
 
 /**
  * Class Microgaming
  * @package App\Components\Integrations\GameProviders
  */
-class Microgaming implements GameProviderInterface
+class Microgaming extends BaseGameProvider implements GameProviderInterface
 {
-    protected $game;
-
-    protected $lang;
-
-    protected $isMobile;
-
     /**
      * Microgaming constructor.
      * @param $gameId
@@ -27,23 +21,9 @@ class Microgaming implements GameProviderInterface
      */
     public function __construct($gameId, $lang, $isMobile)
     {
-        $this->game = $this->getGame($gameId);
+        $this->game = $this->getGame(new GamesNew(), $gameId);
         $this->lang = $lang === 'ru' ? 'ru' : 'en';
         $this->isMobile = $isMobile;
-    }
-
-    /**
-     * @param $gameId
-     * @return bool|mixed
-     * @throws \App\Exceptions\Internal\GameNotFoundException
-     */
-    protected function getGame($gameId)
-    {
-        $game = (new GamesNew())->getById($gameId);
-        if (!$game) {
-            throw new GameNotFoundException();
-        }
-        return $game;
     }
 
     /**
@@ -53,9 +33,9 @@ class Microgaming implements GameProviderInterface
      */
     public function getGameReal($userInfo, $walletInfo)
     {
-        $token = MicroGamingHelper::generateToken(session_id(), $walletInfo['currency']);
+        $token = MicroGamingHelper::generateToken(RemoteSession::getSessionId(), $walletInfo['currency']);
 
-        $isGameValid = ($this->game->applicationid && $this->game->productid);
+        $isGameValid = $this->isGameValid();
 
         if ($this->isMobile) {
             if ($isGameValid) {
@@ -152,7 +132,7 @@ class Microgaming implements GameProviderInterface
      */
     public function getGameDemo()
     {
-        $isGameValid = ($this->game->applicationid && $this->game->productid);
+        $isGameValid = $this->isGameValid();
 
         if ($this->isMobile) {
             if ($isGameValid) {
@@ -233,5 +213,13 @@ class Microgaming implements GameProviderInterface
             'gameid' => $this->game->servergameid,
         ];
         return config('integrations.microGaming.game_lobby_url') . "{$this->lang}/" . http_build_query($queryData);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isGameValid():bool
+    {
+        return $this->game->applicationid && $this->game->productid;
     }
 }

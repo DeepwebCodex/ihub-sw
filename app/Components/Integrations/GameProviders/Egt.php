@@ -3,22 +3,15 @@
 namespace App\Components\Integrations\GameProviders;
 
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
-use App\Exceptions\Internal\GameNotFoundException;
 use App\Models\Erlybet\Egt\GamesNew;
 
 /**
  * Class Egt
  * @package App\Components\Integrations\GameProviders
  */
-class Egt implements GameProviderInterface
+class Egt extends BaseGameProvider implements GameProviderInterface
 {
     const PORTAL_CODE = 'Favbet_Seamless_';
-
-    protected $game;
-
-    protected $lang;
-
-    protected $isMobile;
 
     /**
      * Egt constructor.
@@ -29,23 +22,9 @@ class Egt implements GameProviderInterface
      */
     public function __construct($gameId, $lang, $isMobile)
     {
-        $this->game = $this->getGame($gameId);
+        $this->game = $this->getGame(new GamesNew(), $gameId);
         $this->lang = $lang;
         $this->isMobile = $isMobile;
-    }
-
-    /**
-     * @param $gameId
-     * @return bool|mixed
-     * @throws \App\Exceptions\Internal\GameNotFoundException
-     */
-    protected function getGame($gameId)
-    {
-        $game = (new GamesNew())->getById($gameId);
-        if (!$game) {
-            throw new GameNotFoundException();
-        }
-        return $game;
     }
 
     /**
