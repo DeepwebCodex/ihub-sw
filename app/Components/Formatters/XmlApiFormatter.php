@@ -37,6 +37,8 @@ class XmlApiFormatter extends BaseApiFormatter
     {
         list($payload, $statusCode) = array_values($this->transformException($exception));
 
+        ksort($payload);
+
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'application/xml'
         ]);

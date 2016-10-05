@@ -45,7 +45,7 @@ class TextApiFormatter extends BaseApiFormatter
     public function formatResponse($statusCode, string $message, array $payload = [])
     {
 
-        $payload = array_merge($message ? compact('message') : [], $this->getMetaData()?:[], $payload);
+        $payload = array_merge($this->getMetaData()?:[], $payload, $message ? compact('message') : []);
 
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'text/plain'

@@ -11,6 +11,7 @@ namespace App\Components\Formatters;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
+use Illuminate\Support\Facades\Route;
 use SimpleXMLElement;
 
 
@@ -25,9 +26,9 @@ class EgtXmlApiFormatter extends XmlApiFormatter
     {
         if($data) {
 
-            $currentAction = \Route::currentRouteAction();
+            $currentAction = Route::currentRouteAction();
 
-            $method = null;
+            $method = '';
 
             if($currentAction) {
                 list($controller, $method) = explode('@', $currentAction);
