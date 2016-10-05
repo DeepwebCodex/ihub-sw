@@ -1,0 +1,12 @@
+class_name: ApiTester
+modules:
+    enabled:
+        - Helper\Api
+        - Asserts
+        - REST:
+            depends: Laravel5Extended
+        - Laravel5Extended:
+            environment_file: .env.testing
+            server:
+              PARTNER_ID: 1
+              FRONTEND_NUM: -8
