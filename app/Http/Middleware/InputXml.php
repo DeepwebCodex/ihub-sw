@@ -21,6 +21,7 @@ class InputXml
     public function handle($request, \Closure $next)
     {
         $bodyContent = $request->getContent();
+
         if (!$bodyContent) {
             throw new ApiHttpException(400, trans('Empty source'));
         }
@@ -40,21 +41,20 @@ class InputXml
 
     private function collapseAttributes(array $data)
     {
-        $temp = [];
         if ($data) {
             foreach ($data as $name => $item) {
                 if (is_array($item)) {
-                    if ($name == '@attributes') {
-                        $temp = $item;
+                    if($name === '@attributes') {
+                        $data = $this->collapseAttributes($item);
                     } else {
-                        $temp[$name] = $this->collapseAttributes($item);
+                        $data[$name] = $this->collapseAttributes($item);
                     }
                 } else {
-                    $temp[$name] = $item;
+                    $data[$name] = $item;
                 }
             }
         }
 
-        return $temp;
+        return $data;
     }
 }

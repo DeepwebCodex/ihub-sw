@@ -41,3 +41,9 @@ Route::group(['prefix' => 'mg'], function () {
     Route::any('{any}', "MicroGamingController@error");
     Route::any('/', "MicroGamingController@index");
 });
+
+/**MicroGaming controller routes */
+Route::group(['prefix' => 'vb'], function () {
+    Route::any('{any}', "VirtualBoxingController@error");
+    Route::any('/', "VirtualBoxingController@index");
+});
