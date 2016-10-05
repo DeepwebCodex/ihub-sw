@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
+
 use App\Exceptions\Api\ApiHttpException;
 use Nathanmac\Utilities\Parser\Facades\Parser;
 
@@ -30,8 +31,7 @@ class InputXml
             $bodyContentDecoded = Parser::xml($bodyContent);
 
             $bodyContentDecoded = $this->collapseAttributes($bodyContentDecoded);
-
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new ApiHttpException(400, trans('Can\'t parse source'));
         }
 
@@ -39,6 +39,10 @@ class InputXml
         return $next($request);
     }
 
+    /**
+     * @param array $data
+     * @return array|mixed
+     */
     private function collapseAttributes(array $data)
     {
         if ($data) {

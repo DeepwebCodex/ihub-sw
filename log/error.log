@@ -201,3 +201,381 @@ Stack trace:
 #3 /var/www/ihub/app/Components/Formatters/XmlApiFormatter.php(40): App\Components\Formatters\MicroGamingApiFormatter->format(Array)
 #4 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\XmlApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
 #5 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions
+2016/09/28 12:36:14 [error] 1315#1315: *61 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No suitable servers found (`serverselectiontryonce` set): [Failed connecting to '127.0.0.1:27017': Connection refused] in /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php:628
+Stack trace:
+#0 /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php(628): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/MongoDBHandler.php(46): MongoDB\Collection->insertOne(Array)
+#2 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\MongoDBHandler->write(Array)
+#3 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#4 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(MongoDB\Driver\Exception\ConnectionTimeoutException), Array)
+#5 /var/www/ihub/vendor/laravel/fram...
+PHP message: PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No suitable servers found (`serverselectiontryonce` set): [Failed connecting to '127.0.0.1:27017': Connection refused] in /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php:628
+Stack trace:
+#0 /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php(628): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/MongoDBHandler.php(46): MongoDB\Collection->insertOne(Array)
+#2 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\MongoDBHandler->write(Array)
+#3 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#4 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(Symfony\Component\Debug\Exceptio
+2016/09/28 12:36:46 [error] 1315#1315: *61 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No suitable servers found (`serverselectiontryonce` set): [Failed connecting to '127.0.0.1:27017': Connection refused] in /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php:628
+Stack trace:
+#0 /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php(628): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/MongoDBHandler.php(46): MongoDB\Collection->insertOne(Array)
+#2 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\MongoDBHandler->write(Array)
+#3 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#4 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(MongoDB\Driver\Exception\ConnectionTimeoutException), Array)
+#5 /var/www/ihub/vendor/laravel/fram...
+PHP message: PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No suitable servers found (`serverselectiontryonce` set): [Failed connecting to '127.0.0.1:27017': Connection refused] in /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php:628
+Stack trace:
+#0 /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php(628): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/MongoDBHandler.php(46): MongoDB\Collection->insertOne(Array)
+#2 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\MongoDBHandler->write(Array)
+#3 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#4 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(Symfony\Component\Debug\Exceptio
+2016/10/03 14:58:39 [error] 1313#1313: *30 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:26
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 26, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(26): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(40): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(ErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(ErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#6 /var...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:26
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 26, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(26): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(40): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/
+2016/10/03 14:59:54 [error] 1313#1313: *32 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:27
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 27, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(27): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(41): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(ErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(ErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#6 /var" while reading upstream, client: 127.0.0.1, server: ihub.web, request: "POST /vb HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/03 14:59:54 [error] 1313#1313: *32 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:27
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 27, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(27): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(41): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Ha" while reading upstream, client: 127.0.0.1, server: ihub.web, request: "POST /vb HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/03 15:02:00 [error] 1313#1313: *34 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:26
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 26, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(26): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(40): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(ErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(ErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#6 /var...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:26
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 26, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(26): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(40): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Maximum function nesting level of '256' reached, aborting! in /var/www/ihub/app/Http/Middleware/InputXml.php on line 657
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:618
+PHP message: PHP
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "var/www/ihub/app/Http/Middleware/InputXml.php:642
+PHP message: PHP  27. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  28. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  29. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  30. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  31. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  32. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  33. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  34. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  35. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  36. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  37. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  38. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  39. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  40. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  41. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  42. App\Http\Middleware\InputXml->collapseAttribut
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  60. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  61. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  62. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  63. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  64. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  65. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  66. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  67. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  68. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  69. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  70. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  71. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  72. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  73. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  74. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  75. App\Http\Middleware\InputXml->collapseAttributes()
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  93. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  94. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  95. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  96. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  97. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  98. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  99. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 100. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 101. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 102. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 103. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 104. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 105. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 106. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 107. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 108. App\Http\Middleware\InputXml->collapseAttribut
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 126. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 127. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 128. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 129. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 130. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 131. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 132. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 133. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 134. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 135. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 136. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 137. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 138. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 139. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 140. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 141. App\Http\Middleware\InputXml->collapseAttributes()
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 159. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 160. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 161. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 162. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 163. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 164. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 165. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 166. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 167. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 168. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 169. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 170. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 171. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 172. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 173. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 174. App\Http\Middleware\InputXml->collapseAttribut
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 192. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 193. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 194. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 195. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 196. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 197. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 198. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 199. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 200. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 201. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 202. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 203. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 204. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 205. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 206. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 207. App\Http\Middleware\InputXml->collapseAttributes()
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 225. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 226. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 227. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 228. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 229. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 230. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 231. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 232. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 233. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 234. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 235. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 236. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 237. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 238. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 239. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 240. App\Http\Middleware\InputXml->collapseAttribut
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: ", aborting! in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php on line 115
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:618
+PHP message: PHP  13. Illuminate\Pipeline\Pip
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "are/InputXml.php:642
+PHP message: PHP  27. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  28. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  29. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  30. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  31. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  32. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  33. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  34. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  35. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  36. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  37. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  38. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  39. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  40. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  41. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  42. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/M
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "InputXml.php:661
+PHP message: PHP  60. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  61. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  62. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  63. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  64. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  65. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  66. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  67. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  68. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  69. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  70. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  71. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  72. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  73. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  74. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  75. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middl
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "are/InputXml.php:661
+PHP message: PHP  93. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  94. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  95. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  96. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  97. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  98. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  99. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 100. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 101. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 102. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 103. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 104. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 105. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 106. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 107. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 108. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/M
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "InputXml.php:661
+PHP message: PHP 126. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 127. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 128. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 129. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 130. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 131. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 132. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 133. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 134. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 135. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 136. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 137. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 138. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 139. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 140. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 141. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middl
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "are/InputXml.php:661
+PHP message: PHP 159. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 160. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 161. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 162. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 163. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 164. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 165. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 166. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 167. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 168. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 169. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 170. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 171. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 172. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 173. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 174. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/M
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "InputXml.php:661
+PHP message: PHP 192. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 193. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 194. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 195. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 196. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 197. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 198. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 199. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 200. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 201. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 202. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 203. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 204. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 205. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 206. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 207. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middl
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "are/InputXml.php:661
+PHP message: PHP 225. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 226. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 227. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 228. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 229. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 230. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 231. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 232. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 233. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 234. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 235. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 236. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 237. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 238. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 239. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 240. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/M
+2016/10/03 18:01:33 [error] 1316#1316: *261 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Class 'App\Models\Line\BaseVirtualBoxingModel' not found in /var/www/ihub/app/Models/VirtualBoxing/EventLinkModel.php on line 14
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:618
+PHP mess
+2016/10/03 18:01:33 [error] 1316#1316: *261 FastCGI sent in stderr: "ing\{closure}() /var/www/ihub/app/Http/Middleware/InputXml.php:39
+PHP message: PHP  27. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  28. Illuminate\Routing\Route->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:642
+PHP message: PHP  29. Illuminate\Routing\Route->runController() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:144
+PHP message: PHP  30. Illuminate\Routing\ControllerDispatcher->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:189
+PHP message: PHP  31. Illuminate\Routing\Controller->callAction() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:44
+PHP message: PHP  32. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  33. App\Http\Controllers\Api\VirtualBoxingController->index() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  34. Illuminate\Container\Container->call() /var/www/ihub/app/Http/Controllers/Api/VirtualBoxingController.php:43
+PHP message: PHP  35. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:507}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:507
+PHP message: PHP  36. App\Http\Controllers\Api\VirtualBoxingController->matchBet() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:507
+PHP message: PHP  37. spl_autoload_call() /var/www/ihub/app/Http/Controllers/Api/VirtualBoxingController.php:51
+PHP message: PHP  38. Composer\Autoload\ClassLoader->loadClass() /var/www/ihub/app/Http/Controllers/Api/VirtualBoxingController.php:51
+PHP message: PHP  39. Composer\Autoload\includeFile() /v

@@ -3,10 +3,10 @@
 namespace App\Models\Line;
 
 /**
- * Class StatusDescModel
+ * Class StatusDesc
  * @package App\Models\Line
  */
-class StatusDescModel extends BaseLineModel
+class StatusDesc extends BaseLineModel
 {
     /**
      * {@inheritdoc}

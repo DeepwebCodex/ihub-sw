@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
+
 use App\Exceptions\Api\ApiHttpException;
 
 /**
@@ -25,6 +26,6 @@ class CheckPartnerId
             return $next($request);
         }
 
-        throw new ApiHttpException(503, "Service unavailable");
+        throw new ApiHttpException(503, 'Service unavailable');
     }
 }

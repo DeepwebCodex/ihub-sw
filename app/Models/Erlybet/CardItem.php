@@ -5,10 +5,10 @@ namespace App\Models\Erlybet;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class CardItemModel
+ * Class CardItem
  * @package App\Models\Erlybet
  */
-class CardItemModel extends Model
+class CardItem extends Model
 {
     /**
      * {@inheritdoc}

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Internal;
 
 use App\Http\Controllers\Controller;
-use App\Models\Erlybet\CardsBetGamesModel;
+use App\Models\Erlybet\CardsBetGames;
 use App\Transformers\Internal\BetGames\CashdeskCardsTransformer;
 use App\Transformers\Internal\BetGames\CashdeskCardTransformer;
 use Illuminate\Support\Facades\Input;
@@ -39,7 +39,7 @@ class BetGamesController extends Controller
             return $this->wrongInputResponse();
         }
 
-        $cardInfo = (new CardsBetGamesModel)->getCard(
+        $cardInfo = (new CardsBetGames)->getCard(
             Input::get('barcode'),
             Input::get('cashdesk_id')
         );
@@ -72,7 +72,7 @@ class BetGamesController extends Controller
         $states = explode(',', Input::get('states'));
         $states = array_map('trim', $states);
 
-        $cardsInfo = (new CardsBetGamesModel)->getCards(
+        $cardsInfo = (new CardsBetGames)->getCards(
             $states,
             Input::get('cashdesk_id'),
             get_formatted_date(Input::get('from')),
