@@ -118,7 +118,6 @@ class CasinoController extends BaseApiController
         ]);
     }
 
-
     /**
      * @param PayOutRequest $request
      * @return \Illuminate\Http\JsonResponse

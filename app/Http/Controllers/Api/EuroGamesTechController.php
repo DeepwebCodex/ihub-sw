@@ -58,7 +58,6 @@ class EuroGamesTechController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
-
         EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
 
         return $this->respondOk(200, null, [
@@ -161,7 +160,6 @@ class EuroGamesTechController extends BaseApiController
 
     public function respondOk($statusCode = Response::HTTP_OK, string $message = null, array $payload = [])
     {
-
         list($message, $code) = array_values(CodeMapping::getByMeaning(CodeMapping::SUCCESS));
 
         $payload = array_merge($payload, [
