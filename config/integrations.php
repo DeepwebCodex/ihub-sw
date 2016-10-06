@@ -63,5 +63,13 @@ return [
         'max_bet_live' => null,
         'max_payout_live' => null,
         'info_url' => NULL
-    ]
+    ],
+
+    'live_dealer' => [
+        'system_id' => '999',
+        'server_addr' => '0.0.0.0',
+        'api_url' => 'https://apitest.fundist.org/',
+        'api_key' => '19d47072a7e46e82ce07b7d8b843cecc',
+        'api_password' => '4575885165224895',
+    ],
 ];

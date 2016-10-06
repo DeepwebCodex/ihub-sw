@@ -183,7 +183,8 @@ return [
         \App\Providers\AccountManagerServiceProvider::class,
         \App\Providers\AppLogServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
-        \App\Providers\CasinoGameLauncherServiceProvider::class
+        \App\Providers\CasinoGameLauncherServiceProvider::class,
+        \App\Providers\LiveDealerApiServiceProvider::class
     ],
 
     /*

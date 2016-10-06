@@ -118,7 +118,6 @@ class CasinoController extends BaseApiController
         ]);
     }
 
-
     /**
      * @param PayOutRequest $request
      * @return \Illuminate\Http\JsonResponse
@@ -135,7 +134,8 @@ class CasinoController extends BaseApiController
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
             TransactionHelper::amountCentsToWhole($request->input('amount')),
-            $request->input('type_operation') == 'rollback' ? TransactionRequest::TRANS_REFUND : TransactionRequest::TRANS_WIN,
+            $request->input('type_operation') === 'rollback'
+                ? TransactionRequest::TRANS_REFUND : TransactionRequest::TRANS_WIN,
             $request->input('transaction_id')
         );
 
@@ -160,20 +160,19 @@ class CasinoController extends BaseApiController
 
         $token = $request->cookie('PHPSESSID');
 
-        $user_id = RemoteSession::start($token)->get('user_id');
+        $userId = RemoteSession::start($token)->get('user_id');
 
-        if($user_id)
-        {
+        if ($userId) {
             $payload = [
-                'status'    => true,
-                'token'     => $token,
-                'message'   => ''
+                'status' => true,
+                'token' => $token,
+                'message' => ''
             ];
         } else {
             $payload = [
-                'status'    => false,
-                'token'     => '',
-                'message'   => "auth failed"
+                'status' => false,
+                'token' => '',
+                'message' => 'auth failed'
             ];
         }
 
@@ -187,16 +186,18 @@ class CasinoController extends BaseApiController
         return $response;
     }
 
-    public function error(){
+    public function error()
+    {
         throw new ApiHttpException(404, null, CodeMapping::getByMeaning(CodeMapping::UNKNOWN_METHOD));
     }
 
-    public function respondOk($statusCode = Response::HTTP_OK, string $message = "", array $payload = []){
+    public function respondOk($statusCode = Response::HTTP_OK, string $message = '', array $payload = [])
+    {
         $payload = array_merge([
-            'status'    => true,
-            'code'      => 1,
-            'message'   => 'success',
-            'time'      => time()
+            'status' => true,
+            'code' => 1,
+            'message' => 'success',
+            'time' => time()
         ], $payload);
 
         $payload = array_merge($payload, ['signature' => CasinoHelper::generateActionSignature($payload)]);
