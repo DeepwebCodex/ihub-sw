@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Request;
 
 class CasinoValidation
 {
-    public static function CheckSignature($attribute, $value, $parameters, $validator){
-        if(!($request = self::getRequest())){
+    public function CheckSignature($attribute, $value, $parameters, $validator){
+        if(!($request = $this->getRequest())){
             return false;
         }
 
@@ -21,7 +21,7 @@ class CasinoValidation
         return false;
     }
 
-    public static function CheckTime($attribute, $value, $parameters, $validator){
+    public function CheckTime($attribute, $value, $parameters, $validator){
         if((time() - $value) <= 360){
             return true;
         }
@@ -29,7 +29,7 @@ class CasinoValidation
         return false;
     }
 
-    public static function CheckAmount($attribute, $value, $parameters, $validator){
+    public function CheckAmount($attribute, $value, $parameters, $validator){
         if($value <= 0){
             return false;
         }
@@ -40,7 +40,7 @@ class CasinoValidation
     /**
      * @return \Illuminate\Http\Request
      */
-    private static function getRequest(){
+    public function getRequest(){
         return Request::getFacadeRoot();
     }
 }

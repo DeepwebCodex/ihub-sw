@@ -5,8 +5,8 @@ return [
     'api' => [
 
         'account_roh' => [
-            'host'  => 'ef01dev.favorit',
-            'port'  => 7767
+            'host'  => 'de2ef01d.dev.favorit',
+            'port'  => 7768
         ],
 
         'account_session' => [
@@ -36,7 +36,7 @@ return [
     ],
 
     'hazlecast_sessions' => [
-        'host'  => 'ef01dev.favorit',
+        'host'  => 'de2of01d.dev.favorit',
         'port'  => 5701
     ]
 

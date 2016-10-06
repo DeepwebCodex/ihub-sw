@@ -28,14 +28,10 @@ class RemoteSession
         $this->remoteHost = config('external.hazlecast_sessions.host');
         $this->remotePort = config('external.hazlecast_sessions.port');
 
-        $this->setUp();
-
-        if($session_id) {
-            $this->start($session_id);
-        }
+        $this->sessionId = $session_id;
     }
 
-    private function setUp()
+    public function setUp()
     {
         $this->memCache = new \Memcache();
 
@@ -47,6 +43,12 @@ class RemoteSession
         } catch (\Exception $e) {
             throw new ApiHttpException(503, "Service unavailable");
         }
+
+        if($this->sessionId) {
+            $this->start($this->sessionId);
+        }
+
+        return $this;
     }
 
     /**

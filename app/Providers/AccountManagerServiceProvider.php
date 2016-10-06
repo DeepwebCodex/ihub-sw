@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Components\ExternalServices\AccountManager;
+
 use Illuminate\Support\ServiceProvider;
 
 class AccountManagerServiceProvider extends ServiceProvider

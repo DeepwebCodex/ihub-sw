@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Request;
 
 class EuroGamesTechValidation
 {
-    public static function checkDefenceCode($attribute, $value, $parameters, $validator){
-        if(!($request = self::getRequest())){
+    public function checkDefenceCode($attribute, $value, $parameters, $validator){
+        if(!($request = $this->getRequest())){
             return false;
         }
 
@@ -25,7 +25,7 @@ class EuroGamesTechValidation
         throw new ApiHttpException(400, "Defence code expired", ['code' => 3100]);
     }
 
-    public static function checkExpirationTime($attribute, $value, $parameters, $validator){
+    public function checkExpirationTime($attribute, $value, $parameters, $validator){
         list($hash, $time) = explode('-', $value);
 
         if((time() - $time) > 120){
@@ -35,7 +35,7 @@ class EuroGamesTechValidation
         return true;
     }
 
-    public static function validateDepositReason($attribute, $value, $parameters, $validator){
+    public function validateDepositReason($attribute, $value, $parameters, $validator){
         if(!in_array($value, ['ROUND_END', 'ROUND_CANCEL', 'JACKPOT_END']))
         {
             return false;
@@ -44,7 +44,7 @@ class EuroGamesTechValidation
         return true;
     }
 
-    public static function validateWithdrawReason($attribute, $value, $parameters, $validator){
+    public function validateWithdrawReason($attribute, $value, $parameters, $validator){
         if($value != 'ROUND_BEGIN')
         {
             return false;
@@ -56,7 +56,7 @@ class EuroGamesTechValidation
     /**
      * @return \Illuminate\Http\Request
      */
-    private static function getRequest(){
+    public function getRequest(){
         return Request::getFacadeRoot();
     }
 }
