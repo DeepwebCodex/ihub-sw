@@ -49,7 +49,7 @@ class EuroGamesTechController extends BaseApiController
 
         EgtHelper::checkInputCurrency($user->getCurrency(), EgtHelper::getCurrencyFromPortalCode($request->input('PortalCode')));
 
-        return $this->respondOk(200, null,[
+        return $this->respondOk(200, null, [
             'Balance' => $user->getBalanceInCents()
         ]);
     }
@@ -61,7 +61,7 @@ class EuroGamesTechController extends BaseApiController
 
         EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
 
-        return $this->respondOk(200, null,[
+        return $this->respondOk(200, null, [
             'Balance' => $user->getBalanceInCents()
         ]);
     }

@@ -20,17 +20,18 @@ class BaseApiController extends Controller
         $this->protocolFormatter->setTemplate(self::$exceptionTemplate);
     }
 
-
-    public function respond($statusCode, string $message, array $payload = []){
+    public function respond($statusCode, string $message, array $payload = [])
+    {
         return $this->protocolFormatter->formatResponse($statusCode, $message, $payload);
     }
 
-    public function respondOk($statusCode = Response::HTTP_OK, string $message = "", array $payload = []){
+    public function respondOk($statusCode = Response::HTTP_OK, string $message = '', array $payload = [])
+    {
         return $this->respond($statusCode, $message, $payload);
     }
 
-    public function getOption(string $name, $default = null){
+    public function getOption(string $name, $default = null)
+    {
         return array_get($this->options, $name, $default);
     }
-
 }
