@@ -9,7 +9,7 @@
 namespace App\Components\ExternalServices\Traits;
 
 
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\GenericApiHttpException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -48,7 +48,7 @@ trait CashDeskRohRequest
                 $this->sendPostCashDesk($url, $params, $retry);
             }
 
-            throw new ApiHttpException(500, $e->getMessage());
+            throw new GenericApiHttpException(500, $e->getMessage());
         }
     }
 

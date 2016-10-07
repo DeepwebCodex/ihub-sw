@@ -6,7 +6,7 @@ namespace App\Components\ExternalServices\Traits;
  * Request handling for account ROH get API
  */
 
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\GenericApiHttpException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -27,7 +27,7 @@ trait RohRestRequest
                 if ($data = $response->getBody()) {
                     if ($data = json_decode($data->getContents(), true)) {
                         if(isset($data['status']) && $data['status'] == "error"){
-                            throw new ApiHttpException(500, '');
+                            throw new GenericApiHttpException(500, '');
                         }
 
                         if(isset($data['operations'])){
@@ -40,7 +40,7 @@ trait RohRestRequest
             }
 
         } catch (\Exception $e) {
-            throw new ApiHttpException(500, $e->getMessage());
+            throw new GenericApiHttpException(500, $e->getMessage());
         }
     }
 

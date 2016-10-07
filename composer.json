@@ -13,7 +13,8 @@
         "kozz/laravel-guzzle-provider": "~6.0",
         "Nathanmac/Parser": "3.*",
         "spatie/laravel-fractal": "^1.9",
-        "danielstjules/stringy": "~2.3"
+        "danielstjules/stringy": "~2.3",
+        "flow/jsonpath": "^0.3.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

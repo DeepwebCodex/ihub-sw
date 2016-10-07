@@ -1,15 +1,17 @@
 <?php
 
-use App\Components\ExternalServices\RemoteSession;
-
 class CasinoApiCest
 {
 
-    protected function _before()
+    private $objectId;
+    private $user_balance;
+
+    public function _before()
     {
+
     }
 
-    protected function _after()
+    public function _after()
     {
     }
 
@@ -72,10 +74,12 @@ class CasinoApiCest
 
     public function testMethodPayIn(ApiTester $I)
     {
+        $this->objectId = random_int(100000, 9900000);
+
         $request = [
             'api_id' => 15,
             'token'  => 'HSKSOOJH9762tSDSDF',
-            'object_id' => '121285348',
+            'object_id' => $this->objectId,
             'transaction_id' => random_int(90000, 250000),
             'amount' => 10,
             'time'   => time()
@@ -88,6 +92,8 @@ class CasinoApiCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->expect('min required items in response');
+        $I->canSeeResponseContains("\"balance\"");
+        $this->user_balance = $I->grabDataFromResponseByJsonPath('balance');
         $I->seeResponseContainsJson(['status' => true, 'message' => 'success']);
     }
 
@@ -96,7 +102,7 @@ class CasinoApiCest
         $request = [
             'api_id' => 15,
             'token'  => 'HSKSOOJH9762tSDSDF',
-            'object_id' => '121285348',
+            'object_id' => $this->objectId,
             'transaction_id' => random_int(90000, 250000),
             'amount' => 10,
             'user_id' => 1,
@@ -110,8 +116,13 @@ class CasinoApiCest
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
+        $I->canSeeResponseContains("\"balance\"");
         $I->expect('min required items in response');
         $I->seeResponseContainsJson(['status' => true, 'message' => 'success']);
+
+        $expected = $this->user_balance[0] + $request['amount'];
+
+        $I->assertEquals([$expected], $I->grabDataFromResponseByJsonPath('balance'), "Balance does not match");
     }
 
     public function testGenToken(ApiTester $I)

@@ -6,7 +6,7 @@ namespace App\Components\ExternalServices\Traits;
  * Request handling for account ROH get session API
  */
 
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\GenericApiHttpException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -27,7 +27,7 @@ trait SessionRequest
                 if ($data = $response->getBody()) {
                     if ($data = json_decode($data->getContents(), true)) {
                         if(isset($data['error'])){
-                            throw new ApiHttpException(500, '', $data['error']);
+                            throw new GenericApiHttpException(500, '', $data['error']);
                         }
 
                         if(isset($data['exists']) && !empty($data['exists'])){
@@ -48,7 +48,7 @@ trait SessionRequest
                 $this->sendGetSession($url, $params, $retry);
             }
 
-            throw new ApiHttpException(500, $e->getMessage());
+            throw new GenericApiHttpException(500, $e->getMessage());
         }
     }
 }

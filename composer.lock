@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d256815f7f54ef73e3896175cb53870b",
-    "content-hash": "dc0ab9a902adc095774519f3980218d3",
+    "hash": "6251535ae839a3ac76375697e2846f19",
+    "content-hash": "783c877b4e7fb49780a759951ea5628a",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -274,6 +274,47 @@
                 "zf2"
             ],
             "time": "2015-06-29 05:42:04"
+        },
+        {
+            "name": "flow/jsonpath",
+            "version": "0.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FlowCommunications/JSONPath.git",
+                "reference": "00aa9c361e4d0a210dd95f3c917a1e0dde3a957f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FlowCommunications/JSONPath/zipball/00aa9c361e4d0a210dd95f3c917a1e0dde3a957f",
+                "reference": "00aa9c361e4d0a210dd95f3c917a1e0dde3a957f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "peekmo/jsonpath": "dev-master",
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Flow\\JSONPath": "src/",
+                    "Flow\\JSONPath\\Test": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Frank",
+                    "email": "stephen@flowsa.com"
+                }
+            ],
+            "description": "JSONPath implementation for parsing, searching and flattening arrays",
+            "time": "2016-09-06 17:43:18"
         },
         {
             "name": "guzzlehttp/guzzle",

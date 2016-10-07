@@ -7,6 +7,7 @@ modules:
             depends: Laravel5Extended
         - Laravel5Extended:
             environment_file: .env.testing
+            cleanup: false
             server:
               PARTNER_ID: 1
-              FRONTEND_NUM: -8
+              FRONTEND_NUM: -5

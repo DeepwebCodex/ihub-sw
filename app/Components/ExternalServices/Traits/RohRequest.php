@@ -6,7 +6,7 @@ namespace App\Components\ExternalServices\Traits;
  * Request handling for account ROH post API
  */
 
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\GenericApiHttpException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -84,7 +84,7 @@ trait RohRequest
                 $this->sendPostRoh($url, $params, $retry);
             }
 
-            throw new ApiHttpException($statusCode, $e->getMessage());
+            throw new GenericApiHttpException($statusCode, $e->getMessage());
         }
     }
 
