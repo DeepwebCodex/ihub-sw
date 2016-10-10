@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Components\ExternalServices\RemoteSession;
 use Illuminate\Support\ServiceProvider;
-use Mockery;
+use Testing\RemoteSessionMock;
 
 class RemoteSessionServiceProvider extends ServiceProvider
 {
@@ -25,14 +25,7 @@ class RemoteSessionServiceProvider extends ServiceProvider
     {
         if($this->app->environment() == 'testing') {
             $this->app->singleton('RemoteSession', function ($app) {
-
-                 $remote_session = Mockery::mock(RemoteSession::class);
-
-                 $remote_session->shouldReceive('start')->andReturnSelf();
-                 $remote_session->shouldReceive('get')->andReturn(1);
-                 $remote_session->shouldReceive('getSessionId')->andReturn("KSKHDU95jG34");
-
-                return $remote_session;
+                return RemoteSessionMock::getMock();
             });
         } else {
             $this->app->singleton('RemoteSession', function ($app) {
