@@ -16,7 +16,7 @@ class WithdrawAndDepositRequest extends BaseEgtRequest
     public function messages()
     {
         return [
-            'Reason.validate_withdraw' => 'Invalid reason',
+            'Reason.validate_deposit' => 'Invalid reason',
         ];
     }
 
@@ -38,7 +38,7 @@ class WithdrawAndDepositRequest extends BaseEgtRequest
             'SessionId'     => 'bail|required|string',
             'Amount'        => 'bail|required|numeric|min:0',
             'Currency'      => 'bail|required|string',
-            'Reason'        => 'bail|required|string|validate_withdraw',
+            'Reason'        => 'bail|required|string|validate_deposit',
             'PortalCode'    => 'bail|required|string',
             'WinAmount'     => 'bail|required|numeric|min:0'
         ];

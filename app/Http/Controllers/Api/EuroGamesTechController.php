@@ -128,7 +128,7 @@ class EuroGamesTechController extends BaseApiController
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
             TransactionHelper::amountCentsToWhole($request->input('Amount')),
-            EgtHelper::getTransactionType($request->input('Reason')),
+            TransactionRequest::TRANS_BET,
             $request->input('TransferId')
         );
 
@@ -141,7 +141,7 @@ class EuroGamesTechController extends BaseApiController
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
             TransactionHelper::amountCentsToWhole($request->input('WinAmount')),
-            TransactionRequest::TRANS_WIN,
+            EgtHelper::getTransactionType($request->input('Reason')),
             $request->input('TransferId')
         );
 
