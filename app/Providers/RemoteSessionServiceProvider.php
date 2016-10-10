@@ -30,6 +30,7 @@ class RemoteSessionServiceProvider extends ServiceProvider
 
                  $remote_session->shouldReceive('start')->andReturnSelf();
                  $remote_session->shouldReceive('get')->andReturn(1);
+                 $remote_session->shouldReceive('getSessionId')->andReturn("KSKHDU95jG34");
 
                 return $remote_session;
             });

@@ -62,7 +62,9 @@ class MicroGamingController extends BaseApiController
 
     public function logIn(LogInRequest $request)
     {
-        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
+        $user = IntegrationUser::get(1, $this->getOption('service_id'), 'microgaming');
+
+        $this->addMetaField('currency', $user->getCurrency());
 
         MicroGamingHelper::confirmTokenHash(
             $request->input('methodcall.call.token'),
@@ -86,6 +88,8 @@ class MicroGamingController extends BaseApiController
     {
         $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
 
+        $this->addMetaField('currency', $user->getCurrency());
+
         MicroGamingHelper::confirmTokenHash(
             $request->input('methodcall.call.token'),
             RemoteSession::getSessionId(),
@@ -101,6 +105,8 @@ class MicroGamingController extends BaseApiController
     public function play(PlayRequest $request)
     {
         $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
+
+        $this->addMetaField('currency', $user->getCurrency());
 
         MicroGamingHelper::confirmTokenHash(
             $request->input('methodcall.call.token'),
@@ -134,6 +140,8 @@ class MicroGamingController extends BaseApiController
     {
         $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
 
+        $this->addMetaField('currency', $user->getCurrency());
+
         MicroGamingHelper::confirmTokenHash(
             $request->input('methodcall.call.token'),
             RemoteSession::getSessionId(),
@@ -149,6 +157,8 @@ class MicroGamingController extends BaseApiController
     public function refreshToken(RefreshTokenRequest $request)
     {
         $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
+
+        $this->addMetaField('currency', $user->getCurrency());
 
         MicroGamingHelper::confirmTokenHash(
             $request->input('methodcall.call.token'),
@@ -169,7 +179,7 @@ class MicroGamingController extends BaseApiController
         $token = request()->input('methodcall.call.token');
 
         if (RemoteSession::getSessionId()) {
-            $token = MicroGamingHelper::generateToken(RemoteSession::getSessionId(), $this->getMetaField('currency'));
+            $token = MicroGamingHelper::generateToken(RemoteSession::getSessionId(), $this->pullMetaField('currency'));
         }
 
         $attributes = [
