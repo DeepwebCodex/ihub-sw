@@ -4,6 +4,7 @@ namespace App\Http\Requests\MicroGaming;
 
 use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\MicroGaming\CodeMapping;
+use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
@@ -30,13 +31,12 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
         if (!$this->isSecure()) {
             $this->addMetaField('methodName', 'https');
 
-            throw new ApiHttpException('400', "Only https is allowed", [array_get('code', CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR))]);
+            throw new ApiHttpException('400', "Only https is allowed", CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
         }
     }
 
     public function authorizeUser(Request $request){
-        list($remoteSession, $time, $hash) = $request->input('methodcall.call.token');
-
+        list($remoteSession, $time, $hash) = MicroGamingHelper::parseToken($request->input('methodcall.call.token'));
         $remoteSession = trim($remoteSession);
 
         $userId = RemoteSession::start($remoteSession)->get('user_id');
