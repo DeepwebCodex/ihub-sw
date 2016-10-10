@@ -159,7 +159,6 @@ class MicroGamingApiCest
     public function testMethodPlayOut(ApiTester $I)
     {
         $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
-        $this->gameID = random_int(9900000, 99000000);
 
         $request = [
             'methodcall' => [

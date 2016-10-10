@@ -96,9 +96,9 @@ class MicroGamingHelper
     public static function getTransactionDirection(string $playType)
     {
         $map = [
-            'bet'  => TransactionRequest::D_DEPOSIT,
-            'win'    => TransactionRequest::D_WITHDRAWAL,
-            'refund' => TransactionRequest::D_WITHDRAWAL
+            'bet'  => TransactionRequest::D_WITHDRAWAL,
+            'win'    => TransactionRequest::D_DEPOSIT,
+            'refund' => TransactionRequest::D_DEPOSIT
         ];
 
         return array_get($map, $playType);
