@@ -42,22 +42,7 @@ $app->singleton(
 );
 
 $app->configureMonologUsing(function ($monolog) {
-    $config = config('log.mongo');
-
-    if (!$config['server']) {
-        return;
-    }
-
-    $mongoHandler = new Monolog\Handler\MongoDBHandler(
-        new \MongoDB\Client($config['server']),
-        $config['db_name'],
-        $config['collection_name']
-    );
-
-    $mongoHandler->setFormatter(new \App\Log\Monolog\Formatter\AppFormatter());
-
-    /** @var \Monolog\Logger $monolog */
-    $monolog->pushHandler($mongoHandler);
+    new \App\Log\Logger(config('log.logger'), $monolog);
 });
 
 /*
