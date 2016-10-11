@@ -8,7 +8,10 @@
 
 namespace App\Components\Integrations;
 
-
+/**
+ * Class CodeMappingBase
+ * @package App\Components\Integrations
+ */
 class CodeMappingBase
 {
     const SERVER_ERROR      = 'server_error';
@@ -30,16 +33,25 @@ class CodeMappingBase
     const DUPLICATE         = 'duplicate';
     const BET_LIMIT         = 'bet_limit';
 
-    public static function getMapping(){
+    /**
+     * @return array
+     */
+    public static function getMapping()
+    {
         return [];
     }
 
-    public static function getAttributeMessages(string $attribute = null){
-        $mapping  = static::getMapping();
+    /**
+     * @param string|null $attribute
+     * @return array|mixed
+     */
+    public static function getAttributeMessages(string $attribute = null)
+    {
+        $mapping = static::getMapping();
 
         $result = [];
 
-        if($mapping) {
+        if ($mapping) {
             foreach ($mapping as $code => $item) {
                 if ($item['attribute']) {
                     $result[$item['attribute']] = [
@@ -50,23 +62,30 @@ class CodeMappingBase
             }
         }
 
-        if($attribute){
+        if ($attribute) {
             return array_get($result, $attribute, []);
         }
 
         return $result;
     }
 
-    public static function getByErrorCode($responseCode){
-        $mapping  = static::getMapping();
+    /**
+     * @param $responseCode
+     * @return array
+     */
+    public static function getByErrorCode($responseCode)
+    {
+        $mapping = static::getMapping();
 
         $result = [];
 
-        if($mapping) {
+        if ($mapping) {
             foreach ($mapping as $code => $item) {
                 $item['map'][] = $code;
-                if (isset($item['map']) && !empty($item['map']) && is_array($item['map']) && in_array($responseCode,
-                        $item['map'])
+                if (isset($item['map'])
+                    && !empty($item['map'])
+                    && is_array($item['map'])
+                    && in_array($responseCode, $item['map'])
                 ) {
                     return [
                         'message' => $item['message'],
@@ -88,15 +107,22 @@ class CodeMappingBase
         return $result;
     }
 
-    public static function getByMeaning(string $meaning){
-        $mapping  = static::getMapping();
+    /**
+     * @param string $meaning
+     * @return array
+     */
+    public static function getByMeaning(string $meaning)
+    {
+        $mapping = static::getMapping();
 
         $result = [];
 
-        if($mapping) {
+        if ($mapping) {
             foreach ($mapping as $code => $item) {
-                if (isset($item['meanings']) && !empty($item['meanings']) && is_array($item['meanings']) && in_array($meaning,
-                        $item['meanings'])
+                if (isset($item['meanings'])
+                    && !empty($item['meanings'])
+                    && is_array($item['meanings'])
+                    && in_array($meaning, $item['meanings'])
                 ) {
                     return [
                         'message' => $item['message'],
