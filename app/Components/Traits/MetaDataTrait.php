@@ -8,7 +8,6 @@
 
 namespace App\Components\Traits;
 
-
 use Illuminate\Support\Facades\Request;
 
 trait MetaDataTrait
@@ -18,68 +17,85 @@ trait MetaDataTrait
     /**
      * @return \Illuminate\Http\Request
      */
-    private function getRequest(){
-        return Request::getFacadeRoot() ? :null;
+    private function getRequest()
+    {
+        return Request::getFacadeRoot() ?: null;
     }
 
-    public function addMetaField(string $name, $value){
-        if($request = $this->getRequest()){
+    /**
+     * @param string $name
+     * @param $value
+     * @return $this
+     */
+    public function addMetaField(string $name, $value)
+    {
+        if ($request = $this->getRequest()) {
             $data = $request->input($this->metaStorageKey, []);
             $data = array_merge($data, [$name => $value]);
             $request->merge([$this->metaStorageKey => $data]);
         }
-
         return $this;
     }
 
-    public function setMetaData(array $data){
-        if($request = $this->getRequest()){
-
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function setMetaData(array $data)
+    {
+        if ($request = $this->getRequest()) {
             $request->offsetSet($this->metaStorageKey, $data);
         }
-
         return $this;
     }
 
-    public function pullMetaField(string $name){
-        if($request = $this->getRequest()){
-            if($request->has($this->metaStorageKey)){
-                $data = $request->input($this->metaStorageKey);
-                foreach ($data as $itemName => $value){
-                    if($itemName == $name){
-                        unset($data[$itemName]);
-                        $request->offsetSet($this->metaStorageKey, $data);
-                        return $value;
-                    }
+    /**
+     * @param string $name
+     * @return mixed|null
+     */
+    public function pullMetaField(string $name)
+    {
+        $request = $this->getRequest();
+        if ($request && $request->has($this->metaStorageKey)) {
+            $data = $request->input($this->metaStorageKey);
+            foreach ($data as $itemName => $value) {
+                if ($itemName == $name) {
+                    unset($data[$itemName]);
+                    $request->offsetSet($this->metaStorageKey, $data);
+                    return $value;
                 }
             }
         }
-
         return null;
     }
 
-    public function getMetaField(string $name){
-        if($request = $this->getRequest()){
-            if($request->has($this->metaStorageKey)){
-                $data = $request->input($this->metaStorageKey);
-                foreach ($data as $itemName => $value){
-                    if($itemName == $name){
-                        return $value;
-                    }
+    /**
+     * @param string $name
+     * @return mixed|null
+     */
+    public function getMetaField(string $name)
+    {
+        $request = $this->getRequest();
+        if ($request && $request->has($this->metaStorageKey)) {
+            $data = $request->input($this->metaStorageKey);
+            foreach ($data as $itemName => $value) {
+                if ($itemName == $name) {
+                    return $value;
                 }
             }
         }
-
         return null;
     }
 
-    public function getMetaData(){
-        if($request = $this->getRequest()){
-            if($request->has($this->metaStorageKey)){
-                return $request->input($this->metaStorageKey);
-            }
+    /**
+     * @return array|null|string
+     */
+    public function getMetaData()
+    {
+        $request = $this->getRequest();
+        if ($request && $request->has($this->metaStorageKey)) {
+            return $request->input($this->metaStorageKey);
         }
-
         return null;
     }
 }

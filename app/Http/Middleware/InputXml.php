@@ -48,7 +48,7 @@ class InputXml
         if ($data) {
             foreach ($data as $name => $item) {
                 if (is_array($item)) {
-                    if($name === '@attributes') {
+                    if ($name === '@attributes') {
                         $data = $this->collapseAttributes($item);
                     } else {
                         $data[$name] = $this->collapseAttributes($item);
