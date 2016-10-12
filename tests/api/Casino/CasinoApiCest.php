@@ -1,5 +1,8 @@
 <?php
 
+use App\Components\Integrations\Casino\CasinoHelper;
+use App\Components\Transactions\TransactionRequest;
+
 class CasinoApiCest
 {
 
@@ -31,7 +34,7 @@ class CasinoApiCest
         $I->sendPOST('/casino/auth', [
             'api_id' => 15,
             'token'  => 'HSKSOOJH9762tSDSDF',
-            'signature'  => \App\Components\Integrations\Casino\CasinoHelper::generateActionSignature(['api_id' => 15, 'time' => time(), 'token'  => 'HSKSOOJH9762tSDSDF']),
+            'signature'  => CasinoHelper::generateActionSignature(['api_id' => 15, 'time' => time(), 'token'  => 'HSKSOOJH9762tSDSDF']),
             'time'   => time()
         ]);
         $I->seeResponseCodeIs(200);
@@ -46,7 +49,7 @@ class CasinoApiCest
         $I->sendPOST('/casino/getbalance', [
             'api_id' => 15,
             'token'  => 'HSKSOOJH9762tSDSDF',
-            'signature'  => \App\Components\Integrations\Casino\CasinoHelper::generateActionSignature(['api_id' => 15, 'time' => time(), 'token'  => 'HSKSOOJH9762tSDSDF']),
+            'signature'  => CasinoHelper::generateActionSignature(['api_id' => 15, 'time' => time(), 'token'  => 'HSKSOOJH9762tSDSDF']),
             'time'   => time()
         ]);
         $I->seeResponseCodeIs(200);
@@ -63,7 +66,7 @@ class CasinoApiCest
         $I->sendPOST('/casino/refreshtoken', [
             'api_id' => 15,
             'token'  => 'HSKSOOJH9762tSDSDF',
-            'signature'  => \App\Components\Integrations\Casino\CasinoHelper::generateActionSignature(['api_id' => 15, 'time' => time(), 'token'  => 'HSKSOOJH9762tSDSDF']),
+            'signature'  => CasinoHelper::generateActionSignature(['api_id' => 15, 'time' => time(), 'token'  => 'HSKSOOJH9762tSDSDF']),
             'time'   => time()
         ]);
         $I->seeResponseCodeIs(200);
@@ -87,7 +90,7 @@ class CasinoApiCest
 
         $I->disableMiddleware();
         $I->sendPOST('/casino/payin', array_merge($request, [
-            'signature'  => \App\Components\Integrations\Casino\CasinoHelper::generateActionSignature($request),
+            'signature'  => CasinoHelper::generateActionSignature($request),
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -95,6 +98,14 @@ class CasinoApiCest
         $I->canSeeResponseContains("\"balance\"");
         $this->user_balance = $I->grabDataFromResponseByJsonPath('balance');
         $I->seeResponseContainsJson(['status' => true, 'message' => 'success']);
+
+        $I->expect('Can see record of transaction applied');
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['transaction_id'],
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_WITHDRAWAL
+        ]);
     }
 
     public function testMethodPayOut(ApiTester $I)
@@ -112,7 +123,7 @@ class CasinoApiCest
 
         $I->disableMiddleware();
         $I->sendPOST('/casino/payout', array_merge($request, [
-            'signature'  => \App\Components\Integrations\Casino\CasinoHelper::generateActionSignature($request),
+            'signature'  => CasinoHelper::generateActionSignature($request),
         ]));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
@@ -123,6 +134,14 @@ class CasinoApiCest
         $expected = $this->user_balance[0] + $request['amount'];
 
         $I->assertEquals([$expected], $I->grabDataFromResponseByJsonPath('balance'), "Balance does not match");
+
+        $I->expect('Can see record of transaction applied');
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['transaction_id'],
+            'transaction_type' => TransactionRequest::TRANS_REFUND,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_DEPOSIT
+        ]);
     }
 
     public function testGenToken(ApiTester $I)

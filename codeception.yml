@@ -10,6 +10,8 @@ paths:
     log: tests/_output
     data: tests/_data
     helpers: tests/_support
+extensions:
+    enabled: [Codeception\Extension\Logger]
 settings:
     bootstrap: _bootstrap.php
     colors: true

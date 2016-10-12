@@ -191,7 +191,7 @@ class LaravelExtendedConnector extends Client
         // Set the request instance for the application,
         if (is_null($request)) {
             $appConfig = require $this->module->config['project_dir'] . 'config/app.php';
-            $request = SymfonyRequest::create($appConfig['url']);
+            $request = SymfonyRequest::create($appConfig['url'], 'GET',[], [], [], $this->module->config['server']);
         }
         $this->app->instance('request', Request::createFromBase($request));
 
