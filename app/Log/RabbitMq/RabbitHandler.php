@@ -10,12 +10,11 @@ namespace App\Log\RabbitMq;
 
 use App\Log\RabbitMq\Formatter\RabbitFormatter;
 use Monolog\Formatter\FormatterInterface;
-use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-class RabbitHandler implements HandlerInterface
+class RabbitHandler extends BaseHandler
 {
     private $connection;
     private $channel;
@@ -23,14 +22,6 @@ class RabbitHandler implements HandlerInterface
     private $default_exchange;
 
     private $queueManager;
-
-    protected $level = Logger::DEBUG;
-
-    /**
-     * @var FormatterInterface
-     */
-    protected $formatter;
-    protected $processors = [];
 
     public function __construct(AMQPStreamConnection $connection, RabbitQueueManager $queueManager, $prefix, $default_exchange, int $level = Logger::DEBUG)
     {
@@ -84,49 +75,6 @@ class RabbitHandler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function isHandling(array $record)
-    {
-        return $record['level'] >= $this->level;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle(array $record)
-    {
-        if (!$this->isHandling($record)) {
-            return false;
-        }
-
-        $record = $this->processRecord($record);
-
-        $record['formatted'] = $this->getFormatter()->format($record);
-
-        $this->sendRecord($record);
-
-        return false;
-    }
-
-    /**
-     * Processes a record.
-     *
-     * @param  array $record
-     * @return array
-     */
-    protected function processRecord(array $record)
-    {
-        if ($this->processors) {
-            foreach ($this->processors as $processor) {
-                $record = call_user_func($processor, $record);
-            }
-        }
-
-        return $record;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function handleBatch(array $records)
     {
         $to_send = [];
@@ -144,54 +92,6 @@ class RabbitHandler implements HandlerInterface
         }
 
         $this->sendBatch($to_send);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pushProcessor($callback)
-    {
-        if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), '.var_export($callback, true).' given');
-        }
-        array_unshift($this->processors, $callback);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function popProcessor()
-    {
-        if (!$this->processors) {
-            throw new \LogicException('You tried to pop from an empty processor stack.');
-        }
-
-        return array_shift($this->processors);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setFormatter(FormatterInterface $formatter)
-    {
-        $this->formatter = $formatter;
-
-        return $this;
-    }
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFormatter()
-    {
-        if (!$this->formatter) {
-            $this->formatter = $this->getDefaultFormatter();
-        }
-
-        return $this->formatter;
     }
 
     protected function close(){

@@ -42,6 +42,10 @@ return [
                     ]
                 ]
             ],
+            'file'  => [
+                'log' => env('APP_LOG', 'single'),
+                'log_level' => env('APP_LOG_LEVEL', 'debug')
+            ],
             'mongo' => [
                 'server' => env('LOG_MONGO_SERVER'),
                 'db_name' => env('LOG_MONGO_DB_NAME'),

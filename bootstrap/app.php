@@ -41,8 +41,8 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
-$app->configureMonologUsing(function ($monolog) {
-    new \App\Log\Logger(config('log.logger'), $monolog);
+$app->configureMonologUsing(function ($monolog) use($app) {
+    new \App\Log\Logger(config('log.logger'), $monolog, $app);
 });
 
 /*
