@@ -75,7 +75,7 @@ class CasinoBorderlineApiCest
             'operation_id' => app('AccountManager')->getFreeOperationId(),
             'user_id' => 1,
             'service_id' => array_get($this->options, 'service_id'),
-            'amount' => 10,
+            'amount' => 10/100,
             'move'  => TransactionRequest::D_WITHDRAWAL,
             'partner_id' => request()->server('PARTNER_ID'),
             'cashdesk' => request()->server('FRONTEND_NUM'),

@@ -1,5 +1,7 @@
 <?php
 
+use App\Components\Transactions\TransactionRequest;
+
 class EuroTechGamesApiCest
 {
 
@@ -106,6 +108,14 @@ class EuroTechGamesApiCest
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $expectedBalance = $testUser->getBalanceInCents()-10;
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
+
+        $I->expect('Can see record of transaction applied');
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['TransferId'],
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_WITHDRAWAL
+        ]);
     }
 
     public function testMethodDeposit(ApiTester $I)
@@ -137,6 +147,14 @@ class EuroTechGamesApiCest
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $expectedBalance = $testUser->getBalanceInCents()+10;
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
+
+        $I->expect('Can see record of transaction applied');
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['TransferId'],
+            'transaction_type' => TransactionRequest::TRANS_WIN,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_DEPOSIT
+        ]);
     }
 
     public function testWithdrawAndDeposit(ApiTester $I)
@@ -172,5 +190,20 @@ class EuroTechGamesApiCest
         $I->expect('unchanged balance after operation');
         $expectedBalance = $testUser->getBalanceInCents();
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
+
+        $I->expect('Can see record of both transactions applied');
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['TransferId'],
+            'transaction_type' => TransactionRequest::TRANS_WIN,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_DEPOSIT
+        ]);
+
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['TransferId'],
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_WITHDRAWAL
+        ]);
     }
 }
