@@ -23,7 +23,7 @@ class EuroGamesTechTemplate implements IExceptionTemplate
         $message = $this->useElement('message', 'Unknown');
 
         //503 error case
-        if($statusCode == 503){
+        if(in_array($statusCode, [503, 504])){
             $codeMap = CodeMapping::getByMeaning(CodeMapping::TIMED_OUT);
         } else {
             $codeMap = CodeMapping::getByErrorCode($code);

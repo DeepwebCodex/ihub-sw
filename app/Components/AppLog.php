@@ -153,6 +153,11 @@ class AppLog
     private function write($level, $message, $node = '', $module = '', $line = '')
     {
         $context = $this->composeContext($node, $module, $line);
+
+        if(is_array($message)){
+            $message = collect($message);
+        }
+
         return Log::write($level, $message, $context);
     }
 }

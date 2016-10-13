@@ -56,7 +56,7 @@ class EgtHelper
         }
 
         if($transactionResponse->operation_id === null){
-            throw new ApiHttpException(503, null, CodeMapping::getByMeaning(CodeMapping::TIMED_OUT));
+            throw new ApiHttpException(504, null, CodeMapping::getByMeaning(CodeMapping::TIMED_OUT));
         }
 
         return $transactionResponse;
