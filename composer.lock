@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "08e503cc387906b04d2c0dd2d2c37067",
+    "hash": "ee9fa0c32310b7ea8c852b6a99b8422d",
     "content-hash": "c5656655624dbab66dab860e057a9aac",
     "packages": [
         {
@@ -2899,12 +2899,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "c5dee2957f0f7dc1ad3e9820d386140d15402315"
+                "reference": "5f7ce1165443e03e5461b4b26ae147efb9b14248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/c5dee2957f0f7dc1ad3e9820d386140d15402315",
-                "reference": "c5dee2957f0f7dc1ad3e9820d386140d15402315",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/5f7ce1165443e03e5461b4b26ae147efb9b14248",
+                "reference": "5f7ce1165443e03e5461b4b26ae147efb9b14248",
                 "shasum": ""
             },
             "require": {
@@ -2982,7 +2982,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2016-10-09 19:03:52"
+            "time": "2016-10-13 09:15:21"
         },
         {
             "name": "codeception/specify",
