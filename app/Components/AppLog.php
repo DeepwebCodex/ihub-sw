@@ -2,6 +2,7 @@
 
 namespace App\Components;
 
+use App\Http\Controllers\Api\BaseApiController;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\Log;
  */
 class AppLog
 {
+
+    private $controller = null;
+    private $method = null;
     /**
      * @param string $node
      * @param string $module
@@ -19,12 +23,28 @@ class AppLog
     private function composeContext($node, $module, $line)
     {
         if (!$node || !$module || !$line) {
-            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10);
 
-            $trace = array_filter($trace, function ($elem) {
-                return ($elem['class'] !== __CLASS__);
+            $trace = array_filter($trace, function ($elem) use($node, $module){
+                if(isset($elem['class'])) {
+                    if (!$node && preg_match("/Controller$/", $elem['class'])) {
+                        if (is_subclass_of($elem['class'], BaseApiController::class)) {
+                            $this->controller = $elem['class'];
+                            $this->method = $elem['function'];
+                        }
+                    }
+                    return ($elem['class'] !== __CLASS__);
+                }
+
+                return false;
             });
+
             $trace = array_values($trace);
+
+            if($this->controller && $this->method){
+                $node = $node ?: (new \ReflectionClass($this->controller))->getShortName();
+                $module = $module ?: $this->method;
+            }
 
             list($traceLineInfo, $traceClassInfo) = $trace;
 

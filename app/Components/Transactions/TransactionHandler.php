@@ -7,6 +7,7 @@ use App\Components\ExternalServices\AccountManager;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
+use App\Facades\AppLog;
 
 /**
  * @property  TransactionRequest $request
@@ -41,7 +42,14 @@ class TransactionHandler
 
         $balance = $this->user->getBalance();
 
-        return $this->buildResponse($transactionData, $isDuplicate, $balance);
+        $response = $this->buildResponse($transactionData, $isDuplicate, $balance);
+
+        AppLog::info([
+            'request' => $this->request->getAttributes(),
+            'response' => $response->getAttributes()
+        ], '', 'transaction');
+
+        return $response;
     }
 
     private function buildResponse(array $transactionData, bool $isDuplicate, float $balance){

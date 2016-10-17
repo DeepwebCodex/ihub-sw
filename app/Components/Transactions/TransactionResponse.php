@@ -87,4 +87,8 @@ class TransactionResponse
 
         return $this->deposit_rest;
     }
+
+    public function getAttributes(){
+        return $this->attributes;
+    }
 }

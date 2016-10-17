@@ -4,6 +4,7 @@ namespace App\Components\ExternalServices;
 
 
 use App\Exceptions\Api\ApiHttpException;
+use App\Facades\AppLog;
 
 
 class RemoteSession
@@ -41,6 +42,7 @@ class RemoteSession
         try {
             $this->memCache->pconnect($this->remoteHost, $this->remotePort);
         } catch (\Exception $e) {
+            AppLog::critical($e->getMessage());
             throw new ApiHttpException(503, "Service unavailable");
         }
 

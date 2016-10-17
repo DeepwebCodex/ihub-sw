@@ -15,6 +15,7 @@ use App\Log\RabbitMq\RabbitQueueManager;
 use App\Log\File\FileLogger;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
+use Monolog\Handler\AmqpHandler;
 use Monolog\Handler\MongoDBHandler;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 

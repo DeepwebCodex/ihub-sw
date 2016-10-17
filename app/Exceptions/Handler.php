@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Exceptions\Api\Traits\ApiHandlerTrait;
+use App\Facades\AppLog;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -50,6 +51,10 @@ class Handler extends ExceptionHandler
         if ($controller = $this->isApiCall($request)) {
             $response = $this->getApiExceptionResponse($controller, $exception);
             if ($response instanceof Response) {
+                AppLog::error([
+                    'request' => $request->getContent(),
+                    'response' => $response->getContent()
+                ], $this->getNodeName(), $this->method);
                 return $response;
             }
         }

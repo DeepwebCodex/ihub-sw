@@ -10,6 +10,7 @@ namespace App\Components\ExternalServices\Traits;
 
 
 use App\Exceptions\Api\GenericApiHttpException;
+use App\Facades\AppLog;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -47,6 +48,8 @@ trait CashDeskRohRequest
                 $retry --;
                 $this->sendPostCashDesk($url, $params, $retry);
             }
+
+            AppLog::critical($e->getMessage());
 
             throw new GenericApiHttpException(500, $e->getMessage());
         }

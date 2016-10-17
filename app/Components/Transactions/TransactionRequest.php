@@ -4,6 +4,7 @@ namespace App\Components\Transactions;
 
 
 use App\Components\ExternalServices\AccountManager;
+use ReflectionClass;
 
 /**
  * @property  AccountManager $accountManager
@@ -60,5 +61,22 @@ class TransactionRequest
             "amount"    => $this->amount,
             "currency"  => $this->currency
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        $reflect = new ReflectionClass($this);
+        $props = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $props_ret = [];
+
+        foreach ($props as $property){
+            /**@var \ReflectionProperty $property*/
+            $props_ret[$property->getName()] = $property->getValue($this);
+        }
+
+        return $props_ret;
     }
 }

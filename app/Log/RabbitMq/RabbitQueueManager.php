@@ -44,7 +44,7 @@ class RabbitQueueManager
     {
         if(!empty($this->queueList)){
 
-            $channel->exchange_declare($prefix . $default_exchange, 'direct', false, true, false);
+            //$channel->exchange_declare($prefix . $default_exchange, 'direct', false, true, false);
 
             foreach ($this->queueList as $queue)
             {
@@ -59,22 +59,5 @@ class RabbitQueueManager
                 }
             }
         }
-    }
-
-    /**
-     * @param $level
-     * @return RabbitQueue
-     */
-    public function resolveQueue($level)
-    {
-        if(!empty($queueList)){
-            foreach ($this->queueList as $queue){
-                if($queue->canProcessLevel($level)){
-                    return $queue;
-                }
-            }
-        }
-
-        return new RabbitQueue([]);
     }
 }

@@ -7,6 +7,7 @@ namespace App\Components\ExternalServices\Traits;
  */
 
 use App\Exceptions\Api\GenericApiHttpException;
+use App\Facades\AppLog;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -83,6 +84,8 @@ trait RohRequest
                 $retry--;
                 $this->sendPostRoh($url, $params, $retry);
             }
+
+            AppLog::critical($e->getMessage());
 
             throw new GenericApiHttpException($statusCode, $e->getMessage());
         }
