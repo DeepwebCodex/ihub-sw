@@ -17,7 +17,7 @@ class RemoteSessionMock
         $remote_session = Mockery::mock(RemoteSession::class);
 
         $remote_session->shouldReceive('start')->andReturnSelf();
-        $remote_session->shouldReceive('get')->withArgs(['user_id'])->andReturn(1);
+        $remote_session->shouldReceive('get')->withArgs(['user_id'])->andReturn(env('TEST_USER_ID'));
         $remote_session->shouldReceive('getSessionId')->andReturn("KSKHDU95jG34");
 
         return $remote_session;

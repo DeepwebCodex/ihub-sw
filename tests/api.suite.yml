@@ -9,5 +9,5 @@ modules:
             environment_file: .env.testing
             cleanup: false
             server:
-              PARTNER_ID: 1
-              FRONTEND_NUM: -5
+              PARTNER_ID: %TEST_PARTNER_ID%
+              FRONTEND_NUM: %TEST_CASHEDESK%

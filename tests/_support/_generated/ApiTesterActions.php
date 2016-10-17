@@ -2873,7 +2873,23 @@ trait ApiTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
+     * Use Laravel's model factory to create a model.
+     * Can only be used with Laravel 5.1 and later.
      *
+     * ``` php
+     * <?php
+     * $I->have('App\User');
+     * $I->have('App\User', ['name' => 'John Doe']);
+     * $I->have('App\User', [], 'admin');
+     * ?>
+     * ```
+     *
+     * @see http://laravel.com/docs/5.1/testing#model-factories
+     * @param string $model
+     * @param array $attributes
+     * @param string $name
+     * @return mixed
+     * @part orm
      * @see \Codeception\Module\Laravel5::have()
      */
     public function have($model, $attributes = null, $name = null) {
@@ -2884,7 +2900,24 @@ trait ApiTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
+     * Use Laravel's model factory to create multiple models.
+     * Can only be used with Laravel 5.1 and later.
      *
+     * ``` php
+     * <?php
+     * $I->haveMultiple('App\User', 10);
+     * $I->haveMultiple('App\User', 10, ['name' => 'John Doe']);
+     * $I->haveMultiple('App\User', 10, [], 'admin');
+     * ?>
+     * ```
+     *
+     * @see http://laravel.com/docs/5.1/testing#model-factories
+     * @param string $model
+     * @param int $times
+     * @param array $attributes
+     * @param string $name
+     * @return mixed
+     * @part orm
      * @see \Codeception\Module\Laravel5::haveMultiple()
      */
     public function haveMultiple($model, $times, $attributes = null, $name = null) {

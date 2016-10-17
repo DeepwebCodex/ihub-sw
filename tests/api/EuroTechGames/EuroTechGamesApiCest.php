@@ -29,7 +29,7 @@ class EuroTechGamesApiCest
 
     public function testMethodAuthenticate(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'UserName' => 'FavbetEGTSeamless',
@@ -53,7 +53,7 @@ class EuroTechGamesApiCest
 
     public function testMethodGetPlayerBalance(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'UserName' => 'FavbetEGTSeamless',
@@ -79,7 +79,7 @@ class EuroTechGamesApiCest
 
     public function testMethodWithdraw(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $this->gameNumber = random_int(100000, 9900000);
 
@@ -120,7 +120,7 @@ class EuroTechGamesApiCest
 
     public function testMethodDeposit(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'UserName' => 'FavbetEGTSeamless',
@@ -161,7 +161,7 @@ class EuroTechGamesApiCest
     {
         $this->gameNumber = random_int(100000, 9900000);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'UserName' => 'FavbetEGTSeamless',

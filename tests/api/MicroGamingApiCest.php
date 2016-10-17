@@ -27,7 +27,7 @@ class MicroGamingApiCest
 
     public function testMethodLogIn(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -58,7 +58,7 @@ class MicroGamingApiCest
 
     public function testMethodGetBalance(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -89,7 +89,7 @@ class MicroGamingApiCest
 
     public function testMethodEndGame(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -120,7 +120,7 @@ class MicroGamingApiCest
 
     public function testMethodPlayIn(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
         $this->gameID = random_int(9900000, 99000000);
 
         $request = [
@@ -158,7 +158,7 @@ class MicroGamingApiCest
 
     public function testMethodPlayOut(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [

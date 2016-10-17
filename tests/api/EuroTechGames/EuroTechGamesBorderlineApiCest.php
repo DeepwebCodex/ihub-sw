@@ -21,7 +21,7 @@ class EuroTechGamesBorderlineApiCest
     // tests
     public function testNoBetWin(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $this->gameNumber = random_int(100000, 9900000);
 
@@ -62,7 +62,7 @@ class EuroTechGamesBorderlineApiCest
     {
         $I->grabService('db')->beginTransaction();
 
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $this->gameNumber = random_int(100000, 9900000);
 
@@ -82,7 +82,7 @@ class EuroTechGamesBorderlineApiCest
 
         Transactions::create([
             'operation_id' => $I->grabService('AccountManager')->getFreeOperationId(),
-            'user_id' => 1,
+            'user_id' => env('TEST_USER_ID'),
             'service_id' => array_get($this->options, 'service_id'),
             'amount' => 10/100,
             'move'  => TransactionRequest::D_WITHDRAWAL,
@@ -126,7 +126,7 @@ class EuroTechGamesBorderlineApiCest
     {
         $this->gameNumber = random_int(100000, 9900000);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'UserName' => 'FavbetEGTSeamless',
@@ -144,7 +144,7 @@ class EuroTechGamesBorderlineApiCest
 
         Transactions::create([
             'operation_id' => $I->grabService('AccountManager')->getFreeOperationId(),
-            'user_id' => 1,
+            'user_id' => env('TEST_USER_ID'),
             'service_id' => array_get($this->options, 'service_id'),
             'amount' => 10/100,
             'move'  => TransactionRequest::D_WITHDRAWAL,
@@ -180,7 +180,7 @@ class EuroTechGamesBorderlineApiCest
     {
         $this->gameNumber = random_int(100000, 9900000);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'UserName' => 'FavbetEGTSeamless',
@@ -198,7 +198,7 @@ class EuroTechGamesBorderlineApiCest
 
         Transactions::create([
             'operation_id' => $I->grabService('AccountManager')->getFreeOperationId(),
-            'user_id' => 1,
+            'user_id' => env('TEST_USER_ID'),
             'service_id' => array_get($this->options, 'service_id'),
             'amount' => 10/100,
             'move'  => TransactionRequest::D_WITHDRAWAL,
@@ -242,7 +242,7 @@ class EuroTechGamesBorderlineApiCest
     {
         $this->gameNumber = random_int(100000, 9900000);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'UserName' => 'FavbetEGTSeamless',
@@ -287,7 +287,7 @@ class EuroTechGamesBorderlineApiCest
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'UserName' => 'FavbetEGTSeamless',

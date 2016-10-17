@@ -9,5 +9,5 @@ modules:
         - Laravel5:
             environment_file: .env.testing
             server:
-              PARTNER_ID: 1
-              FRONTEND_NUM: -8
+              PARTNER_ID: %TEST_PARTNER_ID%
+              FRONTEND_NUM: %TEST_CASHEDESK%

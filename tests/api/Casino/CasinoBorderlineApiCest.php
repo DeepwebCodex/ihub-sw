@@ -30,7 +30,7 @@ class CasinoBorderlineApiCest
             'object_id' => $this->objectId,
             'transaction_id' => random_int(90000, 250000),
             'amount' => 10,
-            'user_id' => 1,
+            'user_id' => env('TEST_USER_ID'),
             'time'   => time(),
             'type_operation' => 'rollback'
         ];
@@ -65,15 +65,15 @@ class CasinoBorderlineApiCest
             'object_id' => $this->objectId,
             'transaction_id' => random_int(90000, 250000),
             'amount' => 10,
-            'user_id' => 1,
+            'user_id' => env('TEST_USER_ID'),
             'time'   => time()
         ];
 
-        $testUser = \App\Components\Users\IntegrationUser::get(1, 0, 'tests');
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         Transactions::create([
             'operation_id' => app('AccountManager')->getFreeOperationId(),
-            'user_id' => 1,
+            'user_id' => env('TEST_USER_ID'),
             'service_id' => array_get($this->options, 'service_id'),
             'amount' => 10/100,
             'move'  => TransactionRequest::D_WITHDRAWAL,
@@ -119,7 +119,7 @@ class CasinoBorderlineApiCest
             'object_id' => $this->objectId,
             'transaction_id' => random_int(90000, 250000),
             'amount' => 10,
-            'user_id' => 1,
+            'user_id' => env('TEST_USER_ID'),
             'time'   => time(),
             'type_operation' => 'win'
         ];

@@ -40,7 +40,7 @@ class CasinoApiCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->expect('min required items in response');
-        $I->seeResponseContainsJson(['status' => true, 'message' => 'success', 'user_id' => 1]);
+        $I->seeResponseContainsJson(['status' => true, 'message' => 'success', 'user_id' => env('TEST_USER_ID')]);
     }
 
     public function testMethodGetBalance(ApiTester $I)
@@ -116,7 +116,7 @@ class CasinoApiCest
             'object_id' => $this->objectId,
             'transaction_id' => random_int(90000, 250000),
             'amount' => 10,
-            'user_id' => 1,
+            'user_id' => env('TEST_USER_ID'),
             'time'   => time(),
             'type_operation' => 'rollback'
         ];
