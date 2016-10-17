@@ -23,7 +23,9 @@ class RabbitFormatter implements FormatterInterface
                 'project' => config('app.name'),
                 'msg' => $record['message']
             ],
-            $record['context']
+            [
+                'context' => $record['context']
+            ]
         );
     }
 
