@@ -44,7 +44,7 @@ class RabbitQueueManager
     {
         if(!empty($this->queueList)){
 
-            //$channel->exchange_declare($prefix . $default_exchange, 'direct', false, true, false);
+            $channel->exchange_declare($prefix . $default_exchange, 'direct', false, true, false);
 
             foreach ($this->queueList as $queue)
             {
