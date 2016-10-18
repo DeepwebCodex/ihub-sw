@@ -60,8 +60,6 @@ class EuroTechGamesBorderlineApiCest
 
     public function testStoragePending(ApiTester $I)
     {
-        $I->grabService('db')->beginTransaction();
-
         $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $this->gameNumber = random_int(100000, 9900000);
@@ -118,8 +116,6 @@ class EuroTechGamesBorderlineApiCest
             'status' => TransactionRequest::STATUS_PENDING,
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
-
-        $I->grabService('db')->rollback();
     }
 
     public function testTransactionDuplicate(ApiTester $I)

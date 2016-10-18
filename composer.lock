@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ee9fa0c32310b7ea8c852b6a99b8422d",
+    "hash": "e20fd1bcbd4cf4b902f7279fc3f18149",
     "content-hash": "c5656655624dbab66dab860e057a9aac",
     "packages": [
         {
@@ -2899,12 +2899,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "5f7ce1165443e03e5461b4b26ae147efb9b14248"
+                "reference": "837d47bc6b41f8b25b26c92f75846a08132a581b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/5f7ce1165443e03e5461b4b26ae147efb9b14248",
-                "reference": "5f7ce1165443e03e5461b4b26ae147efb9b14248",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/837d47bc6b41f8b25b26c92f75846a08132a581b",
+                "reference": "837d47bc6b41f8b25b26c92f75846a08132a581b",
                 "shasum": ""
             },
             "require": {
@@ -2982,20 +2982,20 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2016-10-13 09:15:21"
+            "time": "2016-10-16 20:33:13"
         },
         {
             "name": "codeception/specify",
-            "version": "0.4.3",
+            "version": "0.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Specify.git",
-                "reference": "8efcd017687ebdae9c4d95bcbc1dc22a28561874"
+                "reference": "e8abceb9b9db7db24d41aef30ff6c258a9cead36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Specify/zipball/8efcd017687ebdae9c4d95bcbc1dc22a28561874",
-                "reference": "8efcd017687ebdae9c4d95bcbc1dc22a28561874",
+                "url": "https://api.github.com/repos/Codeception/Specify/zipball/e8abceb9b9db7db24d41aef30ff6c258a9cead36",
+                "reference": "e8abceb9b9db7db24d41aef30ff6c258a9cead36",
                 "shasum": ""
             },
             "require": {
@@ -3019,7 +3019,7 @@
                 }
             ],
             "description": "BDD code blocks for PHPUnit and Codeception",
-            "time": "2015-11-26 23:35:52"
+            "time": "2016-10-13 11:54:16"
         },
         {
             "name": "codeception/verify",
@@ -3113,24 +3113,25 @@
         },
         {
             "name": "facebook/webdriver",
-            "version": "1.1.3",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/php-webdriver.git",
-                "reference": "b7186fb1bcfda956d237f59face250d06ef47253"
+                "reference": "af21de3ae5306a8ca0bcc02a19735dadc43e83f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/b7186fb1bcfda956d237f59face250d06ef47253",
-                "reference": "b7186fb1bcfda956d237f59face250d06ef47253",
+                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/af21de3ae5306a8ca0bcc02a19735dadc43e83f3",
+                "reference": "af21de3ae5306a8ca0bcc02a19735dadc43e83f3",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "php": ">=5.3.19"
+                "php": "^5.5 || ~7.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^1.11",
+                "php-mock/php-mock-phpunit": "^1.1",
                 "phpunit/phpunit": "4.6.* || ~5.0",
                 "squizlabs/php_codesniffer": "^2.6"
             },
@@ -3155,7 +3156,7 @@
                 "selenium",
                 "webdriver"
             ],
-            "time": "2016-08-10 00:44:08"
+            "time": "2016-10-14 15:16:51"
         },
         {
             "name": "flow/jsonpath",

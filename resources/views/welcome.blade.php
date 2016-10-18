@@ -7,9 +7,6 @@
 
         <title>Laravel</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
         <!-- Styles -->
         <style>
             html, body {
@@ -62,20 +59,56 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            pre {
+                font-style: normal;
+                font-weight: normal;
+                font-family: "Droid Sans Mono", "Lucida Console", "Andale Mono", "Courier New", "Courier", monospace;
+                font-size: 12px;
+                line-height: 12px;
+                text-align: left;
+            }
         </style>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    <a href="{{ url('/login') }}">Login</a>
-                    <a href="{{ url('/register') }}">Register</a>
-                </div>
-            @endif
-
             <div class="content">
                 <div class="title m-b-md">
-                    Ferapont
+                    <pre>
+                __                             ___            _yygL
+               #####gy_,                    y#######g   __g########g
+              g#F   `M##bg.                g#"'    ###g####~'    9##L
+             ##F       `###g____yyyyy_____j#"        ###          ##E
+            a#F           3##"#~~~~~~~#####"          ##g          ##
+           j#F                           5#      ____ _##y__       ##1
+           a#                           y##    _g##~####"#M##g     ##1
+           #E                           J#L    ##  g#"'     `#########g_
+          o#1                           ##     ## y#E         ##L     9#,
+           #g                           ##      ####F         3#g      ##
+          a#F                           3#L       ##L         ##M#.    ##!
+         g#F                             ##_     _##g       _g#F #g   y##
+        _#F                               ~###g###~M##g_   y###yg#'  y##'
+        ##                                           `?"M###        g##F
+       ##'                                                ?#,      ###L
+       #E                                                  ##g___g#"###
+      J#F                                                    `M##'   ##L
+      ##                                                              ##
+      ##                                                              ##
+      ##                                                              ##L
+   ___##y_.      a#o                                                __##1
+##""F~5#F        ###L                                 __          #M#M###M##
+      J#K        ###L                                g##g             ##
+     _y##ga       ~           _amog                  ####            ##F
+ a###~'"#1                   d#   "#                 "##          #wy##L.
+        3#,                   #g__g"                                ##""5##g
+         ##g#                    ''                                a##    '~
+    __y#"FH#_                                                  y_ g##
+   ##"'     ##g                                                 "###g_
+   ~         `9#g_                                            _g##'"9##gg,
+                 ?##gy_.                                   _y##"'      `##
+                     ~"####ggy_____                  ___g###F'
+                             "~~~~~##################~~~"
+                    </pre>
                 </div>
             </div>
         </div>

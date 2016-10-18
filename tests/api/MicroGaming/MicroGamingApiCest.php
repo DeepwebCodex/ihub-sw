@@ -1,5 +1,6 @@
 <?php
 
+use App\Components\Transactions\TransactionRequest;
 use Carbon\Carbon;
 
 class MicroGamingApiCest
@@ -154,6 +155,14 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()-10).'\']');
+
+        $I->expect('Can see record of transaction applied');
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['methodcall']['call']['actionid'],
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_WITHDRAWAL
+        ]);
     }
 
     public function testMethodPlayOut(ApiTester $I)
@@ -191,5 +200,13 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()+10).'\']');
+
+        $I->expect('Can see record of transaction applied');
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['methodcall']['call']['actionid'],
+            'transaction_type' => TransactionRequest::TRANS_WIN,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_DEPOSIT
+        ]);
     }
 }
