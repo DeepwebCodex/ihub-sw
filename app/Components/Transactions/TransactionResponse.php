@@ -89,6 +89,9 @@ class TransactionResponse
     }
 
     public function getAttributes(){
-        return $this->attributes;
+        return array_merge($this->attributes, [
+            'balance' => $this->balance,
+            'isDuplicate' => $this->isDuplicate
+        ]);
     }
 }
