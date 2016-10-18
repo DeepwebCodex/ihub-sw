@@ -5,39 +5,39 @@ return [
     'api' => [
 
         'account_roh' => [
-            'host'  => 'de2ef01d.dev.favorit',
-            'port'  => 7768
+            'host'  => env('API_ACCOUNT_ROH_HOST', 'de2ef01d.dev.favorit'),
+            'port'  => env('API_ACCOUNT_ROH_PORT', 7768)
         ],
 
         'account_session' => [
-            'host'  => 'ef01dev.favorit',
-            'port'  => 8061,
+            'host'  => env('API_ACCOUNT_SESSION_HOST', 'de2ef01d.dev.favorit'),
+            'port'  => env('API_ACCOUNT_SESSION_PORT', 8061)
         ],
 
         'account_op' => [
-            'host'  => 'ef01dev.favorit',
-            'port'  => 8008
+            'host'  => env('API_ACCOUNT_OP_HOST', 'de2ef01d.dev.favorit'),
+            'port'  => env('API_ACCOUNT_OP_PORT', 8008)
         ],
 
         'cards_roh' => [
-            'host'  => 'ef01dev.favorit',
-            'port'  =>  7767
+            'host'  => env('API_CARDS_ROH_HOST', 'de2ef01d.dev.favorit'),
+            'port'  => env('API_CARDS_ROH_PORT', 7767)
         ],
 
         'config_agent_roh' => [
-            'host'  => 'ef01dev.favorit',
-            'port'  => 7767
+            'host'  => env('API_CONFIGAGENT_ROH_HOST', 'de2ef01d.dev.favorit'),
+            'port'  => env('API_CONFIGAGENT_ROH_PORT', 7767)
         ],
 
         'cash_desk_roh' => [
-            'host'  => 'ef01dev.favorit',
-            'port'  => 7763
+            'host'  => env('API_CASH_DESK_ROH_HOST', 'de2ef01d.dev.favorit'),
+            'port'  => env('API_CASH_DESK_ROH_PORT', 7763)
         ]
     ],
 
     'hazlecast_sessions' => [
-        'host'  => 'de2of01d.dev.favorit',
-        'port'  => 5701
+        'host'  => env('API_HAZLE_SESSIONS_HOST', 'de2ef01d.dev.favorit'),
+        'port'  => env('API_HAZLE_SESSIONS_PORT', 5701)
     ]
 
 ];
