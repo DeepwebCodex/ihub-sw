@@ -33,3 +33,26 @@ if (! function_exists('get_formatted_date')) {
         throw new \InvalidArgumentException;
     }
 }
+
+if (! function_exists('integration_config')) {
+
+    /**
+     * @param \Illuminate\Foundation\Application $app
+     * @param string $environment
+     */
+    function integration_config(\Illuminate\Foundation\Application $app, $environment){
+        if($environment && $app){
+            $basePath = $app->basePath().DIRECTORY_SEPARATOR.'integrations'.DIRECTORY_SEPARATOR;
+            $environmentConfig = $basePath . $environment . '.php';
+
+            if(!file_exists($environmentConfig)){
+                $environmentConfig = $basePath . 'default.php';
+            }
+
+            $integrations = require $environmentConfig;
+
+            Illuminate\Container\Container::getInstance()->make('config')->set('integrations', $integrations);
+        }
+    }
+
+}

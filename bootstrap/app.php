@@ -11,9 +11,20 @@
 |
 */
 
+use Illuminate\Foundation\Bootstrap\LoadConfiguration;
+
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
 );
+
+/*
+ * -------------------------------------------------------------------------
+ * Load integration configs by environment
+ * -------------------------------------------------------------------------
+ */
+$app->afterBootstrapping(LoadConfiguration::class,function() use($app){
+    integration_config($app, $app->environment());
+});
 
 /*
 |--------------------------------------------------------------------------
