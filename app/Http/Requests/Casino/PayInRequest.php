@@ -9,6 +9,21 @@ namespace App\Http\Requests\Casino;
 class PayInRequest extends BaseCasinoRequest
 {
     /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'token' => 'Invalid token',
+            'signature'  => 'Invalid signature',
+            'time'  => 'Time expired',
+            'check_amount' => 'Amount mush be greater that 0'
+        ];
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
