@@ -14,6 +14,13 @@ class AppLog
 
     private $controller = null;
     private $method = null;
+    private $requestId = null;
+
+    public function __construct()
+    {
+        $this->requestId = md5(uniqid(time()));
+    }
+
     /**
      * @param string $node
      * @param string $module
@@ -51,9 +58,11 @@ class AppLog
             $node = $node ?: (new \ReflectionClass($traceClassInfo['class']))->getShortName();
             $module = $module ?: $traceClassInfo['function'];
             $line = $line ?: $traceLineInfo['line'];
+
+            $requestId = $this->requestId;
         }
 
-        return compact('node', 'module', 'line');
+        return compact('node', 'module', 'line', 'requestId');
     }
 
     /**
