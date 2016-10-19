@@ -15,13 +15,20 @@ class RabbitFormatter implements FormatterInterface
      */
     public function format(array $record)
     {
+        $message = $record['message'];
+
+        $decodedMessage = json_decode($record['message'], true);
+        if ($decodedMessage && json_last_error() === JSON_ERROR_NONE) {
+            $message = $decodedMessage;
+        }
+
         return array_merge(
             [
                 'level' => strtolower($record['level_name']),
                 'time' => $record['datetime']->getTimestamp(),
                 'ip'  => request()->getClientIp(),
                 'project' => config('app.name'),
-                'msg' => $record['message']
+                'msg' => $message
             ],
             [
                 'context' => $record['context']
