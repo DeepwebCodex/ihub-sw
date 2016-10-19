@@ -18,7 +18,7 @@ class AppLog
 
     public function __construct()
     {
-        $this->requestId = md5(uniqid(time()));
+        $this->requestId = gen_uid();
     }
 
     /**

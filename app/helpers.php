@@ -56,3 +56,15 @@ if (! function_exists('integration_config')) {
     }
 
 }
+
+if (! function_exists('gen_uid')) {
+
+    /**
+     * @return string
+     */
+    function gen_uid()
+    {
+        return bin2hex(random_bytes(16));
+    }
+
+}
