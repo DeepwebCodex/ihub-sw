@@ -1,27 +1,33 @@
-# Laravel PHP Framework
-
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
-
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
-
-## Official Documentation
-
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+                __                             ___            _yygL
+               #####gy_,                    y#######g   __g########g
+              g#F   `M##bg.                g#"'    ###g####~'    9##L
+             ##F       `###g____yyyyy_____j#"        ###          ##E
+            a#F           3##"#~~~~~~~#####"          ##g          ##
+           j#F                           5#      ____ _##y__       ##1
+           a#                           y##    _g##~####"#M##g     ##1
+           #E                           J#L    ##  g#"'     `#########g_
+          o#1                           ##     ## y#E         ##L     9#,
+           #g                           ##      ####F         3#g      ##
+          a#F                           3#L       ##L         ##M#.    ##!
+         g#F                             ##_     _##g       _g#F #g   y##
+        _#F                               ~###g###~M##g_   y###yg#'  y##'
+        ##                                           `?"M###        g##F
+       ##'                                                ?#,      ###L
+       #E                                                  ##g___g#"###
+      J#F                                                    `M##'   ##L
+      ##                                                              ##
+      ##                                                              ##
+      ##                                                              ##L
+   ___##y_.      a#o                                                __##1
+##""F~5#F        ###L                                 __          #M#M###M##
+      J#K        ###L                                g##g             ##
+     _y##ga       ~           _amog                  ####            ##F
+ a###~'"#1                   d#   "#                 "##          #wy##L.
+        3#,                   #g__g"                                ##""5##g
+         ##g#                    ''                                a##    '~
+    __y#"FH#_                                                  y_ g##
+   ##"'     ##g                                                 "###g_
+   ~         `9#g_                                            _g##'"9##gg,
+                 ?##gy_.                                   _y##"'      `##
+                     ~"####ggy_____                  ___g###F'
+                             "~~~~~##################~~~"
