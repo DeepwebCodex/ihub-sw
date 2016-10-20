@@ -9,6 +9,6 @@ Homestead.yaml
 /_ide_helper.php
 /.phpstorm.meta.php
 
-./init-ihub.sh
+./project-ihub-install.sh
 
 tests/_output/*
