@@ -32,7 +32,7 @@ class Egt extends BaseGameProvider implements GameProviderInterface
      * @param array $walletInfo
      * @return string
      */
-    public function getGameReal($userInfo, $walletInfo):string
+    public function getGameReal(array $userInfo, array $walletInfo):string
     {
         $userId = $userInfo['id'];
         $defenceCode = EgtHelper::generateDefenceCode($userId, $walletInfo['currency']);

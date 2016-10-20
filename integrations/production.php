@@ -22,7 +22,7 @@ return [
         ]
     ],
 
-    'microGaming' => [
+    'microgaming' => [
         'service_id'            => 17,
         'login_server'          => 'microgaming',
         'password_server'       => 'hawai',

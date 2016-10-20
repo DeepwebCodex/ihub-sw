@@ -13,7 +13,7 @@ interface GameProviderInterface
      * @param $walletInfo
      * @return mixed
      */
-    public function getGameReal($userInfo, $walletInfo);
+    public function getGameReal(array $userInfo, array $walletInfo);
 
     /**
      * @return mixed

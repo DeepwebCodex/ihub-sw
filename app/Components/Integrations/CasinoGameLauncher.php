@@ -38,6 +38,7 @@ class CasinoGameLauncher
         }
 
         $providerName = strtolower($game['provider_name']);
+
         try {
             $provider = $this->getProvider($providerName, $game['id'], $lang, $isMobile);
         } catch (GameProviderNotFoundException $e) {
@@ -61,7 +62,7 @@ class CasinoGameLauncher
      */
     protected function getProvider($providerName, $gameId, $lang, $isMobile):GameProviderInterface
     {
-        $providerClass = 'GameProviders\\' . ucfirst($providerName);
+        $providerClass = 'App\\Components\\Integrations\\GameProviders\\' . ucfirst($providerName);
 
         if (!config('integrations.' . $providerName) || !class_exists($providerClass)) {
             throw new GameProviderNotFoundException();
@@ -172,7 +173,7 @@ class CasinoGameLauncher
         }
 
         try {
-            $gameUrl = $provider->getGameReal($user->getAttributes(), $user->getActiveWallet());
+            $gameUrl = $provider->getGameReal($user->getAttributes(), $user->getActiveWallet()->getAttributes());
         } catch (GameNotFoundException $e) {
             return $this->onGameNotFound($lang, $partnerId);
         }

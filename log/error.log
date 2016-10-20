@@ -579,3 +579,420 @@ PHP message: PHP  36. App\Http\Controllers\Api\VirtualBoxingController->matchBet
 PHP message: PHP  37. spl_autoload_call() /var/www/ihub/app/Http/Controllers/Api/VirtualBoxingController.php:51
 PHP message: PHP  38. Composer\Autoload\ClassLoader->loadClass() /var/www/ihub/app/Http/Controllers/Api/VirtualBoxingController.php:51
 PHP message: PHP  39. Composer\Autoload\includeFile() /v
+2016/10/19 14:36:04 [error] 10211#10211: *1162 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class env does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('env')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('env', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('env', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('env')
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(484): Illuminate\Container\Container->offsetGet('env')
+#5 /var/www/ihub/bootstrap/app.php(24): Illuminate\Foundation\Application->environment()
+#6 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:37:04 [error] 10211#10211: *1162 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class env does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('env')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('env', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('env', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('env')
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(484): Illuminate\Container\Container->offsetGet('env')
+#5 /var/www/ihub/bootstrap/app.php(24): Illuminate\Foundation\Application->environment()
+#6 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:37:24 [error] 10211#10211: *1162 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class env does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('env')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('env', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('env', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('env')
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(484): Illuminate\Container\Container->offsetGet('env')
+#5 /var/www/ihub/bootstrap/app.php(24): Illuminate\Foundation\Application->environment()
+#6 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:37:31 [error] 10211#10211: *1162 FastCGI sent in stderr: "PHP message: PHP Warning:  Missing argument 1 for dump(), called in /var/www/ihub/bootstrap/app.php on line 24 and defined in /var/www/vardumper/Resources/functions/dump.php on line 18
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. require_once() /var/www/ihub/public/index.php:35
+PHP message: PHP   3. dump() /var/www/ihub/bootstrap/app.php:24" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:38:00 [error] 10211#10211: *1162 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class env does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('env')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('env', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('env', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('env')
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(484): Illuminate\Container\Container->offsetGet('env')
+#5 /var/www/ihub/bootstrap/app.php(45): Illuminate\Foundation\Application->environment()
+#6 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:38:25 [error] 10211#10211: *1162 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class env does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('env')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('env', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('env', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('env')
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(484): Illuminate\Container\Container->offsetGet('env')
+#5 /var/www/ihub/bootstrap/app.php(54): Illuminate\Foundation\Application->environment()
+#6 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:38:35 [error] 10211#10211: *1162 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class env does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('env')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('env', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('env', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('env')
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(484): Illuminate\Container\Container->offsetGet('env')
+#5 /var/www/ihub/bootstrap/app.php(24): Illuminate\Foundation\Application->environment()
+#6 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:40:03 [error] 10211#10211: *1170 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class env does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('env')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('env', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('env', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('env')
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(484): Illuminate\Container\Container->offsetGet('env')
+#5 /var/www/ihub/bootstrap/app.php(24): Illuminate\Foundation\Application->environment()
+#6 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:41:57 [error] 10211#10211: *1172 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class env does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('env')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('env', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(711): Illuminate\Container\Container->make('env', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('env')
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(484): Illuminate\Container\Container->offsetGet('env')
+#5 /var/www/ihub/bootstrap/app.php(24): Illuminate\Foundation\Application->environment()
+#6 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:43:50 [error] 10211#10211: *1177 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('config')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('config', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('config', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(106): Illuminate\Foundation\Application->make('config', Array)
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(256): app('config')
+#5 /var/www/ihub/bootstrap/app.php(23): config()
+#6 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b...')
+#7 {main}
+  thrown in /var/www/ihub/vendor/laravel/fram" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:46:25 [error] 10211#10211: *1179 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('config')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('config', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('config', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('config')
+#4 /var/www/ihub/bootstrap/app.php(24): Illuminate\Container\Container->offsetGet('config')
+#5 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b...')
+#6 {main}
+  thrown in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 749" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:46:44 [error] 10211#10211: *1179 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('config')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('config', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('config', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('config')
+#4 /var/www/ihub/bootstrap/app.php(65): Illuminate\Container\Container->offsetGet('config')
+#5 /var/www/ihub/public/index.php(35): require_once('/var/www/ihub/b...')
+#6 {main}
+  thrown in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 749" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:50:19 [error] 10211#10211: *1183 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class env does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:749
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(749): ReflectionClass->__construct('env')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(644): Illuminate\Container\Container->build('env', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('env', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(1203): Illuminate\Foundation\Application->make('env')
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(484): Illuminate\Container\Container->offsetGet('env')
+#5 /var/www/ihub/bootstrap/app.php(24): Illuminate\Foundation\Application->environment()
+#6 [internal function]: {closure}(Object(Illuminate\Foundation\Applica" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/19 14:52:18 [error] 10211#10211: *1185 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\FatalThrowableError: Call to undefined function fileExists() in /var/www/ihub/app/helpers.php:48
+Stack trace:
+#0 /var/www/ihub/bootstrap/app.php(26): integration_config(Object(Illuminate\Foundation\Application), 'local')
+#1 [internal function]: {closure}(Object(Illuminate\Foundation\Application))
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Events/Dispatcher.php(221): call_user_func_array(Object(Closure), Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(205): Illuminate\Events\Dispatcher->fire('bootstrapped: I...', Array)
+#4 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(253): Illuminate\Foundation\Application->bootstrapWith(Array)
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel->bootstrap()
+#6 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.p" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/auth HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/20 12:44:23 [error] 10211#10211: *1273 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 8192 bytes) in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 350
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework
+2016/10/20 12:44:23 [error] 10211#10211: *1273 FastCGI sent in stderr: "array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames() /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illuminate\Database\Query\Builder->get() /var/www/ihub/app/Repositories/CasinoGamesRepository.php:151
+PHP message: PHP  30. Illuminate\Database\Query\Builder->runSelect() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1634
+PHP message: PHP  31. Illuminate\Database\Connection->select() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1648
+PHP message: PHP  32. Illuminate\Database\Connection->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:351
+PHP message: PHP  33. Illuminate\Database\Connection->runQueryCallback() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:717
+PHP message: PHP  34. Illuminate\Database\Connection->Illuminate\Database\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:754
+PHP message: PHP  35. PDOStatement->fetchAll() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:350
+PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 4096 bytes) in /var/www/ihub/vendor/symfony/debug/Exception/FatalErrorException.php on line 35
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/
+2016/10/20 12:44:23 [error] 10211#10211: *1273 FastCGI sent in stderr: "ine/Pipeline.php:137
+PHP message: PHP  17. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:49
+PHP message: PHP  18. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP  19. Illuminate\Routing\Middleware\SubstituteBindings->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP  20. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php:41
+PHP message: PHP  21. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  22. Illuminate\Routing\Route->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:642
+PHP message: PHP  23. Illuminate\Routing\Route->runController() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:144
+PHP message: PHP  24. Illuminate\Routing\ControllerDispatcher->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:189
+PHP message: PHP  25. Illuminate\Routing\Controller->callAction() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:44
+PHP message: PHP  26. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames() /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illum
+2016/10/20 12:44:52 [error] 10211#10211: *1273 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 8192 bytes) in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 350
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework
+2016/10/20 12:44:52 [error] 10211#10211: *1273 FastCGI sent in stderr: "array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames() /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illuminate\Database\Query\Builder->get() /var/www/ihub/app/Repositories/CasinoGamesRepository.php:151
+PHP message: PHP  30. Illuminate\Database\Query\Builder->runSelect() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1634
+PHP message: PHP  31. Illuminate\Database\Connection->select() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1648
+PHP message: PHP  32. Illuminate\Database\Connection->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:351
+PHP message: PHP  33. Illuminate\Database\Connection->runQueryCallback() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:717
+PHP message: PHP  34. Illuminate\Database\Connection->Illuminate\Database\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:754
+PHP message: PHP  35. PDOStatement->fetchAll() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:350
+PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 4096 bytes) in /var/www/ihub/app/Log/RabbitMq/RabbitHandler.php on line 45
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/
+2016/10/20 12:44:52 [error] 10211#10211: *1273 FastCGI sent in stderr: "
+PHP message: PHP  17. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:49
+PHP message: PHP  18. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP  19. Illuminate\Routing\Middleware\SubstituteBindings->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP  20. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php:41
+PHP message: PHP  21. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  22. Illuminate\Routing\Route->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:642
+PHP message: PHP  23. Illuminate\Routing\Route->runController() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:144
+PHP message: PHP  24. Illuminate\Routing\ControllerDispatcher->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:189
+PHP message: PHP  25. Illuminate\Routing\Controller->callAction() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:44
+PHP message: PHP  26. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames() /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illuminate\Database\Query
+2016/10/20 12:44:52 [error] 10211#10211: *1273 FastCGI sent in stderr: "pp\Log\RabbitMq\RabbitHandler->sendRecord() /var/www/ihub/app/Log/RabbitMq/BaseHandler.php:57
+PHP message: PHP  45. json_encode() /var/www/ihub/app/Log/RabbitMq/RabbitHandler.php:45" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /internal/games/allgames HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/20 12:45:25 [error] 10211#10211: *1277 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 8192 bytes) in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 350
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework
+2016/10/20 12:45:25 [error] 10211#10211: *1277 FastCGI sent in stderr: "array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames() /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illuminate\Database\Query\Builder->get() /var/www/ihub/app/Repositories/CasinoGamesRepository.php:151
+PHP message: PHP  30. Illuminate\Database\Query\Builder->runSelect() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1634
+PHP message: PHP  31. Illuminate\Database\Connection->select() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1648
+PHP message: PHP  32. Illuminate\Database\Connection->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:351
+PHP message: PHP  33. Illuminate\Database\Connection->runQueryCallback() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:717
+PHP message: PHP  34. Illuminate\Database\Connection->Illuminate\Database\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:754
+PHP message: PHP  35. PDOStatement->fetchAll() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:350
+PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /var/www/ihub/vendor/symfony/debug/Exception/FatalErrorException.php on line 35
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www
+2016/10/20 12:45:25 [error] 10211#10211: *1277 FastCGI sent in stderr: "line/Pipeline.php:137
+PHP message: PHP  17. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:49
+PHP message: PHP  18. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP  19. Illuminate\Routing\Middleware\SubstituteBindings->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP  20. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php:41
+PHP message: PHP  21. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  22. Illuminate\Routing\Route->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:642
+PHP message: PHP  23. Illuminate\Routing\Route->runController() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:144
+PHP message: PHP  24. Illuminate\Routing\ControllerDispatcher->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:189
+PHP message: PHP  25. Illuminate\Routing\Controller->callAction() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:44
+PHP message: PHP  26. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames() /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illu
+2016/10/20 12:46:00 [error] 10211#10211: *1273 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 350
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle($request = *uninitialized*) /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then($destination = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle($request = *uninitialized*, $next = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/K
+2016/10/20 12:46:00 [error] 10211#10211: *1273 FastCGI sent in stderr: "tialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  22. Illuminate\Routing\Route->run($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:642
+PHP message: PHP  23. Illuminate\Routing\Route->runController() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:144
+PHP message: PHP  24. Illuminate\Routing\ControllerDispatcher->dispatch($route = *uninitialized*, $controller = *uninitialized*, $method = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:189
+PHP message: PHP  25. Illuminate\Routing\Controller->callAction($method = *uninitialized*, $parameters = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:44
+PHP message: PHP  26. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}(*uninitialized*, *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames($provider = *uninitialized*, $gameType = *uninitialized*, $lang = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames($provider = *uninitialized*, $gameType = *uninitialized*, $lang = *uninitialized*, $partnerId = *uninitialized*) /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illuminate\Database\Query\Builder->get($columns = *uninitialized*) /var/www/ihub/app/Repositories/CasinoGamesRepository.php:151
+PHP message: PHP  30. Illuminate\Database\Query\Builder->runSelect() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1634
+PHP message: PHP  31. Illuminate\Database\Connection->select($query = *uninitialized*, $bindings = *uniniti
+2016/10/20 12:46:00 [error] 10211#10211: *1273 FastCGI sent in stderr: "Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle($request = *uninitialized*, $next = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack($route = *uninitialized*, $request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:618
+PHP message: PHP  13. Illuminate\Pipeline\Pipeline->then($destination = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:644
+PHP message: PHP  14. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP  15. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP  16. Illuminate\Routing\Middleware\ThrottleRequests->handle($request = *uninitialized*, $next = *uninitialized*, $maxAttempts = *uninitialized*, $decayMinutes = *uninitialized*) /var/www/ihub/vendor/laravel/fram
+2016/10/20 12:46:00 [error] 10211#10211: *1273 FastCGI sent in stderr: "r = *uninitialized*, $gameType = *uninitialized*, $lang = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames($provider = *uninitialized*, $gameType = *uninitialized*, $lang = *uninitialized*, $partnerId = *uninitialized*) /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illuminate\Database\Query\Builder->get($columns = *uninitialized*) /var/www/ihub/app/Repositories/CasinoGamesRepository.php:151
+PHP message: PHP  30. Illuminate\Database\Query\Builder->runSelect() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1634
+PHP message: PHP  31. Illuminate\Database\Connection->select($query = *uninitialized*, $bindings = *uninitialized*, $useReadPdo = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1648
+PHP message: PHP  32. Illuminate\Database\Connection->run($query = *uninitialized*, $bindings = *uninitialized*, $callback = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:351
+PHP message: PHP  33. Illuminate\Database\Connection->runQueryCallback($query = *uninitialized*, $bindings = *uninitialized*, $callback = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:717
+PHP message: PHP  34. Illuminate\Database\Connection->Illuminate\Database\{closure}($me = *uninitialized*, $query = *uninitialized*, $bindings = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:754
+PHP message: PHP  35. PDOStatement->fetchAll(*uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:350
+PHP message: PHP  36. Illuminate\Foundation\Bootstrap\HandleExceptions->handleShutdown() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.
+2016/10/20 12:46:20 [error] 10211#10211: *1273 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 350
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle($request = *uninitialized*) /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then($destination = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle($request = *uninitialized*, $next = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/K
+2016/10/20 12:46:20 [error] 10211#10211: *1273 FastCGI sent in stderr: "tialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  22. Illuminate\Routing\Route->run($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:642
+PHP message: PHP  23. Illuminate\Routing\Route->runController() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:144
+PHP message: PHP  24. Illuminate\Routing\ControllerDispatcher->dispatch($route = *uninitialized*, $controller = *uninitialized*, $method = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:189
+PHP message: PHP  25. Illuminate\Routing\Controller->callAction($method = *uninitialized*, $parameters = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:44
+PHP message: PHP  26. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}(*uninitialized*, *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames($provider = *uninitialized*, $gameType = *uninitialized*, $lang = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames($provider = *uninitialized*, $gameType = *uninitialized*, $lang = *uninitialized*, $partnerId = *uninitialized*) /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illuminate\Database\Query\Builder->get($columns = *uninitialized*) /var/www/ihub/app/Repositories/CasinoGamesRepository.php:151
+PHP message: PHP  30. Illuminate\Database\Query\Builder->runSelect() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1634
+PHP message: PHP  31. Illuminate\Database\Connection->select($query = *uninitialized*, $bindings = *uniniti
+2016/10/20 12:46:20 [error] 10211#10211: *1273 FastCGI sent in stderr: "Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle($request = *uninitialized*, $next = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute($request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack($route = *uninitialized*, $request = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:618
+PHP message: PHP  13. Illuminate\Pipeline\Pipeline->then($destination = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:644
+PHP message: PHP  14. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP  15. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}($passable = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP  16. Illuminate\Routing\Middleware\ThrottleRequests->handle($request = *uninitialized*, $next = *uninitialized*, $maxAttempts = *uninitialized*, $decayMinutes = *uninitialized*) /var/www/ihub/vendor/laravel/fram
+2016/10/20 12:46:20 [error] 10211#10211: *1273 FastCGI sent in stderr: "r = *uninitialized*, $gameType = *uninitialized*, $lang = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames($provider = *uninitialized*, $gameType = *uninitialized*, $lang = *uninitialized*, $partnerId = *uninitialized*) /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illuminate\Database\Query\Builder->get($columns = *uninitialized*) /var/www/ihub/app/Repositories/CasinoGamesRepository.php:151
+PHP message: PHP  30. Illuminate\Database\Query\Builder->runSelect() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1634
+PHP message: PHP  31. Illuminate\Database\Connection->select($query = *uninitialized*, $bindings = *uninitialized*, $useReadPdo = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1648
+PHP message: PHP  32. Illuminate\Database\Connection->run($query = *uninitialized*, $bindings = *uninitialized*, $callback = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:351
+PHP message: PHP  33. Illuminate\Database\Connection->runQueryCallback($query = *uninitialized*, $bindings = *uninitialized*, $callback = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:717
+PHP message: PHP  34. Illuminate\Database\Connection->Illuminate\Database\{closure}($me = *uninitialized*, $query = *uninitialized*, $bindings = *uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:754
+PHP message: PHP  35. PDOStatement->fetchAll(*uninitialized*) /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:350
+PHP message: PHP  36. Illuminate\Foundation\Bootstrap\HandleExceptions->handleShutdown() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.
+2016/10/20 14:19:44 [error] 10211#10211: *1316 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 8192 bytes) in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php on line 350
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework
+2016/10/20 14:19:44 [error] 10211#10211: *1316 FastCGI sent in stderr: "array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames() /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illuminate\Database\Query\Builder->get() /var/www/ihub/app/Repositories/CasinoGamesRepository.php:151
+PHP message: PHP  30. Illuminate\Database\Query\Builder->runSelect() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1634
+PHP message: PHP  31. Illuminate\Database\Connection->select() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php:1648
+PHP message: PHP  32. Illuminate\Database\Connection->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:351
+PHP message: PHP  33. Illuminate\Database\Connection->runQueryCallback() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:717
+PHP message: PHP  34. Illuminate\Database\Connection->Illuminate\Database\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:754
+PHP message: PHP  35. PDOStatement->fetchAll() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Database/Connection.php:350
+PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /var/www/ihub/vendor/symfony/debug/Exception/FatalErrorException.php on line 35
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www
+2016/10/20 14:19:44 [error] 10211#10211: *1316 FastCGI sent in stderr: "line/Pipeline.php:137
+PHP message: PHP  17. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php:49
+PHP message: PHP  18. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP  19. Illuminate\Routing\Middleware\SubstituteBindings->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP  20. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php:41
+PHP message: PHP  21. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  22. Illuminate\Routing\Route->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:642
+PHP message: PHP  23. Illuminate\Routing\Route->runController() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:144
+PHP message: PHP  24. Illuminate\Routing\ControllerDispatcher->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:189
+PHP message: PHP  25. Illuminate\Routing\Controller->callAction() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:44
+PHP message: PHP  26. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  27. App\Http\Controllers\Internal\CasinoController->allGames() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  28. App\Repositories\CasinoGamesRepository->getGames() /var/www/ihub/app/Http/Controllers/Internal/CasinoController.php:62
+PHP message: PHP  29. Illu
+2016/10/20 17:36:48 [error] 10217#10217: *2152 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Cannot use [] for reading in /var/www/ihub/storage/framework/views/d647750e1071aca8a43a83f51e5e1674c883dc15.php on line 135
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:618
+PHP messag
+2016/10/20 17:36:48 [error] 10217#10217: *2152 FastCGI sent in stderr: "37
+PHP message: PHP  26. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php:49
+PHP message: PHP  27. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP  28. Illuminate\Foundation\Http\Middleware\VerifyCsrfToken->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP  29. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php:65
+PHP message: PHP  30. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP  31. Illuminate\Routing\Middleware\SubstituteBindings->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP  32. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php:41
+PHP message: PHP  33. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP  34. App\Http\Middleware\CheckPartnerId->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP  35. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/app/Http/Middleware/CheckPartnerId.php:26
+PHP message: PHP  36. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  37. Illuminate\Routing\Router->prepareResponse() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:642
+PHP message: PHP  38. S

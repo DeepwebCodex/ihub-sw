@@ -25,7 +25,7 @@ class VirtualBoxingController extends BaseApiController
     {
         parent::__construct($formatter);
 
-        $this->options = config('integrations.microGaming');
+        $this->options = config('integrations.microgaming');
 
         $this->middleware('input.xml');
     }

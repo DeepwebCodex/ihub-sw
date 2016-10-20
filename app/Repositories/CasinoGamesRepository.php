@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class CasinoGamesRepository
@@ -25,7 +26,7 @@ class CasinoGamesRepository
     {
         return \DB::connection($this->dbConnection)
             ->table('cms.game_types AS gt')
-            ->select('gt.*, gt_tr.trans AS game_type_tr')
+            ->selectRaw('gt.*, gt_tr.trans AS game_type_tr')
             ->leftJoin('cms.game_types_tr AS gt_tr', function ($join) use ($lang) {
                 /** @var JoinClause $join */
                 $join->on('gt.id', 'gt_tr.game_type_id')
@@ -44,7 +45,7 @@ class CasinoGamesRepository
     {
         return \DB::connection($this->dbConnection)
             ->table('cms.provider AS p')
-            ->select('*, p.name as provider, \'\' as provider_tr')
+            ->selectRaw('*, p.name as provider, \'\' as provider_tr')
             ->join('cms.provider_partner AS pp', 'p.id', 'pp.provider_id')
             ->where([
                 'pp.partner_id' => $partnerId,
@@ -63,19 +64,19 @@ class CasinoGamesRepository
      */
     public function getGame($gameUrl, $lang)
     {
-        return \DB::connection($this->dbConnection)
+        return (array)\DB::connection($this->dbConnection)
             ->table('cms.games AS g')
-            ->select(
+            ->selectRaw(
                 '*, p.name AS provider_name, g.id AS id, g.title AS game_name, 
                 gd.description AS game_name_tr'
             )
-            ->join('cms.provider p', 'p.id', 'g.provider_id')
-            ->leftJoin('cms.game_description gd', function ($join) use ($lang) {
+            ->join('cms.provider as p', 'p.id', 'g.provider_id')
+            ->leftJoin('cms.game_description as gd', function ($join) use ($lang) {
                 /** @var JoinClause $join */
                 $join->on('gd.game_id', 'g.id')
                     ->where('gd.lang', $lang);
             })
-            ->leftJoin('cms.game_features gf', function ($join) {
+            ->leftJoin('cms.game_features as gf', function ($join) {
                 /** @var JoinClause $join */
                 $join->on('gf.game_id', 'g.id')
                     ->where('gf.lang', 'gd.lang');
@@ -85,7 +86,7 @@ class CasinoGamesRepository
                 'g.enable' => true
             ])
             ->get()
-            ->all();
+            ->first();
     }
 
     /**
@@ -99,9 +100,16 @@ class CasinoGamesRepository
     public function getGames($provider, $gameType, $lang, $partnerId)
     {
         /** @var Builder $queryBuilder */
-        $queryBuilder = \DB::connection($this->dbConnection)
+        $queryBuilder = DB::connection($this->dbConnection)
             ->table('cms.games AS g')
-            ->select('g.*, gd.*, gf.*, p.*, gt.*, gtr.trans')
+            ->select([
+                'g.*',
+                'gd.*',
+                'gf.*',
+                'p.*',
+                'gt.*',
+                'gtr.trans'
+            ])
             ->leftJoin('cms.game_description AS gd', function ($join) use ($lang) {
                 /** @var JoinClause $join */
                 $join->on('g.id', 'gd.game_id')
@@ -109,7 +117,7 @@ class CasinoGamesRepository
             })
             ->leftJoin('cms.game_features AS gf', function ($join) {
                 /** @var JoinClause $join */
-                $join->on('gf.lang', 'gd.lang');
+                $join->on('gf.game_id', 'g.id')->where('gf.lang', 'gd.lang');
             })
             ->join('cms.game_types_to_game AS gtg', 'gtg.game_id', 'g.id')
             ->join('cms.game_types AS gt', 'gt.id', 'gtg.game_type_id')
@@ -155,7 +163,7 @@ class CasinoGamesRepository
         /** @var Builder $queryBuilder */
         $queryBuilder = \DB::connection($this->dbConnection)
             ->table('cms.game_seo AS s')
-            ->select('s.*')
+            ->selectRaw('s.*')
             ->where([
                 's.type_entity' => $typeEntity,
                 'lang' => $lang

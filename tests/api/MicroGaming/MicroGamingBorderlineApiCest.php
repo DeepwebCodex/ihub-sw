@@ -11,7 +11,7 @@ class MicroGamingBorderlineApiCest
 
     public function _before()
     {
-        $this->options = config('integrations.microGaming');
+        $this->options = config('integrations.microgaming');
     }
 
     public function _after()

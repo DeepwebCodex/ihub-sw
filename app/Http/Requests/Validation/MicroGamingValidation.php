@@ -39,7 +39,7 @@ class MicroGamingValidation
 
         $time_t = time() - $time;
 
-        if ($time_t >= config('integrations.microGaming.time_expire'))
+        if ($time_t >= config('integrations.microgaming.time_expire'))
         {
             throw new ApiHttpException(400, "Player token expired {$time_t}", CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
         }
