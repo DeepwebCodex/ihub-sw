@@ -2,12 +2,29 @@
 
 namespace App\Http\Requests\Casino;
 
+use Illuminate\Http\Request;
+
 /**
  * Class PayOutRequest
  * @package App\Http\Requests\Simple
  */
 class PayOutRequest extends BaseCasinoRequest
 {
+
+    /**
+     * User is not required to be logged in for this request
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function authorize(Request $request)
+    {
+        $this->addMetaField('user_id', $request->input('user_id'));
+        $this->addMetaField('token', $request->input('token'));
+
+        return true;
+    }
+
     /**
      * Get the error messages for the defined validation rules.
      *
