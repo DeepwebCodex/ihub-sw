@@ -78,7 +78,7 @@ class CasinoController extends BaseApiController
 
     /**
      * @param AuthRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function refreshToken(AuthRequest $request)
     {
