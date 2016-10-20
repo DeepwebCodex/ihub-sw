@@ -1,473 +1,581 @@
-2016/08/26 11:59:55 [error] 28363#28363: *26 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Illuminate/Log/Writer.php(202): Monolog\Logger->error(Object(UnexpectedValueException), Array)
-#4 /...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(Symfony\Component\Debug\Exception\FatalErrorException), Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/laravel/framework/src/Ill
-2016/08/26 12:58:56 [error] 28363#28363: *284 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected '$kernel' (T_VARIABLE) in /media/doomsentinel/Storage/www/integrations/public/index.php on line 58" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /fdgdfg HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
-2016/08/26 12:58:57 [error] 28363#28363: *284 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected '$kernel' (T_VARIABLE) in /media/doomsentinel/Storage/www/integrations/public/index.php on line 58" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /fdgdfg HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
-2016/08/26 12:58:58 [error] 28363#28363: *284 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected '$kernel' (T_VARIABLE) in /media/doomsentinel/Storage/www/integrations/public/index.php on line 58" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /fdgdfg HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
-2016/08/26 12:59:05 [error] 28363#28363: *284 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected end of file in /media/doomsentinel/Storage/www/integrations/public/index.php on line 59" while reading response header from upstream, client: 127.0.0.1, server: integrations.web, request: "GET /fdgdfg HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "integrations.web"
-2016/08/30 17:01:04 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:01:39 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:01:41 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:01:41 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:01:42 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:01:42 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:01:43 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:01:43 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:01:46 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:01:46 [error] 12808#12808: *120 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:28:41 [error] 12808#12808: *275 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:29:22 [error] 12808#12808: *275 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:31:50 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:31:51 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:31:51 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:31:51 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:31:56 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:45 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:45 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:45 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:46 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:48 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:48 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:49 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:49 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:32:49 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:34:00 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:34:00 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:34:01 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:34:01 [error] 12808#12808: *292 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:37:53 [error] 12808#12808: *393 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:37:54 [error] 12808#12808: *393 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
-2016/08/30 17:40:40 [error] 12808#12808: *418 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(UnexpectedValueException), A...
-PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The stream or file "/media/doomsentinel/Storage/www/integrations/storage/logs/laravel-2016-08-30.log" could not be opened: failed to open stream: Permission denied in /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
-Stack trace:
-#0 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php(107): Monolog\Handler\StreamHandler->write(Array)
-#1 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\RotatingFileHandler->write(Array)
-#2 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
-#3 /media/doomsentinel/Storage/www/integrations/vendor/monolog/monolog/src/Monolog/Logger.php(615)
+2016/09/26 12:59:14 [error] 16284#16284: *1 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Class 'Route' not found in /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php:16
+Stack trace:
+#0 /var/www/ihub/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(312): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(124): Illuminate\Foundation\Http\Kernel->renderException(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /var/www/ihub/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#4 {main}
+  thrown in /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php on line 16" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 13:00:28 [error] 16284#16284: *3 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Class 'Route' not found in /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php:16
+Stack trace:
+#0 /var/www/ihub/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(312): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(124): Illuminate\Foundation\Http\Kernel->renderException(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /var/www/ihub/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#4 {main}
+  thrown in /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php on line 16" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 13:01:24 [error] 16284#16284: *3 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught RuntimeException: A facade root has not been set. in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php:234
+Stack trace:
+#0 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(17): Illuminate\Support\Facades\Facade::__callStatic('currentRouteAct...', Array)
+#1 /var/www/ihub/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(312): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(124): Illuminate\Foundation\Http\Kernel->renderException(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#4 /var/www/ihub/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#5 {main}
+  thrown in /var/www/" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 13:02:16 [error] 16284#16284: *3 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ReflectionException: Class Route does not exist in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:734
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(734): ReflectionClass->__construct('Route')
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php(629): Illuminate\Container\Container->build('Route', Array)
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(709): Illuminate\Container\Container->make('Route', Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(106): Illuminate\Foundation\Application->make('Route', Array)
+#4 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(16): app('Route')
+#5 /var/www/ihub/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#6 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(312): App\Exceptions\Handler->ren" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 13:04:25 [error] 16284#16284: *7 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught RuntimeException: A facade root has not been set. in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php:234
+Stack trace:
+#0 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(17): Illuminate\Support\Facades\Facade::__callStatic('currentRouteAct...', Array)
+#1 /var/www/ihub/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(312): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(124): Illuminate\Foundation\Http\Kernel->renderException(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#4 /var/www/ihub/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#5 {main}
+  thrown in /var/www/" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 13:06:39 [error] 16284#16284: *9 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught RuntimeException: A facade root has not been set. in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php:234
+Stack trace:
+#0 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(17): Illuminate\Support\Facades\Facade::__callStatic('currentRouteAct...', Array)
+#1 /var/www/ihub/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(312): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(124): Illuminate\Foundation\Http\Kernel->renderException(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#4 /var/www/ihub/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#5 {main}
+  thrown in /var/www/" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 13:06:52 [error] 16284#16284: *9 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught RuntimeException: A facade root has not been set. in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php:234
+Stack trace:
+#0 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(17): Illuminate\Support\Facades\Facade::__callStatic('currentRouteAct...', Array)
+#1 /var/www/ihub/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(312): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(124): Illuminate\Foundation\Http\Kernel->renderException(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#4 /var/www/ihub/public/index.php(53): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#5 {main}
+  thrown in /var/www/" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:16:57 [error] 497#497: *115 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:17:10 [error] 497#497: *115 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:17:12 [error] 497#497: *115 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:17:22 [error] 10331#10331: *1 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:17:22 [error] 10331#10331: *1 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:17:22 [error] 10331#10331: *1 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:19:28 [error] 10331#10331: *5 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:19:29 [error] 10331#10331: *5 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:20:44 [error] 10331#10331: *8 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:23:43 [error] 10331#10331: *12 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:28:19 [error] 10331#10331: *14 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:31:44 [error] 10331#10331: *16 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:32:26 [error] 10331#10331: *16 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:32:27 [error] 10331#10331: *16 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:33:20 [error] 10331#10331: *16 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:33:21 [error] 10331#10331: *16 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:33:52 [error] 10331#10331: *16 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:34:55 [error] 10331#10331: *16 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:35:03 [error] 11852#11852: *1 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:35:04 [error] 11852#11852: *1 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:44:41 [error] 11852#11852: *4 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:44:42 [error] 11852#11852: *4 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+PHP message: PHP Parse error:  syntax error, unexpected return (T_RETURN) in /var/www/ihub/app/Http/Controllers/FrontController.php on line 8
+PHP message: PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 15:59:06 [error] 11852#11852: *40 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to a member function getAction() on null in /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php:23
+Stack trace:
+#0 /var/www/ihub/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\HandleExceptions->renderHttpResponse(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#3 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleException(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#4 {main}
+  thrown in /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php on line 23
+PHP message: PHP Fatal error:  Uncaught Error: Call to a member function getAction() on null in /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php:23
+Stack trace:
+#0 /var/www/ihub/app/Exceptions/Handler.php(50): App\Exceptions\Handler->isApiCall()
+#1 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(84): Illuminate\Foundation\Bootstrap\HandleExceptions->renderHttpResponse(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(118): Illuminate\Foundation\Bootstrap\HandleExceptions->handleException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#4 [internal function]: Illuminate\Foundation\B
+2016/09/26 16:05:49 [error] 11852#11852: *49 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Class 'OpaOpa' not found in /var/www/ihub/public/index.php:2
+Stack trace:
+#0 {main}
+  thrown in /var/www/ihub/public/index.php on line 2" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "POST /casino/ HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/26 16:06:01 [error] 11852#11852: *51 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Class 'OpaOpa' not found in /var/www/ihub/public/index.php:2
+Stack trace:
+#0 {main}
+  thrown in /var/www/ihub/public/index.php on line 2" while reading response header from upstream, client: 127.0.0.1, server: ihub.web, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/09/27 13:14:22 [error] 11851#11851: *139 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The Response content must be a string or object implementing __toString(), "object" given. in /var/www/ihub/vendor/symfony/http-foundation/Response.php:403
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Http/Response.php(48): Symfony\Component\HttpFoundation\Response->setContent(Object(DOMDocument))
+#1 /var/www/ihub/vendor/symfony/http-foundation/Response.php(201): Illuminate\Http\Response->setContent(Object(DOMDocument))
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ResponseFactory.php(55): Symfony\Component\HttpFoundation\Response->__construct(Object(DOMDocument), 500, Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(237): Illuminate\Routing\ResponseFactory->make(Object(DOMDocument), 500, Array)
+#4 /var/www/ihub/app/Components/Formatters/XmlApiFormatter.php(61): Illuminate\Support\Facades\Facade::__callStatic('make', Array)
+#5 /var/www/ihub/app/Exceptions/...
+PHP message: PHP Fatal error:  Uncaught UnexpectedValueException: The Response content must be a string or object implementing __toString(), "object" given. in /var/www/ihub/vendor/symfony/http-foundation/Response.php:403
+Stack trace:
+#0 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Http/Response.php(48): Symfony\Component\HttpFoundation\Response->setContent(Object(DOMDocument))
+#1 /var/www/ihub/vendor/symfony/http-foundation/Response.php(201): Illuminate\Http\Response->setContent(Object(DOMDocument))
+#2 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ResponseFactory.php(55): Symfony\Component\HttpFoundation\Response->__construct(Object(DOMDocument), 500, Array)
+#3 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(237): Illuminate\Routing\ResponseFactory->make(Object(DOMDocument), 500, Array)
+#4 /var/www/ihub/app/Components/Formatters/XmlApiFormatter.php(61): Illuminate\Support\Facades\
+2016/09/27 14:53:43 [error] 11851#11851: *192 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Class 'App\Components\ThirdParty\Exception' not found in /var/www/ihub/app/Components/ThirdParty/Array2Xml.php:124
+Stack trace:
+#0 /var/www/ihub/app/Components/ThirdParty/Array2Xml.php(135): App\Components\ThirdParty\Array2Xml::convert('methodresponse', Array)
+#1 /var/www/ihub/app/Components/ThirdParty/Array2Xml.php(71): App\Components\ThirdParty\Array2Xml::convert('pkt', Array)
+#2 /var/www/ihub/app/Components/Formatters/MicroGamingApiFormatter.php(26): App\Components\ThirdParty\Array2Xml::createXML('pkt', Array)
+#3 /var/www/ihub/app/Components/Formatters/XmlApiFormatter.php(40): App\Components\Formatters\MicroGamingApiFormatter->format(Array)
+#4 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\XmlApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalThrowableError))
+#5 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Sym...
+PHP message: PHP Fatal error:  Uncaught Error: Class 'App\Components\ThirdParty\Exception' not found in /var/www/ihub/app/Components/ThirdParty/Array2Xml.php:124
+Stack trace:
+#0 /var/www/ihub/app/Components/ThirdParty/Array2Xml.php(135): App\Components\ThirdParty\Array2Xml::convert('methodresponse', Array)
+#1 /var/www/ihub/app/Components/ThirdParty/Array2Xml.php(71): App\Components\ThirdParty\Array2Xml::convert('pkt', Array)
+#2 /var/www/ihub/app/Components/Formatters/MicroGamingApiFormatter.php(26): App\Components\ThirdParty\Array2Xml::createXML('pkt', Array)
+#3 /var/www/ihub/app/Components/Formatters/XmlApiFormatter.php(40): App\Components\Formatters\MicroGamingApiFormatter->format(Array)
+#4 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\XmlApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#5 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions
+2016/09/28 12:36:14 [error] 1315#1315: *61 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No suitable servers found (`serverselectiontryonce` set): [Failed connecting to '127.0.0.1:27017': Connection refused] in /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php:628
+Stack trace:
+#0 /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php(628): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/MongoDBHandler.php(46): MongoDB\Collection->insertOne(Array)
+#2 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\MongoDBHandler->write(Array)
+#3 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#4 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(MongoDB\Driver\Exception\ConnectionTimeoutException), Array)
+#5 /var/www/ihub/vendor/laravel/fram...
+PHP message: PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No suitable servers found (`serverselectiontryonce` set): [Failed connecting to '127.0.0.1:27017': Connection refused] in /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php:628
+Stack trace:
+#0 /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php(628): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/MongoDBHandler.php(46): MongoDB\Collection->insertOne(Array)
+#2 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\MongoDBHandler->write(Array)
+#3 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#4 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(Symfony\Component\Debug\Exceptio
+2016/09/28 12:36:46 [error] 1315#1315: *61 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No suitable servers found (`serverselectiontryonce` set): [Failed connecting to '127.0.0.1:27017': Connection refused] in /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php:628
+Stack trace:
+#0 /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php(628): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/MongoDBHandler.php(46): MongoDB\Collection->insertOne(Array)
+#2 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\MongoDBHandler->write(Array)
+#3 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#4 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(MongoDB\Driver\Exception\ConnectionTimeoutException), Array)
+#5 /var/www/ihub/vendor/laravel/fram...
+PHP message: PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No suitable servers found (`serverselectiontryonce` set): [Failed connecting to '127.0.0.1:27017': Connection refused] in /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php:628
+Stack trace:
+#0 /var/www/ihub/vendor/mongodb/mongodb/src/Collection.php(628): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/MongoDBHandler.php(46): MongoDB\Collection->insertOne(Array)
+#2 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php(37): Monolog\Handler\MongoDBHandler->write(Array)
+#3 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(336): Monolog\Handler\AbstractProcessingHandler->handle(Array)
+#4 /var/www/ihub/vendor/monolog/monolog/src/Monolog/Logger.php(615): Monolog\Logger->addRecord(400, Object(Symfony\Component\Debug\Exceptio
+2016/10/03 14:58:39 [error] 1313#1313: *30 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:26
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 26, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(26): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(40): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(ErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(ErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#6 /var...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:26
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 26, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(26): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(40): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/
+2016/10/03 14:59:54 [error] 1313#1313: *32 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:27
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 27, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(27): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(41): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(ErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(ErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#6 /var" while reading upstream, client: 127.0.0.1, server: ihub.web, request: "POST /vb HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/03 14:59:54 [error] 1313#1313: *32 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:27
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 27, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(27): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(41): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Ha" while reading upstream, client: 127.0.0.1, server: ihub.web, request: "POST /vb HTTP/1.1", upstream: "fastcgi://unix:/var/run/php/php7.0-fpm.sock:", host: "ihub.web"
+2016/10/03 15:02:00 [error] 1313#1313: *34 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:26
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 26, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(26): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(40): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(ErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(ErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(107): App\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(ErrorException))
+#6 /var...
+PHP message: PHP Fatal error:  Uncaught ErrorException: Array to string conversion in /var/www/ihub/app/Components/Formatters/TextApiFormatter.php:26
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Array to string...', '/var/www/ihub/a...', 26, Array)
+#1 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(26): implode(' ', Array)
+#2 /var/www/ihub/app/Components/Formatters/TextApiFormatter.php(40): App\Components\Formatters\TextApiFormatter->format(Array)
+#3 /var/www/ihub/app/Exceptions/Api/Traits/ApiHandlerTrait.php(58): App\Components\Formatters\TextApiFormatter->formatException(Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#4 /var/www/ihub/app/Exceptions/Handler.php(51): App\Exceptions\Handler->getApiExceptionResponse('App\\Http\\Contro...', Object(Symfony\Component\Debug\Exception\FatalErrorException))
+#5 /var/www/ihub/vendor/laravel/framework/src/Illuminate/
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Maximum function nesting level of '256' reached, aborting! in /var/www/ihub/app/Http/Middleware/InputXml.php on line 657
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:618
+PHP message: PHP
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "var/www/ihub/app/Http/Middleware/InputXml.php:642
+PHP message: PHP  27. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  28. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  29. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  30. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  31. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  32. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  33. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  34. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  35. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  36. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  37. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  38. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  39. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  40. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  41. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  42. App\Http\Middleware\InputXml->collapseAttribut
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  60. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  61. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  62. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  63. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  64. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  65. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  66. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  67. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  68. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  69. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  70. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  71. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  72. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  73. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  74. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  75. App\Http\Middleware\InputXml->collapseAttributes()
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  93. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  94. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  95. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  96. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  97. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  98. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  99. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 100. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 101. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 102. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 103. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 104. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 105. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 106. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 107. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 108. App\Http\Middleware\InputXml->collapseAttribut
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 126. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 127. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 128. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 129. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 130. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 131. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 132. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 133. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 134. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 135. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 136. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 137. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 138. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 139. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 140. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 141. App\Http\Middleware\InputXml->collapseAttributes()
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 159. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 160. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 161. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 162. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 163. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 164. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 165. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 166. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 167. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 168. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 169. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 170. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 171. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 172. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 173. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 174. App\Http\Middleware\InputXml->collapseAttribut
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 192. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 193. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 194. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 195. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 196. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 197. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 198. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 199. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 200. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 201. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 202. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 203. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 204. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 205. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 206. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 207. App\Http\Middleware\InputXml->collapseAttributes()
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 225. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 226. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 227. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 228. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 229. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 230. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 231. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 232. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 233. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 234. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 235. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 236. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 237. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 238. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 239. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 240. App\Http\Middleware\InputXml->collapseAttribut
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: ", aborting! in /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php on line 115
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:618
+PHP message: PHP  13. Illuminate\Pipeline\Pip
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "are/InputXml.php:642
+PHP message: PHP  27. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  28. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  29. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  30. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  31. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  32. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  33. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  34. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  35. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  36. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  37. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  38. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  39. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  40. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  41. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  42. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/M
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "InputXml.php:661
+PHP message: PHP  60. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  61. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  62. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  63. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  64. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  65. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  66. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  67. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  68. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  69. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  70. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  71. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  72. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  73. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  74. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  75. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middl
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "are/InputXml.php:661
+PHP message: PHP  93. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  94. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  95. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  96. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  97. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  98. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP  99. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 100. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 101. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 102. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 103. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 104. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 105. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 106. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 107. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 108. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/M
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "InputXml.php:661
+PHP message: PHP 126. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 127. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 128. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 129. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 130. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 131. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 132. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 133. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 134. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 135. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 136. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 137. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 138. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 139. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 140. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 141. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middl
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "are/InputXml.php:661
+PHP message: PHP 159. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 160. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 161. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 162. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 163. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 164. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 165. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 166. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 167. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 168. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 169. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 170. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 171. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 172. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 173. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 174. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/M
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "InputXml.php:661
+PHP message: PHP 192. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 193. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 194. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 195. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 196. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 197. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 198. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 199. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 200. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 201. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 202. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 203. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 204. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 205. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 206. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 207. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middl
+2016/10/03 16:17:22 [error] 1317#1317: *118 FastCGI sent in stderr: "are/InputXml.php:661
+PHP message: PHP 225. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 226. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 227. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 228. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 229. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 230. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 231. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 232. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 233. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 234. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 235. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 236. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 237. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 238. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 239. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/Middleware/InputXml.php:661
+PHP message: PHP 240. App\Http\Middleware\InputXml->collapseAttributes() /var/www/ihub/app/Http/M
+2016/10/03 18:01:33 [error] 1316#1316: *261 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Class 'App\Models\Line\BaseVirtualBoxingModel' not found in /var/www/ihub/app/Models/VirtualBoxing/EventLinkModel.php on line 14
+PHP message: PHP Stack trace:
+PHP message: PHP   1. {main}() /var/www/ihub/public/index.php:0
+PHP message: PHP   2. Illuminate\Foundation\Http\Kernel->handle() /var/www/ihub/public/index.php:52
+PHP message: PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:116
+PHP message: PHP   4. Illuminate\Pipeline\Pipeline->then() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:149
+PHP message: PHP   5. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:104
+PHP message: PHP   6. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:33
+PHP message: PHP   7. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:137
+PHP message: PHP   8. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:46
+PHP message: PHP   9. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  10. Illuminate\Routing\Router->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:267
+PHP message: PHP  11. Illuminate\Routing\Router->dispatchToRoute() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:596
+PHP message: PHP  12. Illuminate\Routing\Router->runRouteWithinStack() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:618
+PHP mess
+2016/10/03 18:01:33 [error] 1316#1316: *261 FastCGI sent in stderr: "ing\{closure}() /var/www/ihub/app/Http/Middleware/InputXml.php:39
+PHP message: PHP  27. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:53
+PHP message: PHP  28. Illuminate\Routing\Route->run() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Router.php:642
+PHP message: PHP  29. Illuminate\Routing\Route->runController() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:144
+PHP message: PHP  30. Illuminate\Routing\ControllerDispatcher->dispatch() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Route.php:189
+PHP message: PHP  31. Illuminate\Routing\Controller->callAction() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:44
+PHP message: PHP  32. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  33. App\Http\Controllers\Api\VirtualBoxingController->index() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:55
+PHP message: PHP  34. Illuminate\Container\Container->call() /var/www/ihub/app/Http/Controllers/Api/VirtualBoxingController.php:43
+PHP message: PHP  35. call_user_func_array:{/var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:507}() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:507
+PHP message: PHP  36. App\Http\Controllers\Api\VirtualBoxingController->matchBet() /var/www/ihub/vendor/laravel/framework/src/Illuminate/Container/Container.php:507
+PHP message: PHP  37. spl_autoload_call() /var/www/ihub/app/Http/Controllers/Api/VirtualBoxingController.php:51
+PHP message: PHP  38. Composer\Autoload\ClassLoader->loadClass() /var/www/ihub/app/Http/Controllers/Api/VirtualBoxingController.php:51
+PHP message: PHP  39. Composer\Autoload\includeFile() /v

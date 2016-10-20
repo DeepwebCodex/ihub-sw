@@ -109,23 +109,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Logging Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log settings for your application. Out of
-    | the box, Laravel uses the Monolog PHP logging library. This gives
-    | you a variety of powerful log handlers / formatters to utilize.
-    |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
-    |
-    */
-
-    'log' => env('APP_LOG', 'single'),
-
-    'log_level' => env('APP_LOG_LEVEL', 'debug'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -160,7 +143,7 @@ return [
         Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
-        Illuminate\Validation\ValidationServiceProvider::class,
+        \App\Providers\ApiValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
         /*
@@ -177,8 +160,14 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
-        \Kozz\Laravel\Providers\Guzzle::class
+        \Kozz\Laravel\Providers\Guzzle::class,
+        \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
+        \App\Providers\RemoteSessionServiceProvider::class,
+        \App\Providers\AccountManagerServiceProvider::class,
+        \App\Providers\AppLogServiceProvider::class,
+        Spatie\Fractal\FractalServiceProvider::class,
+        \App\Providers\CasinoGameLauncherServiceProvider::class,
+        \App\Providers\LiveDealerApiServiceProvider::class
     ],
 
     /*
@@ -225,8 +214,11 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class
+        'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class,
+        'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
+        'RemoteSession' => \App\Components\ExternalServices\Facades\RemoteSession::class,
+        'AppLog' => \App\Facades\AppLog::class,
+        'Fractal' => Spatie\Fractal\FractalFacade::class,
     ],
 
 ];

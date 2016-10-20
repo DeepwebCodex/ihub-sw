@@ -1,0 +1,20 @@
+actor: Tester
+coverage:
+    enabled: true
+    include:
+        - app/*
+    exclude:
+        - app/Http/Kernel.php
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    helpers: tests/_support
+extensions:
+    enabled: [Codeception\Extension\Logger]
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M
+params:
+    - .env.testing

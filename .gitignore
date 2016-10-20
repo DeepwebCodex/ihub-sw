@@ -2,7 +2,13 @@
 /public/storage
 /vendor
 /.idea
+/log
 Homestead.json
 Homestead.yaml
 .env
 /_ide_helper.php
+/.phpstorm.meta.php
+
+./project-ihub-install.sh
+
+tests/_output/*

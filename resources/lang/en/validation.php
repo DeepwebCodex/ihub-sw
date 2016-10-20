@@ -111,5 +111,5 @@ return [
     */
 
     'attributes' => [],
-
+    'date_value'        => 'The :attribute is not a valid date',
 ];

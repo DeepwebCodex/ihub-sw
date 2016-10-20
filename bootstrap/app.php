@@ -11,9 +11,20 @@
 |
 */
 
+use Illuminate\Foundation\Bootstrap\LoadConfiguration;
+
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
 );
+
+/*
+ * -------------------------------------------------------------------------
+ * Load integration configs by environment
+ * -------------------------------------------------------------------------
+ */
+$app->afterBootstrapping(LoadConfiguration::class,function() use($app){
+    integration_config($app, $app->environment());
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +51,10 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
+
+$app->configureMonologUsing(function ($monolog) use($app) {
+    new \App\Log\Logger(config('log.logger'), $monolog, $app);
+});
 
 /*
 |--------------------------------------------------------------------------

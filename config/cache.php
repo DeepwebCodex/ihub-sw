@@ -30,9 +30,9 @@ return [
 
     'stores' => [
 
-        'apc' => [
+        /*'apc' => [
             'driver' => 'apc',
-        ],
+        ],*/
 
         'array' => [
             'driver' => 'array',
@@ -49,7 +49,7 @@ return [
             'path' => storage_path('framework/cache'),
         ],
 
-        'memcached' => [
+        /*'memcached' => [
             'driver' => 'memcached',
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
             'sasl' => [
@@ -66,7 +66,7 @@ return [
                     'weight' => 100,
                 ],
             ],
-        ],
+        ],*/
 
         'redis' => [
             'driver' => 'redis',

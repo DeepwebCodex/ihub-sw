@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'erlybet'),
 
     /*
     |--------------------------------------------------------------------------
@@ -45,40 +45,77 @@ return [
     */
 
     'connections' => [
-
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-        ],
-
-        'mysql' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
-        ],
-
-        'pgsql' => [
+        'account' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', 'localhost'),
+            'host' => env('DB_ACCOUNT_HOST', 'db01dev.favorit'),
+            'port' => env('DB_ACCOUNT_PORT', '5432'),
+            'database' => env('DB_ACCOUNT_DATABASE', 'account'),
+            'username' => env('DB_ACCOUNT_USERNAME', 'u_developer'),
+            'password' => env('DB_ACCOUNT_PASSWORD', 'Caeph1NaingEe9Sh'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'account',
+            'sslmode' => 'prefer',
+        ],
+        'erlybet' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST', 'db01dev.favorit'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE', 'erlybet'),
+            'username' => env('DB_USERNAME', 'u_developer'),
+            'password' => env('DB_PASSWORD', 'Caeph1NaingEe9Sh'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'sslmode' => 'prefer',
+        ],
+        'integration' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST', 'db01dev.favorit'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'erlybet'),
+            'username' => env('DB_USERNAME', 'u_developer'),
+            'password' => env('DB_PASSWORD', 'Caeph1NaingEe9Sh'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'sslmode' => 'prefer',
+            'schema' => 'integration',
+        ],
+        'erlybet_slave' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST', 'db01dev.favorit'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_ERLYBET_SLAVE', 'erlybet_slave'),
+            'username' => env('DB_USERNAME', 'u_developer'),
+            'password' => env('DB_PASSWORD', 'Caeph1NaingEe9Sh'),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-
+        'line' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_LINE', 'de2db02d.dev.favorit'),
+            'port' => env('DB_PORT_LINE', '5432'),
+            'database' => 'line',
+            'username' => env('DB_USERNAME_LINE', 'g_develop'),
+            'password' => env('DB_PASSWORD_LINE', 'hb8g7t34fbv09t'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+        'lineVirtualBoxing' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_LINE', 'de2db02d.dev.favorit'),
+            'port' => env('DB_PORT_LINE', '5432'),
+            'database' => 'line',
+            'username' => env('DB_USERNAME_LINE', 'g_develop'),
+            'password' => env('DB_PASSWORD_LINE', 'hb8g7t34fbv09to'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'vb',
+            'sslmode' => 'prefer',
+        ]
     ],
 
     /*
