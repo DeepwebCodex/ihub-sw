@@ -45,7 +45,42 @@ class Handler extends ExceptionHandler
             throw $exception; // throw the original exception
         }
 
-        $logger->error(collect([$exception->getMessage(), json_encode($exception->getTrace())]));
+        $errorThrownBy = $this->composeContextFromTrace($exception->getTrace());
+
+        $logger->error(
+            collect([
+                $exception->getMessage(),
+                json_encode($exception->getTrace())
+            ]),
+            $errorThrownBy['node'],
+            $errorThrownBy['module'],
+            $errorThrownBy['line']
+        );
+    }
+
+    /**
+     * @param $trace
+     * @return array
+     */
+    private function composeContextFromTrace($trace)
+    {
+        $trace = array_filter($trace, function ($elem){
+            if(isset($elem['class'])) {
+                return ($elem['class'] !== __CLASS__);
+            }
+
+            return false;
+        });
+
+        $trace = array_values($trace);
+
+        list($traceLineInfo) = $trace;
+
+        $node = $traceLineInfo['class'];
+        $module = $traceLineInfo['function'];
+        $line = $traceLineInfo['line'];
+
+        return compact('node', 'module', 'line');
     }
 
     /**
