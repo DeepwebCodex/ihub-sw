@@ -43,6 +43,8 @@ class CasinoGameLauncher
             $provider = $this->getProvider($providerName, $game['id'], $lang, $isMobile);
         } catch (GameProviderNotFoundException $e) {
             return $this->errorResult('Config or model not exist');
+        }  catch (GameNotFoundException $e) {
+            return $this->onGameNotFound($lang, $partnerId);
         }
 
         if ($isDemo) {
