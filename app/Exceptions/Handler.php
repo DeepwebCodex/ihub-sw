@@ -40,7 +40,7 @@ class Handler extends ExceptionHandler
         }
 
         try {
-            $logger = $this->container->make(LoggerInterface::class);
+            $logger = app('AppLog');
         } catch (Exception $ex) {
             throw $exception; // throw the original exception
         }
