@@ -76,9 +76,9 @@ class Handler extends ExceptionHandler
 
         list($traceLineInfo) = $trace;
 
-        $node = $traceLineInfo['class'];
-        $module = $traceLineInfo['function'];
-        $line = $traceLineInfo['line'];
+        $node = $traceLineInfo['class'] ?? '';
+        $module = $traceLineInfo['function'] ?? '';
+        $line = $traceLineInfo['line'] ?? '';
 
         return compact('node', 'module', 'line');
     }
