@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
             throw $exception; // throw the original exception
         }
 
-        $logger->error([$exception->getMessage(), var_export($exception->getTrace(), true)]);
+        $logger->error(collect([$exception->getMessage(), json_encode($exception->getTrace())]));
     }
 
     /**
