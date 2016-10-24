@@ -47,8 +47,70 @@
         </style>
     </head>
     <body>
+    <div class="ui top menu">
+        <div class="right menu">
+            @if ($user)
+                <form class="right menu" method="POST" action="{{url('give')}}">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="userID" value="{{$user->id}}">
+                    <div class="item">
+                        <div class="ui right labeled left icon input">
+                            <i class="money icon"></i>
+                            <input type="text" name="amount" placeholder="Enter amount" value="{{$user->getBalance()}}">
+                            <button type="submit" class="ui tag green label">
+                                Set Balance
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            @endif
+            <form class="right menu" method="POST">
+                @if (!$user)
+                    {{ csrf_field() }}
+                    <div class="item">
+                        <div class="ui right labeled left icon input">
+                            <i class="mail icon"></i>
+                            <input type="text" name="login_name" placeholder="Enter username" value="{{array_get($input, 'login_name')}}">
+                            <a class="ui tag label">
+                                Email
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="ui right labeled left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="login_password" placeholder="Enter password" value="{{array_get($input, 'login_password')}}">
+                            <a class="ui tag label">
+                                Pass
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <button type="submit" class="tiny ui green right labeled icon submit button">
+                            <i class="right plug icon"></i>
+                            Login
+                        </button>
+                    </div>
+                @else
+                    <div class="item">
+                        <i class="user icon"></i>
+                        {{$user->login}}
+                    </div>
+                    <div class="item">
+                        <i class="money icon"></i>
+                        <b>{{$user->getBalance()}} : {{$user->getCurrency()}}</b>
+                    </div>
+                    <div class="item">
+                        <a href="{{url('logout')}}" class="tiny ui red right labeled icon button">
+                            <i class="right power icon"></i>
+                            Logout
+                        </a>
+                    </div>
+                @endif
+            </form>
+        </div>
+    </div>
     <div class="main ui container">
-        <h1 class="ui dividing header">iHub Games</h1>
         <form class="ui form">
             <div class="ui three column stackable grid">
                 <div class="seven wide column">
@@ -163,5 +225,35 @@
             </tbody>
         </table>
     </div>
+    <div id="game-container"></div>
     </body>
 </html>
+
+<script>
+    /*var container = $('#game-container');
+    var template = '<iframe src="https://free.egtmgs.com/favbet.php?gameId=897"></iframe>';
+    $(document).ready(function() {
+        container.append(template);
+    });*/
+
+    $('#login').on('click', function(e){
+        e.preventDefault();
+        var url = $(this).attr('href');
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            crossDomain: true,
+            data: {
+                username : 'ziwidif@rootfest.net',
+                password : 'impare666'
+            },
+            success: function (data) {
+                console.log(data);
+            },
+            error: function(data){
+                console.log(data);
+            }
+        });
+    });
+</script>

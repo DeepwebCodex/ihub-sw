@@ -67,7 +67,7 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
             'gameid' => $this->game['servergameid'],
             'playmode' => 'real'
         ];
-        return config('integrations.microgaming.game_url') . http_build_query($queryData);
+        return config('integrations.microgaming.game_url') . '?' . http_build_query($queryData);
     }
 
     /**
@@ -87,7 +87,7 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
             'isRGI' => 'true',
         ];
         return config('integrations.microgaming.game_mobile_url') . "/{$gameName}/{$this->lang}"
-        . http_build_query($queryData);
+        . '?' . http_build_query($queryData);
     }
 
     /**
@@ -107,7 +107,7 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
             'gameID' => $this->game['servergameid'],
             'playmode' => 'real'
         ];
-        return config('integrations.microgaming.game_url') . http_build_query($queryData);
+        return config('integrations.microgaming.game_url') . '?' . http_build_query($queryData);
     }
 
     /**
@@ -124,7 +124,7 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
             'AuthToken' => $token,
             'gameid' => $this->game['servergameid'],
         ];
-        return config('integrations.microgaming.game_lobby_url') . "{$this->lang}/" . http_build_query($queryData);
+        return config('integrations.microgaming.game_lobby_url') . "{$this->lang}/" . '?' . http_build_query($queryData);
     }
 
     /**
@@ -161,7 +161,7 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
             'gameid' => $this->game->servergameid,
             'playmode' => 'demo',
         ];
-        return config('integrations.microgaming.game_url') . http_build_query($queryData);
+        return config('integrations.microgaming.game_url') . '?' . http_build_query($queryData);
     }
 
     /**
@@ -180,7 +180,7 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
             'lobbyurl' => config('integrations.microgaming.game_mobile_lobby_url'),
         ];
         return config('integrations.microgaming.game_mobile_url') . "/{$gameName}/{$this->lang}"
-        . http_build_query($queryData);
+        . '?' . http_build_query($queryData);
     }
 
     /**
@@ -197,7 +197,7 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
             'ul' => $this->lang,
             'gameID' => $this->game->servergameid,
         ];
-        return config('integrations.microgaming.game_url') . http_build_query($queryData);
+        return config('integrations.microgaming.game_url') . '?' . http_build_query($queryData);
     }
 
     /**
@@ -212,7 +212,7 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
             'csid' => config('integrations.microgaming.server_id'),
             'gameid' => $this->game->servergameid,
         ];
-        return config('integrations.microgaming.game_lobby_url') . "{$this->lang}/" . http_build_query($queryData);
+        return config('integrations.microgaming.game_lobby_url') . "{$this->lang}/" . '?' . http_build_query($queryData);
     }
 
     /**

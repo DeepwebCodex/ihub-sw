@@ -50,7 +50,7 @@ class Egt extends BaseGameProvider implements GameProviderInterface
             $queryData['client'] = 'mobile';
             $queryData['closeurl'] = '';
         }
-        return config('integrations.egt.game_real_url') . http_build_query($queryData);
+        return config('integrations.egt.game_real_url') . '?' . http_build_query($queryData);
     }
 
     /**
@@ -61,6 +61,6 @@ class Egt extends BaseGameProvider implements GameProviderInterface
         $queryData = [
             'gameId' => $this->game->egt_free_gameid
         ];
-        return config('integrations.egt.game_demo_url') . http_build_query($queryData);
+        return config('integrations.egt.game_demo_url') . '?' . http_build_query($queryData);
     }
 }
