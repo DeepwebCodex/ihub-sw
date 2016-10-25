@@ -15,6 +15,7 @@ use App\Exceptions\Api\ApiHttpException;
 use App\Models\Transactions;
 /**
  * @property  CodeMappingBase $codeMapping;
+ * @property  TransactionRequest $request;
  */
 class BaseSeamlessWalletProcessor
 {
@@ -137,6 +138,7 @@ class BaseSeamlessWalletProcessor
         }
 
         $model = Transactions::create(array_merge($this->responseData, [
+            'object_id'  => $this->request->object_id,
             'foreign_id' => $this->request->foreign_id,
             'transaction_type' => $this->request->transaction_type
         ]));

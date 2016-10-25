@@ -103,7 +103,7 @@ class MicroGamingBorderlineApiCest
             'status' => TransactionRequest::STATUS_PENDING,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'methodcall.call.actionid'),
-            'object_id' => $this->gameID,
+            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameID, array_get($this->options, 'service_id')),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -172,7 +172,7 @@ class MicroGamingBorderlineApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'methodcall.call.actionid'),
-            'object_id' => $this->gameID,
+            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameID, array_get($this->options, 'service_id')),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -233,7 +233,7 @@ class MicroGamingBorderlineApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'methodcall.call.actionid'),
-            'object_id' => $this->gameID,
+            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameID, array_get($this->options, 'service_id')),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 

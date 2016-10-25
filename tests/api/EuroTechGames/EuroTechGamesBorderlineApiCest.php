@@ -89,7 +89,7 @@ class EuroTechGamesBorderlineApiCest
             'status' => TransactionRequest::STATUS_PENDING,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
-            'object_id' => $this->gameNumber,
+            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameNumber, array_get($this->options, 'service_id')),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -149,7 +149,7 @@ class EuroTechGamesBorderlineApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
-            'object_id' => $this->gameNumber,
+            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameNumber, array_get($this->options, 'service_id')),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -203,7 +203,7 @@ class EuroTechGamesBorderlineApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
-            'object_id' => $this->gameNumber,
+            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameNumber, array_get($this->options, 'service_id')),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
