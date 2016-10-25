@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
-        <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script
+        <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
         <title>Laravel</title>
 
@@ -19,7 +19,7 @@
                 border: none;
                 width: calc(100% + 2em);
                 margin: 0em -1em;
-                height: 300px;
+                /*height: 300px;*/
             }
             iframe html {
                 overflow: hidden;
@@ -48,6 +48,7 @@
     </head>
     <body>
     <div class="ui top menu">
+        <div class="main ui container">
         <div class="right menu">
             @if ($user)
                 <form class="right menu" method="POST" action="{{url('give')}}">
@@ -109,6 +110,7 @@
                 @endif
             </form>
         </div>
+            </div>
     </div>
     <div class="main ui container">
         <form class="ui form">
@@ -201,7 +203,7 @@
                                         'isMobile' => $game['mobile'] ? : false,
                                         'isDemo'   => false
                                     ]); ?>
-                                    <a href="{{$baseUrl}}/internal/games/game?{{$query}}" target="_blank" class="mini ui right labeled green icon button">
+                                    <a href="{{$baseUrl}}/internal/games/game?{{$query}}" class="mini ui right labeled green icon button rungame">
                                         <i class="right arrow icon"></i>
                                         Run
                                     </a>
@@ -213,7 +215,7 @@
                                                 'isMobile' => $game['mobile'] ? : false,
                                                 'isDemo'   => true
                                         ]); ?>
-                                        <a href="{{$baseUrl}}/internal/games/game?{{$query}}" target="_blank" class="mini ui blue button">
+                                        <a href="{{$baseUrl}}/internal/games/game?{{$query}}" class="mini ui blue button rungame">
                                             Demo
                                         </a>
                                     @endif
@@ -225,31 +227,73 @@
             </tbody>
         </table>
     </div>
-    <div id="game-container"></div>
+    <div class="ui basic modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Game Name
+        </div>
+        <div class="image content" id="iframe">
+            <div class="image">
+                <i class="warning sign icon"></i>
+            </div>
+            <div class="description">
+                <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+            </div>
+        </div>
+    </div>
     </body>
 </html>
 
 <script>
-    /*var container = $('#game-container');
-    var template = '<iframe src="https://free.egtmgs.com/favbet.php?gameId=897"></iframe>';
-    $(document).ready(function() {
-        container.append(template);
-    });*/
 
-    $('#login').on('click', function(e){
+    window.template = '';
+
+    $(document).ready(function() {
+        window.template = $('.ui.basic.modal #iframe').html();
+    });
+
+
+    $('.rungame').on('click', function(e){
         e.preventDefault();
+
+        var modal = $('.ui.basic.modal');
+
+        var iframe = $('.ui.basic.modal #iframe');
+
+        var header = $('.ui.basic.modal .header');
+
         var url = $(this).attr('href');
 
         $.ajax({
             url: url,
-            type: 'post',
-            crossDomain: true,
-            data: {
-                username : 'ziwidif@rootfest.net',
-                password : 'impare666'
-            },
+            type: 'POST',
+            dataType: 'JSON',
             success: function (data) {
-                console.log(data);
+                if(data.status == true) {
+                    console.log(data);
+                    header.html(data.game_name + " " + data.provider_name);
+
+                    var template = '<iframe src="' + data.url + '" height="650"></iframe>';
+
+                    var ifrm = document.createElement("iframe");
+                    ifrm.setAttribute("src", data.url);
+                    ifrm.style.height = "650px";
+
+                    Object.defineProperty(ifrm, "referrer", {get : function(){ return "https://favbet.dev/"; }});
+
+                    iframe.html(ifrm);
+
+                    //iframe.html(template);
+
+
+                    modal.modal('show');
+                } else {
+                    header.html(window.template);
+                    header.html('Error');
+                    $('.ui.basic.modal .content .description').html(data.message);
+
+                    modal.modal('show');
+                }
             },
             error: function(data){
                 console.log(data);
