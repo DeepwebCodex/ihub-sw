@@ -4,7 +4,7 @@ namespace App\Components\Integrations\GameProviders;
 
 use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
-use App\Models\Erlybet\MIcrogaming\GamesNew;
+use App\Models\Erlybet\Microgaming\GamesNew;
 
 /**
  * Class Microgaming
