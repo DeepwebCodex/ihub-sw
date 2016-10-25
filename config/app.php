@@ -167,7 +167,8 @@ return [
         \App\Providers\AppLogServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
         \App\Providers\CasinoGameLauncherServiceProvider::class,
-        \App\Providers\LiveDealerApiServiceProvider::class
+        \App\Providers\LiveDealerApiServiceProvider::class,
+        \App\Providers\AmqpServiceProvider::class,
     ],
 
     /*

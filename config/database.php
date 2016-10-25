@@ -104,18 +104,18 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-        'lineVirtualBoxing' => [
+        'trans' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST_LINE', 'de2db02d.dev.favorit'),
             'port' => env('DB_PORT_LINE', '5432'),
-            'database' => 'line',
+            'database' => 'trans',
             'username' => env('DB_USERNAME_LINE', 'g_develop'),
-            'password' => env('DB_PASSWORD_LINE', 'hb8g7t34fbv09to'),
+            'password' => env('DB_PASSWORD_LINE', 'hb8g7t34fbv09t'),
             'charset' => 'utf8',
             'prefix' => '',
-            'schema' => 'vb',
+            'schema' => 'public',
             'sslmode' => 'prefer',
-        ]
+        ],
     ],
 
     /*

@@ -3,15 +3,15 @@
 namespace App\Models\Line;
 
 /**
- * Class StatusDescModel
+ * Class EventParticipant
  * @package App\Models\Line
  */
-class EventModel extends BaseLineModel
+class EventParticipant extends BaseLineModel
 {
     /**
      * {@inheritdoc}
      */
-    protected $table = 'event';
+    protected $table = 'event_participant';
 
     /**
      * {@inheritdoc}

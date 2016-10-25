@@ -29,7 +29,7 @@ class LiveDealerLink extends BaseErlybetModel
     {
         return \DB::connection($this->connection)
             ->table($this->table)
-            ->select('user_id, game_id, i_actionid, amount, currency, type, balance_after')
+            ->select('user_id', 'game_id', 'i_actionid', 'amount', 'currency', 'type', 'balance_after')
             ->whereIn('id', function ($query) use ($gameIdFirst, $actionIdFirst, $gameIdLast, $actionIdLast) {
                 /** @var Builder $query */
                 $query->select('id')
