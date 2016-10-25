@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
             throw $exception; // throw the original exception
         }
 
-        /*$errorThrownBy = $this->composeContextFromTrace($exception->getTrace());
+        $errorThrownBy = $this->composeContextFromTrace($exception->getTrace());
 
         $logger->error(
             collect([
@@ -55,7 +55,7 @@ class Handler extends ExceptionHandler
             $errorThrownBy['node'],
             $errorThrownBy['module'],
             $errorThrownBy['line']
-        );*/
+        );
     }
 
     /**
