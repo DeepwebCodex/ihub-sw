@@ -59,6 +59,8 @@ class StatsdService
                 $this->incrementStatus($status, $controller . '.' . $method);
             }
         }
+
+        $this->service->flush();
     }
 
     /**
