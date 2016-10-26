@@ -29,18 +29,22 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            'check.partner_id'
+            'check.partner_id',
+            'log.hits'
         ],
 
         'api' => [
+            'log.hits',
             'throttle:60,1',
             'bindings',
             'check.partner_id'
         ],
 
         'internal' => [
+            'log.hits',
             'throttle:60,1',
-            'bindings'
+            'bindings',
+            'check.partner_id'
         ],
     ];
 
@@ -60,6 +64,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'input.json' => \App\Http\Middleware\InputJson::class,
         'check.partner_id' => \App\Http\Middleware\CheckPartnerId::class,
-        'input.xml' => \App\Http\Middleware\InputXml::class
+        'input.xml' => \App\Http\Middleware\InputXml::class,
+        'log.hits'  => \App\Http\Middleware\LogHits::class
     ];
 }

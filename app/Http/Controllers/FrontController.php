@@ -9,11 +9,17 @@ use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Liuggio\StatsdClient\Sender\SocketSender;
+use Liuggio\StatsdClient\Service\StatsdService;
+use Liuggio\StatsdClient\StatsdClient;
 
 class FrontController extends Controller
 {
     public function index(Request $request)
     {
+        $service = new StatsdService(new StatsdClient(new SocketSender()));
+
+
         $user = $this->authorizeUser($request);
 
         $baseUrl = url('/');
