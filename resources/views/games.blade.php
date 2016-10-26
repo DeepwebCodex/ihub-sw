@@ -256,6 +256,8 @@
     $('.rungame').on('click', function(e){
         e.preventDefault();
 
+        var button = $(this);
+
         var iframe = $('.ui.basic.modal #iframe');
 
         var header = $('.ui.basic.modal .header');
@@ -273,6 +275,12 @@
             url: url,
             type: 'POST',
             dataType: 'JSON',
+            beforeSend: function(){
+                button.addClass("loading");
+            },
+            complete: function(){
+                button.removeClass("loading");
+            },
             success: function (data) {
                 if(data.status == true) {
                     console.log(data);
