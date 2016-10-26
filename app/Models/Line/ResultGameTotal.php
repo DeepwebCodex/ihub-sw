@@ -14,22 +14,27 @@ class ResultGameTotal extends BaseLineModel
     protected $table = 'result_game_total';
 
     /**
-     * @param $params
-     * @param $eventId
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
+
+    /**
+     * @param array $params
+     * @param int $eventId
      * @return bool
      */
-    public static function updateResultGameTotal($params, $eventId)
+    public static function updateResultGameTotal(array $params, int $eventId)
     {
         return static::where('event_id', $eventId)
             ->update($params);
     }
 
     /**
-     * @param $eventId
-     * @param $str
+     * @param int $eventId
+     * @param array $str
      * @return mixed
      */
-    public static function insertResultGameTotal($eventId, $str)
+    public static function insertResultGameTotal(int $eventId, array $str)
     {
         return static::create([
             'event_id' => $eventId,

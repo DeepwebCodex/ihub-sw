@@ -14,15 +14,20 @@ class OutcomeType extends BaseLineModel
     protected $table = 'outcome_type';
 
     /**
-     * @param $marketId
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
+
+    /**
+     * @param int $marketTemplateId
      * @return array
      */
-    public function getOutcomeType($marketId)
+    public function getOutcomeTypeByMarketTemplateId(int $marketTemplateId)
     {
         return \DB::connection($this->connection)
             ->table('market_template mt')
             ->join('outcome_type ot', 'ot.id = any (mt.outcome_types)')
-            ->where('mt.id', $marketId)
+            ->where('mt.id', $marketTemplateId)
             ->get()
             ->all();
     }

@@ -12,4 +12,9 @@ class ResultType extends BaseLineModel
      * {@inheritdoc}
      */
     protected $table = 'result_type';
+
+    /**
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
 }

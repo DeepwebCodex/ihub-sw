@@ -14,6 +14,11 @@ class ResultGame extends BaseLineModel
     protected $table = 'result_game';
 
     /**
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
+
+    /**
      * @param array $records
      * @return mixed
      */

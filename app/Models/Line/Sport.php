@@ -14,6 +14,11 @@ class Sport extends BaseLineModel
     protected $table = 'sport';
 
     /**
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
+
+    /**
      * @param int $sportId
      * @param int $eventId
      * @return bool

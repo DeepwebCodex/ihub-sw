@@ -14,6 +14,11 @@ class Sportform extends BaseLineModel
     protected $table = 'sportform';
 
     /**
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
+
+    /**
      * @param int $sportId
      */
     public static function findById(int $sportId)

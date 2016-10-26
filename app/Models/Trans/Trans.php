@@ -39,12 +39,11 @@ class Trans extends BaseTransModel
                     'value' => $value,
                     'lang' => $lang
                 ]);
-            } else {
-                return \DB::connection($this->connection)
-                    ->table($this->table)
-                    ->where(['key' => $key, 'lang' => $lang])
-                    ->update(['value' => $value]);
             }
+            return \DB::connection($this->connection)
+                ->table($this->table)
+                ->where(['key' => $key, 'lang' => $lang])
+                ->update(['value' => $value]);
         }
     }
 }

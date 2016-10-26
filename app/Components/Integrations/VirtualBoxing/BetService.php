@@ -42,9 +42,9 @@ class BetService
      * @param array $match
      * @throws \App\Exceptions\Api\ApiHttpException|\Exception
      */
-    public function setBet(array $match)
+    public function setBet(array $match):void
     {
-        $scheduleId = $match['scheduleId'];
+        $scheduleId = (int)$match['scheduleId'];
         $this->eventVbId = $scheduleId;
 
         if (EventLink::checkExistsByVbId($scheduleId)) {
@@ -97,14 +97,12 @@ class BetService
 
             (new ResultService($this->config))->initResultEvent($eventId);
 
-            $market = new Market($this->config);
-            $market->setMarkets(
-                $match['bet'],
-                $eventId,
+            $market = new Market(
+                $this->config,
                 $eventParticipantHome->getEventParticipantId(),
                 $eventParticipantAway->getEventParticipantId()
             );
-            $market->suspendMarkets($eventId);
+            $market->setMarkets($match['bet'], $eventId);
 
             Translate::save();
 

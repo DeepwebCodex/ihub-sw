@@ -12,4 +12,9 @@ class Outcome extends BaseLineModel
      * {@inheritdoc}
      */
     protected $table = 'outcome';
+
+    /**
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
 }

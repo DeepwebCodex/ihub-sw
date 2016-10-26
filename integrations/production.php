@@ -76,7 +76,7 @@ return [
             'max_payout' => 10000.00,
             'stop_loss' => 1000000.00,
             'OW_weight' => 100,
-            'match_rt_id' => 1,
+            'match_result_type_id' => 1,
             'CS' => 1318,
             'CSR' => 1319,
             'T65' => 50,

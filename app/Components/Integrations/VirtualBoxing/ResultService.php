@@ -34,7 +34,7 @@ class ResultService
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getEventId()
     {
@@ -47,7 +47,7 @@ class ResultService
      * @param array $rounds
      * @throws \Exception
      */
-    public function setResult(int $eventVbId, string $tid, array $rounds)
+    public function setResult(int $eventVbId, string $tid, array $rounds):void
     {
         $event = EventLink::getByVbId($eventVbId);
         if (!$event) {
@@ -93,7 +93,7 @@ class ResultService
      * @return array
      * @throws \App\Exceptions\Api\ApiHttpException
      */
-    protected function mapResult(int $eventId, array $rounds)
+    protected function mapResult(int $eventId, array $rounds):array
     {
         $answer = [];
         $eventParticipants = (new Event())->preGetParticipant($eventId);
@@ -184,13 +184,12 @@ class ResultService
 
     /**
      * @param $round
-     * @return mixed
+     * @return int
      * @throws \App\Exceptions\Api\ApiHttpException
      */
-    protected function mapResultType($round)
+    protected function mapResultType(int $round):int
     {
-        $roundsMap = $this->getConfigOption('rounds_map');
-        return $roundsMap[$round];
+        return $this->getConfigOption('rounds_map')[$round];
     }
 
     /**
@@ -200,7 +199,7 @@ class ResultService
      * @return array
      * @throws \App\Exceptions\Api\ApiHttpException
      */
-    protected function prepareInsertEmpty(int $eventId, array $participants, int $resultType)
+    protected function prepareInsertEmpty(int $eventId, array $participants, int $resultType):array
     {
         $scopeType = $this->getConfigOption('scope_type');
         $res = [];
@@ -220,22 +219,21 @@ class ResultService
     }
 
     /**
-     * @param $scope
-     * @return mixed
+     * @param string $scope
+     * @return int
      * @throws \App\Exceptions\Api\ApiHttpException
      */
-    protected function mapScope($scope)
+    protected function mapScope(string $scope):int
     {
-        $scopeMap = $this->getConfigOption('scope_type');
-        return $scopeMap[$scope];
+        return $this->getConfigOption('scope_type')[$scope];
     }
 
     /**
      * @param $eventId
-     * @return bool
+     * @return void
      * @throws \Exception
      */
-    public function initResultEvent($eventId)
+    public function initResultEvent(int $eventId):void
     {
         $eventType = $this->getConfigOption('event_type');
 
@@ -263,7 +261,5 @@ class ResultService
             'result_total_json' => '',
             'result_type_id' => $resultType[0]['id']
         ]);
-
-        return true;
     }
 }

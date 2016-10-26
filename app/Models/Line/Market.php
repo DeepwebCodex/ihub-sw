@@ -21,13 +21,31 @@ class Market extends BaseLineModel
     /**
      * @param int $eventId
      * @param string $suspend
-     * @return int
+     * @return bool
      */
-    public function updateMarketEvent(int $eventId, $suspend = 'no')
+    protected function updateMarketEventSuspend(int $eventId, string $suspend):bool
     {
-        return \DB::connection($this->connection)
+        return (bool)\DB::connection($this->connection)
             ->table($this->table)
             ->where('event_id', $eventId)
             ->update(['suspend' => $suspend]);
+    }
+
+    /**
+     * @param int $eventId
+     * @return bool
+     */
+    public function suspendMarketEvent(int $eventId):bool
+    {
+        return $this->updateMarketEventSuspend($eventId, 'yes');
+    }
+
+    /**
+     * @param int $eventId
+     * @return bool
+     */
+    public function resumeMarketEvent(int $eventId):bool
+    {
+        return $this->updateMarketEventSuspend($eventId, 'no');
     }
 }
