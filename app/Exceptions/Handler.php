@@ -7,6 +7,7 @@ use App\Facades\AppLog;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -84,6 +85,26 @@ class Handler extends ExceptionHandler
     }
 
     /**
+     * @param Request $request
+     * @return bool
+     */
+    private function capture($request)
+    {
+        $route = $request->route();
+
+        if (!$route)
+        {
+            return false;
+        }
+
+        $currentAction = $route->getActionName();
+
+        if($currentAction) {
+            app('Statsd')->registerFailed($currentAction);
+        }
+    }
+
+    /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -92,6 +113,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        $this->capture($request);
+
         if ($controller = $this->isApiCall($request)) {
             $response = $this->getApiExceptionResponse($controller, $exception);
             if ($response instanceof Response) {
