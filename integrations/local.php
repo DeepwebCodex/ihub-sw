@@ -31,10 +31,10 @@ return [
         'list_currency'         => ['WMZ' => 'USD', 'WMR' => 'RUB', 'WMU' => 'UAH', 'WME' => 'EUR'],
         'jackpot_url'           => 'http://www.quickfiregames.co.uk/services/tickers/progressivesxml.asmx/Games',
         'jackpot_set_url'       => '/microgaming/set_jackpot', // +_+
-        'game_mobile_lobby_url' => 'https://www.quickfiregames.co.uk/mobile/menu.aspx?',
+        'game_mobile_lobby_url' => 'http://mgdemoproxy1.web/mobile/menu.aspx?',
         'game_mobile_url'       => 'http://mgmobileproxy.web/MobileWebServices/casino/game/launch/mgs',
         'game_lobby_url'        => 'http://mgdectopproxy.web/quickfiressl',
-        'game_url'              => 'https://redirector3.valueactive.eu/Casino/Default.aspx',
+        'game_url'              => 'http://mgdemoproxy2.web/Casino/Default.aspx',
         'security_word'         => 'sdfw#4,.WWsdfdf',   // WTF ?
         'csid'                  => 1115, // WTF #2
         'client_id'             => 40300,

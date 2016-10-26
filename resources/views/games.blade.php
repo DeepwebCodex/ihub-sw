@@ -207,7 +207,7 @@
                                         <i class="right arrow icon"></i>
                                         Run
                                     </a>
-                                    @if ($game['demo'])
+                                    @if ($game['demo'] || $game['name'] == 'microgaming')
                                         <?php $query = http_build_query([
                                                 'gameType' => $game['game_type'],
                                                 'gameUrl'  => $game['url'],
