@@ -55,8 +55,6 @@ class CasinoBorderlineApiCest
 
     public function testStoragePending(ApiTester $I)
     {
-        $I->grabService('db')->beginTransaction();
-
         $this->objectId = random_int(100000, 9900000);
 
         $request = [
@@ -105,8 +103,6 @@ class CasinoBorderlineApiCest
         $I->seeResponseContainsJson(['status' => true, 'message' => 'success']);
 
         $I->assertEquals([$testUser->getBalanceInCents() - 10], $I->grabDataFromResponseByJsonPath('balance'), "Balance does not match");
-
-        $I->grabService('db')->rollback();
     }
 
     public function testZeroWin(ApiTester $I)
