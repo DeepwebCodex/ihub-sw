@@ -256,13 +256,18 @@
     $('.rungame').on('click', function(e){
         e.preventDefault();
 
-        var modal = $('.ui.basic.modal');
-
         var iframe = $('.ui.basic.modal #iframe');
 
         var header = $('.ui.basic.modal .header');
 
         var url = $(this).attr('href');
+
+        var modal = $('.ui.basic.modal').modal({
+            onHidden : function(){
+                iframe.empty();
+                return true;
+            }
+        });
 
         $.ajax({
             url: url,
@@ -273,8 +278,6 @@
                     console.log(data);
                     header.html(data.game_name + " " + data.provider_name);
 
-                    var template = '<iframe src="' + data.url + '" height="650"></iframe>';
-
                     var ifrm = document.createElement("iframe");
                     ifrm.setAttribute("src", data.url);
                     ifrm.style.height = "650px";
@@ -283,12 +286,9 @@
 
                     iframe.html(ifrm);
 
-                    //iframe.html(template);
-
-
                     modal.modal('show');
                 } else {
-                    header.html(window.template);
+                    iframe.html(window.template);
                     header.html('Error');
                     $('.ui.basic.modal .content .description').html(data.message);
 
@@ -296,7 +296,11 @@
                 }
             },
             error: function(data){
-                console.log(data);
+                iframe.html(window.template);
+                header.html('Error');
+                $('.ui.basic.modal .content .description').html(data);
+
+                modal.modal('show');
             }
         });
     });
