@@ -270,7 +270,6 @@ class MicroGamingBorderlineApiCest
 
         $baseFunc = new MicroGamingApiCest();
 
-        $baseFunc->testMethodPlayIn($I);
         $baseFunc->testMethodPlayOut($I);
         $baseFunc->testMethodPlayOut($I);
     }

@@ -120,6 +120,8 @@ class EuroTechGamesApiCest
 
     public function testMethodDeposit(ApiTester $I)
     {
+        $this->testMethodWithdraw($I);
+
         $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
