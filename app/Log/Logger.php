@@ -31,7 +31,7 @@ class Logger
     {
         $driver = Arr::get($config, 'default');
 
-        if(method_exists($this, 'run'. $this->drivers[$driver]))
+        if(method_exists($this, 'run'.  Arr::get($this->drivers, $driver)))
         {
             return $this->{'run'. $this->drivers[$driver]}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
         }

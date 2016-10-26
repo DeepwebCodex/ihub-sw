@@ -62,7 +62,7 @@ class MicroGamingController extends BaseApiController
 
     public function logIn(LogInRequest $request)
     {
-        $user = IntegrationUser::get(1, $this->getOption('service_id'), 'microgaming');
+        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
 
         $this->addMetaField('currency', $user->getCurrency());
 

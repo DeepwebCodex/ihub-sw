@@ -8,7 +8,8 @@
 
 namespace Testing;
 
-use App\Components\ExternalServices\AccountManager;
+
+use App\Components\ExternalServices\RemoteSession;
 use Mockery;
 
 class RemoteSessionMock
