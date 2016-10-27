@@ -10,7 +10,7 @@ class Transactions extends Model
     /**
      * {@inheritdoc}
      */
-    protected $connection = 'erlybet'; //TODO::fill
+    protected $connection = 'integration'; //TODO::fill
 
     /**
      * {@inheritdoc}
