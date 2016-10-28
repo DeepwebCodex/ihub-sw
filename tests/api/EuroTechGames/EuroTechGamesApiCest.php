@@ -1,6 +1,8 @@
 <?php
 
 use App\Components\Transactions\TransactionRequest;
+use \App\Components\Integrations\EuroGamesTech\EgtHelper;
+use \App\Components\Integrations\EuroGamesTech\StatusCode;
 
 class EuroTechGamesApiCest
 {
@@ -40,15 +42,21 @@ class EuroTechGamesApiCest
         ];
 
         $I->disableMiddleware();
-        $I->sendPOST('/egt/Authenticate', array_merge($request, [
-            'DefenceCode' => \App\Components\Integrations\EuroGamesTech\EgtHelper::generateDefenceCode($request['PlayerId'], $request['PortalCode'], time())
-        ]));
+        $defenceCode = EgtHelper::generateDefenceCode($request['PlayerId'], $request['PortalCode'], time());
+        $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $defenceCode]));
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $I->seeXmlResponseIncludes("<Balance>{$testUser->getBalanceInCents()}</Balance>");
+
+        /**
+         * send request with the same defence code
+         */
+        $I->sendPOST('/egt/Authenticate', array_merge($request, [ 'DefenceCode' => $defenceCode ]));
+        $response = (array)(new SimpleXMLElement($I->grabResponse()));
+        $I->assertEquals(StatusCode::EXPIRED, $response['ErrorCode']);
     }
 
     public function testMethodGetPlayerBalance(ApiTester $I)
