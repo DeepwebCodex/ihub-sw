@@ -35,15 +35,15 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
     {
         $token = MicroGamingHelper::generateToken(RemoteSession::getSessionId(), $walletInfo['currency']);
 
-        $isGameValid = $this->isGameValid();
+        $isGameSubProvider = $this->isGameSubProvider();
 
         if ($this->isMobile) {
-            if ($isGameValid) {
+            if ($isGameSubProvider) {
                 return $this->getRealGameMobileUrl($token);
             }
             return $this->getRealGameMobileLobbyUrl($token);
         }
-        if ($isGameValid) {
+        if ($isGameSubProvider) {
             return $this->getRealGameUrl($token);
         }
         return $this->getRealGameLobbyUrl($token);
@@ -132,15 +132,15 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
      */
     public function getGameDemo()
     {
-        $isGameValid = $this->isGameValid();
+        $isGameSubProvider = $this->isGameSubProvider();
 
         if ($this->isMobile) {
-            if ($isGameValid) {
+            if ($isGameSubProvider) {
                 return $this->getDemoGameMobileUrl();
             }
             return $this->getDemoGameMobileLobbyUrl();
         }
-        if ($isGameValid) {
+        if ($isGameSubProvider) {
             return $this->getDemoGameUrl();
         }
         return $this->getDemoGameLobbyUrl();
@@ -218,7 +218,7 @@ class Microgaming extends BaseGameProvider implements GameProviderInterface
     /**
      * @return bool
      */
-    protected function isGameValid():bool
+    protected function isGameSubProvider():bool
     {
         return $this->game->applicationid && $this->game->productid;
     }

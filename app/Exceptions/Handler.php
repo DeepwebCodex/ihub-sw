@@ -121,7 +121,7 @@ class Handler extends ExceptionHandler
                 AppLog::error([
                     'request' => $request->getContent(),
                     'response' => $response->getContent()
-                ], $this->getNodeName(), $this->method);
+                ], $this->getNodeName(), 'response-error');
                 return $response;
             }
         }
