@@ -33,7 +33,7 @@ return [
         'jackpot_set_url'       => '/microgaming/set_jackpot', // +_+
         'game_mobile_lobby_url' => 'http://mgdemoproxy1.web/mobile/menu.aspx?',
         'game_mobile_url'       => 'http://mgmobileproxy.web/MobileWebServices/casino/game/launch/mgs',
-        'game_lobby_url'        => 'http://mgdectopproxy.web/quickfiressl',
+        'game_lobby_url'        => 'https://quickfire3.gameassists.co.uk/quickfiressl',
         'game_url'              => 'http://mgdemoproxy2.web/Casino/Default.aspx',
         'security_word'         => 'sdfw#4,.WWsdfdf',   // WTF ?
         'csid'                  => 1115, // WTF #2
