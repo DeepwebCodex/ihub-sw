@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Users\IntegrationUser;
+use App\Facades\AppLog;
 use App\Http\Controllers\Internal\CasinoController;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\RequestOptions;
@@ -17,9 +18,6 @@ class FrontController extends Controller
 {
     public function index(Request $request)
     {
-        $service = new StatsdService(new StatsdClient(new SocketSender()));
-
-
         $user = $this->authorizeUser($request);
 
         $baseUrl = url('/');

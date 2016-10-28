@@ -15,7 +15,7 @@ class ObjectIdMap extends Model
     /**
      * {@inheritdoc}
      */
-    protected $table = 'integration.object_id_map';
+    protected $table = 'object_id_map';
 
     /**
      * {@inheritdoc}

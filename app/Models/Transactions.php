@@ -15,7 +15,7 @@ class Transactions extends Model
     /**
      * {@inheritdoc}
      */
-    protected $table = 'integration.transaction_history';
+    protected $table = 'transaction_history';
 
     protected $fillable = [
         'user_id',
