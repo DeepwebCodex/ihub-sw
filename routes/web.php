@@ -13,4 +13,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', "FrontController@index");
+Route::any('/', "FrontController@index");
+
+Route::get('/logout', "FrontController@logOut");
+
+Route::post('/give', "FrontController@giveMoney");

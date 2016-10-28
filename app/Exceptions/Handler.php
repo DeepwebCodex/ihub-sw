@@ -7,6 +7,7 @@ use App\Facades\AppLog;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -40,12 +41,67 @@ class Handler extends ExceptionHandler
         }
 
         try {
-            $logger = $this->container->make(LoggerInterface::class);
+            $logger = app('AppLog');
         } catch (Exception $ex) {
             throw $exception; // throw the original exception
         }
 
-        $logger->error($exception->getMessage(), $exception->getTrace());
+        $errorThrownBy = $this->composeContextFromTrace($exception->getTrace());
+
+        $logger->error(
+            collect([
+                $exception->getMessage(),
+                json_encode($exception->getTrace())
+            ]),
+            $errorThrownBy['node'],
+            $errorThrownBy['module'],
+            $errorThrownBy['line']
+        );
+    }
+
+    /**
+     * @param $trace
+     * @return array
+     */
+    private function composeContextFromTrace($trace)
+    {
+        $trace = array_filter($trace, function ($elem){
+            if(isset($elem['class'])) {
+                return ($elem['class'] !== __CLASS__);
+            }
+
+            return false;
+        });
+
+        $trace = array_values($trace);
+
+        list($traceLineInfo) = $trace;
+
+        $node = $traceLineInfo['class'] ?? '';
+        $module = $traceLineInfo['function'] ?? '';
+        $line = $traceLineInfo['line'] ?? '';
+
+        return compact('node', 'module', 'line');
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    private function capture($request)
+    {
+        $route = $request->route();
+
+        if (!$route)
+        {
+            return false;
+        }
+
+        $currentAction = $route->getActionName();
+
+        if($currentAction) {
+            app('Statsd')->registerFailed($currentAction);
+        }
     }
 
     /**
@@ -57,13 +113,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        $this->capture($request);
+
         if ($controller = $this->isApiCall($request)) {
             $response = $this->getApiExceptionResponse($controller, $exception);
             if ($response instanceof Response) {
                 AppLog::error([
                     'request' => $request->getContent(),
                     'response' => $response->getContent()
-                ], $this->getNodeName(), $this->method);
+                ], $this->getNodeName(), 'response-error');
                 return $response;
             }
         }

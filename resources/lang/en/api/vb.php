@@ -1,12 +1,11 @@
 <?php
 
 return [
-    'test' => 'test',
-    'error_methond_not_found' => 'Method not found ',
+    'error_method_not_found' => 'Method not found',
     'cant_parse_xml' => 'cant_parse_xml',
     'error_create_category' => 'error_create_category',
     'miss_element' => 'Miss element',
-    'error_create_participant' => 'Fail creat paricipant',
+    'error_create_participant' => 'Fail create participant',
     'error_create_participant2' => 'Can\'t find id participant',
     'init_result' => 'Scope data or participant or result type is bad',
     'cant_insert_market' => 'Cant insert market',

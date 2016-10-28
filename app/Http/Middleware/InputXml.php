@@ -41,24 +41,25 @@ class InputXml
 
     /**
      * @param array $data
+     * @param string $parentName
      * @return array|mixed
      */
-    private function collapseAttributes(array $data)
+    private function collapseAttributes(array $data, $parentName = '')
     {
         if ($data) {
             foreach ($data as $name => $item) {
-                if (is_array($item)) {
-                    if ($name === '@attributes') {
-                        $data = $this->collapseAttributes($item);
-                    } else {
-                        $data[$name] = $this->collapseAttributes($item);
-                    }
+                if ($parentName && $name === '#text') {
+                    $data[$parentName] = $item;
                 } else {
-                    $data[$name] = $item;
+                    $name = ltrim($name, '@');
+                    if (is_array($item)) {
+                        $data[$name] = $this->collapseAttributes($item, $name);
+                    } else {
+                        $data[$name] = $item;
+                    }
                 }
             }
         }
-
         return $data;
     }
 }

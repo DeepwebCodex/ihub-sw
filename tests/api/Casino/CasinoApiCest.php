@@ -110,6 +110,8 @@ class CasinoApiCest
 
     public function testMethodPayOut(ApiTester $I)
     {
+        $this->testMethodPayIn($I);
+
         $request = [
             'api_id' => 15,
             'token'  => 'HSKSOOJH9762tSDSDF',

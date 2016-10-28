@@ -52,5 +52,10 @@ return [
                 'collection_name' => env('LOG_MONGO_COLLECTION_NAME')
             ]
         ]
+    ],
+
+    'statsd' => [
+        'host' => env('STATSD_HOST'),
+        'port' => env('STATSD_PORT')
     ]
 ];

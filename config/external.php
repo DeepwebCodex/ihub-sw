@@ -19,6 +19,11 @@ return [
             'port'  => env('API_ACCOUNT_OP_PORT', 8008)
         ],
 
+        'amqp' => [
+            'host' => env('API_AMQP_HOST', 'of01dev.favorit'),
+            'port' => env('API_AMQP_PORT', 8001),
+        ],
+
         'cards_roh' => [
             'host'  => env('API_CARDS_ROH_HOST', 'de2ef01d.dev.favorit'),
             'port'  => env('API_CARDS_ROH_PORT', 7767)

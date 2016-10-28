@@ -36,4 +36,12 @@ class Wallet
     {
         return array_get($this->attributes, $name);
     }
+
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
 }

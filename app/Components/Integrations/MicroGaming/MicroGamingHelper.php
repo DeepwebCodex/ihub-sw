@@ -43,7 +43,7 @@ class MicroGamingHelper
      */
     public static function partToken($remoteSessionId, $time, $currency) {
         $currency = self::mapCurrencyCode($currency);
-        return md5(sha1($remoteSessionId . config('integrations.microGaming.security_word') . $time . $currency));
+        return md5(sha1($remoteSessionId . config('integrations.microgaming.security_word') . $time . $currency));
     }
 
     /**
@@ -52,7 +52,7 @@ class MicroGamingHelper
      */
     public static function mapCurrencyCode(string $currency)
     {
-        $currencyMap = config('integrations.microGaming.list_currency');
+        $currencyMap = config('integrations.microgaming.list_currency');
 
         return array_get($currencyMap, $currency, $currency);
     }

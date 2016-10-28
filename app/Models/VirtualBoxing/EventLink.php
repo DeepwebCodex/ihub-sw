@@ -8,7 +8,11 @@
 
 namespace App\Models\VirtualBoxing;
 
-class EventLinkModel extends BaseVirtualBoxingModel
+/**
+ * Class EventLink
+ * @package App\Models\VirtualBoxing
+ */
+class EventLink extends BaseVirtualBoxingModel
 {
     /**
      * {@inheritdoc}
@@ -21,13 +25,12 @@ class EventLinkModel extends BaseVirtualBoxingModel
     public $timestamps = false;
 
     /**
-     * @param int $event_vb_id
-     * @return EventLinkModel|null
+     * @param int $eventVbId
+     * @return EventLink|null
      */
-    public static function getByVbId(int $event_vb_id = 0)
+    public static function getByVbId(int $eventVbId)
     {
-        return EventLinkModel::where(
-            ['event_vb_id' => $event_vb_id]
-        )->first();
+        return static::where('event_vb_id', $eventVbId)
+            ->first();
     }
 }

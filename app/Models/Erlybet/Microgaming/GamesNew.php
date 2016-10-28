@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Erlybet\MIcrogaming;
+namespace App\Models\Erlybet\Microgaming;
 
 use App\Models\Erlybet\BaseErlybetModel;
 

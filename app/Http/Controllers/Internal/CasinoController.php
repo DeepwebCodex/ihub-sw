@@ -57,7 +57,12 @@ class CasinoController extends Controller
      */
     public function allGames($provider = 'allproviders', $gameType = 'alltypes', $lang = 'ru')
     {
+        $provider = request()->input('provider', 'allproviders');
+        $gameType = request()->input('gameType', 'alltypes');
+        $lang = request()->input('lang', 'ru');
+
         $partnerId = (int)request()->server('PARTNER_ID');
+
         $games = (new CasinoGamesRepository())->getGames($provider, $gameType, $lang, $partnerId);
 
         return $this->makeCommonSuccessResponse([
@@ -107,6 +112,12 @@ class CasinoController extends Controller
      */
     public function game($gameType = 'new', $gameUrl = '', $lang = 'ru', $isMobile = false, $isDemo = false)
     {
+        $gameType = request()->input('gameType', 'new');
+        $gameUrl = request()->input('gameUrl', '');
+        $lang = request()->input('lang', 'ru');
+        $isMobile = (bool) request()->input('isMobile', false);
+        $isDemo = (bool) request()->input('isDemo', false);
+
         $isMobile = filter_var($isMobile, FILTER_VALIDATE_BOOLEAN);
         $isDemo = filter_var($isDemo, FILTER_VALIDATE_BOOLEAN);
 

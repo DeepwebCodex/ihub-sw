@@ -15,6 +15,7 @@ class RemoteSession
     private $session_prefix;
     private $lifetime;
 
+    /** @var  \Memcached $memCache */
     private $memCache;
 
     private $sessionData;
@@ -34,13 +35,15 @@ class RemoteSession
 
     public function setUp()
     {
-        $this->memCache = new \Memcache();
+        $this->memCache = new \Memcached('sessions_pool');
 
-        $this->session_prefix = ini_get("memcached.sess_prefix"); // 'memc.sess.key.' - for dev server
+        $this->session_prefix = 'memc.sess.key.';// - for dev server
         $this->lifetime = ini_get("session.gc_maxlifetime");
 
         try {
-            $this->memCache->pconnect($this->remoteHost, $this->remotePort);
+            if(!$this->memCache->addServer($this->remoteHost, $this->remotePort)){
+                throw new \MemcachedException("Unable to connect to server");
+            }
         } catch (\Exception $e) {
             AppLog::critical($e->getMessage());
             throw new ApiHttpException(503, "Service unavailable");

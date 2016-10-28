@@ -6,8 +6,9 @@ class_name: UnitTester
 modules:
     enabled:
         - \Helper\Unit
-        - Laravel5:
+        - Laravel5Extended:
             environment_file: .env.testing
+            cleanup: false
             server:
               PARTNER_ID: %TEST_PARTNER_ID%
               FRONTEND_NUM: %TEST_CASHEDESK%

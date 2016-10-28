@@ -19,10 +19,10 @@ Route::group(['prefix' => 'internal'], function () {
     Route::get('ld', 'LiveDealerController@checkTransactions');
 
     Route::group(['prefix' => 'games'], function () {
-        Route::get('allgametypes/{lang?}', 'CasinoController@allGameTypes');
-        Route::get('allproviders', 'CasinoController@allProviders');
-        Route::get('game/{gameType?}/{gameUrl?}/{lang?}/{isMobile?}/{isDemo?}/', 'CasinoController@game');
-        Route::get('allgames/{provider?}/{gameType?}/{lang?}', 'CasinoController@allGames');
-        Route::get('allseo/{typeEntity?}/{entityName?}/{lang?}', 'CasinoController@allSeo');
+        Route::any('allgametypes/{lang?}', 'CasinoController@allGameTypes');
+        Route::any('allproviders', 'CasinoController@allProviders');
+        Route::any('game/{gameType?}/{gameUrl?}/{lang?}/{isMobile?}/{isDemo?}/', 'CasinoController@game');
+        Route::any('allgames/{provider?}/{gameType?}/{lang?}', 'CasinoController@allGames');
+        Route::any('allseo/{typeEntity?}/{entityName?}/{lang?}', 'CasinoController@allSeo');
     });
 });

@@ -10,12 +10,12 @@ class Transactions extends Model
     /**
      * {@inheritdoc}
      */
-    protected $connection = 'erlybet'; //TODO::fill
+    protected $connection = 'integration'; //TODO::fill
 
     /**
      * {@inheritdoc}
      */
-    protected $table = 'integration.transaction_history';
+    protected $table = 'transaction_history';
 
     protected $fillable = [
         'user_id',

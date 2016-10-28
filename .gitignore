@@ -6,9 +6,8 @@
 Homestead.json
 Homestead.yaml
 .env
+.env.testing
 /_ide_helper.php
 /.phpstorm.meta.php
-
-./project-ihub-install.sh
 
 tests/_output/*

@@ -8,33 +8,31 @@
 
 namespace App\Exceptions\Api\Templates;
 
-use App\Components\Integrations\MicroGaming\CodeMapping;
-use Carbon\Carbon;
-use Illuminate\Http\Response;
-use Stringy\StaticStringy as S;
-
+/**
+ * Class VirtualBoxingTemplate
+ * @package App\Exceptions\Api\Templates
+ */
 class VirtualBoxingTemplate implements IExceptionTemplate
 {
     private $item;
 
+    /**
+     * @param array $item
+     * @param $statusCode
+     * @param $isApiException
+     * @return array
+     */
     public function mapping($item, $statusCode, $isApiException)
     {
         $this->item = $item;
 
-        if(!$isApiException && isset($this->item['message'])){
+        if (!$isApiException && isset($this->item['message'])) {
             $this->item['message'] = 'Error';
-            if(isset($this->item['code'])){
+            if (isset($this->item['code'])) {
                 unset($this->item['code']);
             }
         }
 
         return $this->item;
-    }
-
-    private function useElement($key, $default){
-        $val = isset($this->item[$key]) ? $this->item[$key] : $default;
-        unset($this->item[$key]);
-
-        return $val;
     }
 }
