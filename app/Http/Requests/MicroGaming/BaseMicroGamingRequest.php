@@ -5,6 +5,7 @@ namespace App\Http\Requests\MicroGaming;
 use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\MicroGaming\CodeMapping;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
+use App\Components\Integrations\MicroGaming\StatusCode;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
@@ -83,7 +84,7 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
         throw new ApiHttpException('400',
             array_get($firstError, 'message', 'Invalid input'),
             [
-                'code' => array_get($firstError, 'code', 6000)
+                'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
             ]
         );
     }

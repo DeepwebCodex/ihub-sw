@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Components\Integrations\MicroGaming;
+
+abstract class StatusCode
+{
+    const SERVER_ERROR = 6000;
+    const INVALID_TOKEN = 6001;
+    const TOKEN_EXPIRED = 6002;
+    const INVALID_AUTH = 6003;
+    const INVALID_USER = 6101;
+    const ACCOUNT_BLOCKED = 6102;
+    const ACCOUNT_NOT_FOUND = 6103;
+    const RESTRICTED_USER = 6104;
+    const ACCOUNT_EULA_NOT_ACCEPTED = 6105;
+    const SHOW_PROTECTION = 6106;
+    const BLOCKED_IP = 6107;
+    const PASSWORD_EXPIRED = 6108;
+    const ACCOUNT_RESTRICTION_TIMEOUT = 6109;
+    const ACCOUNT_RESTRICTION_PAUSE = 6110;
+    const ACCOUNT_BLACKLISTED = 6111;
+    const ACCOUNT_DISABLED = 6112;
+    const ALREADY_PROCESSED = 6501;
+    const ACCOUNT_NO_MONEY = 6503;
+    const ACCOUNT_DAILY_LIMIT = 6505;
+    const ACCOUNT_WEEKLY_LIMIT = 6506;
+    const ACCOUNT_MONTHLY_LIMIT = 6507;
+    const ACCOUNT_PLAYTIME_EXPIRED = 6508;
+    const ACCOUNT_LOSES_OVERDRAFT = 6509;
+    const ACCOUNT_GAME_RESTRICTED = 6510;
+    const EXTERNAL_NOT_FOUND = 6511;
+}
