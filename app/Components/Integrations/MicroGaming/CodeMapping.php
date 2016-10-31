@@ -20,152 +20,152 @@ class CodeMapping extends CodeMappingBase
 
     public static function getMapping(){
         return [
-            6000 => [
+            StatusCode::SERVER_ERROR => [
                 'message'   => 'Неопределенная ошибка.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::SERVER_ERROR],
                 'default'   => true
             ],
-            6001 => [
+            StatusCode::INVALID_TOKEN => [
                 'message'   => 'Токен игрока недействителен.',
                 'map'       => [],
                 'attribute' => 'token',
                 'meanings'  => [self::INVALID_TOKEN]
             ],
-            6002 => [
+            StatusCode::TOKEN_EXPIRED => [
                 'message'   => 'Срок действия токена игрока истек.',
                 'map'       => [],
                 'attribute' => 'timestamp',
                 'meanings'  => [self::TIME_EXPIRED]
             ],
-            6003 => [
+            StatusCode::INVALID_AUTH => [
                 'message'   => 'Учетные данные для аутентификации через API неверны.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::INVALID_AUTH]
             ],
-            6101 => [
+            StatusCode::INVALID_USER => [
                 'message'   => 'Ошибка при проверке логина. Неверное имя пользователя или пароль.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::INVALID_USER_ID]
             ],
-            6102 => [
+            StatusCode::ACCOUNT_BLOCKED => [
                 'message'   => 'Аккаунт заблокирован.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::ACCOUNT_BANNED]
             ],
-            6103 => [
+            StatusCode::ACCOUNT_NOT_FOUND => [
                 'message'   => 'Такого аккаунта не существует.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_NOT_FOUND]
             ],
-            6104 => [
+            StatusCode::RESTRICTED_USER => [
                 'message'   => 'Для игрока действует самоограничение.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_RESTRICTED]
             ],
-            6105 => [
+            StatusCode::ACCOUNT_EULA_NOT_ACCEPTED => [
                 'message'   => 'Игрок еще не принял правила и условия.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_RESTRICTED]
             ],
-            6106 => [
+            StatusCode::SHOW_PROTECTION => [
                 'message'   => 'Обязательное отображение защиты игрока.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_RESTRICTED]
             ],
-            6107 => [
+            StatusCode::BLOCKED_IP => [
                 'message'   => 'Ограничение по IP-адресу',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_RESTRICTED]
             ],
-            6108 => [
+            StatusCode::PASSWORD_EXPIRED => [
                 'message'   => 'Срок действия пароля истек',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_RESTRICTED]
             ],
-            6109 => [
+            StatusCode::ACCOUNT_RESTRICTION_TIMEOUT => [
                 'message'   => 'Срок самоограничения истек, и игрок должен связаться с оператором, чтобы отменить ограничение. После этого активируется период игровой паузы.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_RESTRICTED]
             ],
-            6110 => [
+            StatusCode::ACCOUNT_RESTRICTION_PAUSE => [
                 'message'   => 'Срок самоограничения истек, но у игрока период игровой паузы.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_RESTRICTED]
             ],
-            6111 => [
+            StatusCode::ACCOUNT_BLACKLISTED => [
                 'message'   => 'Аккаунт находится в черном списке.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_RESTRICTED]
             ],
-            6112 => [
+            StatusCode::ACCOUNT_DISABLED => [
                 'message'   => 'Аккаунт игрока отключен. Относится только к регулируемым рынкам.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_RESTRICTED]
             ],
-            6501 => [
+            StatusCode::ALREADY_PROCESSED => [
                 'message'   => 'Уже обработан на основе других сведений.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::DUPLICATE]
             ],
-            6503 => [
+            StatusCode::ACCOUNT_NO_MONEY => [
                 'message'   => 'У игрока недостаточно средств.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::NO_MONEY]
             ],
-            6505 => [
+            StatusCode::ACCOUNT_DAILY_LIMIT => [
                 'message'   => 'Игрок превысил свой дневной безопасный лимит.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_LIMIT]
             ],
-            6506 => [
+            StatusCode::ACCOUNT_WEEKLY_LIMIT => [
                 'message'   => 'Игрок превысил свой недельный безопасный лимит.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_LIMIT]
             ],
-            6507 => [
+            StatusCode::ACCOUNT_MONTHLY_LIMIT => [
                 'message'   => 'Игрок превысил свой месячный безопасный лимит.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_LIMIT]
             ],
-            6508 => [
+            StatusCode::ACCOUNT_PLAYTIME_EXPIRED => [
                 'message'   => 'Игрок превысил свою продолжительность игры.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_LIMIT]
             ],
-            6509 => [
+            StatusCode::ACCOUNT_LOSES_OVERDRAFT => [
                 'message'   => 'Игрок превысил свой лимит проигрыша.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_LIMIT]
             ],
-            6510 => [
+            StatusCode::ACCOUNT_GAME_RESTRICTED => [
                 'message'   => 'Игрок не допущен к данной игре.',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::USER_LIMIT]
             ],
-            6511 => [
+            StatusCode::EXTERNAL_NOT_FOUND => [
                 'message'   => 'Внешняя система с таким именем не существует',
                 'map'       => [],
                 'attribute' => null,

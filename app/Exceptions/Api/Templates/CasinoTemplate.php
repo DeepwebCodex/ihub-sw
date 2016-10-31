@@ -11,6 +11,7 @@ namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Integrations\Casino\CodeMapping;
+use App\Components\Integrations\Casino\StatusCode;
 
 class CasinoTemplate implements IExceptionTemplate
 {
@@ -22,14 +23,14 @@ class CasinoTemplate implements IExceptionTemplate
     {
         $this->item = $item;
 
-        $code = (int)$this->useElement('code', 0);
+        $code = (int)$this->useElement('code', StatusCode::SERVER_ERROR);
         $message = $this->useElement('message', 'Unknown');
 
         $codeMap = CodeMapping::getByErrorCode($code);
 
         if($codeMap){
             $code = $codeMap['code'];
-            $message = ($code == 0 && $isApiException === true) ? $message : $codeMap['message'];
+            $message = ($code == StatusCode::SERVER_ERROR && $isApiException === true) ? $message : $codeMap['message'];
         }
 
         $view = [
