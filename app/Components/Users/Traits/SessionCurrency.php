@@ -16,7 +16,7 @@ trait SessionCurrency
     protected $redisKey;
 
     protected function setSessionCurrency($currency, $userId){
-        Redis::setEx($this->redisKey . $userId . ':currency', 604800, $currency);
+        Redis::setEx($this->redisKey . $userId . ':currency', 605, $currency);
     }
 
     protected function validateSessionCurrency($activeCurrency, $userId){
