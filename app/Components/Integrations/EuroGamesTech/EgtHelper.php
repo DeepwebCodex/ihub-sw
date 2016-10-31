@@ -11,7 +11,7 @@ use App\Exceptions\Api\ApiHttpException;
 
 class EgtHelper
 {
-    const DEFENCE_CODE_EXPIRATION_TIME = 120;
+    const DEFENCE_CODE_EXPIRATION_TIME = 2;
 
     public static function generateDefenceCode(int $userId, string $currency, $time = null){
 

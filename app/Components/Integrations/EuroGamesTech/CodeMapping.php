@@ -7,6 +7,7 @@
  */
 
 namespace App\Components\Integrations\EuroGamesTech;
+use App\Components\Integrations\EuroGamesTech\StatusCode;
 
 
 use App\Components\Integrations\CodeMappingBase;
@@ -15,68 +16,68 @@ class CodeMapping extends CodeMappingBase
 {
     public static function getMapping(){
         return [
-            1000 => [
+            StatusCode::OK => [
                 'message'   => 'OK',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::SUCCESS]
             ],
-            1100 => [
+            StatusCode::DUPLICATE => [
                 'message'   => 'Transaction duplicate',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::DUPLICATE]
             ],
-            1300 => [
+            StatusCode::OK_DO_REALITY_CHECK => [
                 'message'   => 'Success (player protection)',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::SUCCESS]
             ],
-            1400 => [
+            StatusCode::OK_90_TIME_PROXIMITY_ALERT => [
                 'message'   => 'Success - time is almost out (player protection)',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::SUCCESS]
             ],
-            1500 => [
+            StatusCode::OK_10_PERCENT_CREDIT_LEFT_ALERT => [
                 'message'   => 'Success - low funds (player protection)',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::SUCCESS]
             ],
-            2000 => [
+            StatusCode::TIMED_OUT => [
                 'message'   => 'Timed out',
                 'map'       => [-1],
                 'attribute' => null,
                 'meanings'  => [self::TIMED_OUT]
             ],
-            3000 => [
+            StatusCode::INTERNAL_SERVER_ERROR => [
                 'message'   => 'Server error',
                 'map'       => [],
                 'attribute' => null,
                 'default'   => true,
                 'meanings'  => [self::SERVER_ERROR, self::USER_NOT_FOUND]
             ],
-            3100 => [
+            StatusCode::INSUFFICIENT_FUNDS => [
                 'message'   => 'Insufficient funds',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::NO_MONEY]
             ],
-            3300 => [
+            StatusCode::BET_LIMIT_REACHED => [
                 'message'   => 'Bet limit reached',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::BET_LIMIT]
             ],
-            3400 => [
+            StatusCode::LOSS_LIMIT_REACHED => [
                 'message'   => 'Loss limit reached',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => []
             ],
-            3500 => [
+            StatusCode::SESSION_TIME_LIMIT_REACHED => [
                 'message'   => 'Session time limit reached',
                 'map'       => [],
                 'attribute' => null,

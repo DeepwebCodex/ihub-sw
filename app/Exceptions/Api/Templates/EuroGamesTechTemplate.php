@@ -10,6 +10,7 @@ namespace App\Exceptions\Api\Templates;
 
 
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
+use \App\Components\Integrations\EuroGamesTech\StatusCode;
 
 class EuroGamesTechTemplate implements IExceptionTemplate
 {
@@ -19,7 +20,7 @@ class EuroGamesTechTemplate implements IExceptionTemplate
     {
         $this->item = $item;
 
-        $code = (int)$this->useElement('code', 3000);
+        $code = (int)$this->useElement('code', StatusCode::INTERNAL_SERVER_ERROR);
         $message = $this->useElement('message', 'Unknown');
 
         //503 error case
@@ -31,7 +32,8 @@ class EuroGamesTechTemplate implements IExceptionTemplate
 
         if($codeMap){
             $code = $codeMap['code'];
-            $message = (($code == 3000 || ($code == 3100 && $message != 'Unknown')) && $isApiException == true) ? $message : $codeMap['message'];
+            $message = (($code == StatusCode::INTERNAL_SERVER_ERROR ||
+                    ($code == StatusCode::INSUFFICIENT_FUNDS && $message != 'Unknown')) && $isApiException == true) ? $message : $codeMap['message'];
         }
 
         $balance = $this->useElement('Balance', null);
