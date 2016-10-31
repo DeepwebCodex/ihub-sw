@@ -5,6 +5,7 @@ namespace App\Http\Requests\Casino;
 
 use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\Casino\CodeMapping;
+use App\Components\Integrations\Casino\StatusCode;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
@@ -54,7 +55,7 @@ class BaseCasinoRequest extends ApiRequest implements ApiValidationInterface
         throw new ApiHttpException('400',
             array_get($firstError, 'message', 'Invalid input'),
             [
-                'code' => array_get($firstError, 'code', 0)
+                'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
             ]
         );
     }
