@@ -1,11 +1,14 @@
 <?php
 
 use App\Components\Transactions\TransactionRequest;
+use \App\Components\Integrations\EuroGamesTech\EgtHelper;
+use \App\Components\Integrations\EuroGamesTech\StatusCode;
 
 class EuroTechGamesApiCest
 {
 
     private $gameNumber;
+    private $defenceCode;
 
     public function _before()
     {
@@ -40,15 +43,35 @@ class EuroTechGamesApiCest
         ];
 
         $I->disableMiddleware();
-        $I->sendPOST('/egt/Authenticate', array_merge($request, [
-            'DefenceCode' => \App\Components\Integrations\EuroGamesTech\EgtHelper::generateDefenceCode($request['PlayerId'], $request['PortalCode'], time())
-        ]));
+        $this->defenceCode = EgtHelper::generateDefenceCode($request['PlayerId'], $request['PortalCode'], time());
+        $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $this->defenceCode]));
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $I->seeXmlResponseIncludes("<Balance>{$testUser->getBalanceInCents()}</Balance>");
+    }
+
+    /**
+     * @depends testMethodAuthenticate
+     * @param ApiTester $I
+     */
+    public function testDefenceCodeDuplicate(ApiTester $I)
+    {
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+
+        $request = [
+            'UserName' => 'FavbetEGTSeamless',
+            'Password' => '6IQLjj8Jowe3X',
+            'PlayerId' => $testUser->id,
+            'PortalCode' => $testUser->getCurrency(),
+            'SessionId' => md5(str_random())
+        ];
+        $I->disableMiddleware();
+        $I->sendPOST('/egt/Authenticate', array_merge($request, [ 'DefenceCode' => $this->defenceCode ]));
+        $response = (array)(new SimpleXMLElement($I->grabResponse()));
+        $I->assertEquals(StatusCode::EXPIRED, $response['ErrorCode']);
     }
 
     public function testMethodGetPlayerBalance(ApiTester $I)

@@ -5,6 +5,7 @@ namespace App\Http\Requests\EuroGamesTech;
 
 use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
+use \App\Components\Integrations\EuroGamesTech\StatusCode;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
@@ -54,7 +55,7 @@ class BaseEgtRequest extends ApiRequest implements ApiValidationInterface
         throw new ApiHttpException('400',
             array_get($firstError, 'message', 'Invalid input'),
             [
-                'code' => array_get($firstError, 'code', 3000)
+                'code' => array_get($firstError, 'code', StatusCode::INTERNAL_SERVER_ERROR)
             ]
         );
     }

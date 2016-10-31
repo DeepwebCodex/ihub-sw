@@ -77,7 +77,13 @@ return [
             'driver' => 'redis',
             'connection' => 'default',
             'prefix' => env('REDIS_PREFIX', 'app') . ':sessions'
-        ]
+        ],
+
+        'redis_egt' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'prefix' => env('REDIS_PREFIX', 'app') . ':egt'
+        ],
 
     ],
 
