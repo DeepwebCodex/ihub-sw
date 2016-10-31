@@ -69,7 +69,7 @@ class StatsdService
      */
     protected function incrementStatus(string $status, string $key){
         if($this->service){
-            $this->service->increment($status . $key);
+            $this->service->increment($status . '.' . $key);
         }
     }
 }
