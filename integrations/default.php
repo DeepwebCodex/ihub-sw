@@ -14,6 +14,7 @@ return [
         'secret'        => 'Qasdf3QEFDDCS2',
         'game_real_url' => 'http://mgs-staging.egtmgs.com:8080/core-web-war/MGL',
         'game_demo_url' => 'https://free.egtmgs.com/favbet.php',
+        'jackpot_url'   => 'http://stats.egtmgs.com/jackpot_FavbetSeamless_EUR.json',
     ],
 
     'goldenRace' => [

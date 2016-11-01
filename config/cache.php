@@ -79,10 +79,16 @@ return [
             'prefix' => env('REDIS_PREFIX', 'app') . ':sessions'
         ],
 
-        'redis_egt' => [
+        'redis_egt_defence_code' => [
             'driver' => 'redis',
             'connection' => 'default',
-            'prefix' => env('REDIS_PREFIX', 'app') . ':egt'
+            'prefix' => env('REDIS_PREFIX', 'app') . ':egt:defence_code'
+        ],
+
+        'redis_egt_jackpot' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'prefix' => env('REDIS_PREFIX', 'app') . ':egt:jackpot'
         ],
 
     ],

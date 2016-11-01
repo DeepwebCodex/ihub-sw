@@ -231,4 +231,12 @@ class EuroTechGamesApiCest
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
     }
+
+    public function testJackpot(ApiTester $I)
+    {
+        $I->disableMiddleware();
+        $I->sendPOST('/internal/egt/jackpot/set');
+        $I->sendPOST('/internal/egt/jackpot/get');
+        $I->seeResponseIsJson();
+    }
 }

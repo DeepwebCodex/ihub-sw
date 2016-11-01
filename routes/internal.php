@@ -25,4 +25,9 @@ Route::group(['prefix' => 'internal'], function () {
         Route::any('allgames/{provider?}/{gameType?}/{lang?}', 'CasinoController@allGames');
         Route::any('allseo/{typeEntity?}/{entityName?}/{lang?}', 'CasinoController@allSeo');
     });
+
+    Route::group(['prefix' => 'egt/jackpot'], function () {
+        Route::any('set', 'EgtJackpotController@set');
+        Route::any('get', 'EgtJackpotController@get');
+    });
 });
