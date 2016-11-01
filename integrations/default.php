@@ -63,6 +63,8 @@ return [
         'info_url' => null,
         'rounds_map' => [1 => 31, 2 => 32, 3 => 33, 4 => 34, 5 => 35, 6 => 36],
         'scope_type' => ['point' => 1, 'knockdown' => 33, 'winner' => 12],
+        'type_participant' => 'athlete',
+        'status_type' => 'notstarted',
         'event_type' => 'prebet',
         'locked' => 'no',
         'weigh' => 100,

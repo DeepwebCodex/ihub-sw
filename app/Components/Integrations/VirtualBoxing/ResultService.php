@@ -3,7 +3,8 @@
 namespace App\Components\Integrations\VirtualBoxing;
 
 use App\Components\Integrations\VirtualSports\ConfigTrait;
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\VirtualBoxing\DuplicateException;
+use App\Exceptions\Api\VirtualBoxing\ErrorException;
 use App\Models\Line\Event;
 use App\Models\Line\ResultGame;
 use App\Models\Line\ResultGameTotal;
@@ -36,7 +37,7 @@ class ResultService
     /**
      * @return int
      */
-    public function getEventId()
+    public function getEventId():int
     {
         return $this->eventId;
     }
@@ -45,23 +46,25 @@ class ResultService
      * @param int $eventVbId
      * @param string $tid
      * @param array $rounds
-     * @throws \Exception
+     * @return void
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     * @throws \App\Exceptions\Api\VirtualBoxing\DuplicateException
      */
-    public function setResult(int $eventVbId, string $tid, array $rounds):void
+    public function setResult(int $eventVbId, string $tid, array $rounds)
     {
         $event = EventLink::getByVbId($eventVbId);
         if (!$event) {
-            throw new ApiHttpException(400, 'cant_find_event');
+            throw new ErrorException('cant_find_event');
         }
         $eventId = $event->event_id;
         $this->eventId = $eventId;
         $sportId = $this->getConfigOption('sport_id');
         if ((new Sport())->checkSportEventExists($sportId, $eventId) === false) {
-            throw new ApiHttpException(400, 'cant_find_event');
+            throw new ErrorException('cant_find_event');
         }
 
         if (Result::existsById($tid)) {
-            throw new ApiHttpException(200, 'done_duplicate', compact($eventId, $eventVbId, $tid));
+            throw new DuplicateException(compact($eventId, $eventVbId, $tid));
         }
         $mapResult = $this->mapResult($eventId, $rounds);
 
@@ -70,17 +73,17 @@ class ResultService
                 foreach ($rt as $params) {
                     $resultGameModel = new ResultGame($params);
                     if (!$resultGameModel->save()) {
-                        throw new ApiHttpException(400, 'cant_insert_result');
+                        throw new ErrorException('cant_insert_result');
                     }
                 }
             }
             if (!ResultGameTotal::updateResultGameTotal($mapResult['result_game_total'], $mapResult['event_id'])) {
-                throw new ApiHttpException(400, "Can't update result total");
+                throw new ErrorException("Can't update result total");
             }
 
             $resultModel = new Result(['tid' => $tid]);
             if (!$resultModel->save()) {
-                throw new ApiHttpException(400, "Can't insert result");
+                throw new ErrorException("Can't insert result");
             }
 
             ResultGame::updateApprove($eventId);
@@ -91,7 +94,7 @@ class ResultService
      * @param int $eventId
      * @param array $rounds
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     protected function mapResult(int $eventId, array $rounds):array
     {
@@ -183,9 +186,9 @@ class ResultService
     }
 
     /**
-     * @param $round
+     * @param int $round
      * @return int
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     protected function mapResultType(int $round):int
     {
@@ -197,7 +200,7 @@ class ResultService
      * @param array $participants
      * @param int $resultType
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     protected function prepareInsertEmpty(int $eventId, array $participants, int $resultType):array
     {
@@ -221,7 +224,7 @@ class ResultService
     /**
      * @param string $scope
      * @return int
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     protected function mapScope(string $scope):int
     {
@@ -229,37 +232,37 @@ class ResultService
     }
 
     /**
-     * @param $eventId
+     * @param int $eventId
      * @return void
-     * @throws \Exception
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    public function initResultEvent(int $eventId):void
+    public function initResultEvent(int $eventId)
     {
         $eventType = $this->getConfigOption('event_type');
 
         $event = new Event();
 
+        $validateValue = function ($value) {
+            if (!$value) {
+                throw new ErrorException('init_result');
+            }
+        };
+
         $scopeData = $event->preGetScope($eventId, $eventType);
-        if (!$scopeData) {
-            throw new ApiHttpException(400, 'init_result');
-        }
+        $validateValue($scopeData);
 
-        $participant = $event->preGetParticipant($eventId);
-        if (!$participant) {
-            throw new ApiHttpException(400, 'init_result');
-        }
+        $participants = $event->preGetParticipant($eventId);
+        $validateValue($participants);
 
-        $resultType = $event->preGetPeriodStart($eventId, $eventType);
-        if (!$resultType) {
-            throw new ApiHttpException(400, 'init_result');
-        }
+        $resultTypes = $event->preGetPeriodStart($eventId, $eventType);
+        $validateValue($resultTypes);
 
-        (new ResultGame)->checkResultTable($eventId, $resultType, $participant, $scopeData);
+        (new ResultGame)->checkResultTable($eventId, $resultTypes, $participants, $scopeData);
 
         ResultGameTotal::insertResultGameTotal($eventId, [
             'result_total' => '',
             'result_total_json' => '',
-            'result_type_id' => $resultType[0]['id']
+            'result_type_id' => $resultTypes[0]['id']
         ]);
     }
 }

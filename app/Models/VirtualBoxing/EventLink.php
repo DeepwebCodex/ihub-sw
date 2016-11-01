@@ -22,7 +22,17 @@ class EventLink extends BaseVirtualBoxingModel
     /**
      * {@inheritdoc}
      */
+    public $incrementing = false;
+
+    /**
+     * {@inheritdoc}
+     */
     public $timestamps = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $fillable = ['event_vb_id', 'event_id'];
 
     /**
      * @param int $eventVbId

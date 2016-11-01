@@ -113,7 +113,7 @@ return [
             'password' => env('DB_PASSWORD_LINE', 'hb8g7t34fbv09t'),
             'charset' => 'utf8',
             'prefix' => '',
-            'schema' => 'public',
+            'schema' => 'trans',
             'sslmode' => 'prefer',
         ],
     ],

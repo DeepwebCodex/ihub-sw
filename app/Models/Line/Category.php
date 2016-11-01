@@ -19,15 +19,20 @@ class Category extends BaseLineModel
     public $timestamps = false;
 
     /**
-     * @param $name
-     * @param $sportId
-     * @return bool
+     * {@inheritdoc}
      */
-    public static function findByNameForSport($name, $sportId)
+    public $fillable = ['name', 'weigh', 'enet_id', 'sport_id', 'gender', 'country_id', 'slug'];
+
+    /**
+     * @param string $name
+     * @param int $sportId
+     * @return static|null
+     */
+    public static function findByNameForSport(string $name, int $sportId)
     {
         return static::where([
             'name' => $name,
             'sport_id' => $sportId
-        ]);
+        ])->first();
     }
 }

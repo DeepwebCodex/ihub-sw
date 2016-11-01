@@ -2,7 +2,6 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
-use App\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Tournament as TournamentModel;
 
 /**
@@ -32,10 +31,10 @@ class Tournament
      * @param $categoryId
      * @param $sportformId
      * @param $sportformLiveId
-     * @return void
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @return bool
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    public function create($tournamentName, $categoryId, $sportformId, $sportformLiveId):void
+    public function create($tournamentName, $categoryId, $sportformId, $sportformLiveId):bool
     {
         $tournament = TournamentModel::findByNameForSport($tournamentName, $categoryId);
         if ($tournament === false) {
@@ -67,20 +66,21 @@ class Tournament
                 'info_url' => $this->getConfigOption('info_url'),
             ]);
             if (!$tournament->save()) {
-                throw new ApiHttpException(400, 'error_create_tournament');
+                return false;
             }
-            $this->tournamentModel = $tournament;
         }
+        $this->tournamentModel = $tournament;
+        return true;
     }
 
     /**
      * @return int
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \RuntimeException
      */
     public function getTournamentId():int
     {
         if (!$this->tournamentModel) {
-            throw new ApiHttpException(400, 'error_create_tournament');
+            throw new \RuntimeException('Tournament not defined');
         }
         return (int)$this->tournamentModel->id;
     }

@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\VirtualBoxing;
 
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\VirtualBoxing\ErrorException;
 
 /**
  * Class MarketOutcomeMapper
@@ -36,29 +36,29 @@ class MarketOutcomeMapper
      * @param array $outcomes
      * @param array $selection
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     public function mapOWMain(int $marketId, array $outcomes, array $selection):array
     {
         $outcomeTypeId = null;
-        foreach ($outcomes as $value) {
-            if ($selection['home'] === 'H' && $value['name'] === 'Home') {
-                $outcomeTypeId = $value['id'];
-                $participant = $this->participantHomeId;
+        $participantId = null;
+        foreach ($outcomes as $outcome) {
+            if ($selection['home'] === 'H' && $outcome['name'] === 'Home') {
+                $outcomeTypeId = $outcome['id'];
+                $participantId = $this->participantHomeId;
                 break;
             }
-            if ($selection['home'] === 'A' && $value['name'] === 'Away') {
-                $outcomeTypeId = $value['id'];
-                $participant = $this->participantAwayId;
+            if ($selection['home'] === 'A' && $outcome['name'] === 'Away') {
+                $outcomeTypeId = $outcome['id'];
+                $participantId = $this->participantAwayId;
                 break;
             }
-            if ($selection['home'] === 'D' && $value['name'] === 'Draw') {
-                $outcomeTypeId = $value['id'];
-                $participant = null;
+            if ($selection['home'] === 'D' && $outcome['name'] === 'Draw') {
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
         }
-        return $this->formatMapResult($marketId, $selection, $outcomeTypeId, 0.00, $participant);
+        return $this->formatMapResult($marketId, $selection, $outcomeTypeId, 0.00, $participantId);
     }
 
     /**
@@ -66,16 +66,16 @@ class MarketOutcomeMapper
      * @param array $outcomes
      * @param array $selection
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     public function mapCSMain(int $marketId, array $outcomes, array $selection):array
     {
         //0-5 4-5  2-5 1-5 6:6 6-5 5-5 5-4 5-6 5-1 5-0 5-3 5-2  3-5
         $outcomeTypeId = null;
-        foreach ($outcomes as $value) {
-            $name = str_replace(':', '-', $value['name']);
+        foreach ($outcomes as $outcome) {
+            $name = str_replace(':', '-', $outcome['name']);
             if ($name === (string)$selection['name']) {
-                $outcomeTypeId = $value['id'];
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
         }
@@ -87,18 +87,18 @@ class MarketOutcomeMapper
      * @param array $outcomes
      * @param array $selection
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     public function mapT65(int $marketId, array $outcomes, array $selection):array
     {
         $outcomeTypeId = null;
-        foreach ($outcomes as $value) {
-            if ((string)$selection['name'] === 'Under 6.5' && $value['name'] === 'Under') {
-                $outcomeTypeId = $value['id'];
+        foreach ($outcomes as $outcome) {
+            if ((string)$selection['name'] === 'Under 6.5' && $outcome['name'] === 'Under') {
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
-            if ((string)$selection['name'] === 'Over 6.5' && $value['name'] === 'Over') {
-                $outcomeTypeId = $value['id'];
+            if ((string)$selection['name'] === 'Over 6.5' && $outcome['name'] === 'Over') {
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
         }
@@ -110,18 +110,18 @@ class MarketOutcomeMapper
      * @param $outcomes
      * @param $selection
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     public function mapOE(int $marketId, array $outcomes, array $selection):array
     {
         $outcomeTypeId = null;
-        foreach ($outcomes as $value) {
-            if ((string)$selection['name'] === 'Even' && $value['name'] === 'Even') {
-                $outcomeTypeId = $value['id'];
+        foreach ($outcomes as $outcome) {
+            if ((string)$selection['name'] === 'Even' && $outcome['name'] === 'Even') {
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
-            if ((string)$selection['name'] === 'Odd' && $value['name'] === 'Odd') {
-                $outcomeTypeId = $value['id'];
+            if ((string)$selection['name'] === 'Odd' && $outcome['name'] === 'Odd') {
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
         }
@@ -133,14 +133,14 @@ class MarketOutcomeMapper
      * @param $outcomes
      * @param $selection
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     public function mapKO1(int $marketId, array $outcomes, array $selection):array
     {
         $outcomeTypeId = null;
-        foreach ($outcomes as $value) {
-            if ((string)$selection['name'] === $value['name']) {
-                $outcomeTypeId = $value['id'];
+        foreach ($outcomes as $outcome) {
+            if ((string)$selection['name'] === $outcome['name']) {
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
         }
@@ -152,18 +152,18 @@ class MarketOutcomeMapper
      * @param $outcomes
      * @param $selection
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     public function mapKO2(int $marketId, array $outcomes, array $selection):array
     {
         $outcomeTypeId = null;
-        foreach ($outcomes as $value) {
-            if ((string)$selection['name'] === 'Y' && $value['name'] === 'Yes') {
-                $outcomeTypeId = $value['id'];
+        foreach ($outcomes as $outcome) {
+            if ((string)$selection['name'] === 'Y' && $outcome['name'] === 'Yes') {
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
-            if ((string)$selection['name'] === 'N' && $value['name'] === 'No') {
-                $outcomeTypeId = $value['id'];
+            if ((string)$selection['name'] === 'N' && $outcome['name'] === 'No') {
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
         }
@@ -175,7 +175,7 @@ class MarketOutcomeMapper
      * @param $outcomes
      * @param $selection
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     public function mapKO3(int $marketId, array $outcomes, array $selection):array
     {
@@ -187,54 +187,54 @@ class MarketOutcomeMapper
      * @param $outcomes
      * @param $selection
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     public function mapKO4(int $marketId, array $outcomes, array $selection):array
     {
         $outcomeTypeId = null;
-        foreach ($outcomes as $value) {
-            if ($selection['home'] === 'H' && $value['name'] === 'Home') {
-                $outcomeTypeId = $value['id'];
-                $participant = $this->participantHomeId;
+        $participantId = null;
+        foreach ($outcomes as $outcome) {
+            if ($selection['home'] === 'H' && $outcome['name'] === 'Home') {
+                $outcomeTypeId = $outcome['id'];
+                $participantId = $this->participantHomeId;
                 break;
             }
-            if ($selection['home'] === 'A' && $value['name'] === 'Away') {
-                $outcomeTypeId = $value['id'];
-                $participant = $this->participantAwayId;
+            if ($selection['home'] === 'A' && $outcome['name'] === 'Away') {
+                $outcomeTypeId = $outcome['id'];
+                $participantId = $this->participantAwayId;
                 break;
             }
-            if ($selection['home'] === 'D' && $value['name'] === 'no knockout') {
-                $outcomeTypeId = $value['id'];
-                $participant = null;
+            if ($selection['home'] === 'D' && $outcome['name'] === 'no knockout') {
+                $outcomeTypeId = $outcome['id'];
                 break;
             }
         }
-        return $this->formatMapResult($marketId, $selection, $outcomeTypeId, 0.0, $participant);
+        return $this->formatMapResult($marketId, $selection, $outcomeTypeId, 0.0, $participantId);
     }
 
     /**
-     * @param $marketId
-     * @param $selection
-     * @param $outcomeTypeId
+     * @param int $marketId
+     * @param array $selection
+     * @param int $outcomeTypeId
      * @param float $dParam
-     * @param $participant
+     * @param $participantId
      * @return array
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     protected function formatMapResult(
         int $marketId,
         array $selection,
-        $outcomeTypeId,
+        int $outcomeTypeId,
         float $dParam = 0.0,
-        $participant = null
+        $participantId = null
     ):array
     {
         if (!$outcomeTypeId) {
-            throw new ApiHttpException(400, 'cant_find_outcome');
+            throw new ErrorException('cant_find_outcome');
         }
         return [
             'event_market_id' => $marketId,
-            'event_participant_id' => $participant,
+            'event_participant_id' => $participantId,
             'outcome_type_id' => $outcomeTypeId,
             'coef' => (string)$selection['price']['dec'],
             'dparam1' => $dParam
