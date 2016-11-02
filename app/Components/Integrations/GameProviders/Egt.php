@@ -3,6 +3,7 @@
 namespace App\Components\Integrations\GameProviders;
 
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
+use App\Components\Integrations\EuroGamesTech\DefenceCode;
 use App\Models\Erlybet\Egt\GamesNew;
 
 /**
@@ -35,7 +36,7 @@ class Egt extends BaseGameProvider implements GameProviderInterface
     public function getGameReal(array $userInfo, array $walletInfo):string
     {
         $userId = $userInfo['id'];
-        $defenceCode = EgtHelper::generateDefenceCode($userId, $walletInfo['currency']);
+        $defenceCode = (new DefenceCode())->generate($userId, $walletInfo['currency']);
 
         $queryData = [
             'defenceCode' => $defenceCode,

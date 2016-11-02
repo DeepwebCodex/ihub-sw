@@ -1,7 +1,7 @@
 <?php
 
 use App\Components\Integrations\Casino\CasinoHelper;
-use App\Components\Integrations\EuroGamesTech\EgtHelper;
+use App\Components\Integrations\EuroGamesTech\DefenceCode;
 use App\Http\Requests\Validation\CasinoValidation;
 use App\Http\Requests\Validation\MicroGamingValidation;
 use Codeception\Util\Stub;
@@ -19,9 +19,9 @@ class CustomValidationTest extends \Codeception\Test\Unit
             'PortalCode' => 'RUB'
         ];
 
-        $this->egtRequestData['DefenceCode'] = EgtHelper::generateDefenceCode($this->egtRequestData['PlayerId'], $this->egtRequestData['PortalCode'], time());
+        $this->egtRequestData['DefenceCode'] = (new DefenceCode)->generate($this->egtRequestData['PlayerId'], $this->egtRequestData['PortalCode'], time());
 
-        $this->egtValidatorStub = Stub::make(\App\Http\Requests\Validation\EuroGamesTechValidation::class, [
+        $this->egtValidatorStub = Stub::construct(\App\Http\Requests\Validation\EuroGamesTechValidation::class, [], [
             'getRequest' => Stub::atLeastOnce(function(){
                 $request = request();
                 $request->merge($this->egtRequestData);
