@@ -9,7 +9,7 @@ namespace App\Components\Integrations\EuroGamesTech;
 class Jackpot
 {
     const EXPIRATION_TIME = 5;
-    const CACHE_KEY = 'egt_jackpot';
+    const CACHE_KEY = 'jackpot';
     /**
      * @var \Illuminate\Contracts\Cache\Repository
      */
@@ -21,7 +21,7 @@ class Jackpot
 
     public function __construct()
     {
-        $this->cache = app('cache')->store('redis_egt_jackpot');
+        $this->cache = app('cache')->store('redis_egt');
         $this->receiver = new JackpotReceiver();
     }
 

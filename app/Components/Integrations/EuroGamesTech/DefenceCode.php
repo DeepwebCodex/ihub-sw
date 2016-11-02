@@ -5,6 +5,8 @@ namespace App\Components\Integrations\EuroGamesTech;
 class DefenceCode
 {
     const EXPIRATION_TIME = 2;
+    const CACHE_KEY = 'defence_code:';
+
     /**
      * @var \Illuminate\Cache\Repository
      */
@@ -12,7 +14,7 @@ class DefenceCode
 
     public function __construct()
     {
-        $this->cache = app('cache')->store('redis_egt_defence_code');
+        $this->cache = app('cache')->store('redis_egt');
     }
 
     /**
@@ -36,7 +38,7 @@ class DefenceCode
      */
     public function isUsed(string $code):bool
     {
-        return !is_null($this->cache->get($code));
+        return !is_null($this->cache->get(self::CACHE_KEY . $code));
     }
 
     /**
@@ -44,7 +46,7 @@ class DefenceCode
      */
     public function setUsed(string $code)
     {
-        $this->cache->add($code, true, self::EXPIRATION_TIME);
+        $this->cache->add(self::CACHE_KEY . $code, true, self::EXPIRATION_TIME);
     }
 
     /**
