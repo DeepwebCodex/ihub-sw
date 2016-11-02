@@ -13,7 +13,8 @@ return [
         'Password'      => '6IQLjj8Jowe3X',
         'secret'        => 'Qasdf3QEFDDCS2',
         'game_real_url' => 'http://egtstageproxy.web/core-web-war/MGL',
-        'game_demo_url' => 'http://egtdemoproxy.web/favbet.php'
+        'game_demo_url' => 'http://egtdemoproxy.web/favbet.php',
+        'jackpot_url'   => 'http://stats.egtmgs.com/jackpot_FavbetSeamless_EUR.json',
     ],
 
     'goldenRace' => [

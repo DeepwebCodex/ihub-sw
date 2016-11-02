@@ -89,6 +89,6 @@ class EgtHelper
      */
     private static function cache()
     {
-        return app('cache')->store('redis_egt');
+        return app('cache')->store('redis_egt_defence_code');
     }
 }
