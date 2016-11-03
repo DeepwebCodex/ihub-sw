@@ -3,38 +3,45 @@
 namespace App\Http\Requests\Validation;
 
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
+use App\Components\Integrations\EuroGamesTech\DefenceCode;
 use App\Components\Integrations\EuroGamesTech\StatusCode;
 use App\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Request;
 
 class EuroGamesTechValidation
 {
+    /**
+     * @var DefenceCode
+     */
+    private $defenceCode;
+
+    public function __construct()
+    {
+        $this->defenceCode = new DefenceCode();
+    }
+
     public function checkDefenceCode($attribute, $value, $parameters, $validator){
         if(!($request = $this->getRequest())){
             return false;
         }
 
-        if(EgtHelper::isDefenceCodeUsed($value)){
+        if($this->defenceCode->isUsed($value)){
             throw new ApiHttpException(400, "Defence code is deactivated", ['code' => StatusCode::EXPIRED]);
         }
 
         $userId = $request->input('PlayerId');
-        $currency = substr($request->input('PortalCode'), -3);
+        $currency = EgtHelper::getCurrencyFromPortalCode($request->input('PortalCode'));
 
-        list($hash, $time) = explode('-', $value);
-
-        if($value == EgtHelper::generateDefenceCode($userId, $currency, $time)){
-            EgtHelper::setDefenceCodeUsed($value);
+        if($this->defenceCode->isCorrect($value, $userId, $currency)){
+            $this->defenceCode->setUsed($value);
             return true;
         }
 
-        throw new ApiHttpException(400, "Defence code expired", ['code' => StatusCode::EXPIRED]);
+        throw new ApiHttpException(400, "Defence code is wrong", ['code' => StatusCode::EXPIRED]);
     }
 
     public function checkExpirationTime($attribute, $value, $parameters, $validator){
-        list($hash, $time) = explode('-', $value);
-
-        if((time() - $time) > EgtHelper::DEFENCE_CODE_EXPIRATION_TIME){
+        if($this->defenceCode->isExpired($value)){
             throw new ApiHttpException(400, "Defence code expired", ['code' => StatusCode::EXPIRED]);
         }
 

@@ -3,6 +3,7 @@
 use App\Components\Transactions\TransactionRequest;
 use \App\Components\Integrations\EuroGamesTech\EgtHelper;
 use \App\Components\Integrations\EuroGamesTech\StatusCode;
+use \App\Components\Integrations\EuroGamesTech\DefenceCode;
 
 class EuroTechGamesApiCest
 {
@@ -43,7 +44,7 @@ class EuroTechGamesApiCest
         ];
 
         $I->disableMiddleware();
-        $this->defenceCode = EgtHelper::generateDefenceCode($request['PlayerId'], $request['PortalCode'], time());
+        $this->defenceCode = (new DefenceCode())->generate($request['PlayerId'], $request['PortalCode'], time());
         $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $this->defenceCode]));
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -89,9 +90,7 @@ class EuroTechGamesApiCest
         ];
 
         $I->disableMiddleware();
-        $I->sendPOST('/egt/GetPlayerBalance', array_merge($request, [
-            'DefenceCode' => \App\Components\Integrations\EuroGamesTech\EgtHelper::generateDefenceCode($request['PlayerId'], $request['PortalCode'], time())
-        ]));
+        $I->sendPOST('/egt/GetPlayerBalance', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
@@ -121,9 +120,7 @@ class EuroTechGamesApiCest
         ];
 
         $I->disableMiddleware();
-        $I->sendPOST('/egt/Withdraw', array_merge($request, [
-            'DefenceCode' => \App\Components\Integrations\EuroGamesTech\EgtHelper::generateDefenceCode($request['PlayerId'], $request['PortalCode'], time())
-        ]));
+        $I->sendPOST('/egt/Withdraw', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
@@ -162,9 +159,7 @@ class EuroTechGamesApiCest
         ];
 
         $I->disableMiddleware();
-        $I->sendPOST('/egt/Deposit', array_merge($request, [
-            'DefenceCode' => \App\Components\Integrations\EuroGamesTech\EgtHelper::generateDefenceCode($request['PlayerId'], $request['PortalCode'], time())
-        ]));
+        $I->sendPOST('/egt/Deposit', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
@@ -204,9 +199,7 @@ class EuroTechGamesApiCest
         ];
 
         $I->disableMiddleware();
-        $I->sendPOST('/egt/WithdrawAndDeposit', array_merge($request, [
-            'DefenceCode' => \App\Components\Integrations\EuroGamesTech\EgtHelper::generateDefenceCode($request['PlayerId'], $request['PortalCode'], time())
-        ]));
+        $I->sendPOST('/egt/WithdrawAndDeposit', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
