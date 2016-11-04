@@ -1,15 +1,29 @@
 <?php
 
+namespace api\EuroGamesTech;
+
 use App\Components\Transactions\TransactionRequest;
-use \App\Components\Integrations\EuroGamesTech\EgtHelper;
 use \App\Components\Integrations\EuroGamesTech\StatusCode;
 use \App\Components\Integrations\EuroGamesTech\DefenceCode;
+use \EuroGamesTech\TestData;
+use \EuroGamesTech\TestUser;
 
-class EuroTechGamesApiCest
+class EuroGamesTechApiCest
 {
 
     private $gameNumber;
     private $defenceCode;
+    private $data;
+    /**
+     * @var TestUser
+     */
+    private $testUser;
+
+    public function __construct()
+    {
+        $this->testUser = new TestUser();
+        $this->data = new TestData($this->testUser);
+    }
 
     public function _before()
     {
@@ -21,7 +35,7 @@ class EuroTechGamesApiCest
     }
 
     // tests
-    public function testMethodNotFound(ApiTester $I)
+    public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendGET('/egt');
         $I->seeResponseCodeIs(404);
@@ -31,17 +45,9 @@ class EuroTechGamesApiCest
         $I->seeXmlResponseIncludes("<ErrorMessage>Server error</ErrorMessage>");
     }
 
-    public function testMethodAuthenticate(ApiTester $I)
+    public function testMethodAuthenticate(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'SessionId' => md5(str_random())
-        ];
+        $request = $this->data->authenticate();
 
         $I->disableMiddleware();
         $this->defenceCode = (new DefenceCode())->generate($request['PlayerId'], $request['PortalCode'], time());
@@ -51,43 +57,26 @@ class EuroTechGamesApiCest
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
-        $I->seeXmlResponseIncludes("<Balance>{$testUser->getBalanceInCents()}</Balance>");
+        $I->seeXmlResponseIncludes("<Balance>{$this->testUser->getBalanceInCents()}</Balance>");
     }
 
     /**
      * @depends testMethodAuthenticate
-     * @param ApiTester $I
+     * @param \ApiTester $I
      */
-    public function testDefenceCodeDuplicate(ApiTester $I)
+    public function testDefenceCodeDuplicate(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $request = $this->data->authenticate();
 
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'SessionId' => md5(str_random())
-        ];
         $I->disableMiddleware();
-        $I->sendPOST('/egt/Authenticate', array_merge($request, [ 'DefenceCode' => $this->defenceCode ]));
-        $response = (array)(new SimpleXMLElement($I->grabResponse()));
+        $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $this->defenceCode]));
+        $response = (array)(new \SimpleXMLElement($I->grabResponse()));
         $I->assertEquals(StatusCode::EXPIRED, $response['ErrorCode']);
     }
 
-    public function testMethodGetPlayerBalance(ApiTester $I)
+    public function testMethodGetPlayerBalance(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random())
-        ];
+        $request = $this->data->getBalance();
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/GetPlayerBalance', $request);
@@ -96,28 +85,14 @@ class EuroTechGamesApiCest
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
-        $I->seeXmlResponseIncludes("<Balance>{$testUser->getBalanceInCents()}</Balance>");
+        $I->seeXmlResponseIncludes("<Balance>{$this->testUser->getBalanceInCents()}</Balance>");
     }
 
-    public function testMethodWithdraw(ApiTester $I)
+    public function testMethodWithdraw(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $this->gameNumber = random_int(100000, 9900000);
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random()),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => $this->gameNumber,
-            'Amount'    => 10,
-            'Reason'    => 'ROUND_BEGIN'
-        ];
+        $balance = $this->testUser->getBalanceInCents();
+        $request = $this->data->bet();
+        $this->gameNumber = $request['GameNumber'];
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/Withdraw', $request);
@@ -126,7 +101,7 @@ class EuroTechGamesApiCest
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
-        $expectedBalance = $testUser->getBalanceInCents()-10;
+        $expectedBalance = $balance - $this->data->getAmount();
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of transaction applied');
@@ -138,25 +113,11 @@ class EuroTechGamesApiCest
         ]);
     }
 
-    public function testMethodDeposit(ApiTester $I)
+    public function testMethodDeposit(\ApiTester $I)
     {
         $this->testMethodWithdraw($I);
-
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random()),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => $this->gameNumber,
-            'Amount'    => 10,
-            'Reason'    => 'ROUND_END'
-        ];
+        $balance = $this->testUser->getBalanceInCents();
+        $request = $this->data->win($this->gameNumber);
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/Deposit', $request);
@@ -165,7 +126,7 @@ class EuroTechGamesApiCest
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
-        $expectedBalance = $testUser->getBalanceInCents()+10;
+        $expectedBalance = $balance + $this->data->getAmount();
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of transaction applied');
@@ -177,26 +138,9 @@ class EuroTechGamesApiCest
         ]);
     }
 
-    public function testWithdrawAndDeposit(ApiTester $I)
+    public function testWithdrawAndDeposit(\ApiTester $I)
     {
-        $this->gameNumber = random_int(100000, 9900000);
-
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random()),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => $this->gameNumber,
-            'Amount'    => 10,
-            'WinAmount' => 10,
-            'Reason'    => 'ROUND_END'
-        ];
+        $request = $this->data->betWin();
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/WithdrawAndDeposit', $request);
@@ -206,7 +150,7 @@ class EuroTechGamesApiCest
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $I->expect('unchanged balance after operation');
-        $expectedBalance = $testUser->getBalanceInCents();
+        $expectedBalance = $this->testUser->getBalanceInCents();
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of both transactions applied');
@@ -225,7 +169,7 @@ class EuroTechGamesApiCest
         ]);
     }
 
-    public function testJackpot(ApiTester $I)
+    public function testJackpot(\ApiTester $I)
     {
         $I->disableMiddleware();
         $I->sendPOST('/internal/egt/jackpot/set');

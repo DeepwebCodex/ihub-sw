@@ -60,7 +60,7 @@ class CustomValidationTest extends \Codeception\Test\Unit
         });
     }
 
-    public function testEuroTechGamesValidatorDefenceCode()
+    public function testEuroGamesTechValidatorDefenceCode()
     {
         $this->specify("Check defence code of a request", function(){
             verify("Validation passes", $this->egtValidatorStub->checkDefenceCode(null, $this->egtRequestData['DefenceCode'], null, null))->true();
@@ -71,7 +71,7 @@ class CustomValidationTest extends \Codeception\Test\Unit
         });
     }
 
-    public function testEuroTechGamesValidatorExpirationTime()
+    public function testEuroGamesTechValidatorExpirationTime()
     {
         $this->specify("Check check expiration time", function() {
             verify("Validation passes", $this->egtValidatorStub->checkExpirationTime(null, $this->egtRequestData['DefenceCode'], null, null))->true();

@@ -1,13 +1,28 @@
 <?php
 
+namespace api\EuroGamesTech;
+
 use App\Components\Transactions\TransactionRequest;
 use App\Models\Transactions;
+use \EuroGamesTech\TestData;
+use \EuroGamesTech\TestUser;
 
-class EuroTechGamesBorderlineApiCest
+
+class EuroGamesTechBorderlineApiCest
 {
 
-    private $gameNumber;
     private $options;
+    private $data;
+    /**
+     * @var TestUser
+     */
+    private $testUser;
+
+    public function __construct()
+    {
+        $this->testUser = new TestUser();
+        $this->data = new TestData($this->testUser);
+    }
 
     public function _before()
     {
@@ -19,25 +34,9 @@ class EuroTechGamesBorderlineApiCest
     }
 
     // tests
-    public function testNoBetWin(ApiTester $I)
+    public function testNoBetWin(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $this->gameNumber = random_int(100000, 9900000);
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random()),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => $this->gameNumber,
-            'Amount'    => 10,
-            'Reason'    => 'ROUND_END'
-        ];
+        $request = $this->data->win();
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/Deposit', $request);
@@ -56,25 +55,9 @@ class EuroTechGamesBorderlineApiCest
         ]);
     }
 
-    public function testStoragePending(ApiTester $I)
+    public function testStoragePending(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $this->gameNumber = random_int(100000, 9900000);
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random()),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => $this->gameNumber,
-            'Amount'    => 10,
-            'Reason'    => 'ROUND_BEGIN'
-        ];
+        $request = $this->data->bet();
 
         Transactions::create([
             'operation_id' => $I->grabService('AccountManager')->getFreeOperationId(),
@@ -85,9 +68,9 @@ class EuroTechGamesBorderlineApiCest
             'partner_id' => request()->server('PARTNER_ID'),
             'cashdesk' => request()->server('FRONTEND_NUM'),
             'status' => TransactionRequest::STATUS_PENDING,
-            'currency' => $testUser->getCurrency(),
+            'currency' => $this->testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameNumber, array_get($this->options, 'service_id')),
+            'object_id' => \App\Models\ObjectIdMap::getObjectId($request['GameNumber'], array_get($this->options, 'service_id')),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -114,25 +97,9 @@ class EuroTechGamesBorderlineApiCest
         ]);
     }
 
-    public function testTransactionDuplicate(ApiTester $I)
+    public function testTransactionDuplicate(\ApiTester $I)
     {
-        $this->gameNumber = random_int(100000, 9900000);
-
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random()),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => $this->gameNumber,
-            'Amount'    => 10,
-            'Reason'    => 'ROUND_BEGIN'
-        ];
+        $request = $this->data->bet();
 
         Transactions::create([
             'operation_id' => $I->grabService('AccountManager')->getFreeOperationId(),
@@ -143,9 +110,9 @@ class EuroTechGamesBorderlineApiCest
             'partner_id' => request()->server('PARTNER_ID'),
             'cashdesk' => request()->server('FRONTEND_NUM'),
             'status' => TransactionRequest::STATUS_COMPLETED,
-            'currency' => $testUser->getCurrency(),
+            'currency' => $this->testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameNumber, array_get($this->options, 'service_id')),
+            'object_id' => \App\Models\ObjectIdMap::getObjectId($request['GameNumber'], array_get($this->options, 'service_id')),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -163,28 +130,13 @@ class EuroTechGamesBorderlineApiCest
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1100</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>Transaction duplicate</ErrorMessage>");
-        $I->seeXmlResponseIncludes("<Balance>{$testUser->getBalanceInCents()}</Balance>");
+        $I->seeXmlResponseIncludes("<Balance>{$this->testUser->getBalanceInCents()}</Balance>");
     }
 
-    public function testZeroWin(ApiTester $I)
+    public function testZeroWin(\ApiTester $I)
     {
-        $this->gameNumber = random_int(100000, 9900000);
-
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random()),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => $this->gameNumber,
-            'Amount'    => 0,
-            'Reason'    => 'ROUND_END'
-        ];
+        $request = $this->data->win();
+        $request['Amount'] = 0;
 
         Transactions::create([
             'operation_id' => $I->grabService('AccountManager')->getFreeOperationId(),
@@ -195,9 +147,9 @@ class EuroTechGamesBorderlineApiCest
             'partner_id' => request()->server('PARTNER_ID'),
             'cashdesk' => request()->server('FRONTEND_NUM'),
             'status' => TransactionRequest::STATUS_COMPLETED,
-            'currency' => $testUser->getCurrency(),
+            'currency' => $this->testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameNumber, array_get($this->options, 'service_id')),
+            'object_id' => \App\Models\ObjectIdMap::getObjectId($request['GameNumber'], array_get($this->options, 'service_id')),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -215,7 +167,7 @@ class EuroTechGamesBorderlineApiCest
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
-        $I->seeXmlResponseIncludes("<Balance>{$testUser->getBalanceInCents()}</Balance>");
+        $I->seeXmlResponseIncludes("<Balance>{$this->testUser->getBalanceInCents()}</Balance>");
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(\App\Models\Transactions::class, [
@@ -226,26 +178,9 @@ class EuroTechGamesBorderlineApiCest
         ]);
     }
 
-    public function testMultiWin(ApiTester $I)
+    public function testMultiWin(\ApiTester $I)
     {
-        $this->gameNumber = random_int(100000, 9900000);
-
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random()),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => $this->gameNumber,
-            'Amount'    => 10,
-            'WinAmount' => 10,
-            'Reason'    => 'ROUND_END'
-        ];
+        $request = $this->data->betWin();
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/WithdrawAndDeposit', $request);
@@ -255,7 +190,7 @@ class EuroTechGamesBorderlineApiCest
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $I->expect('unchanged balance after operation');
-        $expectedBalance = $testUser->getBalanceInCents();
+        $expectedBalance = $this->testUser->getBalanceInCents();
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of both transactions applied');
@@ -273,21 +208,8 @@ class EuroTechGamesBorderlineApiCest
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $request = [
-            'UserName' => 'FavbetEGTSeamless',
-            'Password' => '6IQLjj8Jowe3X',
-            'PlayerId' => $testUser->id,
-            'PortalCode' => $testUser->getCurrency(),
-            'Currency' => $testUser->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'SessionId' => md5(str_random()),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => $this->gameNumber,
-            'Amount'    => 10,
-            'Reason'    => 'JACKPOT_END'
-        ];
+        $request = $this->data->win($request['GameNumber']);
+        $request['Reason'] = 'JACKPOT_END';
 
         $I->sendPOST('/egt/Deposit', $request);
         $I->seeResponseCodeIs(200);
@@ -295,7 +217,7 @@ class EuroTechGamesBorderlineApiCest
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
-        $expectedBalance = $testUser->getBalanceInCents()+10;
+        $expectedBalance += $this->data->getAmount();
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of transaction applied');
