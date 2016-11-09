@@ -3,10 +3,10 @@
 namespace App\Http\Requests\GameSession;
 
 /**
- * Class SessionStartRequest
+ * Class SessionCreateRequest
  * @package App\Http\Requests\GameSession
  */
-class SessionStartRequest extends BaseGameSessionRequest
+class SessionCreateRequest extends BaseGameSessionRequest
 {
     /**
      * @return array

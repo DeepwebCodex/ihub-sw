@@ -2,25 +2,43 @@
 
 namespace App\Components\Integrations\GameSession;
 
-use Illuminate\Support\Facades\Redis;
-
 /**
  * Class GameSession
  * @package App\Components
  */
 class GameSessionService
 {
-    use Serializer;
+    use Serializer, SessionStore;
 
     const CONFIG_PREFIX = 'session.game_session';
 
+    /**
+     * @var bool
+     */
     private $sessionStarted = false;
 
+    /**
+     * @var array
+     */
     private $sessionData;
 
+    /**
+     * @var string
+     */
     private $sessionId;
 
     /**
+     * @param $optionName
+     * @return mixed
+     */
+    protected function getConfigOption($optionName)
+    {
+        return config(self::CONFIG_PREFIX . '.' . $optionName);
+    }
+
+    /**
+     * Create session
+     *
      * @param array $sessionData
      * @return string
      */
@@ -39,6 +57,8 @@ class GameSessionService
     }
 
     /**
+     * Make session id
+     *
      * @param array $data
      * @return string
      */
@@ -47,29 +67,23 @@ class GameSessionService
         $sessionKey = implode('', array_values($data));
         $time = microtime(true);
 
-        return hash_hmac('sha512', $sessionKey . $time, config(self::CONFIG_PREFIX . '.storage_secret'));
-    }
-
-    protected function writeSessionDataStore()
-    {
-        $sessionData = $this->serialize($this->sessionData);
-        Redis::setEx(
-            $this->getStorageKey($this->sessionId),
-            config('session.game_session.ttl'),
-            $sessionData
-        );
+        return hash_hmac('sha512', $sessionKey . $time, $this->getConfigOption('storage_secret'));
     }
 
     /**
+     * Get session storage key
+     *
      * @param string $sessionId
      * @return string
      */
-    protected function getStorageKey(string $sessionId)
+    protected function getStorageKey(string $sessionId):string
     {
-        return config(self::CONFIG_PREFIX . '.storage_key_prefix') . ':' . $sessionId;
+        return $this->getConfigOption('storage_key_prefix') . ':' . $sessionId;
     }
 
     /**
+     * Start an existing session
+     *
      * @param string $sessionId
      * @throws \RuntimeException
      */
@@ -82,38 +96,8 @@ class GameSessionService
     }
 
     /**
-     * @param string $sessionId
-     * @throws \RuntimeException
-     */
-    protected function readSessionDataStore(string $sessionId)
-    {
-        $this->checkSessionExistsStore($sessionId);
-
-        $sessionData = Redis::get($this->getStorageKey($sessionId));
-        $this->prolongSessionStore($sessionId);
-        $this->sessionData = $this->unserialize($sessionData);
-    }
-
-    /**
-     * @param string $sessionId
-     * @throws \RuntimeException
-     */
-    protected function checkSessionExistsStore(string $sessionId)
-    {
-        if (!Redis::exists($this->getStorageKey($sessionId))) {
-            throw new \RuntimeException('Session does not exist');
-        }
-    }
-
-    /**
-     * @param string $sessionId
-     */
-    protected function prolongSessionStore(string $sessionId)
-    {
-        Redis::expire($this->getStorageKey($sessionId), config(self::CONFIG_PREFIX . '.ttl'));
-    }
-
-    /**
+     * Prolong session
+     *
      * @param string $sessionId
      * @throws \RuntimeException
      */
@@ -124,6 +108,8 @@ class GameSessionService
     }
 
     /**
+     * Regenerate session
+     *
      * @param string $sessionId
      * @return string
      * @throws \RuntimeException
@@ -136,15 +122,17 @@ class GameSessionService
 
         $this->sessionId = $newSessionId;
 
-        Redis::del($this->getStorageKey($sessionId));
+        $this->deleteSessionStore($sessionId);
         $this->writeSessionDataStore();
 
         return $newSessionId;
     }
 
     /**
+     * Get value for session
+     *
      * @param string $key
-     * @param null $default
+     * @param mixed $default
      * @return mixed
      * @throws \RuntimeException
      */
@@ -155,6 +143,8 @@ class GameSessionService
     }
 
     /**
+     * Validate session started
+     *
      * @throws \RuntimeException
      */
     protected function validateSessionStarted()
@@ -165,6 +155,8 @@ class GameSessionService
     }
 
     /**
+     * Check is session started
+     *
      * @return boolean
      */
     public function isSessionStarted(): bool
@@ -173,8 +165,10 @@ class GameSessionService
     }
 
     /**
+     * Set value for session
+     *
      * @param string $key
-     * @param $value
+     * @param mixed $value
      * @return array
      * @throws \Exception
      */
@@ -184,6 +178,11 @@ class GameSessionService
         return array_set($this->sessionData, $key, $value);
     }
 
+    /**
+     * Save session data to store
+     *
+     * @throws \RuntimeException
+     */
     public function save()
     {
         $this->validateSessionStarted();

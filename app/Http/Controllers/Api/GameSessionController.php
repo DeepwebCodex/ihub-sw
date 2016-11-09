@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\Templates\GameSessionTemplate;
-use App\Http\Requests\GameSession\SessionStartRequest;
+use App\Http\Requests\GameSession\SessionCreateRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 
@@ -27,10 +27,10 @@ class GameSessionController extends BaseApiController
     }
 
     /**
-     * @param SessionStartRequest $request
+     * @param SessionCreateRequest $request
      * @return Response
      */
-    public function create(SessionStartRequest $request)
+    public function create(SessionCreateRequest $request)
     {
         $input = Input::only('user_id', 'project_id', 'game_id', 'currency');
 
