@@ -10,17 +10,27 @@ use Illuminate\Support\Facades\Redis;
  */
 trait SessionStore
 {
+    use Serializer;
+
     /**
      * Write session data to store
      */
     protected function writeSessionDataStore()
     {
         $sessionData = $this->serialize($this->sessionData);
-        Redis::setEx(
-            $this->getStorageKey($this->sessionId),
-            $this->getConfigOption('ttl'),
-            $sessionData
-        );
+
+        Redis::setEx($this->getStorageKey($this->sessionId), $this->getConfigOption('ttl'), $sessionData);
+    }
+
+    /**
+     * Get session storage key
+     *
+     * @param string $sessionId
+     * @return string
+     */
+    protected function getStorageKey(string $sessionId):string
+    {
+        return $this->getConfigOption('storage_key_prefix') . ':' . $sessionId;
     }
 
     /**

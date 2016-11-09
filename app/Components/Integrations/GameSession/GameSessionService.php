@@ -8,7 +8,7 @@ namespace App\Components\Integrations\GameSession;
  */
 class GameSessionService
 {
-    use Serializer, SessionStore;
+    use SessionStore;
 
     const CONFIG_PREFIX = 'session.game_session';
 
@@ -26,15 +26,6 @@ class GameSessionService
      * @var string
      */
     private $sessionId;
-
-    /**
-     * @param $optionName
-     * @return mixed
-     */
-    protected function getConfigOption($optionName)
-    {
-        return config(self::CONFIG_PREFIX . '.' . $optionName);
-    }
 
     /**
      * Create session
@@ -71,14 +62,12 @@ class GameSessionService
     }
 
     /**
-     * Get session storage key
-     *
-     * @param string $sessionId
-     * @return string
+     * @param $optionName
+     * @return mixed
      */
-    protected function getStorageKey(string $sessionId):string
+    protected function getConfigOption($optionName)
     {
-        return $this->getConfigOption('storage_key_prefix') . ':' . $sessionId;
+        return config(self::CONFIG_PREFIX . '.' . $optionName);
     }
 
     /**
