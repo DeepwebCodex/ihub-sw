@@ -8,9 +8,7 @@ namespace App\Components\Integrations\GameSession;
  */
 class GameSessionService
 {
-    use SessionStore;
-
-    const CONFIG_PREFIX = 'session.game_session';
+    use ConfigResolver;
 
     /**
      * @var bool
@@ -18,33 +16,46 @@ class GameSessionService
     private $sessionStarted = false;
 
     /**
-     * @var array
+     * @var SessionStoreItem
      */
-    private $sessionData;
-
-    /**
-     * @var string
-     */
-    private $sessionId;
+    private $sessionStoreItem;
 
     /**
      * Create session
      *
      * @param array $sessionData
      * @return string
+     * @throws \RuntimeException
      */
     public function create(array $sessionData):string
     {
+        $referenceId = $this->makeReferenceId($sessionData);
+        $referenceStoreItem = new ReferenceStoreItem($referenceId);
+        $referenceStoreItem->read();
+        $sessionId = $referenceStoreItem->getSessionId();
+        $sessionStoreItem = new SessionStoreItem($sessionId);
+
+        if ($sessionId && $sessionStoreItem->exists()) {
+            return $sessionId;
+        }
         $sessionId = $this->makeSessionId($sessionData);
 
-        $this->sessionId = $sessionId;
-        $this->sessionData = $sessionData;
+        $this->sessionStoreItem = SessionStoreItem::create($sessionId, $sessionData, $referenceId);
 
-        $this->writeSessionDataStore();
-
+        ReferenceStoreItem::create($referenceId, $sessionId);
         $this->sessionStarted = true;
 
         return $sessionId;
+    }
+
+    /**
+     * @param array $data
+     * @return string
+     */
+    protected function makeReferenceId(array $data):string
+    {
+        $referenceKey = implode('', array_values($data));
+        return hash_hmac('sha512', $referenceKey, $this->getConfigOption('storage_secret'));
     }
 
     /**
@@ -57,17 +68,7 @@ class GameSessionService
     {
         $sessionKey = implode('', array_values($data));
         $time = microtime(true);
-
         return hash_hmac('sha512', $sessionKey . $time, $this->getConfigOption('storage_secret'));
-    }
-
-    /**
-     * @param $optionName
-     * @return mixed
-     */
-    protected function getConfigOption($optionName)
-    {
-        return config(self::CONFIG_PREFIX . '.' . $optionName);
     }
 
     /**
@@ -78,9 +79,8 @@ class GameSessionService
      */
     public function start(string $sessionId)
     {
-        $this->readSessionDataStore($sessionId);
-
-        $this->sessionId = $sessionId;
+        $this->sessionStoreItem = new SessionStoreItem($sessionId);
+        $this->sessionStoreItem->read();
         $this->sessionStarted = true;
     }
 
@@ -92,8 +92,9 @@ class GameSessionService
      */
     public function prolong(string $sessionId)
     {
-        $this->checkSessionExistsStore($sessionId);
-        $this->prolongSessionStore($sessionId);
+        $sessionStoreItem = new SessionStoreItem($sessionId);
+        $sessionStoreItem->checkExists()
+            ->prolong();
     }
 
     /**
@@ -105,14 +106,18 @@ class GameSessionService
      */
     public function regenerate(string $sessionId):string
     {
-        $this->readSessionDataStore($sessionId);
+        $sessionStoreItem = new SessionStoreItem($sessionId);
+        $sessionStoreItem->read();
+        $sessionData = $sessionStoreItem->getData();
+        $referenceId = $sessionStoreItem->getReference();
 
-        $newSessionId = $this->makeSessionId($this->sessionData);
+        $newSessionId = $this->makeSessionId($sessionData);
 
-        $this->sessionId = $newSessionId;
+        $sessionStoreItem->delete();
 
-        $this->deleteSessionStore($sessionId);
-        $this->writeSessionDataStore();
+        $this->sessionStoreItem = SessionStoreItem::create($newSessionId, $sessionData, $referenceId);
+
+        ReferenceStoreItem::create($referenceId, $newSessionId);
 
         return $newSessionId;
     }
@@ -128,7 +133,7 @@ class GameSessionService
     public function get(string $key, $default = null)
     {
         $this->validateSessionStarted();
-        return array_get($this->sessionData, $key, $default);
+        return $this->sessionStoreItem->getDataField($key, $default);
     }
 
     /**
@@ -154,17 +159,30 @@ class GameSessionService
     }
 
     /**
+     * Store value for session
+     *
+     * @param string $key
+     * @param mixed $value
+     * @throws \RuntimeException
+     */
+    public function store(string $key, $value)
+    {
+        $this->set($key, $value);
+        $this->save();
+    }
+
+    /**
      * Set value for session
      *
      * @param string $key
      * @param mixed $value
      * @return array
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function set(string $key, $value)
     {
         $this->validateSessionStarted();
-        return array_set($this->sessionData, $key, $value);
+        return $this->sessionStoreItem->setDataField($key, $value);
     }
 
     /**
@@ -175,6 +193,6 @@ class GameSessionService
     public function save()
     {
         $this->validateSessionStarted();
-        $this->writeSessionDataStore();
+        $this->sessionStoreItem->save();
     }
 }

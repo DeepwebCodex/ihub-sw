@@ -14,7 +14,7 @@ trait Serializer
      * @param array $data
      * @return string
      */
-    protected function serialize(array $data)
+    protected function serialize(array $data):string
     {
         return \json_encode($data);
     }
