@@ -1,0 +1,23 @@
+stages:
+- build
+- deploy
+
+variables:
+  GIT_SSL_NO_VERIFY: "true"
+
+before_script:
+  - echo $CI_BUILD_REF
+  - echo $CONTAINER_PHP_FPM_TEST_IMAGE
+
+build_7.0:
+  stage: build
+  image: php:7.0
+  script:
+    - php -v
+    - ls -liah
+    - echo "date" >> ./test.txt
+
+deploy:
+  stage: deploy
+  script:
+    - cat ./test.txt
