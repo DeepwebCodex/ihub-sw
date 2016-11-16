@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Requests\BetGames;
+
+/**
+ * Class AuthRequest
+ * @package App\Http\Requests\EuroGamesTech
+ */
+class PingRequest extends BaseRequest
+{
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'DefenceCode.check_defence_code' => 'Invalid defence code',
+            'DefenceCode.check_expiration_time'  => 'Expired defence code',
+        ];
+    }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return array_merge(parent::rules(), [
+//            'PortalCode' => 'bail|required|string',
+        ]);
+    }
+}
