@@ -19,7 +19,7 @@ build_7.0:
     - composer install
   artifacts:
     paths:
-      - ./ihub
+      - ./
 
 deploy:
   stage: deploy
