@@ -17,9 +17,11 @@ build_7.0:
     - php -m
     - ls -liah
     - composer install
+    - tar czf /tmp/artifacts.tar.gz . --exclude='.git' --exclude='.gitlab-ci.yml' --exclude='.gitignore' --exclude='.env.example'
+    - mv /tmp/artifacts.tar.gz .
   artifacts:
     paths:
-      - ./
+      - ./artifacts.tar.gz
 
 deploy:
   stage: deploy
