@@ -16,7 +16,7 @@ build_7.0:
     - php -v
     - php -m
     - ls -liah
-    - php composer install
+    - composer install
   artifacts:
     paths:
       - ./ihub
