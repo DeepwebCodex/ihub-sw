@@ -14,9 +14,9 @@ build_7.0:
   image: php:7.0
   script:
     - php -v
-    - ls -liah
     - curl --silent --show-error https://getcomposer.org/installer | php
-    - php composer install
+    - ls -liah
+    - php composer.phar install
   artifacts:
     paths:
       - ./ihub
