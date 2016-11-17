@@ -4,6 +4,7 @@ stages:
 
 variables:
   GIT_SSL_NO_VERIFY: "true"
+  CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:latest
 
 before_script:
   - echo $CI_BUILD_REF
@@ -21,5 +22,7 @@ build_7.0:
 
 deploy:
   stage: deploy
+  image: docker:latest
   script:
-    - ls -liah
+    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
+    - docker push $CONTAINER_IHUB_CODE_IMAGE
