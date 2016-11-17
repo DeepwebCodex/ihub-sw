@@ -11,7 +11,7 @@ before_script:
 
 build_7.0:
   stage: build
-  image: php:7.0
+  image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
     - php -v
     - curl --silent --show-error https://getcomposer.org/installer | php
