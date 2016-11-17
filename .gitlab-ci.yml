@@ -13,15 +13,11 @@ build_7.0:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
-    - php -v
-    - php -m
-    - ls -liah
     - composer install
-    - tar czf /tmp/artifacts.tar.gz . --exclude='.git' --exclude='.gitlab-ci.yml' --exclude='.gitignore' --exclude='.env.example'
-    - mv /tmp/artifacts.tar.gz .
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
   artifacts:
     paths:
-      - ./artifacts.tar.gz
+      - ./
 
 deploy:
   stage: deploy
