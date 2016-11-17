@@ -24,5 +24,6 @@ deploy:
   stage: deploy
   image: docker:latest
   script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
     - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
     - docker push $CONTAINER_IHUB_CODE_IMAGE
