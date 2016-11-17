@@ -15,9 +15,12 @@ build_7.0:
   script:
     - php -v
     - ls -liah
-    - echo "date" >> ./test.txt
+    - php composer install
+  artifacts:
+    paths:
+      - ./ihub
 
 deploy:
   stage: deploy
   script:
-    - cat ./test.txt
+    - ls -liah
