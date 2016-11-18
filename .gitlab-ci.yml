@@ -23,7 +23,7 @@ deploy:
   image: docker:latest
   script:
     - ls -liah
-#    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
-#    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
-#    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
-#    - docker push $CONTAINER_IHUB_CODE_IMAGE
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
+    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
+    - docker push $CONTAINER_IHUB_CODE_IMAGE
