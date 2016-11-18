@@ -4,26 +4,23 @@ stages:
 
 variables:
   GIT_SSL_NO_VERIFY: "true"
-  CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:latest
+  CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
 before_script:
   - echo $CI_BUILD_REF
-  - echo $CONTAINER_PHP_FPM_TEST_IMAGE
 
 build_7.0:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
-    - composer install
-    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
-  artifacts:
-    paths:
-      - ./
+    - sh ./run/install-rancher.sh
 
 deploy:
   stage: deploy
   image: docker:latest
   script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
-    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
-    - docker push $CONTAINER_IHUB_CODE_IMAGE
+    - ls -liah
+#    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
+#    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
+#    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
+#    - docker push $CONTAINER_IHUB_CODE_IMAGE
