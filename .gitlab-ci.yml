@@ -43,3 +43,5 @@ rancher_upgrade:
   script:
     - export RANCHER_URL=$RANCHER_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-image $CONTAINER_PHP_FPM_DEV_IMAGE --finish-upgrade
+  only:
+    - dev
