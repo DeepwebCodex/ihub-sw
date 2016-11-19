@@ -1,9 +1,13 @@
 stages:
 - build
 - deploy
+- upgrade
 
 variables:
   GIT_SSL_NO_VERIFY: "true"
+  RANCHER_URL: "http://10.141.11.53:8080"
+  RANCHER_ACCESS_KEY: "3FB11832B4F1A1D4138A"
+  RANCHER_SECRET_KEY: "H3MNqJ6DSNmMbFUQxpsjyiy1ggE1zsDEZxpCL188"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
 before_script:
@@ -23,12 +27,19 @@ build_7.0:
       - ./vendor
       - ./
 
-deploy:
+push_code:
   stage: deploy
   image: docker:latest
   script:
-    - ls -liah
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
     - rm -rf .git .gitlab-ci.yml .gitignore .env.example
+    - ls -liah
     - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
     - docker push $CONTAINER_IHUB_CODE_IMAGE
+
+rancher_upgrade:
+  stage: upgrade
+  image: cdrx/rancher-gitlab-deploy
+  script:
+    - export RANCHER_URL=$RANCHER_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
+    - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-image $CONTAINER_PHP_FPM_DEV_IMAGE --finish-upgrade
