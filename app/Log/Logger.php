@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Monolog\Handler\AmqpHandler;
 use Monolog\Handler\MongoDBHandler;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exception\AMQPExceptionInterface;
 
 class Logger
 {
@@ -56,7 +57,11 @@ class Logger
         }
         catch (\Exception $e)
         {
-            return $this->startLogDriver($config, $monolog, $app, true);
+            if(!$useFallback) {
+                return $this->startLogDriver($config, $monolog, $app, true);
+            }
+
+            throw $e;
         }
     }
 
