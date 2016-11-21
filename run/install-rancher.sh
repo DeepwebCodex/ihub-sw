@@ -24,5 +24,10 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^STATSD_HOST=localhost/STATSD_HOST=statsd/g" \
        ./.env
 
+cp ./.env ./.env.testing
+
+sed -i -e "s/^APP_ENV=local/APP_ENV=testing/g" \
+       ./.env.testing
+
 echo "--- Installing vendors.."
 composer install
