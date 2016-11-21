@@ -5,11 +5,11 @@ chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache
 cp ./.env.example ./.env
 
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
-       -e "s/^APP_ENV=local/APP_ENV=dev/g" \
+       -e "s/^APP_ENV=local/APP_ENV=local/g" \
        -e "s/^DB_HOST=127.0.0.1/DB_HOST=postgresql/g" \
        -e "s/^DB_USERNAME=pgsql/DB_USERNAME=postgres/g" \
        -e "s/^DB_PASSWORD=pgsq/DB_PASSWORD=mysecretpassword/g" \
-       -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
+       -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=file/g" \
        -e "s/^SESSION_DRIVER=file/SESSION_DRIVER=redis/g" \
        -e "s/^REDIS_HOST=127.0.0.1/REDIS_HOST=redis/g" \
        -e "s/^LOG_DRIVER=file/LOG_DRIVER=file/g" \
