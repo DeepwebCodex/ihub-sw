@@ -5,7 +5,7 @@ namespace App\Components\Integrations\VirtualBoxing;
 use App\Components\Integrations\VirtualSports\ConfigTrait;
 use App\Exceptions\Api\VirtualBoxing\ErrorException;
 use App\Models\Line\Event;
-use App\Models\Line\Market;
+use App\Models\Line\Market as MarketModel;
 use App\Models\Line\ResultGame;
 use App\Models\Line\Sport;
 use App\Models\Line\StatusDesc;
@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\Redis;
 class ProgressService
 {
     use ConfigTrait;
+
+    const STATUS_CODE_NO_MORE_BETS = 'N';
+
+    const STATUS_CODE_FINISHED_EVENT = 'Z';
+
+    const STATUS_CODE_CANCELLED_EVENT = 'V';
 
     /**
      * @var int
@@ -35,12 +41,28 @@ class ProgressService
     }
 
     /**
+     * @return array
+     */
+    public static function getAvailableStatusCodes():array
+    {
+        $reflector = new \ReflectionClass(static::class);
+        $constants = $reflector->getConstants();
+
+        $prefix = 'STATUS_CODE_';
+        $values = array_filter($constants, function ($key) use ($prefix) {
+            return strpos($key, $prefix) !== false;
+        }, ARRAY_FILTER_USE_KEY);
+
+        return array_values($values);
+    }
+
+    /**
      * @param int $eventVbId
      * @param int $sportId
-     * @param string $progressName
+     * @param string $statusCode
      * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    public function setProgress(int $eventVbId, int $sportId, string $progressName)
+    public function setProgress(int $eventVbId, int $sportId, string $statusCode)
     {
         $event = EventLink::getByVbId($eventVbId);
         if (!$event) {
@@ -51,14 +73,14 @@ class ProgressService
         if ((new Sport())->checkSportEventExists($sportId, $eventId) === false) {
             throw new ErrorException('wrong_sport_id_for_event');
         }
-        switch ($progressName) {
-            case 'N':
+        switch ($statusCode) {
+            case self::STATUS_CODE_NO_MORE_BETS:
                 $this->setNoMoreBets($eventId);
                 break;
-            case 'Z':
+            case self::STATUS_CODE_FINISHED_EVENT:
                 $this->setFinishedEvent($eventId);
                 break;
-            case 'V':
+            case self::STATUS_CODE_CANCELLED_EVENT:
                 $this->setCancelledEvent($eventId);
                 break;
             default:
@@ -86,7 +108,7 @@ class ProgressService
      */
     protected function suspendMarketEvent(int $eventId)
     {
-        $resUpdate = (new Market)->suspendMarketEvent($eventId);
+        $resUpdate = (new MarketModel)->suspendMarketEvent($eventId);
         if (!$resUpdate) {
             throw new ErrorException('update_market_n');
         }

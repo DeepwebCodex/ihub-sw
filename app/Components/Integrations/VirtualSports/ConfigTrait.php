@@ -22,10 +22,9 @@ trait ConfigTrait
      */
     protected function getConfigOption(string $name)
     {
-        $res = array_get($this->config, $name);
-        if (!$res) {
+        if (!array_has($this->config, $name)) {
             throw new ErrorException('Configuration error', ['config_option' => $name]);
         }
-        return $res;
+        return array_get($this->config, $name);
     }
 }

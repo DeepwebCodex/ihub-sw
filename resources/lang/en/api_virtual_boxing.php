@@ -20,7 +20,7 @@ return [
     'cant_calculate_bet' => 'Cant calculate bet',
     'done' => 'Done',
     'bad_status_progress' => 'Bad status progress',
-    'done_duplicate' => 'Done this is duplicate',
+    'done_duplicate' => 'This is duplicate',
     'cant_find_outcome' => 'Cant find outcome',
     'cant_find_participant' => 'Cant find 2participant',
     'cant_void_finished' => 'cant_void_finished',

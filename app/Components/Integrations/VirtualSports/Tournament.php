@@ -37,11 +37,11 @@ class Tournament
     public function create($tournamentName, $categoryId, $sportformId, $sportformLiveId):bool
     {
         $tournament = TournamentModel::findByNameForSport($tournamentName, $categoryId);
-        if ($tournament === false) {
+        if ($tournament === null) {
             Translate::add($tournamentName);
 
             $tournament = new TournamentModel([
-                'tournament_name' => $tournamentName,
+                'name' => $tournamentName,
                 'weigh' => $this->getConfigOption('weigh'),
                 'enet_id' => null,
                 'category_id' => $categoryId,

@@ -100,12 +100,11 @@ class VirtualBoxingController extends BaseApiController
         $validator = Validator::make(Input::all(), [
             'event_id' => 'bail|required|numeric',
             'mnem' => 'bail|required|in:MB',
-            'xu:ups-at.xu:at' => 'bail|required|array'
         ]);
 
-        $progressName = $request->input('xu:ups-at.xu:at')[0]['#text'];
+        $statusCode = Input::all()['xu:ups-at.xu:at'][0]['#text'];
         if ($validator->fails()
-            || !in_array($progressName, ['N', 'Z', 'V'], true)
+            || !in_array($statusCode, ProgressService::getAvailableStatusCodes(), true)
         ) {
             $responseMessage = $this->getMessageDescription('miss_element');
             return $this->respondError($responseMessage);
@@ -115,7 +114,7 @@ class VirtualBoxingController extends BaseApiController
 
         $progressService = new ProgressService($this->options);
         try {
-            $progressService->setProgress($eventVbId, $this->getOption('sport_id'), $progressName);
+            $progressService->setProgress($eventVbId, $this->getOption('sport_id'), $statusCode);
         } catch (\Exception $e) {
             return $this->processException($e);
         }

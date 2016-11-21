@@ -17,5 +17,6 @@ class DuplicateException extends BaseException
     {
         parent::__construct();
         $this->code = Response::HTTP_OK;
+        $this->message = 'done_duplicate';
     }
 }

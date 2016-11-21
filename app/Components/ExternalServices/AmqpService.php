@@ -15,7 +15,7 @@ class AmqpService
 
     public function __construct()
     {
-        $this->config = config('amqp');
+        $this->config = config('external.api.amqp');
     }
 
     /**
@@ -27,7 +27,7 @@ class AmqpService
      */
     public function sendMsg($exchange, $routingKey, $msgBody)
     {
-        $url = 'http://' . $this->config['http_host'] . ':' . $this->config['http_port'] . '/api/mqsend';
+        $url = 'http://' . $this->config['host'] . ':' . $this->config['port'] . '/api/mqsend';
 
         $response = app('Guzzle')::request(
             'POST',
