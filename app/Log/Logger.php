@@ -97,7 +97,7 @@ class Logger
         $monolog->pushHandler($rabbitHandler);
     }
 
-    public function EchoLog()
+    public function runEchoLog()
     {
         return null;
     }
