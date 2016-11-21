@@ -20,20 +20,20 @@ try_to_build_7.0:
   script:
     - sh ./run/install-rancher.sh
     - ./vendor/bin/codecept run
-  cache:
-    key: $CI_BUILD_REF_NAME
-    paths:
-      - ./vendor
+#  cache:
+#    key: $CI_BUILD_REF_NAME
+#    paths:
+#      - ./vendor
 
 build_7.0:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
     - sh ./run/install-rancher.sh
-  cache:
-    key: $CI_BUILD_REF_NAME
-    paths:
-      - ./vendor
+#  cache:
+#    key: $CI_BUILD_REF_NAME
+#    paths:
+#      - ./vendor
   artifacts:
     paths:
       - ./vendor
