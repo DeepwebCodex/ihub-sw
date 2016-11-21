@@ -57,7 +57,7 @@ class AppLog
 
             $node = $node ?: (new \ReflectionClass($traceClassInfo['class']))->getShortName();
             $module = $module ?: $traceClassInfo['function'];
-            $line = $line ?: $traceLineInfo['line'];
+            $line = $line ?: array_get($traceLineInfo, 'line');
 
             $requestId = $this->requestId;
         }
