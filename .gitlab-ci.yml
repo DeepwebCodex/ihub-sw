@@ -46,3 +46,25 @@ rancher_upgrade:
     - upgrade --environment dev-ihub --stack ihub --service nginx
   only:
     - dev
+
+manual_push_code:
+  stage: deploy
+  image: docker:latest
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
+    - ls -liah
+    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
+    - docker push $CONTAINER_IHUB_CODE_IMAGE
+  when: manual
+
+manual_rancher_upgrade:
+  stage: upgrade
+  image: cdrx/rancher-gitlab-deploy
+  script:
+    - export RANCHER_URL=$RANCHER_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
+    - upgrade --environment dev-ihub --stack ihub --service php-fpm
+    - upgrade --environment dev-ihub --stack ihub --service nginx
+  only:
+    - dev
+  when: manual
