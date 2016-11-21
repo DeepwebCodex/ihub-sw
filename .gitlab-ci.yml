@@ -12,7 +12,8 @@ variables:
 
 before_script:
   - echo $CI_BUILD_REF
-
+  - before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab,favorit:4567
 try_to_build_7.0:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
