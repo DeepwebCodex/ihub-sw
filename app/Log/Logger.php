@@ -32,7 +32,7 @@ class Logger
         ],
         'file'   => [
             'driver'    => 'File',
-            'fallback'  => null
+            'fallback'  => 'EchoLog'
         ],
     ];
 
@@ -95,6 +95,11 @@ class Logger
 
         /** @var \Monolog\Logger $monolog */
         $monolog->pushHandler($rabbitHandler);
+    }
+
+    public function EchoLog()
+    {
+        return null;
     }
 
     public function runFile(array $config, \Monolog\Logger $monolog, $app){
