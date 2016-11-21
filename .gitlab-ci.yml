@@ -21,13 +21,13 @@ try_to_build_7.0:
     - sh ./run/install-rancher.sh
     - ./vendor/bin/codecept run
   cache:
-    key: "$CI_BUILD_REF_NAME"
+    key: $CI_BUILD_REF_NAME
     untracked: true
     paths:
       - ./vendor
   artifacts:
     when: always
-    name: "${CI_BUILD_STAGE}_${CI_BUILD_REF_NAME}"
+    name: $CI_BUILD_REF_NAME
     paths:
       - ./tests/_output
     expire_in: 1 day
