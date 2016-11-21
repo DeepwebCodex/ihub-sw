@@ -24,6 +24,10 @@ try_to_build_7.0:
     key: $CI_BUILD_REF_NAME
     paths:
       - ./vendor
+  artifacts:
+    paths:
+      - ./tests/_output
+    expire_in: 1 day
 
 build_7.0:
   stage: build

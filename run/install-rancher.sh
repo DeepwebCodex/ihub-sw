@@ -27,6 +27,8 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
 cp ./.env ./.env.testing
 
 sed -i -e "s/^APP_ENV=local/APP_ENV=testing/g" \
+       -e "s/^SESSION_DRIVER=redis/SESSION_DRIVER=file/g" \
+       -e "s/^LOG_DRIVER=rabbit/LOG_DRIVER=file/g" \
        ./.env.testing
 
 echo "--- Installing vendors.."
