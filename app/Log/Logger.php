@@ -50,7 +50,7 @@ class Logger
             if(method_exists($this, 'run'.  Arr::get($this->drivers, $driver)) && !$useFallback)
             {
                 return $this->{'run'. $this->drivers[$driver]['driver']}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
-            } else {
+            } elseif(method_exists($this, 'run'.  Arr::get($this->drivers, $driver .'.fallback'))) {
                 return $this->{'run'. $this->drivers[$driver]['fallback']}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
             }
         }
