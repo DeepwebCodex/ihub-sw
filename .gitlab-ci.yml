@@ -16,6 +16,7 @@ before_script:
 try_to_build_7.0:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
+  allow_failure: true
   script:
     - sh ./run/install-rancher.sh
     - ./vendor/bin/codecept run
@@ -27,7 +28,6 @@ try_to_build_7.0:
 build_7.0:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
-  allow_failure: true
   script:
     - sh ./run/install-rancher.sh
   cache:
