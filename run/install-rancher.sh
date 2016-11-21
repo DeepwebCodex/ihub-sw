@@ -11,8 +11,9 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^DB_PASSWORD=pgsq/DB_PASSWORD=mysecretpassword/g" \
        -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
        -e "s/^SESSION_DRIVER=file/SESSION_DRIVER=redis/g" \
-       -e "s/^REDIS_HOST=127.0.0.1/REDIS_HOST=redis01/g" \
-       -e "s/^LOG_DRIVER=file/LOG_DRIVER=file/g" \
+       -e "s/^REDIS_HOST=127.0.0.1/REDIS_HOST=redis/g" \
+       -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
+       -e "s/^LOG_DRIVER=file/LOG_DRIVER=rabbit/g" \
        -e "s/^LOG_MONGO_SERVER=/LOG_MONGO_SERVER=mongodb:\/\/mongo:27017/g" \
        -e "s/^LOG_MONGO_DB_NAME=/LOG_MONGO_DB_NAME=logs/g" \
        -e "s/^LOG_MONGO_COLLECTION_NAME=/LOG_MONGO_COLLECTION_NAME=integration/g" \
