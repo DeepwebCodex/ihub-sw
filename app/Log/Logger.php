@@ -48,7 +48,7 @@ class Logger
 
         try
         {
-            if(method_exists($this, 'run'.  Arr::get($this->drivers, $driver)) && !$useFallback)
+            if(method_exists($this, 'run'.  Arr::get($this->drivers, $driver.'.driver')) && !$useFallback)
             {
                 return $this->{'run'. $this->drivers[$driver]['driver']}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
             } elseif(method_exists($this, 'run'.  Arr::get($this->drivers, $driver .'.fallback'))) {
