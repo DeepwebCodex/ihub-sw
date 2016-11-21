@@ -55,7 +55,7 @@ push_code:
 
 rancher_upgrade:
   stage: upgrade
-  image: cdrx/rancher-gitlab-deploy
+  image: docker pull gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
     - export RANCHER_URL=$RANCHER_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm
@@ -76,7 +76,7 @@ manual_push_code:
 
 manual_rancher_upgrade:
   stage: upgrade
-  image: cdrx/rancher-gitlab-deploy
+  image: docker pull gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
     - export RANCHER_URL=$RANCHER_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm
