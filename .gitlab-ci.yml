@@ -25,6 +25,8 @@ try_to_build_7.0:
     paths:
       - ./vendor
   artifacts:
+    when: always
+    name: "${CI_BUILD_STAGE}_${CI_BUILD_REF_NAME}"
     paths:
       - ./tests/_output
     expire_in: 1 day
