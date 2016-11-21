@@ -19,7 +19,6 @@ try_to_build_7.0:
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   allow_failure: true
   script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
     - sh ./run/install-rancher.sh
     - ./vendor/bin/codecept run
   cache:
