@@ -36,6 +36,7 @@ build_7.0:
     paths:
       - ./vendor
       - ./
+    expire_in: 1 week
   only:
     - dev
     - master
