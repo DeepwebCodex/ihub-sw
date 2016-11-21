@@ -22,18 +22,41 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 class Logger
 {
     private $drivers = [
-        'mongo' => 'Mongo',
-        'rabbit' => 'Rabbit',
-        'file'   => 'File'
+        'mongo' => [
+            'driver'    => 'Mongo',
+            'fallback'  => 'File'
+        ],
+        'rabbit' => [
+            'driver'    => 'Rabbit',
+            'fallback'  => 'File'
+        ],
+        'file'   => [
+            'driver'    => 'File',
+            'fallback'  => null
+        ],
     ];
 
     public function __construct(array $config, \Monolog\Logger $monolog, Application $app)
     {
+        return $this->startLogDriver($config, $monolog, $app);
+    }
+
+    protected function startLogDriver(array $config, \Monolog\Logger $monolog, Application $app, $useFallback = false)
+    {
         $driver = Arr::get($config, 'default');
 
-        if(method_exists($this, 'run'.  Arr::get($this->drivers, $driver)))
+        try
         {
-            return $this->{'run'. $this->drivers[$driver]}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
+            if(method_exists($this, 'run'.  Arr::get($this->drivers, $driver)) && !$useFallback)
+            {
+                return $this->{'run'. $this->drivers[$driver]['driver']}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
+            } else {
+                return $this->{'run'. $this->drivers[$driver]['fallback']}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
+            }
+        }
+        catch (\Exception $e)
+        {
+            return $this->startLogDriver($config, $monolog, $app, true);
         }
     }
 
