@@ -13,6 +13,16 @@ variables:
 before_script:
   - echo $CI_BUILD_REF
 
+try_to_build_7.0:
+  stage: build
+  image: gitlab.favorit:4567/integrations/docker:php-fpm
+  script:
+    - sh ./run/install-rancher.sh
+  cache:
+    key: $CI_BUILD_REF_NAME
+    paths:
+      - ./vendor
+
 build_7.0:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
@@ -26,6 +36,9 @@ build_7.0:
     paths:
       - ./vendor
       - ./
+  only:
+    - dev
+    - master
 
 push_code:
   stage: deploy
@@ -36,6 +49,9 @@ push_code:
     - ls -liah
     - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
     - docker push $CONTAINER_IHUB_CODE_IMAGE
+  only:
+    - dev
+    - master
 
 rancher_upgrade:
   stage: upgrade
