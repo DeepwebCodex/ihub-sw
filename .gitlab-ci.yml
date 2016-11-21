@@ -30,6 +30,7 @@ try_to_build_7.0:
     name: $CI_BUILD_REF_NAME
     paths:
       - ./tests/_output
+      - ./storage/logs
     expire_in: 1 day
 
 build_7.0:
