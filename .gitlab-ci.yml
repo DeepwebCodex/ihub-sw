@@ -12,7 +12,7 @@ variables:
 
 before_script:
   - echo $CI_BUILD_REF
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab,favorit:4567
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
 
 try_to_build_7.0:
   stage: build
