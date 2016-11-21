@@ -28,6 +28,7 @@ build_7.0:
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
     - sh ./run/install-rancher.sh
+    - ./vendor/bin/codecept run
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
