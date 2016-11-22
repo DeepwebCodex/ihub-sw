@@ -13,8 +13,6 @@ class VirtualBoxingApiCest
 
     protected $eventId;
 
-    protected $resultId;
-
     public function testMethodNotFound(ApiTester $I)
     {
         $I->sendGET(self::URI_PREFIX . 'test');
@@ -163,7 +161,7 @@ class VirtualBoxingApiCest
             'type' => 'result',
             'result' => [
                 'event_id' => $this->eventId,
-                'tid' => $this->resultId,
+                'tid' => md5($this->eventId),
                 'round' => $rounds,
             ]
         ];
@@ -172,7 +170,7 @@ class VirtualBoxingApiCest
         $I->sendPOST(self::URI_PREFIX, $request);
     }
 
-    /*public function testDuplicateBet(ApiTester $I)
+    public function testDuplicateBet(ApiTester $I)
     {
         $this->eventId = $this->getEventId();
 
@@ -185,9 +183,9 @@ class VirtualBoxingApiCest
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::DUPLICATE_RESPONSE_TEXT);
-    }*/
+    }
 
-    /*public function testDuplicateResult(ApiTester $I)
+    public function testDuplicateResult(ApiTester $I)
     {
         $this->eventId = $this->getEventId();
 
@@ -230,5 +228,5 @@ class VirtualBoxingApiCest
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
-    }*/
+    }
 }
