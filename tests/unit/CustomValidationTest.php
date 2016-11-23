@@ -10,25 +10,8 @@ class CustomValidationTest extends \Codeception\Test\Unit
 {
     use Codeception\Specify;
 
-    private $egtRequestData;
-    private $egtValidatorStub;
-
     protected function _before() {
-        $this->egtRequestData = [
-            'PlayerId'  => random_int(10000, 40000),
-            'PortalCode' => 'RUB'
-        ];
 
-        $this->egtRequestData['DefenceCode'] = (new DefenceCode)->generate($this->egtRequestData['PlayerId'], $this->egtRequestData['PortalCode'], time());
-
-        $this->egtValidatorStub = Stub::construct(\App\Http\Requests\Validation\EuroGamesTechValidation::class, [], [
-            'getRequest' => Stub::atLeastOnce(function(){
-                $request = request();
-                $request->merge($this->egtRequestData);
-
-                return $request;
-            })
-        ]);
     }
 
     protected function _after() {}
@@ -57,28 +40,6 @@ class CustomValidationTest extends \Codeception\Test\Unit
         $this->specify("Amount for casino must always be > 0", function() use ($stubbedValidator){
             verify("Amount passes", $stubbedValidator->CheckAmount(null, 100, null, null))->true();
             verify("Amount check failed", $stubbedValidator->CheckAmount(null, -5, null, null))->false();
-        });
-    }
-
-    public function testEuroGamesTechValidatorDefenceCode()
-    {
-        $this->specify("Check defence code of a request", function(){
-            verify("Validation passes", $this->egtValidatorStub->checkDefenceCode(null, $this->egtRequestData['DefenceCode'], null, null))->true();
-
-            $this->expectException(\App\Exceptions\Api\ApiHttpException::class);
-            $this->expectExceptionCode(0);
-            $this->egtValidatorStub->checkDefenceCode(null, 'dsfsdf-sdfsdf', null, null);
-        });
-    }
-
-    public function testEuroGamesTechValidatorExpirationTime()
-    {
-        $this->specify("Check check expiration time", function() {
-            verify("Validation passes", $this->egtValidatorStub->checkExpirationTime(null, $this->egtRequestData['DefenceCode'], null, null))->true();
-
-            $this->expectException(\App\Exceptions\Api\ApiHttpException::class);
-            $this->expectExceptionCode(0);
-            $this->egtValidatorStub->checkDefenceCode(null, 'dsfsdf-13216486181685', null, null);
         });
     }
 
