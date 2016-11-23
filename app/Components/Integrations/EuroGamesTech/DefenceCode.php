@@ -18,7 +18,7 @@ class DefenceCode
      * DefenceCode constructor.
      * @param Repository $cache
      */
-    public function __construct($cache)
+    public function __construct($cache = null)
     {
         $this->cache = $cache ? : app('cache')->store('redis_egt');
     }
