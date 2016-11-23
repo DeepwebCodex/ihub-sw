@@ -6,7 +6,7 @@ cp ./.env.example ./.env
 
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^APP_ENV=local/APP_ENV=local/g" \
-       -e "s/^DB_HOST=127.0.0.1/DB_HOST=postgresql/g" \
+       -e "s/^DB_HOST=127.0.0.1/DB_HOST=ihub.favbet.dev/g" \
        -e "s/^DB_USERNAME=pgsql/DB_USERNAME=postgres/g" \
        -e "s/^DB_PASSWORD=pgsq/DB_PASSWORD=mysecretpassword/g" \
        -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
