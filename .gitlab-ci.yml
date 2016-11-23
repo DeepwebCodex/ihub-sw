@@ -12,6 +12,7 @@ variables:
 
 before_script:
   - echo $CI_BUILD_REF
+  
 
 try_to_build_7.0:
   stage: build
