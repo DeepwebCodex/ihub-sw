@@ -2,19 +2,25 @@
 
 namespace App\Components\Integrations\EuroGamesTech;
 
+use Illuminate\Cache\Repository;
+
 class DefenceCode
 {
     const EXPIRATION_TIME = 2;
     const CACHE_KEY = 'defence_code:';
 
     /**
-     * @var \Illuminate\Cache\Repository
+     * @var Repository
      */
     private $cache;
 
-    public function __construct()
+    /**
+     * DefenceCode constructor.
+     * @param Repository $cache
+     */
+    public function __construct($cache = null)
     {
-        $this->cache = app('cache')->store('redis_egt');
+        $this->cache = $cache ? : app('cache')->store('redis_egt');
     }
 
     /**
