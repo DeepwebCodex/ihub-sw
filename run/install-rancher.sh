@@ -36,5 +36,10 @@ echo "TEST_USER_ID=89" >> ./.env.testing
 echo "TEST_PARTNER_ID=1" >> ./.env.testing
 echo "TEST_CASHEDESK=-5" >> ./.env.testing
 
-echo "--- Installing vendors.."
+echo "--- Installing composer.."
+echo ">> composer install"
 composer install
+
+echo "--- Running migrate.."
+echo ">> php artisan migrate --database=integration"
+php artisan migrate --database=integration
