@@ -63,7 +63,7 @@ class ReferenceStoreItem
     /**
      * @return string
      */
-    public function getSessionId(): string
+    public function getSessionId()
     {
         return $this->sessionId;
     }

@@ -33,11 +33,11 @@ class GameSessionService
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
         $referenceStoreItem->read();
         $sessionId = $referenceStoreItem->getSessionId();
-        $sessionStoreItem = new SessionStoreItem($sessionId);
 
-        if ($sessionId && $sessionStoreItem->exists()) {
+        if (SessionStoreItem::existsBySessionId($sessionId)) {
             return $sessionId;
         }
+
         $sessionId = $this->makeSessionId($sessionData);
 
         $this->sessionStoreItem = SessionStoreItem::create($sessionId, $sessionData, $referenceId);
