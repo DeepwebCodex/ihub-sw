@@ -59,6 +59,19 @@ class SessionStoreItem
     }
 
     /**
+     * @param $sessionId
+     * @return bool
+     */
+    public static function existsBySessionId($sessionId)
+    {
+        if (!$sessionId) {
+            return false;
+        }
+        $sessionStoreItem = new self($sessionId);
+        return $sessionStoreItem->exists();
+    }
+
+    /**
      * @return self
      */
     public function save():self
