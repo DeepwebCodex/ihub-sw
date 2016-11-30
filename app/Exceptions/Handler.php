@@ -163,8 +163,8 @@ class Handler extends ExceptionHandler
 
         return new \Illuminate\Http\Response(
             $whoops->handleException($e),
-            $e->getStatusCode(),
-            $e->getHeaders()
+            method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500,
+            method_exists($e, 'getHeaders') ? $e->getHeaders() : []
         );
     }
 
