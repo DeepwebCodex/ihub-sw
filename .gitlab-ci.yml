@@ -1,4 +1,5 @@
 stages:
+- test
 - build
 - deploy
 - upgrade
@@ -6,35 +7,32 @@ stages:
 variables:
   GIT_SSL_NO_VERIFY: "true"
   RANCHER_URL: "http://10.141.11.53:8080"
-  RANCHER_ACCESS_KEY: "3FB11832B4F1A1D4138A"
-  RANCHER_SECRET_KEY: "H3MNqJ6DSNmMbFUQxpsjyiy1ggE1zsDEZxpCL188"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
 before_script:
   - echo $CI_BUILD_REF
   
 
-try_to_build_7.0:
-  stage: build
+composer_and_ unit_testing:
+  stage: test
   image: gitlab.favorit:4567/integrations/docker:php-fpm
-  allow_failure: true
   script:
     - sh ./run/install-rancher.sh
-    - ./vendor/bin/codecept run -d
+    - ./vendor/bin/codecept run
   cache:
     key: $CI_BUILD_REF_NAME
     untracked: true
     paths:
       - ./vendor
   artifacts:
-    when: always
+    when: on_failure
     name: $CI_BUILD_REF_NAME
     paths:
       - ./tests/_output
       - ./storage/logs
     expire_in: 1 day
 
-build_7.0:
+build_php_7.0:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
@@ -75,7 +73,7 @@ rancher_upgrade:
   only:
     - dev
 
-manual_push_code:
+manual_push_dev_code:
   stage: deploy
   image: docker:latest
   script:
@@ -86,7 +84,7 @@ manual_push_code:
     - docker push $CONTAINER_IHUB_CODE_IMAGE
   when: manual
 
-manual_rancher_upgrade:
+manual_dev_rancher_upgrade:
   stage: upgrade
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
