@@ -14,10 +14,9 @@ before_script:
   - echo $CI_BUILD_REF
   
 
-try_to_build_7.0:
+composer_and_ unit_testing:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
-  allow_failure: true
   script:
     - sh ./run/install-rancher.sh
     - ./vendor/bin/codecept run
@@ -27,7 +26,7 @@ try_to_build_7.0:
     paths:
       - ./vendor
   artifacts:
-    when: always
+    when: on_failure
     name: $CI_BUILD_REF_NAME
     paths:
       - ./tests/_output
