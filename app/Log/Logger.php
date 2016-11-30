@@ -18,22 +18,50 @@ use Illuminate\Support\Arr;
 use Monolog\Handler\AmqpHandler;
 use Monolog\Handler\MongoDBHandler;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exception\AMQPExceptionInterface;
 
 class Logger
 {
     private $drivers = [
-        'mongo' => 'Mongo',
-        'rabbit' => 'Rabbit',
-        'file'   => 'File'
+        'mongo' => [
+            'driver'    => 'Mongo',
+            'fallback'  => 'File'
+        ],
+        'rabbit' => [
+            'driver'    => 'Rabbit',
+            'fallback'  => 'File'
+        ],
+        'file'   => [
+            'driver'    => 'File',
+            'fallback'  => 'EchoLog'
+        ],
     ];
 
     public function __construct(array $config, \Monolog\Logger $monolog, Application $app)
     {
+        return $this->startLogDriver($config, $monolog, $app);
+    }
+
+    protected function startLogDriver(array $config, \Monolog\Logger $monolog, Application $app, $useFallback = false)
+    {
         $driver = Arr::get($config, 'default');
 
-        if(method_exists($this, 'run'.  Arr::get($this->drivers, $driver)))
+        try
         {
-            return $this->{'run'. $this->drivers[$driver]}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
+            if(method_exists($this, 'run'.  Arr::get($this->drivers, $driver.'.driver')) && !$useFallback)
+            {
+                return $this->{'run'. $this->drivers[$driver]['driver']}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
+            } elseif(method_exists($this, 'run'.  Arr::get($this->drivers, $driver .'.fallback'))) {
+                return $this->{'run'. $this->drivers[$driver]['fallback']}(Arr::get($config, 'connections.' . $driver), $monolog, $app);
+            }
+        }
+        catch (\Exception $e)
+        {
+            if(!$useFallback) {
+                return $this->startLogDriver($config, $monolog, $app, true);
+            }
+
+            throw $e;
         }
     }
 
@@ -72,6 +100,11 @@ class Logger
 
         /** @var \Monolog\Logger $monolog */
         $monolog->pushHandler($rabbitHandler);
+    }
+
+    public function runEchoLog()
+    {
+        return null;
     }
 
     public function runFile(array $config, \Monolog\Logger $monolog, $app){
