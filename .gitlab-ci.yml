@@ -20,7 +20,7 @@ try_to_build_7.0:
   allow_failure: true
   script:
     - sh ./run/install-rancher.sh
-    - ./vendor/bin/codecept run -d
+    - ./vendor/bin/codecept run
   cache:
     key: $CI_BUILD_REF_NAME
     untracked: true
