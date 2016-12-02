@@ -2,6 +2,7 @@
 
 namespace App\Components\Integrations\GameSession;
 
+use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -185,7 +186,7 @@ class SessionStoreItem
     public function checkExists():self
     {
         if (!$this->exists()) {
-            throw new \RuntimeException('Session does not exist');
+            throw new SessionDoesNotExist();
         }
         return $this;
     }

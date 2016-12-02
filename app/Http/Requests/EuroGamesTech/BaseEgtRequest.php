@@ -43,7 +43,7 @@ class BaseEgtRequest extends ApiRequest implements ApiValidationInterface
 
     public function failedAuthorization()
     {
-        throw new ApiHttpException('403', "Auth failed", array_get(CodeMapping::getByMeaning(CodeMapping::USER_NOT_FOUND), 'code', 0));
+        throw new ApiHttpException('403', "Auth failed", CodeMapping::getByMeaning(CodeMapping::USER_NOT_FOUND));
     }
 
     public function rules(){ return []; }

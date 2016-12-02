@@ -3,6 +3,7 @@
 namespace App\Http\Requests\MicroGaming;
 
 use App\Components\ExternalServices\Facades\RemoteSession;
+use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\MicroGaming\CodeMapping;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use App\Components\Integrations\MicroGaming\StatusCode;
@@ -37,10 +38,13 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
     }
 
     public function authorizeUser(Request $request){
-        list($remoteSession, $time, $hash) = MicroGamingHelper::parseToken($request->input('methodcall.call.token'));
-        $remoteSession = trim($remoteSession);
+        try{
+            app('GameSession')->start($request->input('token', ''));
+        } catch (SessionDoesNotExist $e) {
+            return false;
+        }
 
-        $userId = RemoteSession::start($remoteSession)->get('user_id');
+        $userId = app('GameSession')->get('user_id');
 
         if(!$userId){
             throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));

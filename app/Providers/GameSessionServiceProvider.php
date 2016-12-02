@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Components\Integrations\GameSession\GameSessionService;
 use Illuminate\Support\ServiceProvider;
+use Testing\GameSessionsMock;
 
 /**
  * Class GameSessionServiceProvider
@@ -21,9 +22,15 @@ class GameSessionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('GameSession', function ($app) {
-            return new GameSessionService();
-        });
+        if($this->app->environment() == 'testing') {
+            $this->app->singleton('GameSession', function ($app) {
+                return GameSessionsMock::getMock();
+            });
+        } else {
+            $this->app->singleton('GameSession', function ($app) {
+                return new GameSessionService();
+            });
+        }
     }
 
     /**

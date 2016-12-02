@@ -6,6 +6,7 @@ namespace App\Http\Requests\Casino;
 use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\Casino\CodeMapping;
 use App\Components\Integrations\Casino\StatusCode;
+use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
@@ -30,7 +31,13 @@ class BaseCasinoRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-        $userId = RemoteSession::start($request->input('token'))->get('user_id');
+        try{
+            app('GameSession')->start($request->input('token', ''));
+        } catch (SessionDoesNotExist $e) {
+            return false;
+        }
+
+        $userId = app('GameSession')->get('user_id');
 
         if($userId){
             $this->addMetaField('user_id', $userId);
