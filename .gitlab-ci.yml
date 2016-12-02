@@ -6,7 +6,7 @@ stages:
 
 variables:
   GIT_SSL_NO_VERIFY: "true"
-  RANCHER_URL: "http://rancher.favbet.dev:8080"
+  RANCHER_URL: "http://10.141.11.51:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
 before_script:
