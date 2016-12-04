@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Validation;
 
+use App\Components\Integrations\BetGames\ApiMethod;
 use App\Components\Integrations\BetGames\Signature;
-use App\Components\Integrations\BetGames\Status;
+use App\Components\Integrations\BetGames\Error;
 use App\Components\Integrations\BetGames\Token;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
@@ -20,21 +21,28 @@ class BetGamesValidation
             return false;
         }
 
-        $this->signature = new Signature($request->all());
-
+        $all = $request->all();
+        unset($all['signature']);
+        $this->signature = new Signature($all);
         if ($this->signature->isWrong($value)) {
-            $status = new Status('wrong_signature');
-            throw new ApiHttpException(400, $status->getMessage(), ['code' => $status->getCode()]);
+            throw new ApiHttpException(400, null, [
+                'code' => Error::SIGNATURE,
+                'method' => Request::getFacadeRoot()->method,
+                'token' => Request::getFacadeRoot()->token,
+            ]);
         }
 
-        return false;
+        return true;
     }
 
     public function checkTime($attribute, $value, $parameters, $validator):bool
     {
         if ((time() - $value) > $this->time_limit) {
-            $status = new Status('time_expired');
-            throw new ApiHttpException(400, $status->getMessage(), ['code' => $status->getCode()]);
+            throw new ApiHttpException(400, null, [
+                'code' => Error::TIME,
+                'method' => Request::getFacadeRoot()->method,
+                'token' => Request::getFacadeRoot()->token,
+            ]);
         }
 
         return true;
@@ -42,17 +50,36 @@ class BetGamesValidation
 
     public function checkToken($attribute, $value, $parameters, $validator):bool
     {
-        return true;
-        $token = new Token($value);
+        if ('ping' == Request::getFacadeRoot()->method) {
+            return ($value == '-');
+        }
+
+        $token = Token::getByHash($value);
 
         $user = IntegrationUser::get($token->getUserId(), config('integrations.betGames.service_id'), 'betGames');
         if ($token->isExpired() || $token->isWrongCurrency($user->getCurrency())) {
-            $status = new Status('wrong_token');
-            throw new ApiHttpException(400, $status->getMessage(), ['code' => $status->getCode()]);
+            throw new ApiHttpException(400, null, [
+                'code' => Error::TOKEN,
+                'method' => Request::getFacadeRoot()->method,
+                'token' => Request::getFacadeRoot()->token,
+            ]);
         } else {
             $token->refresh();
         }
 
+        return true;
+    }
+
+    public function checkMethod($attribute, $value, $parameters, $validator):bool
+    {
+        $apiMethod = new ApiMethod($value);
+        if (!$apiMethod->get()) {
+            throw new ApiHttpException(400, null, [
+                'code' => Error::SIGNATURE,
+                'method' => Request::getFacadeRoot()->method,
+                'token' => Request::getFacadeRoot()->token,
+            ]);
+        }
 
         return true;
     }

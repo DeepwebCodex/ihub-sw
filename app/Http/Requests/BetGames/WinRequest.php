@@ -1,26 +1,13 @@
 <?php
 
 namespace App\Http\Requests\BetGames;
-use App\Http\Requests\Validation\BetGamesValidation;
 
 /**
- * Class AuthRequest
- * @package App\Http\Requests\EuroGamesTech
+ * Class WinRequest
+ * @package App\Http\Requests\BetGames
  */
 class WinRequest extends BaseRequest
 {
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'DefenceCode.check_defence_code' => 'Invalid defence code',
-            'DefenceCode.check_expiration_time'  => 'Expired defence code',
-        ];
-    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -32,7 +19,12 @@ class WinRequest extends BaseRequest
          * @see BetGamesValidation::checkToken
          */
         return array_merge(parent::rules(), [
-            'token' => 'bail|required|string|check_token',
+            'params.player_id' => 'bail|required|integer|min:1',
+            'params.amount' => 'bail|required|integer|min:0',
+            'params.currency' => 'bail|required|string',
+            'params.bet_id' => 'bail|required|integer|min:1',
+            'params.transaction_id' => 'bail|required|integer|min:1',
+            'params.retrying' => 'bail|required|integer|boolean',
         ]);
     }
 }

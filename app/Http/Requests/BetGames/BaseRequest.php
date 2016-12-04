@@ -2,10 +2,6 @@
 
 namespace App\Http\Requests\BetGames;
 
-
-use App\Components\ExternalServices\Facades\RemoteSession;
-use App\Components\Integrations\EuroGamesTech\CodeMapping;
-use \App\Components\Integrations\EuroGamesTech\StatusCode;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
@@ -13,14 +9,12 @@ use App\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
 
 /**
- * Class AuthRequest
- * @package App\Http\Requests\EuroGamesTech
+ * Class BaseRequest
+ * @package App\Http\Requests\BetGames
  */
 class BaseRequest extends ApiRequest implements ApiValidationInterface
 {
     use MetaDataTrait;
-
-    protected $codeMapClass = CodeMapping::class;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -30,43 +24,33 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-        $config_user = config('integrations.egt.UserName');
-        $config_password = config('integrations.egt.Password');
-
-        if ($config_user == $request->input('UserName') && $config_password == $request->input('Password')) {
-            return true;
-        }
-
-        return false;
     }
 
     public function failedAuthorization()
     {
-//        throw new ApiHttpException('403', "Auth failed", array_get(CodeMapping::getByMeaning(CodeMapping::USER_NOT_FOUND), 'code', 0));
     }
 
     /**
-     * @see BetGamesValidation::checkToken BetGamesValidation::checkSignature BetGamesValidation::checkToken
+     * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkToken, BetGamesValidation::checkMethod
      */
     public function rules()
     {
         return [
-            'method' => 'bail|required|string',
-//            'signature' => 'bail|required|check_signature',
-//            'time' => 'bail|required|integer|check_time',
-            'params' => 'bail',
+            'method' => 'bail|required|string|check_method',
+            'signature' => 'bail|required|string|check_signature',
+            'time' => 'bail|required|integer|check_time',
+            'token' => 'bail|required|string|check_token',
+            'params' => 'bail|present'
         ];
     }
 
     public function response(array $errors)
     {
-        $firstError = $this->getFirstError($errors);
-
-        throw new ApiHttpException('400',
-            array_get($firstError, 'message', 'Invalid input'),
-            [
-                'code' => array_get($firstError, 'code', StatusCode::INTERNAL_SERVER_ERROR)
-            ]
-        );
+//        var_dump($this->input('method'), $errors); die();
+        throw new ApiHttpException('400', null, [
+            'code' => key($errors),
+            'method' => $this->input('method'),
+            'token' => $this->input('token'),
+        ]);
     }
 }

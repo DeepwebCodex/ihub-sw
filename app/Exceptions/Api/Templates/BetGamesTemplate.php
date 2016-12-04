@@ -2,56 +2,78 @@
 
 namespace App\Exceptions\Api\Templates;
 
-
-use App\Components\Integrations\BetGames\CodeMapping;
-use App\Components\Integrations\BetGames\Signature;
-use \App\Components\Integrations\EuroGamesTech\StatusCode;
+use App\Components\Integrations\BetGames\Error;
+use App\Components\Integrations\BetGames\ResponseData;
+use App\Components\Transactions\TransactionHelper;
 
 class BetGamesTemplate implements IExceptionTemplate
 {
-    private $item;
-
+    /**
+     * @param array $item
+     * @param $statusCode
+     * @param $isApiException
+     * @return mixed
+     */
     public function mapping($item, $statusCode, $isApiException)
     {
-//        var_dump($item, $statusCode); die('qwe');
-        $this->item = $item;
-
-        $code = (int)$this->useElement('code', StatusCode::INTERNAL_SERVER_ERROR);
-        $message = $this->useElement('message', 'Unknown');
-
-        //503 error case
-        if(in_array($statusCode, [503, 504])){
-            $codeMap = CodeMapping::getByMeaning(CodeMapping::TIMED_OUT);
-        } else {
-            $codeMap = CodeMapping::getByErrorCode($code);
+        $errorKey = $item['code'] ?? TransactionHelper::UNKNOWN;
+        $error = new Error($errorKey);
+        if (!$error->isValidationCode()) {
+            $error = new Error(TransactionHelper::getTransactionErrorState($errorKey));
         }
 
-        if($codeMap){
-            $code = $codeMap['code'];
-            $message = (($code == StatusCode::INTERNAL_SERVER_ERROR ||
-                    ($code == StatusCode::INSUFFICIENT_FUNDS && $message != 'Unknown')) && $isApiException == true) ? $message : $codeMap['message'];
+        //internal server and timeout error cases
+        if ($this->isInternalError($statusCode, $error->getCode())) {
+            $this->onInternalError();
+            return null;
         }
 
-        $view = [
-            'method' => 'ping',
-            'token' => '-',
-            'success' => 0,
-            'error_code' => 1,
-            'error_text' => $item['message'],
-            'time' => time(),
-        ];
-        $signature = new Signature($view);
+        if ($this->isDuplicateWin($item)) {
+            return $this->onDuplicateWin($item);
+        }
 
-        return array_merge($view, [
-            'params' => '',
-            'signature' => $signature->getHash(),
-        ]);
+        $data = new ResponseData($item['method'], $item['token'], [], $error);
+        return $data->fail();
     }
 
-    private function useElement($key, $default){
-        $val = isset($this->item[$key]) ? $this->item[$key] : $default;
-        unset($this->item[$key]);
+    /**
+     * Internal server error or timeout
+     *
+     * @param $statusCode
+     * @param $errorCode
+     * @return bool
+     */
+    private function isInternalError($statusCode, $errorCode)
+    {
+        return in_array($statusCode, [503, 504]) || is_null($errorCode);
+    }
 
-        return $val;
+    private function onInternalError()
+    {
+        $response = new ResponseData();
+        $response->wrong();
+    }
+
+    /**
+     * @param $data
+     * @return bool
+     */
+    private function isDuplicateWin($data)
+    {
+        return ($data['method'] == 'transaction_bet_payout') && TransactionHelper::getTransactionErrorState($data['code']) == TransactionHelper::DUPLICATE;
+    }
+
+    /**
+     * @param $item
+     * @return mixed
+     */
+    private function onDuplicateWin($item)
+    {
+        $data = new ResponseData($item['method'], $item['token'], [
+            'balance_after' => $item['balance'],
+            'already_processed' => 1
+        ]);
+
+        return $data->ok();
     }
 }

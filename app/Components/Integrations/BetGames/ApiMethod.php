@@ -2,21 +2,20 @@
 
 namespace App\Components\Integrations\BetGames;
 
-use App\Components\Transactions\TransactionRequest;
-
 /**
- * Class TransactionMap
+ * Class ApiMethod
  * @package App\Components\Integrations\BetGames
  */
-class TransactionMap
+class ApiMethod
 {
+
     /**
      * @var string
      */
     private $method;
 
     /**
-     * TransactionMap constructor.
+     * ApiMethod constructor.
      * @param string $method
      */
     public function __construct(string $method)
@@ -27,11 +26,16 @@ class TransactionMap
     /**
      * @return string
      */
-    public function getType():string 
+    public function get():string 
     {
         $map = [
-            'transaction_bet_payin' => TransactionRequest::TRANS_BET,
-            'transaction_bet_payout' => TransactionRequest::TRANS_WIN,
+            'ping' => 'ping',
+            'get_account_details' => 'account',
+            'refresh_token' => 'refreshToken',
+            'request_new_token' => 'newToken',
+            'get_balance' => 'getBalance',
+            'transaction_bet_payin' => 'bet',
+            'transaction_bet_payout' => 'win',
         ];
 
         return $map[$this->method] ?? '';

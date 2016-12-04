@@ -14,6 +14,10 @@ class Signature
     private $data;
     private $hash;
 
+    /**
+     * Signature constructor.
+     * @param array $data
+     */
     public function __construct(array $data)
     {
         $this->cache = app('cache')->store('redis_bet_games');
@@ -22,7 +26,10 @@ class Signature
     }
 
 
-    public function getHash()
+    /**
+     * @return string
+     */
+    public function getHash():string 
     {
         return $this->hash;
     }
@@ -33,7 +40,6 @@ class Signature
     private function create():string
     {
         $result = '';
-//        var_dump($this->data); die('qwe');
         foreach ($this->data as $key => $value) {
             if ($key == 'params' && empty($value)) {
                 continue;
@@ -87,9 +93,9 @@ class Signature
 
     /**
      * @param $value
-     * @return mixed
+     * @return int
      */
-    private function getTime($value)
+    private function getTime($value):int 
     {
         list(, $time) = explode('-', $value);
         return $time;

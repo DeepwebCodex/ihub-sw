@@ -3,23 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\BetGamesApiFormatter;
-use App\Components\Integrations\BetGames\Signature;
+use App\Components\Integrations\BetGames\ApiMethod;
+use App\Components\Integrations\BetGames\ResponseData;
 use App\Components\Integrations\BetGames\Token;
 use App\Components\Integrations\BetGames\TransactionMap;
-use App\Components\Integrations\BetGames\TransactionDecorator;
 use App\Components\Traits\MetaDataTrait;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\BetGamesTemplate;
-use App\Http\Requests\BetGames\PingRequest;
-use App\Http\Requests\BetGames\GetAccountDetailsRequest;
-use App\Http\Requests\BetGames\RefreshTokenRequest;
-use App\Http\Requests\BetGames\NewTokenRequest;
-use App\Http\Requests\BetGames\GetBalanceRequest;
+use App\Http\Requests\BetGames\BaseRequest;
 use App\Http\Requests\BetGames\BetRequest;
 use App\Http\Requests\BetGames\WinRequest;
 use Illuminate\Http\Response;
@@ -31,6 +26,10 @@ class BetGamesController extends BaseApiController
 
     public static $exceptionTemplate = BetGamesTemplate::class;
 
+    /**
+     * BetGamesController constructor.
+     * @param BetGamesApiFormatter $formatter
+     */
     public function __construct(BetGamesApiFormatter $formatter)
     {
         parent::__construct($formatter);
@@ -40,65 +39,102 @@ class BetGamesController extends BaseApiController
         $this->middleware('input.xml')->except(['error']);
 
         /**
-         * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkToken
+         * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkToken, BetGamesValidation::checkMethod
          */
         Validator::extend('check_signature', 'App\Http\Requests\Validation\BetGamesValidation@checkSignature');
         Validator::extend('check_time', 'App\Http\Requests\Validation\BetGamesValidation@checkTime');
-        Validator::extend('checkToken', 'App\Http\Requests\Validation\BetGamesValidation@checkToken');
-//        Validator::extend('check_expiration_time', 'App\Http\Requests\Validation\EuroGamesTechValidation@checkExpirationTime');
-//        Validator::extend('validate_deposit', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateDepositReason');
-//        Validator::extend('validate_withdraw', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateWithdrawReason');
+        Validator::extend('check_token', 'App\Http\Requests\Validation\BetGamesValidation@checkToken');
+        Validator::extend('check_method', 'App\Http\Requests\Validation\BetGamesValidation@checkMethod');
     }
 
-    public function ping(PingRequest $request)
+    /**
+     * @param BaseRequest $request
+     * @return mixed
+     */
+    public function index(BaseRequest $request)
     {
-        return $this->responseOk('ping',  $request->input('token'));
+        $apiMethod = new ApiMethod($request->input('method'));
+        return app()->call([$this, $apiMethod->get()], $request->all());
     }
 
-    public function account(GetAccountDetailsRequest $request)
+    /**
+     * @param BaseRequest $request
+     * @return Response
+     */
+    public function ping(BaseRequest $request)
     {
-        $token = new Token($request->input('token'));
-//        $user = IntegrationUser::get($token->getUserId(), $this->getOption('service_id'), 'bet_games');
-//        $attributes = $user->getAttributes();
-        $attributes = ['id' => 11, 'name' => 'test user', 'currency' => 'EUR'];
+        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+        return $this->responseOk('ping', $request->input('token'));
+    }
+
+    /**
+     * @param BaseRequest $request
+     * @return Response
+     */
+    public function account(BaseRequest $request)
+    {
+        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+        $token = Token::getByHash($request->input('token'));
+        $user = IntegrationUser::get($token->getUserId(), $this->getOption('service_id'), 'betGames');
+        $attributes = $user->getAttributes();
 
         return $this->responseOk($request->input('method'), $request->input('token'), [
-                'user_id' => $attributes['id'],
-                'username' => $attributes['name'],
-                'currency' => $attributes['currency'],
-                'info' => '',
-            ]);
+            'user_id' => $attributes['id'],
+            'username' => $attributes['first_name'],
+            'currency' => $user->getCurrency(),
+            'info' => $attributes['last_name'],
+        ]);
     }
 
-    public function refreshToken(RefreshTokenRequest $request)
+    /**
+     * @param BaseRequest $request
+     * @return Response
+     */
+    public function refreshToken(BaseRequest $request)
     {
-        $token = new Token($request->input('token'));
+        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+        $token = Token::getByHash($request->input('token'));
         $token->refresh();
-        return $this->responseOk($request->input('method'), $token->get(),['new_token_value' => $token->getTime()]);
+        return $this->responseOk($request->input('method'), $token->get());
     }
 
-    public function newToken(NewTokenRequest $request)
+    /**
+     * @param BaseRequest $request
+     * @return Response
+     */
+    public function newToken(BaseRequest $request)
     {
-        $token = new Token($request->input('token'));
-        $newToken = $token->setNew();
+        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+        $token = Token::getByHash($request->input('token'));
+        $newToken = $token->getNew();
         return $this->responseOk($request->input('method'), $newToken->get());
     }
 
-    public function getBalance(GetBalanceRequest $request)
+    /**
+     * @param BaseRequest $request
+     * @return Response
+     */
+    public function getBalance(BaseRequest $request)
     {
-        $token = new Token($request->input('token'));
-
-        $user = IntegrationUser::get($token->getUserId(), $this->getOption('service_id'), 'bet_games');
+        $token = Token::getByHash($request->input('token'));
+        $user = IntegrationUser::get($token->getUserId(), $this->getOption('service_id'), 'betGames');
+        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
 
         return $this->responseOk('get_balance', $request->input('token'), [
             'balance' => $user->getBalanceInCents()
         ]);
     }
 
+    /**
+     * @param BetRequest $request
+     * @return Response
+     */
     public function bet(BetRequest $request)
     {
-        $token = new Token($request->input('token'));
-        $user = IntegrationUser::get($token->getUserId(), $this->getOption('service_id'), 'bet_games');
+        $token = Token::getByHash($request->input('token'));
+        $user = IntegrationUser::get($token->getUserId(), $this->getOption('service_id'), 'betGames');
+
+        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
 
         $transactionMap = new TransactionMap($request->input('method'));
         $transactionRequest = new TransactionRequest(
@@ -108,21 +144,29 @@ class BetGamesController extends BaseApiController
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
-            $transactionMap->getType()
+            $transactionMap->getType(),
+            $request->input('params.transaction_id')
         );
 
-        $decorator = new  TransactionDecorator(new  TransactionHandler($transactionRequest, $user));
-        $response = $decorator->handle(new ProcessBetGames());
+        $transaction = new TransactionHandler($transactionRequest, $user);
+        $response = $transaction->handle(new ProcessBetGames());
 
-        return $this->responseOk($request->input('method'), $request->input('token'), [
+        return $this->responseOk($request->input('method'), $token->refresh()->get(), [
             'balance_after' => $response->getBalanceInCents(),
-            'already_processed' => 0
+            'already_processed' => $response->isDuplicate() ? 1 : 0
         ]);
     }
 
+    /**
+     * @param WinRequest $request
+     * @return Response
+     */
     public function win(WinRequest $request)
     {
-        $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'bet_games');
+        $token = Token::getByHash($request->input('token'));
+        $user = IntegrationUser::get($token->getUserId(), $this->getOption('service_id'), 'betGames');
+
+        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token'), 'balance' => $user->getBalanceInCents()]);
 
         $transactionMap = new TransactionMap($request->input('method'));
         $transactionRequest = new TransactionRequest(
@@ -132,23 +176,19 @@ class BetGamesController extends BaseApiController
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
-            $transactionMap->getType()
+            $transactionMap->getType(),
+            $request->input('params.transaction_id')
         );
 
-        $decorator = new  TransactionDecorator(new  TransactionHandler($transactionRequest, $user));
-        $response = $decorator->handle(new ProcessBetGames());
+        $transaction = new TransactionHandler($transactionRequest, $user);
+        $response = $transaction->handle(new ProcessBetGames());
 
         return $this->responseOk($request->input('method'), $request->input('token'), [
             'balance_after' => $response->getBalanceInCents(),
-            'already_processed' => 0
+            'already_processed' => $response->isDuplicate() ? 1 : 0
         ]);
     }
 
-
-    public function error()
-    {
-        throw new ApiHttpException(404, null);
-    }
     /**
      * @param $method
      * @param $token
@@ -157,19 +197,7 @@ class BetGamesController extends BaseApiController
      */
     public function responseOk($method, $token, array $params = [])
     {
-        $data = [
-            'method' => $method,
-            'token' => $token,
-            'success' => 1,
-            'error_code' => 0,
-            'error_text' => '',
-            'time' => time(),
-            'params' => $params
-        ];
-        $signature = new Signature($data);
-
-        return $this->respond(Response::HTTP_OK, '', array_merge($data, [
-            'signature' => $signature->getHash(),
-        ]));
+        $data = new ResponseData($method, $token, $params);
+        return $this->respond(Response::HTTP_OK, '', $data->ok());
     }
 }

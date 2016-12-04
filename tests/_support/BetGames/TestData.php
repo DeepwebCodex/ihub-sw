@@ -2,73 +2,78 @@
 
 namespace BetGames;
 
+use App\Components\Integrations\BetGames\Token;
 use App\Components\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
 
 class TestData
 {
+    const AMOUNT = 10;
     /**
      * @var IntegrationUser
      */
     private $user;
     private $amount;
+    private $token;
 
     public function __construct(TestUser $testUser)
     {
         $this->user = $testUser->getUser();
-        $this->amount = 10;
+        $this->token = Token::create($this->user->id, $this->user->getCurrency());
+        $this->amount = self::AMOUNT;
     }
 
-    public function getFor($method)
+    public function notFound()
     {
-        $data = $this->$method();
-
-        $s = new Signature($data);
+        return $this->basic('not_found');
     }
 
     public function ping()
     {
-        return [
+        $data = [
             'method' => 'ping',
             'token' => '-',
             'time' => time(),
             'params' => null,
         ];
+        $sign = new Signature($data);
+
+        return array_merge($data, ['signature' => $sign->getHash()]);
     }
 
-    public function authenticate()
+    public function account()
     {
-        return $this->basic();
+        return $this->basic('get_account_details');
+    }
+
+    public function refreshToken()
+    {
+        return $this->basic('refresh_token');
+    }
+
+    public function newToken()
+    {
+        return $this->basic('request_new_token');
     }
 
     public function getBalance()
     {
-        return array_merge($this->basic(), [
-            'Currency' => $this->user->getCurrency(),
-            'GameId' => random_int(1, 500),
-        ]);
+        return $this->basic('get_balance');
     }
 
-    public function bet()
+    public function bet($bet_id = null, $trans_id = null)
     {
-        return array_merge($this->transaction(), ['Reason' => 'ROUND_BEGIN']);
+        return $this->transaction('transaction_bet_payin', $bet_id, $trans_id);
     }
 
-    public function win($gameNumber = null)
+    public function win($bet_id = null, $trans_id = null)
     {
-        $data = array_merge($this->transaction(), ['Reason' => 'ROUND_END']);
-        if ($gameNumber) {
-            $data['GameNumber'] = $gameNumber;
-        }
-
-        return $data;
+        return $this->transaction('transaction_bet_payout', $bet_id, $trans_id, $this->user->id);
     }
 
-    public function betWin()
+    public function setAmount($amount)
     {
-        return array_merge($this->transaction(), [
-            'WinAmount' => $this->amount,
-            'Reason' => 'ROUND_END']);
+        return $this->amount = $amount;
     }
 
     public function getAmount()
@@ -76,25 +81,70 @@ class TestData
         return $this->amount;
     }
 
-
-    private function basic()
+    public function resetAmount()
     {
-        return [
-            'method' => config('integrations.egt.UserName'),
-            'token' => config('integrations.egt.Password'),
-            'time' => $this->user->id,
-            'params' => '',
-        ];
+        return $this->amount = self::AMOUNT;
     }
 
-    private function transaction()
+    public function wrongToken($method, $params = null)
     {
-        return array_merge($this->basic(), [
-            'Currency' => $this->user->getCurrency(),
-            'GameId' => random_int(1, 500),
-            'TransferId' => md5(str_random()),
-            'GameNumber' => random_int(100000, 9900000),
-            'Amount' => $this->amount,
-        ]);
+        $data = [
+            'method' => $method,
+            'token' => 123456789,
+            'time' => time(),
+            'params' => $params,
+        ];
+        $this->setSignature($data);
+
+        return $data;
+    }
+
+    public function wrongTime($method, $params = null)
+    {
+        $token = Token::create($this->user->id, $this->user->getCurrency());
+        $data = [
+            'method' => $method,
+            'token' => $token->get(),
+            'time' => 12345,
+            'params' => $params,
+        ];
+        $this->setSignature($data);
+
+        return $data;
+    }
+
+    private function basic($method, $params = null)
+    {
+        $token = Token::create($this->user->id, $this->user->getCurrency());
+        $data = [
+            'method' => $method,
+            'token' => $token->get(),
+            'time' => time(),
+            'params' => $params,
+        ];
+        $this->setSignature($data);
+
+        return $data;
+    }
+
+    private function transaction($method, $bet_id = null, $trans_id = null, $player_id=null)
+    {
+        $params = [
+            'amount' => $this->amount,
+            'currency' => $this->user->getCurrency(),
+            'bet_id' => (empty($bet_id)) ? random_int(100000, 9900000) : (int)$bet_id,
+            'transaction_id' => $trans_id ?? random_int(1000, 5000), //md5(str_random()),
+            'retrying' => 0,
+        ];
+        if($player_id){
+            $params['player_id'] = $player_id;
+        }
+        return $this->basic($method, $params);
+    }
+
+    private function setSignature(&$data)
+    {
+        $sign = new Signature($data);
+        $data['signature'] = $sign->getHash();
     }
 }
