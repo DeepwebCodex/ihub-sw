@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: doomsentinel
- * Date: 9/19/16
- * Time: 10:13 AM
- */
+
 
 namespace App\Components\Transactions;
 
@@ -19,6 +14,7 @@ use App\Models\Transactions;
  */
 class BaseSeamlessWalletProcessor
 {
+    /**@var CodeMappingBase */
     protected $codeMapping;
 
     protected $request;
