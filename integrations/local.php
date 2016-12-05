@@ -97,4 +97,9 @@ return [
         'api_key' => '19d47072a7e46e82ce07b7d8b843cecc',
         'api_password' => '4575885165224895',
     ],
+
+    'betGames' => [
+        'secret' => 'dfF$FF3r4efr',
+        'token_expiration_time' => 60,
+    ],
 ];

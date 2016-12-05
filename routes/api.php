@@ -47,3 +47,17 @@ Route::group(['prefix' => 'vb'], function () {
     Route::any('{any}', "VirtualBoxingController@error");
     Route::any('/', "VirtualBoxingController@index");
 });
+
+/** BetGames controller routes
+ * @see App\Http\Controllers\Api\BetGamesController::index,
+ * @see App\Http\Controllers\Api\BetGamesController::ping,
+ * @see App\Http\Controllers\Api\BetGamesController::account,
+ * @see App\Http\Controllers\Api\BetGamesController::getBalance,
+ * @see App\Http\Controllers\Api\BetGamesController::refreshToken,
+ * @see App\Http\Controllers\Api\BetGamesController::newToken,
+ * @see App\Http\Controllers\Api\BetGamesController::bet,
+ * @see App\Http\Controllers\Api\BetGamesController::win,
+ */
+Route::group(['prefix' => 'bg'], function () {
+    Route::post('/', "BetGamesController@index");
+});
