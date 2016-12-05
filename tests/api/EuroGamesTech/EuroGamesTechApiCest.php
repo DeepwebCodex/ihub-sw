@@ -50,7 +50,7 @@ class EuroGamesTechApiCest
         $request = $this->data->authenticate();
 
         $I->disableMiddleware();
-        $this->defenceCode = (new DefenceCode())->generate($request['PlayerId'], $request['PortalCode'], time());
+        $this->defenceCode = "e4fda8473f68894a11c99acc25ecca11";
         $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $this->defenceCode]));
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -58,20 +58,6 @@ class EuroGamesTechApiCest
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $I->seeXmlResponseIncludes("<Balance>{$this->testUser->getBalanceInCents()}</Balance>");
-    }
-
-    /**
-     * @depends testMethodAuthenticate
-     * @param \ApiTester $I
-     */
-    public function testDefenceCodeDuplicate(\ApiTester $I)
-    {
-        $request = $this->data->authenticate();
-
-        $I->disableMiddleware();
-        $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $this->defenceCode]));
-        $response = (array)(new \SimpleXMLElement($I->grabResponse()));
-        $I->assertEquals(StatusCode::EXPIRED, $response['ErrorCode']);
     }
 
     public function testMethodGetPlayerBalance(\ApiTester $I)

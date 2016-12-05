@@ -11,6 +11,7 @@ use App\Components\Transactions\Strategies\Casino\ProcessCasino;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\Exceptions\UserCurrencyException;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\CasinoTemplate;
@@ -52,7 +53,8 @@ class CasinoController extends BaseApiController
     public function auth(AuthRequest $request)
     {
         $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
-        $user->storeSessionCurrency($user->getCurrency());
+
+        $this->checkSessionCurrency($user->getCurrency());
 
         return $this->respondOk(200, 'success', [
             'user_id'   => $user->id,
@@ -69,7 +71,8 @@ class CasinoController extends BaseApiController
     public function getBalance(AuthRequest $request)
     {
         $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
-        $user->checkSessionCurrency();
+
+        $this->checkSessionCurrency($user->getCurrency());
 
         return $this->respondOk(200, 'success', [
            'balance' => $user->getBalanceInCents()
@@ -83,9 +86,14 @@ class CasinoController extends BaseApiController
     public function refreshToken(AuthRequest $request)
     {
         $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
-        $user->checkSessionCurrency();
 
-        return $this->respondOk();
+        $this->checkSessionCurrency($user->getCurrency());
+
+        $newToken = app('GameSession')->regenerate($request->input('token'));
+
+        return $this->respondOk(200, 'success', [
+            'token' => $newToken
+        ]);
     }
 
     /**
@@ -95,7 +103,8 @@ class CasinoController extends BaseApiController
     public function payIn(PayInRequest $request)
     {
         $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
-        $user->checkSessionCurrency();
+
+        $this->checkSessionCurrency($user->getCurrency());
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -125,7 +134,8 @@ class CasinoController extends BaseApiController
     public function payOut(PayOutRequest $request)
     {
         $user = IntegrationUser::get($this->pullMetaField('user_id'), $this->getOption('service_id'), 'casino');
-        $user->checkSessionCurrency();
+
+        $this->checkSessionCurrency($user->getCurrency());
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -153,6 +163,7 @@ class CasinoController extends BaseApiController
      * @param Request $request
      * @return Response
      * @internal param string $casino
+     * TODO::refactor gen token based on casino solutions team feedback
      */
     public function genToken(Request $request)
     {
@@ -203,5 +214,14 @@ class CasinoController extends BaseApiController
         $payload = array_merge($payload, ['signature' => CasinoHelper::generateActionSignature($payload)]);
 
         return parent::respondOk($statusCode, $message, $payload);
+    }
+
+    /**
+     * @param string $userCurrency
+     */
+    protected function checkSessionCurrency(string $userCurrency){
+        if($userCurrency !== app('GameSession')->get('currency')){
+            throw new UserCurrencyException(409, "Currency mismatch", 1401);
+        }
     }
 }

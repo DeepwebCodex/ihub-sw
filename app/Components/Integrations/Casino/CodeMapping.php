@@ -54,7 +54,7 @@ class CodeMapping extends CodeMappingBase
             ],
             StatusCode::INVALID_TOKEN => [
                 'message'   => 'Invalid token',
-                'map'       => [],
+                'map'       => [88618],
                 'attribute' => 'token',
                 'meanings'  => [self::INVALID_TOKEN]
             ],

@@ -41,7 +41,7 @@ class MicroGamingApiCest
                 ],
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
-                    'token' => \App\Components\Integrations\MicroGaming\MicroGamingHelper::generateToken('KSKHDU95jG34', $testUser->getCurrency())
+                    'token' => "e4fda8473f68894a11c99acc25ecca11"
                 ]
             ]
         ];
@@ -72,7 +72,7 @@ class MicroGamingApiCest
                 ],
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
-                    'token' => \App\Components\Integrations\MicroGaming\MicroGamingHelper::generateToken('KSKHDU95jG34', $testUser->getCurrency())
+                    'token' => "e4fda8473f68894a11c99acc25ecca11"
                 ]
             ]
         ];
@@ -103,7 +103,7 @@ class MicroGamingApiCest
                 ],
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
-                    'token' => \App\Components\Integrations\MicroGaming\MicroGamingHelper::generateToken('KSKHDU95jG34', $testUser->getCurrency())
+                    'token' => "e4fda8473f68894a11c99acc25ecca11"
                 ]
             ]
         ];
@@ -140,7 +140,7 @@ class MicroGamingApiCest
                     'actionid' => random_int(9900000, 99000000),
                     'amount' => 10,
                     'gamereference' => str_random(),
-                    'token' => \App\Components\Integrations\MicroGaming\MicroGamingHelper::generateToken('KSKHDU95jG34', $testUser->getCurrency())
+                    'token' => "e4fda8473f68894a11c99acc25ecca11"
                 ]
             ]
         ];
@@ -187,7 +187,7 @@ class MicroGamingApiCest
                     'actionid' => random_int(9900000, 99000000),
                     'amount' => 10,
                     'gamereference' => str_random(),
-                    'token' => \App\Components\Integrations\MicroGaming\MicroGamingHelper::generateToken('KSKHDU95jG34', $testUser->getCurrency())
+                    'token' => "e4fda8473f68894a11c99acc25ecca11"
                 ]
             ]
         ];

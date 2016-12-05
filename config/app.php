@@ -169,7 +169,8 @@ return [
         \App\Providers\CasinoGameLauncherServiceProvider::class,
         \App\Providers\LiveDealerApiServiceProvider::class,
         \App\Providers\AmqpServiceProvider::class,
-        \App\Providers\StatsdServiceProvider::class
+        \App\Providers\StatsdServiceProvider::class,
+        \App\Providers\GameSessionServiceProvider::class
     ],
 
     /*
