@@ -45,7 +45,7 @@ class CustomValidationTest extends \Codeception\Test\Unit
 
     public function testMicroGamingValidationToken()
     {
-        $token = \App\Components\Integrations\MicroGaming\MicroGamingHelper::generateToken('DFGSED15LKUIY8741', 'WMZ');
+        $token = "e4fda8473f68894a11c99acc25ecca11";
 
         $this->specify("Check validate token method", function() use($token) {
             verify("Validation passes", MicroGamingValidation::validateToken(null, $token, null, null))->true();
@@ -56,19 +56,6 @@ class CustomValidationTest extends \Codeception\Test\Unit
         });
     }
 
-    public function testMicroGamingValidationTime()
-    {
-
-        $token = \App\Components\Integrations\MicroGaming\MicroGamingHelper::generateToken('DFGSED15LKUIY8741', 'WMZ');
-
-        $this->specify("Check validate time method", function() use($token) {
-            verify("Validation passes", MicroGamingValidation::validateTime(null, $token, null, null))->true();
-
-            $this->expectException(\App\Exceptions\Api\ApiHttpException::class);
-            $this->expectExceptionCode(0);
-            MicroGamingValidation::validateTime(null, '', null, null);
-        });
-    }
 
     public function testMicroGamingValidationPlayType()
     {

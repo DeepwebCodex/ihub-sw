@@ -145,7 +145,7 @@ class Handler extends ExceptionHandler
      */
     protected function convertExceptionToResponse(Exception $e)
     {
-        $e =  FlattenException::create($e);
+        $e = FlattenException::create($e);
 
         return \Illuminate\Support\Facades\Response::make(config('app.debug') ? $e->getMessage() : '', $e->getStatusCode(), $e->getHeaders());
     }

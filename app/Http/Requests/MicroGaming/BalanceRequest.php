@@ -16,8 +16,7 @@ class BalanceRequest extends BaseMicroGamingRequest
     public function messages()
     {
         return [
-            'methodcall.call.token.validate_token' => 'Invalid token',
-            'methodcall.call.token.validate_time'  => 'Token is no longer valid',
+            'methodcall.call.token.validate_token' => 'Invalid token'
         ];
     }
     /**
@@ -30,7 +29,7 @@ class BalanceRequest extends BaseMicroGamingRequest
         return [
             'methodcall.system'     => 'bail|required|string|in:casino',
             'methodcall.call.seq'   => 'bail|required|string',
-            'methodcall.call.token' => 'bail|required|string|validate_token|validate_time',
+            'methodcall.call.token' => 'bail|required|string|validate_token',
         ];
     }
 }

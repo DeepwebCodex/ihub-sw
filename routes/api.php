@@ -48,6 +48,12 @@ Route::group(['prefix' => 'vb'], function () {
     Route::any('/', "VirtualBoxingController@index");
 });
 
+/**GameSession controller routes */
+Route::group(['prefix' => 'game_session'], function () {
+    Route::post('create', "GameSessionController@create");
+    Route::any('{any}', "GameSessionController@error");
+});
+
 /** BetGames controller routes
  * @see App\Http\Controllers\Api\BetGamesController::index,
  * @see App\Http\Controllers\Api\BetGamesController::ping,

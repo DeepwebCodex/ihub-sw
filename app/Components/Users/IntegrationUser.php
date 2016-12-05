@@ -63,8 +63,6 @@ use App\Components\Users\Traits\SessionCurrency;
 */
 class IntegrationUser implements UserInterface
 {
-    use SessionCurrency;
-
     private $attributes = [];
 
     private $wallets    = [];
@@ -84,7 +82,6 @@ class IntegrationUser implements UserInterface
     public function __construct(array $userData, string $integration)
     {
         $this->load($userData);
-        $this->redisKey = env('REDIS_PREFIX', 'app') . ':' . $integration . ':users:';
     }
 
     public function __get($name)
@@ -113,16 +110,6 @@ class IntegrationUser implements UserInterface
         }
 
         return null;
-    }
-
-    public function storeSessionCurrency($currency){
-        $this->setSessionCurrency($currency, $this->id);
-    }
-
-    public function checkSessionCurrency(){
-        if(!$this->validateSessionCurrency($this->getCurrency(), $this->id)){
-            throw new UserCurrencyException(409, "Currency mismatch", 1401);
-        }
     }
 
     public function getCurrency(){
