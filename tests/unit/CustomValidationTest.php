@@ -10,25 +10,8 @@ class CustomValidationTest extends \Codeception\Test\Unit
 {
     use Codeception\Specify;
 
-    private $egtRequestData;
-    private $egtValidatorStub;
-
     protected function _before() {
-        $this->egtRequestData = [
-            'PlayerId'  => random_int(10000, 40000),
-            'PortalCode' => 'RUB'
-        ];
 
-        $this->egtRequestData['DefenceCode'] = (new DefenceCode)->generate($this->egtRequestData['PlayerId'], $this->egtRequestData['PortalCode'], time());
-
-        $this->egtValidatorStub = Stub::construct(\App\Http\Requests\Validation\EuroGamesTechValidation::class, [], [
-            'getRequest' => Stub::atLeastOnce(function(){
-                $request = request();
-                $request->merge($this->egtRequestData);
-
-                return $request;
-            })
-        ]);
     }
 
     protected function _after() {}
@@ -60,31 +43,9 @@ class CustomValidationTest extends \Codeception\Test\Unit
         });
     }
 
-    public function testEuroGamesTechValidatorDefenceCode()
-    {
-        $this->specify("Check defence code of a request", function(){
-            verify("Validation passes", $this->egtValidatorStub->checkDefenceCode(null, $this->egtRequestData['DefenceCode'], null, null))->true();
-
-            $this->expectException(\App\Exceptions\Api\ApiHttpException::class);
-            $this->expectExceptionCode(0);
-            $this->egtValidatorStub->checkDefenceCode(null, 'dsfsdf-sdfsdf', null, null);
-        });
-    }
-
-    public function testEuroGamesTechValidatorExpirationTime()
-    {
-        $this->specify("Check check expiration time", function() {
-            verify("Validation passes", $this->egtValidatorStub->checkExpirationTime(null, $this->egtRequestData['DefenceCode'], null, null))->true();
-
-            $this->expectException(\App\Exceptions\Api\ApiHttpException::class);
-            $this->expectExceptionCode(0);
-            $this->egtValidatorStub->checkDefenceCode(null, 'dsfsdf-13216486181685', null, null);
-        });
-    }
-
     public function testMicroGamingValidationToken()
     {
-        $token = \App\Components\Integrations\MicroGaming\MicroGamingHelper::generateToken('DFGSED15LKUIY8741', 'WMZ');
+        $token = "e4fda8473f68894a11c99acc25ecca11";
 
         $this->specify("Check validate token method", function() use($token) {
             verify("Validation passes", MicroGamingValidation::validateToken(null, $token, null, null))->true();
@@ -95,19 +56,6 @@ class CustomValidationTest extends \Codeception\Test\Unit
         });
     }
 
-    public function testMicroGamingValidationTime()
-    {
-
-        $token = \App\Components\Integrations\MicroGaming\MicroGamingHelper::generateToken('DFGSED15LKUIY8741', 'WMZ');
-
-        $this->specify("Check validate time method", function() use($token) {
-            verify("Validation passes", MicroGamingValidation::validateTime(null, $token, null, null))->true();
-
-            $this->expectException(\App\Exceptions\Api\ApiHttpException::class);
-            $this->expectExceptionCode(0);
-            MicroGamingValidation::validateTime(null, '', null, null);
-        });
-    }
 
     public function testMicroGamingValidationPlayType()
     {

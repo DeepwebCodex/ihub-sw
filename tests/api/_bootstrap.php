@@ -1,8 +1,6 @@
 <?php
 // Here you can initialize variables that will be available to your tests
 
-use App\Components\ExternalServices\RemoteSession;
-
 require 'bootstrap/autoload.php';
 $app = require 'bootstrap/app.php';
 $app->loadEnvironmentFrom('.env.testing');

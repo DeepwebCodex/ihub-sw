@@ -103,4 +103,11 @@ return [
         ],
     ],
 
+    'api' => [
+        'game_session' => [
+            'login' => env('GAME_SESSION_API_LOGIN'),
+            'password' => env('GAME_SESSION_API_PASSWORD'),
+        ]
+    ]
+
 ];

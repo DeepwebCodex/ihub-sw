@@ -25,7 +25,8 @@ class UserFactory
 
     private $userData;
 
-    public function make(int $userId, int $serviceId, string $className, string $integration){
+    public function make(int $userId, int $serviceId, string $className, string $integration) : IntegrationUser
+    {
         $this->accountManager = $this->getAccountManager();
 
 
