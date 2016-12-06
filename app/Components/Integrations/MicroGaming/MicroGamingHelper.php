@@ -25,28 +25,6 @@ class MicroGamingHelper
     }
 
     /**
-     * @param string $remoteSessionId
-     * @param string $currency
-     * @return string
-     */
-    public static function generateToken(string $remoteSessionId, string $currency)
-    {
-        $time = microtime(true);
-        return $remoteSessionId . "-" . $time . "-" . self::partToken($remoteSessionId, $time, $currency);
-    }
-
-    /**
-     * @param string $remoteSessionId
-     * @param float $time
-     * @param string $currency
-     * @return string
-     */
-    public static function partToken($remoteSessionId, $time, $currency) {
-        $currency = self::mapCurrencyCode($currency);
-        return md5(sha1($remoteSessionId . config('integrations.microgaming.security_word') . $time . $currency));
-    }
-
-    /**
      * @param string $currency
      * @return mixed
      */
@@ -55,31 +33,6 @@ class MicroGamingHelper
         $currencyMap = config('integrations.microgaming.list_currency');
 
         return array_get($currencyMap, $currency, $currency);
-    }
-
-    /**
-     * @param string $token
-     * @return array
-     */
-    public static function parseToken(string $token){
-        $data = explode('-', $token);
-
-        if(empty($data) || !is_array($data) || count($data) != 3)
-        {
-            throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
-        }
-
-        return $data;
-    }
-
-    public static function confirmTokenHash(string $token, string $remoteSession, string $currency)
-    {
-        list($remoteSessionId, $time, $hash) = self::parseToken($token);
-
-        if($hash != self::partToken($remoteSession, $time, $currency))
-        {
-            throw new ApiHttpException(409, "Player token is invalid.", CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
-        }
     }
 
     public static function getTransactionType(string $playType)

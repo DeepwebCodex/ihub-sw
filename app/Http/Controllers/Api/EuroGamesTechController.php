@@ -37,8 +37,6 @@ class EuroGamesTechController extends BaseApiController
 
         $this->middleware('input.xml')->except(['error']);
 
-        Validator::extend('check_defence_code', 'App\Http\Requests\Validation\EuroGamesTechValidation@checkDefenceCode');
-        Validator::extend('check_expiration_time', 'App\Http\Requests\Validation\EuroGamesTechValidation@checkExpirationTime');
         Validator::extend('validate_deposit', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateDepositReason');
         Validator::extend('validate_withdraw', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateWithdrawReason');
     }
