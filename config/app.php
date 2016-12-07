@@ -166,8 +166,6 @@ return [
         \App\Providers\AccountManagerServiceProvider::class,
         \App\Providers\AppLogServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
-        \App\Providers\CasinoGameLauncherServiceProvider::class,
-        \App\Providers\LiveDealerApiServiceProvider::class,
         \App\Providers\AmqpServiceProvider::class,
         \App\Providers\StatsdServiceProvider::class,
         \App\Providers\GameSessionServiceProvider::class
