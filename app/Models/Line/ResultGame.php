@@ -34,7 +34,7 @@ class ResultGame extends BaseLineModel
         return static::where([
             'event_id' => $eventId,
             'del' => 'no',
-        ])->update('approve', 'yes');
+        ])->update(['approve' => 'yes']);
     }
 
     /**

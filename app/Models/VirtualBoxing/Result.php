@@ -11,7 +11,17 @@ class Result extends BaseVirtualBoxingModel
     /**
      * {@inheritdoc}
      */
-    protected $table = 'vb.result_vb';
+    protected $table = 'result_vb';
+
+    /**
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
 
     /**
      * {@inheritdoc}
