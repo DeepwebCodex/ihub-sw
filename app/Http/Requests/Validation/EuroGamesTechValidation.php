@@ -5,50 +5,36 @@ namespace App\Http\Requests\Validation;
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
 use App\Components\Integrations\EuroGamesTech\DefenceCode;
 use App\Components\Integrations\EuroGamesTech\StatusCode;
+use App\Components\Integrations\GameSession\TokenControl\TokenControl;
 use App\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Request;
 
 class EuroGamesTechValidation
 {
     /**
-     * @var DefenceCode
-     */
-    private $defenceCode;
+     * @var TokenControl
+    */
+    protected $tokenControl;
 
     public function __construct()
     {
-        $this->defenceCode = new DefenceCode();
+        $this->tokenControl = new TokenControl('euro_games_tech', 2);
     }
 
-    public function checkDefenceCode($attribute, $value, $parameters, $validator){
-        if(!($request = $this->getRequest())){
-            return false;
-        }
-
-        if($this->defenceCode->isUsed($value)){
+    public function validateDefenceCode($attribute, $value, $parameters, $validator)
+    {
+        if($this->tokenControl->isUsed($value))
+        {
             throw new ApiHttpException(400, "Defence code is deactivated", ['code' => StatusCode::EXPIRED]);
         }
 
-        $userId = $request->input('PlayerId');
-        $currency = EgtHelper::getCurrencyFromPortalCode($request->input('PortalCode'));
-
-        if($this->defenceCode->isCorrect($value, $userId, $currency)){
-            $this->defenceCode->setUsed($value);
-            return true;
-        }
-
-        throw new ApiHttpException(400, "Defence code is wrong", ['code' => StatusCode::EXPIRED]);
-    }
-
-    public function checkExpirationTime($attribute, $value, $parameters, $validator){
-        if($this->defenceCode->isExpired($value)){
-            throw new ApiHttpException(400, "Defence code expired", ['code' => StatusCode::EXPIRED]);
-        }
+        $this->tokenControl->setUsed($value);
 
         return true;
     }
 
-    public function validateDepositReason($attribute, $value, $parameters, $validator){
+    public function validateDepositReason($attribute, $value, $parameters, $validator)
+    {
         if(!in_array($value, ['ROUND_END', 'ROUND_CANCEL', 'JACKPOT_END']))
         {
             return false;
@@ -57,7 +43,8 @@ class EuroGamesTechValidation
         return true;
     }
 
-    public function validateWithdrawReason($attribute, $value, $parameters, $validator){
+    public function validateWithdrawReason($attribute, $value, $parameters, $validator)
+    {
         if($value != 'ROUND_BEGIN')
         {
             return false;

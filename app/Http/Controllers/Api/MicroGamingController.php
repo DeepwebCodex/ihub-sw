@@ -43,7 +43,6 @@ class MicroGamingController extends BaseApiController
         $this->middleware('input.xml');
 
         Validator::extend('validate_token', 'App\Http\Requests\Validation\MicroGamingValidation@validateToken');
-        Validator::extend('validate_time', 'App\Http\Requests\Validation\MicroGamingValidation@validateTime');
         Validator::extend('validate_play_type', 'App\Http\Requests\Validation\MicroGamingValidation@validatePlayType');
     }
 
@@ -62,15 +61,9 @@ class MicroGamingController extends BaseApiController
 
     public function logIn(LogInRequest $request)
     {
-        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
+        $user = IntegrationUser::get(app('GameSession')->get('user_id'), $this->getOption('service_id'), 'microgaming');
 
         $this->addMetaField('currency', $user->getCurrency());
-
-        MicroGamingHelper::confirmTokenHash(
-            $request->input('methodcall.call.token'),
-            RemoteSession::getSessionId(),
-            $user->getCurrency()
-        );
 
         return $this->respondOk(200, '', [
             'loginname'     => $user->id . $user->getCurrency(),
@@ -86,15 +79,9 @@ class MicroGamingController extends BaseApiController
 
     public function getBalance(BalanceRequest $request)
     {
-        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
+        $user = IntegrationUser::get(app('GameSession')->get('user_id'), $this->getOption('service_id'), 'microgaming');
 
         $this->addMetaField('currency', $user->getCurrency());
-
-        MicroGamingHelper::confirmTokenHash(
-            $request->input('methodcall.call.token'),
-            RemoteSession::getSessionId(),
-            $user->getCurrency()
-        );
 
         return $this->respondOk(200, '', [
             'balance'       => $user->getBalanceInCents(),
@@ -104,15 +91,10 @@ class MicroGamingController extends BaseApiController
 
     public function play(PlayRequest $request)
     {
-        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
+        $user = IntegrationUser::get(app('GameSession')->get('user_id'), $this->getOption('service_id'), 'microgaming');
 
         $this->addMetaField('currency', $user->getCurrency());
 
-        MicroGamingHelper::confirmTokenHash(
-            $request->input('methodcall.call.token'),
-            RemoteSession::getSessionId(),
-            $user->getCurrency()
-        );
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -138,15 +120,9 @@ class MicroGamingController extends BaseApiController
 
     public function endGame(EndGameRequest $request)
     {
-        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
+        $user = IntegrationUser::get(app('GameSession')->get('user_id'), $this->getOption('service_id'), 'microgaming');
 
         $this->addMetaField('currency', $user->getCurrency());
-
-        MicroGamingHelper::confirmTokenHash(
-            $request->input('methodcall.call.token'),
-            RemoteSession::getSessionId(),
-            $user->getCurrency()
-        );
 
         return $this->respondOk(200, '', [
             'balance'       => $user->getBalanceInCents(),
@@ -156,17 +132,13 @@ class MicroGamingController extends BaseApiController
 
     public function refreshToken(RefreshTokenRequest $request)
     {
-        $user = IntegrationUser::get(RemoteSession::get('user_id'), $this->getOption('service_id'), 'microgaming');
+        $user = IntegrationUser::get(app('GameSession')->get('user_id'), $this->getOption('service_id'), 'microgaming');
 
         $this->addMetaField('currency', $user->getCurrency());
 
-        MicroGamingHelper::confirmTokenHash(
-            $request->input('methodcall.call.token'),
-            RemoteSession::getSessionId(),
-            $user->getCurrency()
-        );
-
-        return $this->respondOk(200);
+        return $this->respondOk(200, '', [
+            'token' => app('GameSession')->regenerate($request->input('methodcall.call.token'))
+        ]);
     }
 
     public function error()
@@ -176,15 +148,9 @@ class MicroGamingController extends BaseApiController
 
     public function respondOk($statusCode = Response::HTTP_OK, string $message = '', array $payload = [])
     {
-        $token = request()->input('methodcall.call.token');
-
-        if (RemoteSession::getSessionId()) {
-            $token = MicroGamingHelper::generateToken(RemoteSession::getSessionId(), $this->pullMetaField('currency'));
-        }
-
         $attributes = [
             'seq'   => request()->input('methodcall.call.seq'),
-            'token' => $token
+            'token' => request()->input('methodcall.call.token')
         ];
 
         $attributes = array_merge($attributes, $payload);
