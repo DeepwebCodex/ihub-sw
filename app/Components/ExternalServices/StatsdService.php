@@ -13,9 +13,8 @@ class StatsdService
     public $failedKey  = 'failed';
 
     protected $service = null;
-    /**
-     * RemoteSession constructor.
-     */
+
+
     public function __construct()
     {
         $host = config('log.statsd.host');

@@ -3,12 +3,6 @@
 namespace App\Http\Requests\Casino;
 
 
-use App\Components\ExternalServices\Facades\RemoteSession;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiValidationInterface;
-use Illuminate\Http\Request;
-
 /**
  * Class AuthRequest
  * @package App\Http\Requests\Simple

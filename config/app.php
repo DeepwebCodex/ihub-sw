@@ -156,13 +156,10 @@ return [
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         \Kozz\Laravel\Providers\Guzzle::class,
         \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
-        \App\Providers\RemoteSessionServiceProvider::class,
         \App\Providers\AccountManagerServiceProvider::class,
         \App\Providers\AppLogServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
@@ -217,7 +214,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class,
         'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
-        'RemoteSession' => \App\Components\ExternalServices\Facades\RemoteSession::class,
         'AppLog' => \App\Facades\AppLog::class,
         'Fractal' => Spatie\Fractal\FractalFacade::class,
     ],
