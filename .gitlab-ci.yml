@@ -16,6 +16,8 @@ before_script:
 composer_and_ unit_testing:
   stage: test
   image: gitlab.favorit:4567/integrations/docker:php-fpm
+  services:
+    - redis:3.2
   script:
     - sh ./run/install-rancher.sh
     - ./vendor/bin/codecept run
