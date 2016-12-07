@@ -79,10 +79,10 @@ return [
             'prefix' => env('REDIS_PREFIX', 'app') . ':sessions'
         ],
 
-        'redis_egt' => [
+        'redis_tokens' => [
             'driver' => 'redis',
             'connection' => 'default',
-            'prefix' => env('REDIS_PREFIX', 'app') . ':egt:'
+            'prefix' => env('REDIS_PREFIX', 'app') . ':tokens'
         ],
     ],
 
