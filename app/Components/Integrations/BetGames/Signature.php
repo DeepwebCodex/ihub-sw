@@ -2,8 +2,12 @@
 
 namespace App\Components\Integrations\BetGames;
 
+use App\Components\Traits\MetaDataTrait;
+
 class Signature
 {
+    use MetaDataTrait;
+
     const EXPIRATION_TIME = 1;
     const CACHE_KEY = 'signature:';
 
@@ -41,7 +45,7 @@ class Signature
     {
         $result = '';
         foreach ($this->data as $key => $value) {
-            if ($key == 'params' && empty($value)) {
+            if ($key == 'params' && empty($value) || $key == $this->metaStorageKey) {
                 continue;
             } elseif ($key == 'params' && !empty($value)) {
                 foreach ($value as $keyParam => $param) {

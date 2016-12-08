@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\BetGames;
 
+use App\Components\Integrations\BetGames\Error;
+use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
@@ -24,10 +26,30 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
+        try{
+            app('GameSession')->start($request->input('token'));
+        } catch (SessionDoesNotExist $e) {
+            return false;
+        }
+
+        $userId = app('GameSession')->get('user_id');
+
+        if($userId){
+            $this->addMetaField('user_id', $userId);
+            $this->addMetaField('token', $request->input('token'));
+            return true;
+        }
+
+        return false;
     }
 
     public function failedAuthorization()
     {
+        throw new ApiHttpException(403, null, [
+            'code' => Error::TOKEN,
+            'method' => $this->input('method'),
+            'token' => $this->input('token'),
+        ]);
     }
 
     /**
@@ -39,7 +61,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
             'method' => 'bail|required|string|check_method',
             'signature' => 'bail|required|string|check_signature',
             'time' => 'bail|required|integer|check_time',
-            'token' => 'bail|required|string|check_token',
+//            'token' => 'bail|required|string|check_token',
             'params' => 'bail|present'
         ];
     }

@@ -3,7 +3,6 @@
 namespace api\BetGames;
 
 use App\Components\Integrations\BetGames\Error;
-use \App\Components\Integrations\BetGames\Token;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Models\Transactions;
@@ -29,22 +28,18 @@ class BetGamesApiCest
         $I->disableMiddleware();
     }
 
-    public function _after(\ApiTester $I)
-    {
-//        print_r($I->grabResponse());
-    }
-
-    public function _failed(\ApiTester $I)
-    {
-//        print_r($I->grabResponse());
-    }
-
     // tests
     public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendPOST('/bg', $this->data->notFound());
         $this->getResponseFail($I, Error::SIGNATURE);
 
+    }
+
+    public function testAuth(\ApiTester $I)
+    {
+        $I->sendPOST('/bg', $this->data->authFailed());
+        $this->getResponseFail($I, Error::TOKEN);
     }
 
     public function testPing(\ApiTester $I)
@@ -63,15 +58,9 @@ class BetGamesApiCest
     public function testRefreshToken(\ApiTester $I)
     {
         $request = $this->data->refreshToken();
-        $requestToken = Token::getByHash($request['token']);
-        $oldValue = $requestToken->getCachedValue();
         $I->sendPOST('/bg', $request);
         $response = $this->getResponseOk($I);
-
-        $newValue = $requestToken->getCachedValue();
-
         $I->assertEquals($request['token'], $response['token']);
-        $I->assertNotEquals($oldValue, $newValue);
     }
 
     public function testNewToken(\ApiTester $I)
@@ -80,8 +69,7 @@ class BetGamesApiCest
         $I->sendPOST('/bg', $request);
         $response = $this->getResponseOk($I);
 
-        $responseToken = Token::getByHash($response['token']);
-        $I->assertNotEquals($request['token'], $responseToken->get());
+        $I->assertNotEquals($request['token'], $response['token']);
     }
 
     public function testGetBalance(\ApiTester $I)
@@ -219,12 +207,6 @@ class BetGamesApiCest
         $this->data->resetAmount();
 
         $this->noRecord($I, $request, 'bet');
-    }
-
-    public function testWrongToken(\ApiTester $I)
-    {
-        $I->sendPOST('/bg', $this->data->wrongToken('get_balance'));
-        $this->getResponseFail($I, Error::TOKEN);
     }
 
     public function testWrongSignature(\ApiTester $I)
