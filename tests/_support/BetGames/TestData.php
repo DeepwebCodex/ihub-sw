@@ -117,7 +117,7 @@ class TestData
     {
         $data = [
             'method' => $method,
-            'token' => (int)(microtime(true) * 10000),
+            'token' => (string)(microtime(true) * 10000),
             'time' => time(),
             'params' => $params,
         ];
