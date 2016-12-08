@@ -61,7 +61,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
             'method' => 'bail|required|string|check_method',
             'signature' => 'bail|required|string|check_signature',
             'time' => 'bail|required|integer|check_time',
-//            'token' => 'bail|required|string|check_token',
+            'token' => 'bail|required|string|check_token',
             'params' => 'bail|present'
         ];
     }
