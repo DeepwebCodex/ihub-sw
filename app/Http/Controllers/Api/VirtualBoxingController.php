@@ -172,7 +172,7 @@ class VirtualBoxingController extends BaseApiController
     {
         $errorMessageCode = $exception->getMessage();
         $errorMessage = $this->getMessageDescription($errorMessageCode);
-        return $this->respondError($errorMessage, $exception->getCode());
+        return $this->respondError($errorMessage, (int)$exception->getCode());
     }
 
     /**
