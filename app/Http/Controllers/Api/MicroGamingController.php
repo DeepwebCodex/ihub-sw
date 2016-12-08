@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Formatters\MicroGamingApiFormatter;
 use App\Components\Integrations\Casino\CodeMapping;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;

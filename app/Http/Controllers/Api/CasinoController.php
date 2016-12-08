@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Integrations\Casino\CodeMapping;
@@ -171,7 +170,9 @@ class CasinoController extends BaseApiController
 
         $token = $request->cookie('PHPSESSID');
 
-        $userId = RemoteSession::start($token)->get('user_id');
+
+        //TODO::investigate gen token caller - this is garbage
+        $userId = env('TEST_USER_ID');
 
         if ($userId) {
             $payload = [

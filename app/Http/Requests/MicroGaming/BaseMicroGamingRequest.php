@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests\MicroGaming;
 
-use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\MicroGaming\CodeMapping;
-use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use App\Components\Integrations\MicroGaming\StatusCode;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;

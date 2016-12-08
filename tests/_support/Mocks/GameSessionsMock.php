@@ -8,8 +8,6 @@
 
 namespace Testing;
 
-
-use App\Components\ExternalServices\RemoteSession;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Mockery;
 

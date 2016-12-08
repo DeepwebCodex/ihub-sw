@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\Casino;
 
-
-use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\Casino\CodeMapping;
 use App\Components\Integrations\Casino\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
