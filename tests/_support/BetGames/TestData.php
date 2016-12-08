@@ -41,6 +41,19 @@ class TestData
         return array_merge($data, ['signature' => $sign->getHash()]);
     }
 
+    public function authFailed()
+    {
+        $data = [
+            'method' => 'ping',
+            'token' => 'authorization_must_fails',
+            'time' => time(),
+            'params' => [],
+        ];
+        $this->setSignature($data);
+
+        return $data;
+    }
+
     public function account()
     {
         return $this->basic('get_account_details');
@@ -86,19 +99,6 @@ class TestData
         return $this->amount = self::AMOUNT;
     }
 
-    public function wrongToken($method, $params = null)
-    {
-        $data = [
-            'method' => $method,
-            'token' => 123456789,
-            'time' => time(),
-            'params' => $params,
-        ];
-        $this->setSignature($data);
-
-        return $data;
-    }
-
     public function wrongTime($method, $params = null)
     {
         $token = Token::create($this->user->id, $this->user->getCurrency());
@@ -115,10 +115,9 @@ class TestData
 
     private function basic($method, $params = null)
     {
-        $token = Token::create($this->user->id, $this->user->getCurrency());
         $data = [
             'method' => $method,
-            'token' => $token->get(),
+            'token' => (int)(microtime(true) * 10000),
             'time' => time(),
             'params' => $params,
         ];
@@ -127,7 +126,7 @@ class TestData
         return $data;
     }
 
-    private function transaction($method, $bet_id = null, $trans_id = null, $player_id=null)
+    private function transaction($method, $bet_id = null, $trans_id = null, $player_id = null)
     {
         $params = [
             'amount' => $this->amount,
@@ -136,7 +135,7 @@ class TestData
             'transaction_id' => $trans_id ?? random_int(1000, 5000), //md5(str_random()),
             'retrying' => 0,
         ];
-        if($player_id){
+        if ($player_id) {
             $params['player_id'] = $player_id;
         }
         return $this->basic($method, $params);

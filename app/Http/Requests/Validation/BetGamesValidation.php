@@ -5,8 +5,6 @@ namespace App\Http\Requests\Validation;
 use App\Components\Integrations\BetGames\ApiMethod;
 use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\Error;
-use App\Components\Integrations\BetGames\Token;
-use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Request;
 
@@ -53,18 +51,12 @@ class BetGamesValidation
         if ('ping' == Request::getFacadeRoot()->method) {
             return ($value == '-');
         }
-
-        $token = Token::getByHash($value);
-
-        $user = IntegrationUser::get($token->getUserId(), config('integrations.betGames.service_id'), 'betGames');
-        if ($token->isExpired() || $token->isWrongCurrency($user->getCurrency())) {
+        if (!app('GameSession')->get('user_id')) {
             throw new ApiHttpException(400, null, [
                 'code' => Error::TOKEN,
                 'method' => Request::getFacadeRoot()->method,
                 'token' => Request::getFacadeRoot()->token,
             ]);
-        } else {
-            $token->refresh();
         }
 
         return true;

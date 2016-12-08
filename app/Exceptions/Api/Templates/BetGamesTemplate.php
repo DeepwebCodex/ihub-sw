@@ -69,6 +69,7 @@ class BetGamesTemplate implements IExceptionTemplate
      */
     private function onDuplicateWin($item)
     {
+        app('GameSession')->prolong($item['token']);
         $data = new ResponseData($item['method'], $item['token'], [
             'balance_after' => $item['balance'],
             'already_processed' => 1
