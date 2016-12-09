@@ -35,6 +35,7 @@ class GameSessionService
         $sessionId = $referenceStoreItem->getSessionId();
 
         if (SessionStoreItem::existsBySessionId($sessionId)) {
+            $this->start($sessionId);
             return $sessionId;
         }
 
@@ -194,5 +195,14 @@ class GameSessionService
     {
         $this->validateSessionStarted();
         $this->sessionStoreItem->save();
+    }
+
+    /**
+     * Close current session
+     */
+    public function close()
+    {
+        $this->sessionStarted = false;
+        unset($this->sessionStoreItem);
     }
 }

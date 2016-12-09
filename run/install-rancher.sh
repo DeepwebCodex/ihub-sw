@@ -28,9 +28,9 @@ cp ./.env ./.env.testing
 
 sed -i -e "s/^APP_ENV=local/APP_ENV=testing/g" \
        -e "s/^SESSION_DRIVER=redis/SESSION_DRIVER=redis/g" \
-       -e "s/^LOG_DRIVER=rabbit/LOG_DRIVER=rabbit/g" \
-       -e "s/^REDIS_HOST=redis/REDIS_HOST=ihub.favbet.dev/g" \
-       -e "s/^REDIS_PORT=6379/REDIS_PORT=16379/g" \
+       -e "s/^LOG_DRIVER=rabbit/LOG_DRIVER=file/g" \
+       -e "s/^REDIS_HOST=redis/REDIS_HOST=redis/g" \
+       -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
        ./.env.testing
 
 echo "" >> ./.env.testing

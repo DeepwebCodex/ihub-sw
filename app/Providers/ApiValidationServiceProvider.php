@@ -2,9 +2,7 @@
 
 namespace App\Providers;
 
-use App\Components\ExternalServices\RemoteSession;
 use App\Http\Requests\Validation\ApiValidator;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Factory;
 use Illuminate\Validation\ValidationServiceProvider;
 
