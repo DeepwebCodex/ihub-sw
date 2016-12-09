@@ -12,13 +12,17 @@ class StatsdService
     public $hitsKey = 'hits';
     public $failedKey  = 'failed';
 
+    protected $prefix = '';
+
     protected $service = null;
-
-
+    /**
+     * RemoteSession constructor.
+     */
     public function __construct()
     {
         $host = config('log.statsd.host');
         $port = config('log.statsd.port');
+        $this->prefix = config('log.statsd.prefix');
 
         if($host && $port)
         {
@@ -31,7 +35,7 @@ class StatsdService
      */
     public function registerHit(string $actionName)
     {
-        $this->registerAction($this->hitsKey, $actionName);
+        $this->registerAction($this->prefix.' '.$this->hitsKey, $actionName);
     }
 
     /**
@@ -39,7 +43,7 @@ class StatsdService
      */
     public function registerFailed(string $actionName)
     {
-        $this->registerAction($this->failedKey, $actionName);
+        $this->registerAction($this->prefix. ' ' .$this->failedKey, $actionName);
     }
 
     /**
@@ -59,7 +63,9 @@ class StatsdService
             }
         }
 
-        $this->service->flush();
+        if($this->service) {
+            $this->service->flush();
+        }
     }
 
     /**

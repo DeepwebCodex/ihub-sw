@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\MicroGamingApiFormatter;
 use App\Components\Integrations\Casino\CodeMapping;
+use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use App\Components\Traits\MetaDataTrait;
 use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGaming;
@@ -64,6 +65,13 @@ class MicroGamingController extends BaseApiController
 
         $this->addMetaField('currency', $user->getCurrency());
 
+        try
+        {
+            $token = app('GameSession')->regenerate($request->input('methodcall.call.token'));
+        } catch (SessionDoesNotExist $e) {
+            throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::TIME_EXPIRED));
+        }
+
         return $this->respondOk(200, '', [
             'loginname'     => $user->id . $user->getCurrency(),
             'currency'      => $user->getCurrency(),
@@ -72,7 +80,8 @@ class MicroGamingController extends BaseApiController
             'balance'       => $user->getBalanceInCents(),
             'bonusbalance'  => '0',
             'wallet'        => 'local',
-            'idnumber'      => '0'
+            'idnumber'      => '0',
+            'token'         => $token
         ]);
     }
 
