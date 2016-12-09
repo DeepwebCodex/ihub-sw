@@ -13,6 +13,17 @@ use Illuminate\Http\Request;
  */
 class AuthRequest extends BaseEgtRequest
 {
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'DefenceCode.validate_defence_code' => 'Invalid defence code',
+        ];
+    }
 
     /**
      * Determine if the user is authorized to make this request.
@@ -44,7 +55,7 @@ class AuthRequest extends BaseEgtRequest
             'UserName' => 'bail|required|string',
             'Password' => 'bail|required|string',
             'PlayerId' => 'bail|required|integer',
-            'DefenceCode' => 'bail|required|string',
+            'DefenceCode' => 'bail|required|string|validate_defence_code',
             'PortalCode' => 'bail|required|string',
             'SessionId' => 'bail|required|string'
         ];

@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\EuroGamesTech;
 
-
-use App\Components\ExternalServices\Facades\RemoteSession;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use \App\Components\Integrations\EuroGamesTech\StatusCode;
 use App\Components\Traits\MetaDataTrait;

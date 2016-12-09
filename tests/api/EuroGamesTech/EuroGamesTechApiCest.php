@@ -50,7 +50,7 @@ class EuroGamesTechApiCest
         $request = $this->data->authenticate();
 
         $I->disableMiddleware();
-        $this->defenceCode = "e4fda8473f68894a11c99acc25ecca11";
+        $this->defenceCode = md5(uniqid('egt'.random_int(-99999,999999)));
         $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $this->defenceCode]));
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -153,13 +153,5 @@ class EuroGamesTechApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
-    }
-
-    public function testJackpot(\ApiTester $I)
-    {
-        $I->disableMiddleware();
-        $I->sendPOST('/internal/egt/jackpot/set');
-        $I->sendPOST('/internal/egt/jackpot/get');
-        $I->seeResponseIsJson();
     }
 }
