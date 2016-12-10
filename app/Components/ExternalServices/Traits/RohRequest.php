@@ -61,9 +61,8 @@ trait RohRequest
                     if ($data = json_decode($data->getContents(), true)) {
                         //validate response data
                         if (isset($data['status']) && $data['status'] == 'error') {
-                            /*throw new \Exception(json_encode($data['error']),
-                                isset($data['error']['code']) ? $data['error']['code'] : 0);*/
-                            throw new \Exception("money fuking money", 1027);
+                            throw new \Exception(json_encode($data['error']),
+                                isset($data['error']['code']) ? $data['error']['code'] : 0);
                         }
 
                         if (isset($data['response']) && !empty($data['response'])) {
