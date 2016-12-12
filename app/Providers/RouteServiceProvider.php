@@ -39,9 +39,6 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapApiRoutes();
 
-        $this->mapInternalRoutes();
-
-        //
     }
 
     /**
@@ -75,23 +72,6 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace . '\Api'
         ], function ($router) {
             require base_path('routes/api.php');
-        });
-    }
-
-    /**
-     * Define the "internal" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
-     */
-    protected function mapInternalRoutes()
-    {
-        Route::group([
-            'middleware' => 'internal',
-            'namespace' => $this->namespace . '\Internal'
-        ], function ($router) {
-            require base_path('routes/internal.php');
         });
     }
 }

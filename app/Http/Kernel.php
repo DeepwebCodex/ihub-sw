@@ -49,14 +49,7 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
             'check.partner_id'
-        ],
-
-        'internal' => [
-            'log.hits',
-            'throttle:60,1',
-            'bindings',
-            'check.partner_id'
-        ],
+        ]
     ];
 
     /**
