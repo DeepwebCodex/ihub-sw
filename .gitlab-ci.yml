@@ -18,7 +18,7 @@ composer_and_ unit_testing:
   services:
     - redis:3.2
   script:
-    - sh ./run/install-rancher.sh
+    - sh ./run/dev/install-rancher.sh
     - ./vendor/bin/codecept run
   cache:
     key: $CI_BUILD_REF_NAME
