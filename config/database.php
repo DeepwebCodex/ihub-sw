@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'erlybet'),
+    'default' => env('DB_CONNECTION', 'integration'),
 
     /*
     |--------------------------------------------------------------------------

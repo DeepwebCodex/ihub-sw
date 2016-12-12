@@ -13,7 +13,7 @@ class CreateTransactionsHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::connection('integration')->create('integration.transaction_history', function (Blueprint $table) {
+        Schema::connection('integration')->create('transaction_history', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('operation_id');
@@ -43,6 +43,6 @@ class CreateTransactionsHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::connection('integration')->dropIfExists('integration.transaction_history');
+        Schema::connection('integration')->dropIfExists('transaction_history');
     }
 }
