@@ -40,7 +40,7 @@ class EuroGamesTechBorderlineApiCest
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/Deposit', $request);
-        $I->seeResponseCodeIs(500);
+        $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>3000</ErrorCode>");
@@ -83,7 +83,7 @@ class EuroGamesTechBorderlineApiCest
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/Withdraw', $request);
-        $I->seeResponseCodeIs(404);
+        $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>3000</ErrorCode>");
@@ -125,7 +125,7 @@ class EuroGamesTechBorderlineApiCest
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/Withdraw', $request);
-        $I->seeResponseCodeIs(409);
+        $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1100</ErrorCode>");
