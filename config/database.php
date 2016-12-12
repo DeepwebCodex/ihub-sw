@@ -55,7 +55,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'sslmode' => 'prefer',
-            'schema' => 'integration',
+            'schema' => 'ihub',
         ],
         'line' => [
             'driver' => 'pgsql',
