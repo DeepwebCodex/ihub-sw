@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'erlybet'),
+    'default' => env('DB_CONNECTION', 'integration'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'sslmode' => 'prefer',
-            'schema' => 'integration',
+            'schema' => 'ihub',
         ],
         'line' => [
             'driver' => 'pgsql',
