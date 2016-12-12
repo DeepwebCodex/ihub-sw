@@ -38,7 +38,7 @@ class EuroGamesTechApiCest
     public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendGET('/egt');
-        $I->seeResponseCodeIs(404);
+        $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('both items are in response');
         $I->seeXmlResponseIncludes("<ErrorCode>3000</ErrorCode>");
