@@ -75,7 +75,6 @@ trait RohRequest
             }
 
         } catch (\Exception $e) {
-
             $statusCode = $this->getHttpCode($e->getCode());
 
             /*Retry operation on fail*/
@@ -87,7 +86,7 @@ trait RohRequest
 
             AppLog::critical($e->getMessage());
 
-            throw new GenericApiHttpException($statusCode, $e->getMessage());
+            throw new GenericApiHttpException($statusCode, $e->getMessage(), [], null, [], $e->getCode());
         }
     }
 
