@@ -45,7 +45,7 @@ return [
     */
 
     'connections' => [
-        'ihub' => [
+        'integration' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', ''),
             'port' => env('DB_PORT', ''),
@@ -55,7 +55,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'sslmode' => 'prefer',
-            'schema' => 'icms',
+            'schema' => 'integration',
         ],
         'line' => [
             'driver' => 'pgsql',
