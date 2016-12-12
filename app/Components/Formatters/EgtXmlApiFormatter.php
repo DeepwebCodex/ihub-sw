@@ -66,4 +66,19 @@ class EgtXmlApiFormatter extends XmlApiFormatter
 
         return array_get($map, $method, 'Error') . 'Response';
     }
+
+    /**
+     * @param \Exception $exception
+     * @return Response
+     */
+    public function formatException(\Exception $exception)
+    {
+        list($payload, $statusCode) = array_values($this->transformException($exception));
+
+        ksort($payload);
+
+        return ResponseFacade::make($this->format($payload), 200, [
+            'Content-type' => 'application/xml'
+        ]);
+    }
 }
