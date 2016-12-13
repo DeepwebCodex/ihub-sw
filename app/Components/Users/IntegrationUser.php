@@ -84,6 +84,16 @@ class IntegrationUser implements UserInterface
         $this->load($userData);
     }
 
+    public function updateBalance($newBalanceInCents)
+    {
+        $activeWallet = $this->getActiveWallet();
+        if($activeWallet && $newBalanceInCents !== null){
+            return $activeWallet->deposit = $newBalanceInCents / 100;
+        }
+
+        return false;
+    }
+
     public function __get($name)
     {
         return array_get($this->attributes, $name);

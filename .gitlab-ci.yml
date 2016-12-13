@@ -12,7 +12,7 @@ variables:
 before_script:
   - echo $CI_BUILD_REF
 
-composer_and_ unit_testing:
+composer_and_unit_testing:
   stage: test
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   services:

@@ -9,12 +9,15 @@ use App\Models\Transactions;
 use \BetGames\TestData;
 use \BetGames\TestUser;
 
-class BetGamesApiCest
+/**
+ * Class BetGamesApiCest
+ * @package api\BetGames
+ */
+class BetGamesApiCest_
 {
     private $data;
-    /**
-     * @var TestUser
-     */
+
+    /** @var TestUser */
     private $testUser;
 
     public function __construct()
@@ -28,7 +31,6 @@ class BetGamesApiCest
         $I->disableMiddleware();
     }
 
-    // tests
     public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendPOST('/bg', $this->data->notFound());
