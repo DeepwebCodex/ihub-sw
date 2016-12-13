@@ -53,7 +53,7 @@ class BaseSeamlessWalletProcessor
      * @return array
      */
     protected function processZeroAmountTransaction(){
-        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type);
+        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, request()->server('PARTNER_ID'));
 
         $status = is_object($lastRecord) ? $lastRecord->status : null;
 
