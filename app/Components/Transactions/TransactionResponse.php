@@ -86,7 +86,7 @@ class TransactionResponse
             return $balance;
         }
 
-        return $this->deposit_rest;
+        return S::isBlank($this->deposit_rest) ? 0 : $this->deposit_rest;
     }
 
     public function getAttributes(){
