@@ -132,7 +132,9 @@ class EuroGamesTechController extends BaseApiController
             $request->input('TransferId')
         );
 
-        EgtHelper::handleTransaction($transactionRequest, $user);
+        $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
+
+        $user->updateBalance($transactionResponse->getBalanceInCents());
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
