@@ -24,14 +24,15 @@ class ResponseData
      * @param string $method
      * @param string $token
      * @param array $params
-     * @param Error|null $error
+     * @param array|null $error
      */
-    public function __construct(string $method = '', string $token = '', $params = [], Error $error = null)
+    public function __construct(string $method = '', string $token = '', $params = [], array $error = null)
     {
         $this->method = $method;
         $this->token = $token;
         $this->params = $params;
-        $this->error = $error ?? (new Error('no'));
+        $this->error = $error ?? CodeMapping::getByErrorCode(StatusCode::OK);
+
     }
 
     /**
@@ -43,8 +44,8 @@ class ResponseData
             'method' => $this->method,
             'token' => $this->token,
             'success' => 1,
-            'error_code' => $this->error->getCode(),
-            'error_text' => $this->error->getMessage(),
+            'error_code' => $this->error['code'],
+            'error_text' => $this->error['message'],
             'time' => time(),
             'params' => $this->params
         ];
@@ -62,8 +63,8 @@ class ResponseData
             'method' => $this->method,
             'token' => $this->token,
             'success' => 0,
-            'error_code' => $this->error->getCode(),
-            'error_text' => $this->error->getMessage(),
+            'error_code' => $this->error['code'],
+            'error_text' => $this->error['message'],
             'time' => time(),
         ];
         $this->setSignature($view);

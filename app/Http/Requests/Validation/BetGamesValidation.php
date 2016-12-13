@@ -4,7 +4,8 @@ namespace App\Http\Requests\Validation;
 
 use App\Components\Integrations\BetGames\ApiMethod;
 use App\Components\Integrations\BetGames\Signature;
-use App\Components\Integrations\BetGames\Error;
+//use App\Components\Integrations\BetGames\Error;
+use App\Components\Integrations\BetGames\StatusCode;
 use App\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Request;
 
@@ -24,7 +25,7 @@ class BetGamesValidation
         $this->signature = new Signature($all);
         if ($this->signature->isWrong($value)) {
             throw new ApiHttpException(400, null, [
-                'code' => Error::SIGNATURE,
+                'code' => StatusCode::SIGNATURE,
                 'method' => Request::getFacadeRoot()->method,
                 'token' => Request::getFacadeRoot()->token,
             ]);
@@ -37,7 +38,7 @@ class BetGamesValidation
     {
         if ((time() - $value) > $this->time_limit) {
             throw new ApiHttpException(400, null, [
-                'code' => Error::TIME,
+                'code' => StatusCode::TIME,
                 'method' => Request::getFacadeRoot()->method,
                 'token' => Request::getFacadeRoot()->token,
             ]);
@@ -51,13 +52,6 @@ class BetGamesValidation
         if ('ping' == Request::getFacadeRoot()->method) {
             return ($value == '-');
         }
-        if (!app('GameSession')->get('user_id')) {
-            throw new ApiHttpException(400, null, [
-                'code' => Error::TOKEN,
-                'method' => Request::getFacadeRoot()->method,
-                'token' => Request::getFacadeRoot()->token,
-            ]);
-        }
 
         return true;
     }
@@ -67,7 +61,7 @@ class BetGamesValidation
         $apiMethod = new ApiMethod($value);
         if (!$apiMethod->get()) {
             throw new ApiHttpException(400, null, [
-                'code' => Error::SIGNATURE,
+                'code' => StatusCode::SIGNATURE,
                 'method' => Request::getFacadeRoot()->method,
                 'token' => Request::getFacadeRoot()->token,
             ]);

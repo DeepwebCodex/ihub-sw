@@ -2,8 +2,9 @@
 
 namespace App\Exceptions\Api\Templates;
 
-use App\Components\Integrations\BetGames\Error;
+use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\ResponseData;
+use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Transactions\TransactionHelper;
 
 class BetGamesTemplate implements IExceptionTemplate
@@ -16,14 +17,10 @@ class BetGamesTemplate implements IExceptionTemplate
      */
     public function mapping($item, $statusCode, $isApiException)
     {
-        $errorKey = $item['code'] ?? TransactionHelper::UNKNOWN;
-        $error = new Error($errorKey);
-        if (!$error->isValidationCode()) {
-            $error = new Error(TransactionHelper::getTransactionErrorState($errorKey));
-        }
+        $error = CodeMapping::getByErrorCode($item['code']);
 
         //internal server and timeout error cases
-        if ($this->isInternalError($statusCode, $error->getCode())) {
+        if ($this->isInternalError($statusCode, $error['code'])) {
             $this->onInternalError();
             return null;
         }
@@ -60,7 +57,7 @@ class BetGamesTemplate implements IExceptionTemplate
      */
     private function isDuplicateWin($data)
     {
-        return ($data['method'] == 'transaction_bet_payout') && TransactionHelper::getTransactionErrorState($data['code']) == TransactionHelper::DUPLICATE;
+        return ($data['method'] == 'transaction_bet_payout') && ($data['code'] == StatusCode::BAD_OPERATION_ORDER);
     }
 
     /**

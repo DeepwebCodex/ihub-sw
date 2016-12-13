@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\BetGames;
 
-use App\Components\Integrations\BetGames\Error;
+use App\Components\Integrations\BetGames\CodeMapping;
+use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
@@ -46,7 +47,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     public function failedAuthorization()
     {
         throw new ApiHttpException(403, null, [
-            'code' => Error::TOKEN,
+            'code' => StatusCode::TOKEN,
             'method' => $this->input('method'),
             'token' => $this->input('token'),
         ]);
@@ -68,11 +69,9 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
 
     public function response(array $errors)
     {
-//        var_dump($this->input('method'), $errors); die();
-        throw new ApiHttpException('400', null, [
-            'code' => key($errors),
+        throw new ApiHttpException('400', null, array_merge(CodeMapping::getByErrorCode(StatusCode::SIGNATURE), [
             'method' => $this->input('method'),
             'token' => $this->input('token'),
-        ]);
+        ]));
     }
 }
