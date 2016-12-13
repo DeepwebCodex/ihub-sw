@@ -5,7 +5,6 @@ namespace App\Exceptions\Api\Templates;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\ResponseData;
 use App\Components\Integrations\BetGames\StatusCode;
-use App\Components\Transactions\TransactionHelper;
 
 class BetGamesTemplate implements IExceptionTemplate
 {

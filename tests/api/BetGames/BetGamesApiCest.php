@@ -40,11 +40,11 @@ class BetGamesApiCest
 
     }
 
-    /*public function testAuth(\ApiTester $I)
+    public function testAuth(\ApiTester $I)
     {
         $I->sendPOST('/bg', $this->data->authFailed());
         $this->getResponseFail($I, StatusCode::TOKEN);
-    }*/
+    }
 
     public function testPing(\ApiTester $I)
     {

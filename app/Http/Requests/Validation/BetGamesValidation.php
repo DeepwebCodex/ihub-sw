@@ -4,7 +4,6 @@ namespace App\Http\Requests\Validation;
 
 use App\Components\Integrations\BetGames\ApiMethod;
 use App\Components\Integrations\BetGames\Signature;
-//use App\Components\Integrations\BetGames\Error;
 use App\Components\Integrations\BetGames\StatusCode;
 use App\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Request;
@@ -42,15 +41,6 @@ class BetGamesValidation
                 'method' => Request::getFacadeRoot()->method,
                 'token' => Request::getFacadeRoot()->token,
             ]);
-        }
-
-        return true;
-    }
-
-    public function checkToken($attribute, $value, $parameters, $validator):bool
-    {
-        if ('ping' == Request::getFacadeRoot()->method) {
-            return ($value == '-');
         }
 
         return true;

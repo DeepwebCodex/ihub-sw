@@ -15,9 +15,6 @@ class WinRequest extends BaseRequest
      */
     public function rules()
     {
-        /**
-         * @see BetGamesValidation::checkToken
-         */
         return array_merge(parent::rules(), [
             'params.player_id' => 'bail|required|integer|min:1',
             'params.amount' => 'bail|required|integer|min:0',
