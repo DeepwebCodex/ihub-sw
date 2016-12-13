@@ -387,7 +387,7 @@ trait ApiTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertCount', func_get_args()));
     }
 
- 
+
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2929,7 +2929,7 @@ trait ApiTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Assertion('seeNumRecords', func_get_args()));
     }
 
- 
+
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2953,7 +2953,7 @@ trait ApiTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('grabNumRecords', func_get_args()));
     }
 
- 
+
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
