@@ -74,7 +74,6 @@ class ResponseData
     public function wrong()
     {
         sleep(self::TIME_TO_DISCONNECT);
-        die('disconnect');
     }
 
     /**
