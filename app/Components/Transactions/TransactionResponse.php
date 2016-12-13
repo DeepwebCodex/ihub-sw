@@ -5,6 +5,7 @@ namespace App\Components\Transactions;
 
 use App\Components\ExternalServices\AccountManager;
 use App\Exceptions\Api\ApiHttpException;
+use Stringy\StaticStringy as S;
 
 /**
  * @property integer $operation_id
@@ -81,7 +82,7 @@ class TransactionResponse
     }
 
     protected function procBalance($balance = 0){
-        if(!$this->deposit_rest && $balance){
+        if(S::isBlank($this->deposit_rest) && $balance){
             return $balance;
         }
 
