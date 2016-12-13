@@ -24,7 +24,7 @@ class ProcessBetGames extends BaseSeamlessWalletProcessor implements Transaction
         $this->request = $request;
 
         if ($this->request->transaction_type != TransactionRequest::TRANS_BET) {
-            $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id);
+            $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, request()->server('PARTNER_ID'));
 
             if (!$betTransaction) {
                 throw new ApiHttpException(500, null, ['code' => TransactionHelper::getTransactionErrorCode(TransactionHelper::BAD_OPERATION_ORDER)]);
@@ -49,7 +49,7 @@ class ProcessBetGames extends BaseSeamlessWalletProcessor implements Transaction
      */
     private function processTransaction():array
     {
-        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type);
+        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, request()->server('PARTNER_ID'));
 
         $status = $lastRecord->status ?? null;
 
