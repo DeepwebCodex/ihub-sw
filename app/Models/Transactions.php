@@ -44,13 +44,15 @@ class Transactions extends Model
      * @param int $serviceId
      * @param $externalId
      * @param string $transactionType
+     * @param int $partner_id
      * @return Transactions
      */
-    public static function getTransaction(int $serviceId, $externalId, string $transactionType){
+    public static function getTransaction(int $serviceId, $externalId, string $transactionType, int $partner_id){
         return Transactions::where([
             ['service_id', $serviceId],
             ['foreign_id', $externalId],
-            ['transaction_type', $transactionType]
+            ['transaction_type', $transactionType],
+            ['partner_id', $partner_id]
         ])->first();
     }
 
@@ -58,13 +60,15 @@ class Transactions extends Model
      * @param int $serviceId
      * @param int $userId
      * @param $objectId
+     * @param int $partner_id
      * @return Transactions
      */
-    public static function getBetTransaction(int $serviceId, int $userId, $objectId){
+    public static function getBetTransaction(int $serviceId, int $userId, $objectId, int $partner_id){
         return Transactions::where([
             ['service_id', $serviceId],
             ['user_id', $userId],
             ['object_id', $objectId],
+            ['partner_id', $partner_id],
             ['transaction_type', TransactionRequest::TRANS_BET],
             ['status', TransactionRequest::STATUS_COMPLETED]
         ])->first();
