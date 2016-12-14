@@ -76,7 +76,7 @@ if (! function_exists('get_client_ip')) {
      */
     function get_client_ip()
     {
-        return request()->header('x-real-ip', function() {
+        $ip = request()->header('x-real-ip', function() {
             if(request()->headers->has('x-forwarded-for')){
                 $ips = request()->headers->get('x-forwarded-for');
                 if(is_array($ips))
@@ -89,10 +89,16 @@ if (! function_exists('get_client_ip')) {
                 } elseif (filter_var($ips, FILTER_VALIDATE_IP)) {
                     return $ips;
                 }
-            } else {
-                return request()->getClientIp();
             }
+
+            return request()->getClientIp();
         });
+
+        if(is_array($ip)){
+            return reset($ip);
+        }
+
+        return $ip;
     }
 
 }
