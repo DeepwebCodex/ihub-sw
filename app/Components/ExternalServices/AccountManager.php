@@ -167,7 +167,7 @@ class AccountManager
             'user_id'       => $user_id,
             'amount'        => $amount,
             'currency'      => $currency,
-            'client_ip'     => $this->request->ip() ?: '127.0.0.1',
+            'client_ip'     => get_client_ip() ?: '127.0.0.1',
             'move'          => $direction,
             'status'        => $status,
             'object_id'     => $object_id,
@@ -209,7 +209,7 @@ class AccountManager
         return $this->postMessageRoh('accounts/operation/completed', [
             'user_id'       => $user_id,
             'operation_id'  => $operation_id,
-            'client_ip'     => $this->request->ip() ?: '127.0.0.1',
+            'client_ip'     => get_client_ip() ?: '127.0.0.1',
             'move'          => $direction,
             'object_id'     => $object_id,
             'currency'      => $currency,

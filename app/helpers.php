@@ -68,3 +68,15 @@ if (! function_exists('gen_uid')) {
     }
 
 }
+
+if (! function_exists('get_client_ip')) {
+
+    /**
+     * @return string
+     */
+    function get_client_ip()
+    {
+        return request()->header('X-Real-IP', request()->getClientIp());
+    }
+
+}
