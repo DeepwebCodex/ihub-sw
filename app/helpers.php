@@ -76,21 +76,23 @@ if (! function_exists('get_client_ip')) {
      */
     function get_client_ip()
     {
-        if(request()->headers->has('x-forwarded-for')){
-            $ips = request()->headers->get('x-forwarded-for');
-            if(is_array($ips))
-            {
-                $ip = array_slice($ips, -1);
-                if(filter_var(array_pop($ip), FILTER_VALIDATE_IP))
+        return request()->header('x-real-ip', function() {
+            if(request()->headers->has('x-forwarded-for')){
+                $ips = request()->headers->get('x-forwarded-for');
+                if(is_array($ips))
                 {
-                    return $ip;
+                    $ip = array_slice($ips, -1);
+                    if(filter_var(array_pop($ip), FILTER_VALIDATE_IP))
+                    {
+                        return $ip;
+                    }
+                } elseif (filter_var($ips, FILTER_VALIDATE_IP)) {
+                    return $ips;
                 }
-            } elseif (filter_var($ips, FILTER_VALIDATE_IP)) {
-                return $ips;
+            } else {
+                return request()->getClientIp();
             }
-        }
-
-        return request()->header('X-Real-IP', request()->getClientIp());
+        });
     }
 
 }
