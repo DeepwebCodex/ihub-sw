@@ -28,6 +28,18 @@ class TransactionHelper
         }
     }
 
+    public static function getTransactionErrorCode($code)
+    {
+        $codes = [
+            self::DUPLICATE             => 1402,
+            self::BAD_OPERATION_ORDER   => 1403,
+            self::INSUFFICIENT_FUNDS    => 1027,
+            self::ACCOUNT_DENIED        => 1020,
+            self::ACCOUNT_DENIED        => -2,
+        ];
+        return $codes[$code] ?? null;
+    }
+
     public static function amountCentsToWhole(int $amount){
         return $amount / 100;
     }

@@ -13,7 +13,7 @@ class CreateObjectIdMapTable extends Migration
      */
     public function up()
     {
-        Schema::connection('integration')->create('integration.object_id_map', function (Blueprint $table) {
+        Schema::connection('integration')->create('object_id_map', function (Blueprint $table) {
             $table->increments('id');
             $table->string('object_id');
             $table->integer('service_id');
@@ -30,6 +30,6 @@ class CreateObjectIdMapTable extends Migration
      */
     public function down()
     {
-        Schema::connection('integration')->dropIfExists('integration.object_id_map');
+        Schema::connection('integration')->dropIfExists('object_id_map');
     }
 }

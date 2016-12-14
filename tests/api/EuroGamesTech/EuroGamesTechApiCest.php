@@ -38,7 +38,7 @@ class EuroGamesTechApiCest
     public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendGET('/egt');
-        $I->seeResponseCodeIs(404);
+        $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('both items are in response');
         $I->seeXmlResponseIncludes("<ErrorCode>3000</ErrorCode>");
@@ -137,6 +137,37 @@ class EuroGamesTechApiCest
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $I->expect('unchanged balance after operation');
         $expectedBalance = $this->testUser->getBalanceInCents();
+        $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
+
+        $I->expect('Can see record of both transactions applied');
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['TransferId'],
+            'transaction_type' => TransactionRequest::TRANS_WIN,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_DEPOSIT
+        ]);
+
+        $I->canSeeRecord(\App\Models\Transactions::class, [
+            'foreign_id' => $request['TransferId'],
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_WITHDRAWAL
+        ]);
+    }
+
+    public function testWithdrawAndDepositLost(\ApiTester $I)
+    {
+        $request = $this->data->betLost();
+        $expectedBalance = $this->testUser->getBalanceInCents() - $this->data->getAmount();
+
+        $I->disableMiddleware();
+        $I->sendPOST('/egt/WithdrawAndDeposit', $request);
+        $I->seeResponseCodeIs(200);
+        $I->canSeeResponseIsXml();
+        $I->expect('min required items in response');
+        $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
+        $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
+        $I->expect('unchanged balance after operation');
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of both transactions applied');

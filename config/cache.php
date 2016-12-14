@@ -65,6 +65,12 @@ return [
             'connection' => 'default',
             'prefix' => env('REDIS_PREFIX', 'app') . ':tokens'
         ],
+
+        'redis_bet_games' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'prefix' => env('REDIS_PREFIX', 'app') . ':redis_bet_games:'
+        ],
     ],
 
     /*
