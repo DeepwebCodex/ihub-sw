@@ -80,10 +80,10 @@ if (! function_exists('get_client_ip')) {
             $ips = request()->headers->get('x-forwarded-for');
             if(is_array($ips))
             {
-                foreach ($ips as $ip){
-                    if(filter_var($ip, FILTER_VALIDATE_IP)){
-                        return $ip;
-                    }
+                $ip = array_slice($ips, -1);
+                if(filter_var(array_pop($ip), FILTER_VALIDATE_IP))
+                {
+                    return $ip;
                 }
             } elseif (filter_var($ips, FILTER_VALIDATE_IP)) {
                 return $ips;
