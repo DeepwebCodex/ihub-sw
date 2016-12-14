@@ -2,7 +2,9 @@
 
 namespace api\BetGames;
 
-use App\Components\Integrations\BetGames\Error;
+//use App\Components\Integrations\BetGames\Error;
+use App\Components\Integrations\BetGames\CodeMapping;
+use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Models\Transactions;
@@ -13,7 +15,7 @@ use \BetGames\TestUser;
  * Class BetGamesApiCest
  * @package api\BetGames
  */
-class BetGamesApiCest_
+class BetGamesApiCest
 {
     private $data;
 
@@ -34,14 +36,14 @@ class BetGamesApiCest_
     public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendPOST('/bg', $this->data->notFound());
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
 
     }
 
     public function testAuth(\ApiTester $I)
     {
         $I->sendPOST('/bg', $this->data->authFailed());
-        $this->getResponseFail($I, Error::TOKEN);
+        $this->getResponseFail($I, StatusCode::TOKEN);
     }
 
     public function testPing(\ApiTester $I)
@@ -166,7 +168,7 @@ class BetGamesApiCest_
         $balanceBefore = $this->testUser->getBalanceInCents();
 
         $I->sendPOST('/bg', $request);
-        $this->getResponseFail($I, TransactionHelper::INSUFFICIENT_FUNDS);
+        $this->getResponseFail($I, StatusCode::INSUFFICIENT_FUNDS);
         $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
         $this->data->resetAmount();
 
@@ -179,7 +181,7 @@ class BetGamesApiCest_
 
         $request = $this->data->bet();
         $I->sendPOST('/bg', $request);
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
         $this->data->resetAmount();
 
         $this->noRecord($I, $request, 'bet');
@@ -205,7 +207,7 @@ class BetGamesApiCest_
         $request = $this->data->bet();
 
         $I->sendPOST('/bg', $request);
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
         $this->data->resetAmount();
 
         $this->noRecord($I, $request, 'bet');
@@ -216,14 +218,14 @@ class BetGamesApiCest_
         $data = $this->data->bet();
         $data['signature'] = '123';
         $I->sendPOST('/bg', $data);
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
     }
 
     public function testWrongTime(\ApiTester $I)
     {
         $data = $this->data->wrongTime('get_balance');
         $I->sendPOST('/bg', $data);
-        $this->getResponseFail($I, Error::TIME);
+        $this->getResponseFail($I, StatusCode::TIME);
     }
 
     public function testWrongParams(\ApiTester $I)
@@ -231,7 +233,7 @@ class BetGamesApiCest_
         $data = $this->data->bet();
         unset($data['params']['amount']);
         $I->sendPOST('/bg', $data);
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
     }
 
     private function getResponseOk(\ApiTester $I)
@@ -263,8 +265,8 @@ class BetGamesApiCest_
         $I->assertArrayHasKey('error_code', $data);
         $I->assertArrayHasKey('error_text', $data);
         $I->assertEquals(0, $data['success']);
-        $error = new Error($errorCode);
-        $I->assertEquals($error->getCode(), $data['error_code']);
+        $error = CodeMapping::getByErrorCode($errorCode);
+        $I->assertEquals($error['code'], $data['error_code']);
 
         return $data;
     }

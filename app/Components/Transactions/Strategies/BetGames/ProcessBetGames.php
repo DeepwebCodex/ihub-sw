@@ -2,6 +2,8 @@
 
 namespace App\Components\Transactions\Strategies\BetGames;
 
+use App\Components\Integrations\BetGames\CodeMapping;
+use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Transactions\BaseSeamlessWalletProcessor;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Transactions\TransactionHelper;
@@ -14,7 +16,7 @@ use App\Models\Transactions;
  */
 class ProcessBetGames extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
-
+    protected $codeMapping = CodeMapping::class;
     /**
      * @param TransactionRequest $request
      * @return array
@@ -27,7 +29,7 @@ class ProcessBetGames extends BaseSeamlessWalletProcessor implements Transaction
             $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, request()->server('PARTNER_ID'));
 
             if (!$betTransaction) {
-                throw new ApiHttpException(500, null, ['code' => TransactionHelper::getTransactionErrorCode(TransactionHelper::BAD_OPERATION_ORDER)]);
+                throw new ApiHttpException(500, null, ['code' => TransactionHelper::BAD_OPERATION_ORDER]);
             }
         }
 
@@ -75,5 +77,15 @@ class ProcessBetGames extends BaseSeamlessWalletProcessor implements Transaction
         }
 
         return $this->responseData;
+    }
+
+    protected function onTransactionDuplicate($e)
+    {
+        throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER));
+    }
+
+    protected function onInsufficientFunds($e)
+    {
+        throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByErrorCode(StatusCode::INSUFFICIENT_FUNDS));
     }
 }
