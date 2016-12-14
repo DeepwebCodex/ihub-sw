@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\VirtualBoxing\ErrorException;
 
 /**
  * Trait ConfigTrait
@@ -18,14 +18,13 @@ trait ConfigTrait
     /**
      * @param string $name
      * @return mixed
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     protected function getConfigOption(string $name)
     {
-        $res = array_get($this->config, $name);
-        if (!$res) {
-            throw new ApiHttpException(400, 'config error');
+        if (!array_has($this->config, $name)) {
+            throw new ErrorException('Configuration error', ['config_option' => $name]);
         }
-        return $res;
+        return array_get($this->config, $name);
     }
 }

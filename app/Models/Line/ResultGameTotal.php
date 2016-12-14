@@ -19,6 +19,11 @@ class ResultGameTotal extends BaseLineModel
     public $timestamps = false;
 
     /**
+     * {@inheritdoc}
+     */
+    public $fillable = ['event_id', 'result_total', 'result_total_json', 'result_type_id'];
+
+    /**
      * @param array $params
      * @param int $eventId
      * @return bool

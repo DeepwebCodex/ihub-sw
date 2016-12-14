@@ -3,10 +3,9 @@
 namespace App\Components\Integrations\VirtualBoxing;
 
 use App\Components\Integrations\VirtualSports\ConfigTrait;
-use App\Components\Integrations\VirtualSports\Participant;
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\VirtualBoxing\ErrorException;
 use App\Models\Line\Event;
-use App\Models\Line\Market;
+use App\Models\Line\Market as MarketModel;
 use App\Models\Line\ResultGame;
 use App\Models\Line\Sport;
 use App\Models\Line\StatusDesc;
@@ -20,6 +19,12 @@ use Illuminate\Support\Facades\Redis;
 class ProgressService
 {
     use ConfigTrait;
+
+    const STATUS_CODE_NO_MORE_BETS = 'N';
+
+    const STATUS_CODE_FINISHED_EVENT = 'Z';
+
+    const STATUS_CODE_CANCELLED_EVENT = 'V';
 
     /**
      * @var int
@@ -36,42 +41,58 @@ class ProgressService
     }
 
     /**
+     * @return array
+     */
+    public static function getAvailableStatusCodes():array
+    {
+        $reflector = new \ReflectionClass(static::class);
+        $constants = $reflector->getConstants();
+
+        $prefix = 'STATUS_CODE_';
+        $values = array_filter($constants, function ($key) use ($prefix) {
+            return strpos($key, $prefix) !== false;
+        }, ARRAY_FILTER_USE_KEY);
+
+        return array_values($values);
+    }
+
+    /**
      * @param int $eventVbId
      * @param int $sportId
-     * @param string $progressName
-     * @throws \App\Exceptions\Api\ApiHttpException|\Exception
+     * @param string $statusCode
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    public function setProgress(int $eventVbId, int $sportId, string $progressName):void
+    public function setProgress(int $eventVbId, int $sportId, string $statusCode)
     {
         $event = EventLink::getByVbId($eventVbId);
         if (!$event) {
-            throw new ApiHttpException(200, 'havent_event');
+            throw new ErrorException('cant_find_event');
         }
         $eventId = $event->event_id;
         $this->eventId = $eventId;
         if ((new Sport())->checkSportEventExists($sportId, $eventId) === false) {
-            throw new ApiHttpException(400, 'wrong_sport_id_for_event');
+            throw new ErrorException('wrong_sport_id_for_event');
         }
-        switch ($progressName) {
-            case 'N':
+        switch ($statusCode) {
+            case self::STATUS_CODE_NO_MORE_BETS:
                 $this->setNoMoreBets($eventId);
                 break;
-            case 'Z':
+            case self::STATUS_CODE_FINISHED_EVENT:
                 $this->setFinishedEvent($eventId);
                 break;
-            case 'V':
+            case self::STATUS_CODE_CANCELLED_EVENT:
                 $this->setCancelledEvent($eventId);
                 break;
             default:
-                throw new ApiHttpException(400, 'miss_element');
+                throw new ErrorException('miss_element');
         }
     }
 
     /**
      * @param int $eventId
-     * @throws \App\Exceptions\Api\ApiHttpException|\Exception
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    protected function setNoMoreBets(int $eventId):void
+    protected function setNoMoreBets(int $eventId)
     {
         $statusName = 'inprogress';
         \DB::connection('line')->transaction(function () use ($statusName, $eventId) {
@@ -83,22 +104,22 @@ class ProgressService
 
     /**
      * @param int $eventId
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    protected function suspendMarketEvent(int $eventId):void
+    protected function suspendMarketEvent(int $eventId)
     {
-        $resUpdate = (new Market)->suspendMarketEvent($eventId);
+        $resUpdate = (new MarketModel)->suspendMarketEvent($eventId);
         if (!$resUpdate) {
-            throw new ApiHttpException(400, 'update_market_n');
+            throw new ErrorException('update_market_n');
         }
     }
 
     /**
      * @param string $statusName
      * @param int $eventId
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    protected function createStatusDesc(string $statusName, int $eventId):void
+    protected function createStatusDesc(string $statusName, int $eventId)
     {
         $statusDescModel = new StatusDesc([
             'status_type' => $statusName,
@@ -106,16 +127,17 @@ class ProgressService
             'event_id' => $eventId
         ]);
         if (!$statusDescModel->save()) {
-            throw new ApiHttpException(400, "Can't insert status_desc");
+            throw new ErrorException("Can't insert status_desc");
         }
     }
 
     /**
      * @param int $eventId
      * @param string $status
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @return void
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    protected function sendAmqpMessage(int $eventId, string $status):void
+    protected function sendAmqpMessage(int $eventId, string $status)
     {
         $msg = json_encode(['type' => $status, 'data' => ['event_id' => $eventId]]);
         $sendResult = app('AmqpService')->sendMsg(
@@ -124,29 +146,29 @@ class ProgressService
             $msg
         );
         if (!$sendResult) {
-            throw new ApiHttpException(400, 'cant_calculate_bet');
+            throw new ErrorException('cant_calculate_bet');
         }
     }
 
     /**
      * @param int $eventId
-     * @throws \App\Exceptions\Api\ApiHttpException|\Exception
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    protected function setFinishedEvent(int $eventId):void
+    protected function setFinishedEvent(int $eventId)
     {
         $statusName = 'finished';
         if ($this->processEvent($eventId, $statusName) === 'ok') {
             $this->sendAmqpMessage($eventId, $statusName);
             return;
         }
-        throw new ApiHttpException(400, 'cant_calculate_bet');
+        throw new ErrorException('cant_calculate_bet');
     }
 
     /**
      * @param int $eventId
      * @param string $statusName
      * @return string
-     * @throws \App\Exceptions\Api\ApiHttpException|\Exception
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     protected function processEvent(int $eventId, string $statusName):string
     {
@@ -185,15 +207,15 @@ class ProgressService
 
     /**
      * @param int $eventId
-     * @throws \App\Exceptions\Api\ApiHttpException|\Exception
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    protected function setCancelledEvent(int $eventId):void
+    protected function setCancelledEvent(int $eventId)
     {
         $event = Event::findById($eventId);
-        if ($event === false) {
-            throw new ApiHttpException(400, "Can't find event");
+        if ($event === null) {
+            throw new ErrorException("Can't find event");
         } elseif ($event && $event->status_type === 'finished') {
-            throw new ApiHttpException(400, 'cant_void_finished');
+            throw new ErrorException('cant_void_finished');
         }
 
         $statusName = 'cancelled';
@@ -201,7 +223,7 @@ class ProgressService
             $this->sendAmqpMessage($eventId, $statusName);
             return;
         }
-        throw new ApiHttpException(400, 'cant_calculate_bet');
+        throw new ErrorException('cant_calculate_bet');
     }
 
     /**

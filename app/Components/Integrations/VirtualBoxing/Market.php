@@ -3,7 +3,7 @@
 namespace App\Components\Integrations\VirtualBoxing;
 
 use App\Components\Integrations\VirtualSports\ConfigTrait;
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\VirtualBoxing\ErrorException;
 use App\Models\Line\Market as MarketModel;
 use App\Models\Line\Outcome;
 use App\Models\Line\OutcomeType;
@@ -43,9 +43,9 @@ class Market
      * @param array $markets
      * @param int $eventId
      * @return void
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    public function setMarkets(array $markets, int $eventId):void
+    public function setMarkets(array $markets, int $eventId)
     {
         $this->eventId = $eventId;
 
@@ -68,20 +68,20 @@ class Market
                 $this->marketOutrightWinner($marketSelections, $marketCode);
                 continue;
             }
-            throw new ApiHttpException(400, 'Unknown market code');
+            throw new ErrorException('Unknown market code');
         }
         $this->resumeMarketEvent();
     }
 
     /**
      * @return void
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    protected function resumeMarketEvent():void
+    protected function resumeMarketEvent()
     {
         $marketModel = new MarketModel();
         if (!$marketModel->resumeMarketEvent($this->eventId)) {
-            throw new ApiHttpException(400, "Can't update market event");
+            throw new ErrorException("Can't update market event");
         }
         $statusType = $this->getConfigOption('status_type');
         $statusDesc = new StatusDesc([
@@ -90,8 +90,74 @@ class Market
             'event_id' => $this->eventId,
         ]);
         if (!$statusDesc->save()) {
-            throw new ApiHttpException(400, "Can't insert status_desc");
+            throw new ErrorException("Can't insert status_desc");
         }
+    }
+
+    /**
+     * @param array $marketSelections
+     * @param string $marketName
+     * @return void
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     */
+    private function marketOutrightWinner(array $marketSelections, string $marketName)
+    {
+        $this->create(
+            $marketSelections,
+            $this->getConfigOption('market.OW_result_type'),
+            $this->getConfigOption('market.OW'),
+            $marketName
+        );
+    }
+
+    /**
+     * @param array $marketSelections
+     * @param string $marketName
+     * @return void
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     */
+    private function marketRound(array $marketSelections, string $marketName)
+    {
+        $marketNumber = ltrim($marketName, 'R');
+        $this->create(
+            $marketSelections,
+            $this->getConfigOption('rounds_map')[$marketNumber],
+            $this->getConfigOption('market.OW'),
+            $marketName
+        );
+    }
+
+    /**
+     * @param array $marketSelections
+     * @param string $marketName
+     * @return void
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     */
+    private function marketRoundScore(array $marketSelections, string $marketName)
+    {
+        $marketNumber = ltrim($marketName, 'CS');
+        $this->create(
+            $marketSelections,
+            $this->getConfigOption('rounds_map')[$marketNumber],
+            $this->getConfigOption('market.CSR'),
+            $marketName
+        );
+    }
+
+    /**
+     * @param array $marketSelections
+     * @param string $marketName
+     * @return void
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     */
+    private function marketMatchResult(array $marketSelections, string $marketName)
+    {
+        $this->create(
+            $marketSelections,
+            $this->getConfigOption('market.match_result_type_id'),
+            $this->getConfigOption('market.' . $marketName),
+            $marketName
+        );
     }
 
     /**
@@ -99,14 +165,10 @@ class Market
      * @param int $resultTypeId
      * @param int $marketTemplateId
      * @param string $marketName
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @return void
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    private function create(
-        array $marketSelections,
-        int $resultTypeId,
-        int $marketTemplateId,
-        string $marketName
-    ):void
+    private function create(array $marketSelections, int $resultTypeId, int $marketTemplateId, string $marketName)
     {
         $marketModel = MarketModel::create([
             'event_id' => $this->eventId,
@@ -116,10 +178,11 @@ class Market
             'max_payout' => $this->getConfigOption('market.max_payout'),
             'stop_loss' => $this->getConfigOption('market.stop_loss'),
             'service_id' => $this->getConfigOption('service_id'),
+            'user_id' => $this->getConfigOption('user_id')
         ]);
         $marketId = $marketModel->id;
         if (!$marketId) {
-            throw new ApiHttpException(400, 'cant_insert_market');
+            throw new ErrorException('cant_insert_market');
         }
 
         $outcomes = (new OutcomeType())->getOutcomeTypeByMarketTemplateId($marketTemplateId);
@@ -134,70 +197,8 @@ class Market
             }
             $outcomeModel = new Outcome($params);
             if (!$outcomeModel->save()) {
-                throw new ApiHttpException(400, 'cant_insert_outcome');
+                throw new ErrorException('cant_insert_outcome');
             }
         }
-    }
-
-    /**
-     * @param array $marketSelections
-     * @param string $marketName
-     * @throws \App\Exceptions\Api\ApiHttpException
-     */
-    private function marketOutrightWinner(array $marketSelections, string $marketName):void
-    {
-        $this->create(
-            $marketSelections,
-            $this->getConfigOption('market.OW_result_type'),
-            $this->getConfigOption('market.OW'),
-            $marketName
-        );
-    }
-
-    /**
-     * @param array $marketSelections
-     * @param string $marketName
-     * @throws \App\Exceptions\Api\ApiHttpException
-     */
-    private function marketRound(array $marketSelections, string $marketName):void
-    {
-        $marketNumber = ltrim($marketName, 'R');
-        $this->create(
-            $marketSelections,
-            $this->getConfigOption('rounds_map')[$marketNumber],
-            $this->getConfigOption('market.OW'),
-            $marketName
-        );
-    }
-
-    /**
-     * @param array $marketSelections
-     * @param string $marketName
-     * @throws \App\Exceptions\Api\ApiHttpException
-     */
-    private function marketRoundScore(array $marketSelections, string $marketName):void
-    {
-        $marketNumber = ltrim($marketName, 'CS');
-        $this->create(
-            $marketSelections,
-            $this->getConfigOption('rounds_map')[$marketNumber],
-            $this->getConfigOption('market.CSR'),
-            $marketName
-        );
-    }
-
-    /**
-     * @param array $marketSelections
-     * @param string $marketName
-     * @throws \App\Exceptions\Api\ApiHttpException
-     */
-    private function marketMatchResult(array $marketSelections, string $marketName):void
-    {
-        $this->create(
-            $marketSelections,
-            $this->getConfigOption('market.match_result_type_id'),
-            $this->getConfigOption('market.' . $marketName),
-            $marketName
-        );
     }
 }

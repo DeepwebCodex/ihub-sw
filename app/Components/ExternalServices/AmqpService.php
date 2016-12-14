@@ -2,6 +2,7 @@
 
 namespace App\Components\ExternalServices;
 
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +16,7 @@ class AmqpService
 
     public function __construct()
     {
-        $this->config = config('amqp');
+        $this->config = config('external.api.amqp');
     }
 
     /**
@@ -27,24 +28,26 @@ class AmqpService
      */
     public function sendMsg($exchange, $routingKey, $msgBody)
     {
-        $queryData = http_build_query([
-            'exchange' => $exchange,
-            'routing_key' => $routingKey,
-            'data' => $msgBody
-        ]);
+        $url = 'http://' . $this->config['host'] . ':' . $this->config['port'] . '/api/mqsend';
 
-        $url = 'http://' . $this->config['http_host'] . ':' . $this->config['http_port'] . '/api/mqsend';
-
-        $response = app('Guzzle')::request(
-            'POST',
-            $url,
-            [
-                RequestOptions::HEADERS => [
-                    'Accept' => 'application/json'
-                ],
-                RequestOptions::FORM_PARAMS => $queryData
-            ]
-        );
+        try {
+            $response = app('Guzzle')::request(
+                'POST',
+                $url,
+                [
+                    RequestOptions::HEADERS => [
+                        'Accept' => 'application/json'
+                    ],
+                    RequestOptions::FORM_PARAMS => [
+                        'exchange' => $exchange,
+                        'routing_key' => $routingKey,
+                        'data' => $msgBody
+                    ]
+                ]
+            );
+        } catch (RequestException $e) {
+            throw new \RuntimeException('Could not request AMQP API');
+        }
 
         if ($response->getStatusCode() !== Response::HTTP_OK) {
             throw new \RuntimeException('Not ok response code');
