@@ -37,7 +37,7 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
 
     public function authorizeUser(Request $request){
         try{
-            app('GameSession')->start($request->input('token', ''));
+            app('GameSession')->start($request->input('methodcall.call.token', ''));
         } catch (SessionDoesNotExist $e) {
             throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
         }
