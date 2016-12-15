@@ -57,7 +57,9 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
      */
     public function authorize(Request $request)
     {
-        $this->isSecureRequest();
+        if(config('integrations.microgaming.use_secure_request', true)) {
+            $this->isSecureRequest();
+        }
 
         $config_user = config('integrations.microgaming.login_server');
         $config_password = config('integrations.microgaming.password_server');
