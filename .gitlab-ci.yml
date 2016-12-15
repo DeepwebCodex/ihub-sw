@@ -31,6 +31,7 @@ composer_and_unit_testing:
     paths:
       - ./tests/_output
       - ./storage/logs
+      - ./.env.testing
     expire_in: 1 day
 
 build_php_7.0:
