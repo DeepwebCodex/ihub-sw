@@ -24,7 +24,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
 
 cp ./.env ./.env.testing
 
-sed -i -e "s/^APP_ENV=local/APP_ENV=testing/g" \
+sed -i -e "s/^APP_ENV=dev/APP_ENV=testing/g" \
        -e "s/^SESSION_DRIVER=redis/SESSION_DRIVER=redis/g" \
        -e "s/^LOG_DRIVER=rabbit/LOG_DRIVER=file/g" \
        -e "s/^REDIS_HOST=redis/REDIS_HOST=redis/g" \
