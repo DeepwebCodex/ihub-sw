@@ -15,9 +15,6 @@ class BetRequest extends BaseRequest
      */
     public function rules()
     {
-        /**
-         * @see BetGamesValidation::checkToken
-         */
         return array_merge(parent::rules(), [
             'params.amount' => 'bail|required|integer|min:1',
             'params.currency' => 'bail|required|string',

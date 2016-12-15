@@ -9,7 +9,6 @@
 namespace Testing;
 
 
-use App\Components\ExternalServices\RemoteSession;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Mockery;

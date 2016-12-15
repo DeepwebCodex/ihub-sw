@@ -69,14 +69,6 @@ return [
         ],
     ],
 
-    'live_dealer' => [
-        'system_id' => '999',
-        'server_addr' => '0.0.0.0',
-        'api_url' => 'https://apitest.fundist.org/',
-        'api_key' => '19d47072a7e46e82ce07b7d8b843cecc',
-        'api_password' => '4575885165224895',
-    ],
-
     'betGames' => [
         'secret' => 'dfFWgbF3r4efr',
         'token_expiration_time' => 1,

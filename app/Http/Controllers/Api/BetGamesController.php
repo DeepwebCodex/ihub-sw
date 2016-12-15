@@ -40,7 +40,7 @@ class BetGamesController extends BaseApiController
         $this->middleware('input.xml')->except(['error']);
 
         /**
-         * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkToken, BetGamesValidation::checkMethod
+         * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkMethod
          */
         Validator::extend('check_signature', 'App\Http\Requests\Validation\BetGamesValidation@checkSignature');
         Validator::extend('check_time', 'App\Http\Requests\Validation\BetGamesValidation@checkTime');
