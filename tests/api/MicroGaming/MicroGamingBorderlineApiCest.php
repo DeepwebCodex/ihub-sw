@@ -48,7 +48,7 @@ class MicroGamingBorderlineApiCest
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
         $I->sendPOST('/mg', $request);
-        $I->seeResponseCodeIs(500);
+        $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'play\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
@@ -117,7 +117,7 @@ class MicroGamingBorderlineApiCest
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
         $I->sendPOST('/mg', $request);
-        $I->seeResponseCodeIs(404);
+        $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'play\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');

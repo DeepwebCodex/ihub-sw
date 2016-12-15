@@ -27,10 +27,9 @@ class BetGamesApiFormatter extends XmlApiFormatter
      */
     public function formatException(\Exception $exception)
     {
-//        parent::formatException($exception);
         list($payload, $statusCode) = array_values($this->transformException($exception));
 
-        return ResponseFacade::make($this->format($payload), $statusCode, [
+        return ResponseFacade::make($this->format($payload), 200, [
             'Content-type' => 'application/xml'
         ]);
     }
