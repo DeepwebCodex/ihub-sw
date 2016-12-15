@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\BetGamesApiFormatter;
 use App\Components\Integrations\BetGames\ApiMethod;
+use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\ResponseData;
+use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Integrations\BetGames\TransactionMap;
 use App\Components\Traits\MetaDataTrait;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
@@ -197,7 +199,7 @@ class BetGamesController extends BaseApiController
         if($prolong) {
             app('GameSession')->prolong($token);
         }
-        $data = new ResponseData($method, $token, $params);
+        $data = new ResponseData($method, $token, $params, CodeMapping::getByErrorCode(StatusCode::OK));
         return $this->respond(Response::HTTP_OK, '', $data->ok());
     }
 }
