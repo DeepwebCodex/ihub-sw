@@ -148,7 +148,7 @@ class BetGamesController extends BaseApiController
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
-        $response = $transaction->handle(new ProcessBetGames());
+        $response = $transaction->handle(app(ProcessBetGames::class));
 
         return $this->responseOk($request->input('method'), $request->input('token'), [
             'balance_after' => $response->getBalanceInCents(),
@@ -179,7 +179,7 @@ class BetGamesController extends BaseApiController
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
-        $response = $transaction->handle(new ProcessBetGames());
+        $response = $transaction->handle(app(ProcessBetGames::class));
 
         return $this->responseOk($request->input('method'), $request->input('token'), [
             'balance_after' => $response->getBalanceInCents(),

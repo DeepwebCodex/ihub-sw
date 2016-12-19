@@ -32,6 +32,7 @@ class ResponseData
         $this->token = $token;
         $this->params = $params;
         $this->error = $error;
+        $this->time_to_disconnect = env('BETGAMES_DISCONNECT_TIME', self::TIME_TO_DISCONNECT);
     }
 
     /**
@@ -60,7 +61,7 @@ class ResponseData
     public function fail(bool $sleep = false):array
     {
         if($sleep){
-            sleep(self::TIME_TO_DISCONNECT);
+            sleep($this->time_to_disconnect);
         }
         $view = [
             'method' => $this->method,
