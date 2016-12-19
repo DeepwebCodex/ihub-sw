@@ -144,9 +144,7 @@ class MicroGamingController extends BaseApiController
 
         $this->addMetaField('currency', $user->getCurrency());
 
-        return $this->respondOk(200, '', [
-            'token' => app('GameSession')->regenerate($request->input('methodcall.call.token'))
-        ]);
+        return $this->respondOk();
     }
 
     public function error()

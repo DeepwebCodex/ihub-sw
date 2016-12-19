@@ -83,7 +83,7 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
         if(!$operation){
             throw new ApiHttpException(409, "Finance error", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
         }
-        else if (count($operation) > 1)
+        else if (count($operation) != count($operation, COUNT_RECURSIVE))
         {
             throw new ApiHttpException(409, "Finance error, duplicated duplication", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
         }
