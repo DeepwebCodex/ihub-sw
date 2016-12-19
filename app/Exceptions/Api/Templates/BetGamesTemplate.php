@@ -5,6 +5,7 @@ namespace App\Exceptions\Api\Templates;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\ResponseData;
 use App\Components\Integrations\BetGames\StatusCode;
+use App\Components\Transactions\TransactionHelper;
 
 class BetGamesTemplate implements IExceptionTemplate
 {
@@ -27,13 +28,14 @@ class BetGamesTemplate implements IExceptionTemplate
     {
         $this->initialize($item, $statusCode, $isApiException);
 
-        //internal server and timeout error cases
-        if ($this->isInternalError()) {
-            return $this->onInternalError();
-        }
-
         if ($this->isDuplicateWin()) {
             return $this->onDuplicateWin();
+        }
+
+        /** internal server and timeout error cases.
+         * Must be after 'onDuplicateWin', because 500 "DuplicateWin" error is also internal server error */
+        if ($this->isUnknownError()) {
+            return $this->onUnknownError();
         }
 
         $data = new ResponseData($this->method, $this->token, [], ['code' => $this->errorCode, 'message' => $this->errorMessage]);
@@ -42,7 +44,7 @@ class BetGamesTemplate implements IExceptionTemplate
 
     private function initialize(array $item, $statusCode, bool $isApiException)
     {
-        $this->code = $item['code'] ?? null;
+        $this->code = $item['code'] ?? StatusCode::UNKNOWN;
         $this->token = $item['token'] ?? '';
         $this->method = $item['method'] ?? '';
         $this->balance = $item['balance'] ?? null;
@@ -59,15 +61,15 @@ class BetGamesTemplate implements IExceptionTemplate
      *
      * @return bool
      */
-    private function isInternalError():bool
+    private function isUnknownError():bool
     {
-        return in_array($this->statusCode, [503, 504]) || is_null($this->errorCode);
+        return in_array($this->statusCode, [500, 503, 504]) && is_null(TransactionHelper::getTransactionErrorCode($this->code));
     }
 
     /**
      * @return array
      */
-    private function onInternalError():array
+    private function onUnknownError():array
     {
         $response = new ResponseData($this->method, $this->token, [], CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
         return $response->fail(true);

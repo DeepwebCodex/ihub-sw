@@ -2,21 +2,15 @@
 
 namespace api\BetGames;
 
-//use App\Components\Integrations\BetGames\Error;
-use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\StatusCode;
-use App\Components\Transactions\BaseSeamlessWalletProcessor;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\GenericApiHttpException;
-use App\Http\Controllers\Api\BetGamesController;
 use App\Models\Transactions;
 use \BetGames\TestData;
 use \BetGames\TestUser;
-use Illuminate\Foundation\Testing\Concerns\MocksApplicationServices;
-use PhpSpec\Exception\Exception;
 
 /**
  * Class BetGamesApiCest
@@ -91,14 +85,15 @@ class BetGamesApiCest
         $this->noRecord($I, $request, 'bet');
     }
 
-//    public function testFailDb(\ApiTester $I)
-//    {
-//        $mock = $this->mock(ProcessBetGames::class);
-//        $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andReturn(false);
-//        $mock = $this->mock(AccountManager::class);
-//        $mock->shouldReceive('createTransaction')->once()->withAnyArgs()->andThrow(new GenericApiHttpException(500));
-//        app(AccountManager::class)->createTransaction('1',2,3,4,'5',6,7,8,'9');
-//    }
+    public function testFailDb(\ApiTester $I)
+    {
+        $mock = $this->mock(ProcessBetGames::class);
+        $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
+        $request = $this->data->bet();
+        $I->sendPOST('/bg', $request);
+        $this->getResponseFail($I, StatusCode::UNKNOWN);
+        $this->noRecord($I, $request, 'bet');
+    }
 
     public function testAccount(\ApiTester $I)
     {
