@@ -2,7 +2,6 @@
 
 namespace BetGames;
 
-use App\Components\Integrations\BetGames\Token;
 use App\Components\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
 

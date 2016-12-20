@@ -13,10 +13,6 @@ class ResponseData
     private $method;
     private $token;
     private $params;
-
-    /**
-     * @var Error
-     */
     private $error;
 
     /**

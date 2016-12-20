@@ -49,7 +49,7 @@ class BetGamesController extends BaseApiController
         Validator::extend('check_token', 'App\Http\Requests\Validation\BetGamesValidation@checkToken');
         Validator::extend('check_method', 'App\Http\Requests\Validation\BetGamesValidation@checkMethod');
 
-        $this->userId = app('GameSession')->get('user_id');
+        $this->userId = app('GameSession')->get('user_id') ?? 0;
     }
 
     /**
@@ -162,7 +162,8 @@ class BetGamesController extends BaseApiController
      */
     public function win(WinRequest $request)
     {
-        $user = IntegrationUser::get($this->userId, $this->getOption('service_id'), 'betGames');
+        $userId = $request->input('params.player_id');
+        $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'betGames');
 
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token'), 'balance' => $user->getBalanceInCents()]);
 
