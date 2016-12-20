@@ -24,6 +24,29 @@ class VirtualBoxingController extends BaseApiController
 
     public static $exceptionTemplate = VirtualBoxingTemplate::class;
 
+    const BET_VALIDATION_RULES = [
+        'match.scheduleId' => 'bail|required|numeric',
+        'match.competition' => 'bail|required|string',
+        'match.bet' => 'bail|required|array',
+        'match.away' => 'bail|required|string',
+        'match.home' => 'bail|required|string',
+        'match.location' => 'bail|required|string',
+        'match.date' => 'bail|required|date_format:Y-m-d',
+        'match.time' => 'bail|required|date_format:H:i:s',
+        'match.name' => 'bail|required|string',
+    ];
+
+    const PROGRESS_VALIDATION_RULES = [
+        'event_id' => 'bail|required|numeric',
+        'mnem' => 'bail|required|in:MB',
+    ];
+
+    const RESULT_VALIDATION_RULES = [
+        'result.event_id' => 'bail|required|numeric',
+        'result.tid' => 'bail|required|string',
+        'result.round' => 'bail|required|array',
+    ];
+
     /**
      * VirtualBoxingController constructor.
      * @param TextApiFormatter $formatter
@@ -63,17 +86,7 @@ class VirtualBoxingController extends BaseApiController
      */
     public function matchBet(Request $request)
     {
-        $validator = Validator::make(Input::all(), [
-            'match.scheduleId' => 'bail|required|numeric',
-            'match.competition' => 'bail|required|string',
-            'match.bet' => 'bail|required|array',
-            'match.away' => 'bail|required|string',
-            'match.home' => 'bail|required|string',
-            'match.location' => 'bail|required|string',
-            'match.date' => 'bail|required|date_format:Y-m-d',
-            'match.time' => 'bail|required|date_format:H:i:s',
-            'match.name' => 'bail|required|string',
-        ]);
+        $validator = Validator::make(Input::all(), self::BET_VALIDATION_RULES);
         if ($validator->fails()) {
             $responseMessage = $this->getMessageDescription('miss_element');
             return $this->respondError($responseMessage);
@@ -82,8 +95,8 @@ class VirtualBoxingController extends BaseApiController
         $betService = new BetService($this->options);
         try {
             $betService->setBet($request->input('match'));
-        } catch (\Exception $e) {
-            return $this->processException($e);
+        } catch (\Exception $exception) {
+            return $this->processException($exception);
         }
 
         $responseMessage = $betService->getEventId() . ':' . $betService->getEventVbId();
@@ -97,26 +110,21 @@ class VirtualBoxingController extends BaseApiController
      */
     public function matchProgress(Request $request)
     {
-        $validator = Validator::make(Input::all(), [
-            'event_id' => 'bail|required|numeric',
-            'mnem' => 'bail|required|in:MB',
-        ]);
+        $validator = Validator::make(Input::all(), self::PROGRESS_VALIDATION_RULES);
 
         $statusCode = Input::all()['xu:ups-at.xu:at'][0]['#text'];
-        if ($validator->fails()
-            || !in_array($statusCode, ProgressService::getAvailableStatusCodes(), true)
-        ) {
+        if ($validator->fails()) {
             $responseMessage = $this->getMessageDescription('miss_element');
             return $this->respondError($responseMessage);
         }
 
         $eventVbId = (int)$request->input('event_id');
 
-        $progressService = new ProgressService($this->options);
         try {
-            $progressService->setProgress($eventVbId, $this->getOption('sport_id'), $statusCode);
-        } catch (\Exception $e) {
-            return $this->processException($e);
+            $progressService = new ProgressService($this->options, $eventVbId);
+            $progressService->setProgress($statusCode);
+        } catch (\Exception $exception) {
+            return $this->processException($exception);
         }
 
         $responseMessage = $progressService->getEventId() . ':' . $eventVbId;
@@ -130,11 +138,7 @@ class VirtualBoxingController extends BaseApiController
      */
     public function result(Request $request)
     {
-        $validator = Validator::make(Input::all(), [
-            'result.event_id' => 'bail|required|numeric',
-            'result.tid' => 'bail|required|string',
-            'result.round' => 'bail|required|array',
-        ]);
+        $validator = Validator::make(Input::all(), self::RESULT_VALIDATION_RULES);
         if ($validator->fails()) {
             $responseMessage = $this->getMessageDescription('miss_element');
             return $this->respondError($responseMessage);
@@ -144,11 +148,11 @@ class VirtualBoxingController extends BaseApiController
         $tid = $request->input('result.tid');
         $rounds = $request->input('result.round');
 
-        $resultService = new ResultService($this->options);
+        $resultService = new ResultService($this->options, $eventVbId);
         try {
-            $resultService->setResult($eventVbId, $tid, $rounds);
-        } catch (\Exception $e) {
-            return $this->processException($e);
+            $resultService->setResult($tid, $rounds);
+        } catch (\Exception $exception) {
+            return $this->processException($exception);
         }
 
         $responseMessage = $resultService->getEventId() . ':' . $eventVbId . ':' . $tid;
