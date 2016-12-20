@@ -38,6 +38,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
         if ($userId) {
             $this->addMetaField('user_id', $userId);
             $this->addMetaField('token', $request->input('token'));
+            $this->addMetaField('method', $request->input('method'));
             return true;
         }
 

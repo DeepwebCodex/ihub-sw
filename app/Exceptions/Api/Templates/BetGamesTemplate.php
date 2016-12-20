@@ -5,68 +5,92 @@ namespace App\Exceptions\Api\Templates;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\ResponseData;
 use App\Components\Integrations\BetGames\StatusCode;
+use App\Components\Transactions\TransactionHelper;
 
 class BetGamesTemplate implements IExceptionTemplate
 {
+    private $code;
+    private $token;
+    private $method;
+    private $balance;
+    private $statusCode;
+    private $isApiException;
+    private $errorCode;
+    private $errorMessage;
+
     /**
      * @param array $item
      * @param $statusCode
      * @param $isApiException
      * @return mixed
      */
-    public function mapping($item, $statusCode, $isApiException)
+    public function mapping($item, $statusCode, $isApiException):array
     {
-        $error = CodeMapping::getByErrorCode($item['code']);
+        $this->initialize($item, $statusCode, $isApiException);
 
-        //internal server and timeout error cases
-        if ($this->isInternalError($statusCode, $error['code'])) {
-            return $this->onInternalError($item);
+        if ($this->isDuplicateWin()) {
+            return $this->onDuplicateWin();
         }
 
-        if ($this->isDuplicateWin($item)) {
-            return $this->onDuplicateWin($item);
+        /** internal server and timeout error cases.
+         * Must be after 'onDuplicateWin', because 500 "DuplicateWin" error is also internal server error */
+        if ($this->isUnknownError()) {
+            return $this->onUnknownError();
         }
 
-        $data = new ResponseData($item['method'], $item['token'], [], $error);
+        $data = new ResponseData($this->method, $this->token, [], ['code' => $this->errorCode, 'message' => $this->errorMessage]);
         return $data->fail();
+    }
+
+    private function initialize(array $item, $statusCode, bool $isApiException)
+    {
+        $this->code = $item['code'] ?? StatusCode::UNKNOWN;
+        $this->token = $item['token'] ?? '';
+        $this->method = $item['method'] ?? '';
+        $this->balance = $item['balance'] ?? null;
+        $this->statusCode = $statusCode ?? 500;
+        $this->isApiException = $isApiException ?? false;
+
+        $error = CodeMapping::getByErrorCode($this->code);
+        $this->errorCode = $error['code'] ?? null;
+        $this->errorMessage = $error['message'] ?? '';
     }
 
     /**
      * Internal server error or timeout
      *
-     * @param $statusCode
-     * @param $errorCode
      * @return bool
      */
-    private function isInternalError($statusCode, $errorCode)
+    private function isUnknownError():bool
     {
-        return in_array($statusCode, [500, 503, 504]) || is_null($errorCode);
+        return in_array($this->statusCode, [500, 503, 504]) && is_null(TransactionHelper::getTransactionErrorCode($this->code));
     }
 
-    private function onInternalError($item)
+    /**
+     * @return array
+     */
+    private function onUnknownError():array
     {
-        $response = new ResponseData($item['method'], $item['token'], [], CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
+        $response = new ResponseData($this->method, $this->token, [], CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
         return $response->fail(true);
     }
 
     /**
-     * @param $data
      * @return bool
      */
-    private function isDuplicateWin($data)
+    private function isDuplicateWin():bool
     {
-        return ($data['method'] == 'transaction_bet_payout') && ($data['code'] == StatusCode::BAD_OPERATION_ORDER);
+        return ($this->method == 'transaction_bet_payout') && ($this->code == StatusCode::BAD_OPERATION_ORDER);
     }
 
     /**
-     * @param $item
-     * @return mixed
+     * @return array
      */
-    private function onDuplicateWin($item)
+    private function onDuplicateWin():array
     {
-        app('GameSession')->prolong($item['token']);
-        $data = new ResponseData($item['method'], $item['token'], [
-            'balance_after' => $item['balance'],
+        app('GameSession')->prolong($this->token);
+        $data = new ResponseData($this->method, $this->token, [
+            'balance_after' => $this->balance,
             'already_processed' => 1
         ], CodeMapping::getByErrorCode(StatusCode::OK));
 

@@ -11,5 +11,5 @@ abstract class StatusCode
     const INSUFFICIENT_FUNDS = 4;
     const BAD_OPERATION_ORDER = 700;
     /** not implemented in Bet Games API */
-    const UNKNOWN = 'unknown';
+    const UNKNOWN = -1;
 }
