@@ -11,3 +11,5 @@ Homestead.yaml
 /.phpstorm.meta.php
 
 tests/_output/*
+/nbproject/private/
+/nbproject/*
