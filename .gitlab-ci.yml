@@ -7,7 +7,7 @@ stages:
 variables:
   GIT_SSL_NO_VERIFY: "true"
   RANCHER_DEV_URL: "http://10.141.11.53:8080"
-  RANCHER_PROD_URL: "http://10.141.11.53:8080"
+  RANCHER_PROD_URL: "http://10.120.12.41:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
 before_script:
@@ -75,7 +75,7 @@ push_code:
   image: docker:latest
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
-    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
     - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
     - docker push $CONTAINER_IHUB_CODE_IMAGE
   only:
@@ -106,7 +106,11 @@ manual_push_dev_code:
   stage: deploy
   image: docker:latest
   script:
-    - ping de2rs01p.favorit
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
+    - ls -liah
+    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
+    - docker push $CONTAINER_IHUB_CODE_IMAGE
   when: manual
 
 manual_dev_rancher_upgrade:
