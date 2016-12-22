@@ -34,11 +34,11 @@ composer_and_unit_testing:
       - ./.env.testing
     expire_in: 1 day
 
-build_php_7.0:
+build_php_7.0_dev:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
-    - sh ./run/dev/install-rancher.sh
+    - bash ./run/dev/install-rancher.sh
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
@@ -50,6 +50,24 @@ build_php_7.0:
     expire_in: 1 week
   only:
     - dev
+
+build_php_7.0_master:
+  stage: build
+  image: gitlab.favorit:4567/integrations/docker:php-fpm
+  script:
+    - bash ./run/prod/decode.sh
+    - bash ./run/prod/install-rancher.sh
+  cache:
+    key: $CI_BUILD_REF_NAME
+    paths:
+      - ./vendor
+  artifacts:
+    paths:
+      - ./vendor
+      - ./
+    expire_in: 1 week
+  only:
+    - master
 
 push_code:
   stage: deploy
