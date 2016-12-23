@@ -78,7 +78,7 @@ build_php_7.0_master:
   only:
     - master
 
-push_code:
+push_code_dev:
   tags:
     - de2gl03d_dind_1
   stage: deploy
@@ -90,6 +90,18 @@ push_code:
     - docker push $CONTAINER_IHUB_CODE_IMAGE
   only:
     - dev
+
+push_code_master:
+  tags:
+    - de2gl02p_dind_1
+  stage: deploy
+  image: docker:latest
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
+    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
+    - docker push $CONTAINER_IHUB_CODE_IMAGE
+  only:
     - master
 
 rancher_upgrade_dev:
