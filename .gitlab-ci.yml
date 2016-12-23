@@ -6,19 +6,22 @@ stages:
 
 variables:
   GIT_SSL_NO_VERIFY: "true"
-  RANCHER_URL: "http://10.141.11.53:8080"
+  RANCHER_DEV_URL: "http://10.141.11.53:8080"
+  RANCHER_PROD_URL: "http://10.120.12.41:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
 before_script:
   - echo $CI_BUILD_REF
 
 composer_and_unit_testing:
+  tags:
+    - de2gl03d_dind_1
   stage: test
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   services:
     - redis:3.2
   script:
-    - sh ./run/dev/install-rancher.sh
+    - bash ./run/dev/install-rancher.sh
     - ./vendor/bin/codecept run
   cache:
     key: $CI_BUILD_REF_NAME
@@ -34,11 +37,14 @@ composer_and_unit_testing:
       - ./.env.testing
     expire_in: 1 day
 
-build_php_7.0:
+build_php_7.0_dev:
+  tags:
+    - de2gl03d_dind_1
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
-    - sh ./run/dev/install-rancher.sh
+    - rm -rf .env .env.testing
+    - bash ./run/dev/install-rancher.sh
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
@@ -51,30 +57,80 @@ build_php_7.0:
   only:
     - dev
 
-push_code:
+build_php_7.0_prod:
+  tags:
+    - de2gl02p_dind_1
+  stage: build
+  image: gitlab.favorit:4567/integrations/docker:php-fpm
+  script:
+    - rm -rf .env .env.testing
+    - bash ./run/prod/decode.sh
+    - bash ./run/prod/install-rancher.sh
+  cache:
+    key: $CI_BUILD_REF_NAME
+    paths:
+      - ./vendor
+  artifacts:
+    paths:
+      - ./vendor
+      - ./
+    expire_in: 1 week
+  only:
+    - master
+
+push_code_dev:
+  tags:
+    - de2gl03d_dind_1
   stage: deploy
   image: docker:latest
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
-    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
-    - ls -liah
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
     - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
     - docker push $CONTAINER_IHUB_CODE_IMAGE
   only:
     - dev
+
+push_code_prod:
+  tags:
+    - de2gl02p_dind_1
+  stage: deploy
+  image: docker:latest
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
+    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
+    - docker push $CONTAINER_IHUB_CODE_IMAGE
+  only:
     - master
 
-rancher_upgrade:
+rancher_upgrade_dev:
+  tags:
+    - de2gl03d_dind_1
   stage: upgrade
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
-    - export RANCHER_URL=$RANCHER_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
+    - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm
     - upgrade --environment dev-ihub --stack ihub --service nginx
   only:
     - dev
 
+manual_rancher_upgrade_prod:
+  tags:
+    - de2gl02p_dind_1
+  stage: upgrade
+  image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
+  script:
+    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
+    - upgrade --environment ihub --stack ihub --service php-fpm
+    - upgrade --environment ihub --stack ihub --service nginx
+  only:
+  when: manual
+
 manual_push_dev_code:
+  tags:
+    - de2gl03d_dind_1
   stage: deploy
   image: docker:latest
   script:
@@ -86,10 +142,12 @@ manual_push_dev_code:
   when: manual
 
 manual_dev_rancher_upgrade:
+  tags:
+    - de2gl03d_dind_1
   stage: upgrade
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
-    - export RANCHER_URL=$RANCHER_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
+    - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm
     - upgrade --environment dev-ihub --stack ihub --service nginx
   only:
