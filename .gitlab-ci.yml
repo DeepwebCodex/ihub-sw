@@ -106,7 +106,7 @@ rancher_upgrade_dev:
 
 rancher_upgrade_master:
   tags:
-    - de2gl03d_dind_1
+    - de2gl02p_dind_1
   stage: upgrade
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
