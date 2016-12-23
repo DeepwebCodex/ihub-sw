@@ -7,6 +7,7 @@ namespace App\Components\Transactions;
 use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\CodeMappingBase;
 use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
 /**
  * @property  CodeMappingBase $codeMapping;
@@ -41,7 +42,7 @@ class BaseSeamlessWalletProcessor
                 $this->onInvalidResponse();
             }
 
-        } catch (ApiHttpException $e){
+        } catch (GenericApiHttpException $e){
             $this->handleError($e);
         }
 
@@ -52,7 +53,7 @@ class BaseSeamlessWalletProcessor
      * @return array
      */
     protected function processZeroAmountTransaction(){
-        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type);
+        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, request()->server('PARTNER_ID'));
 
         $status = is_object($lastRecord) ? $lastRecord->status : null;
 
@@ -113,7 +114,7 @@ class BaseSeamlessWalletProcessor
                 $this->onInvalidResponse();
             }
 
-        } catch (ApiHttpException $e){
+        } catch (GenericApiHttpException $e){
             $this->handleError($e);
         }
 
@@ -163,12 +164,12 @@ class BaseSeamlessWalletProcessor
     }
 
     /**
-     * @param ApiHttpException $e
+     * @param GenericApiHttpException $e
      * @return bool
      */
     protected function handleError($e)
     {
-        $errorCode = (int) $e->getPayload('code');
+        $errorCode = (int) $e->getCode();
 
         switch (TransactionHelper::getTransactionErrorState($errorCode))
         {
@@ -191,7 +192,7 @@ class BaseSeamlessWalletProcessor
     }
 
     /**
-     * @param ApiHttpException $e
+     * @param GenericApiHttpException $e
      * @return $this
      */
     protected function onTransactionDuplicate($e)
@@ -200,7 +201,7 @@ class BaseSeamlessWalletProcessor
     }
 
     /**
-     * @param ApiHttpException $e
+     * @param GenericApiHttpException $e
      * @return $this
      */
     protected function onHaveNotBet($e)
@@ -209,7 +210,7 @@ class BaseSeamlessWalletProcessor
     }
 
     /**
-     * @param ApiHttpException $e
+     * @param GenericApiHttpException $e
      */
     protected function onInsufficientFunds($e)
     {
@@ -217,7 +218,7 @@ class BaseSeamlessWalletProcessor
     }
 
     /**
-     * @param ApiHttpException $e
+     * @param GenericApiHttpException $e
      * @return bool
      */
     protected function onAccountDenied($e)

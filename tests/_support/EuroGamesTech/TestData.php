@@ -53,6 +53,13 @@ class TestData
             'Reason' => 'ROUND_END']);
     }
 
+    public function betLost()
+    {
+        return array_merge($this->transaction(), [
+            'WinAmount' => 0,
+            'Reason' => 'ROUND_END']);
+    }
+
     public function getAmount()
     {
         return $this->amount;

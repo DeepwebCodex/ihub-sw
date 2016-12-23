@@ -32,7 +32,7 @@ class GameSessionController extends BaseApiController
      */
     public function create(SessionCreateRequest $request)
     {
-        $input = Input::only('user_id', 'project_id', 'game_id', 'currency');
+        $input = Input::only('user_id', 'project_id', 'game_id', 'currency', 'unique_id');
 
         $sessionId = app('GameSession')->create($input);
 
