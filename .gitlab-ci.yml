@@ -14,6 +14,8 @@ before_script:
   - echo $CI_BUILD_REF
 
 composer_and_unit_testing:
+  tags:
+    - de2gl03d_dind_1
   stage: test
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   services:
@@ -36,6 +38,8 @@ composer_and_unit_testing:
     expire_in: 1 day
 
 build_php_7.0_dev:
+  tags:
+    - de2gl03d_dind_1
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
@@ -54,6 +58,8 @@ build_php_7.0_dev:
     - dev
 
 build_php_7.0_master:
+  tags:
+    - de2gl02p_dind_1
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
@@ -73,6 +79,8 @@ build_php_7.0_master:
     - master
 
 push_code:
+  tags:
+    - de2gl03d_dind_1
   stage: deploy
   image: docker:latest
   script:
@@ -85,6 +93,8 @@ push_code:
     - master
 
 rancher_upgrade_dev:
+  tags:
+    - de2gl03d_dind_1
   stage: upgrade
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
@@ -95,6 +105,8 @@ rancher_upgrade_dev:
     - dev
 
 rancher_upgrade_master:
+  tags:
+    - de2gl03d_dind_1
   stage: upgrade
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
@@ -105,6 +117,8 @@ rancher_upgrade_master:
   when: manual
 
 manual_push_dev_code:
+  tags:
+    - de2gl03d_dind_1
   stage: deploy
   image: docker:latest
   script:
@@ -116,6 +130,8 @@ manual_push_dev_code:
   when: manual
 
 manual_dev_rancher_upgrade:
+  tags:
+    - de2gl03d_dind_1
   stage: upgrade
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
