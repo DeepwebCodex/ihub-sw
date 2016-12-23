@@ -57,7 +57,7 @@ build_php_7.0_dev:
   only:
     - dev
 
-build_php_7.0_master:
+build_php_7.0_prod:
   tags:
     - de2gl02p_dind_1
   stage: build
@@ -91,7 +91,7 @@ push_code_dev:
   only:
     - dev
 
-push_code_master:
+push_code_prod:
   tags:
     - de2gl02p_dind_1
   stage: deploy
@@ -116,7 +116,7 @@ rancher_upgrade_dev:
   only:
     - dev
 
-rancher_upgrade_master:
+manual_rancher_upgrade_prod:
   tags:
     - de2gl02p_dind_1
   stage: upgrade
