@@ -27,7 +27,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-        try{
+        try {
             app('GameSession')->start($request->input('token', ''));
         } catch (SessionDoesNotExist $e) {
             return false;
@@ -35,9 +35,10 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
 
         $userId = app('GameSession')->get('user_id');
 
-        if($userId){
+        if ($userId) {
             $this->addMetaField('user_id', $userId);
             $this->addMetaField('token', $request->input('token'));
+            $this->addMetaField('method', $request->input('method'));
             return true;
         }
 
@@ -67,9 +68,21 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
         ];
     }
 
+    /**
+     * @param array $errors
+     * @throws ApiHttpException
+     * @return null
+     */
     public function response(array $errors)
     {
-        throw new ApiHttpException('400', null, array_merge(CodeMapping::getByErrorCode(StatusCode::SIGNATURE), [
+        if (CodeMapping::isAttribute(key($errors))) {
+            $preparedError = CodeMapping::getByErrorCode(StatusCode::SIGNATURE);
+            $httpStatus = '400';
+        } else {
+            $preparedError = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
+            $httpStatus = '500';
+        }
+        throw new ApiHttpException($httpStatus, null, array_merge($preparedError, [
             'method' => $this->input('method'),
             'token' => $this->input('token'),
         ]));

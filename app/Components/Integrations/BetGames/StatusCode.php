@@ -10,4 +10,6 @@ abstract class StatusCode
     const TOKEN = 3;
     const INSUFFICIENT_FUNDS = 4;
     const BAD_OPERATION_ORDER = 700;
+    /** not implemented in Bet Games API */
+    const UNKNOWN = -1;
 }

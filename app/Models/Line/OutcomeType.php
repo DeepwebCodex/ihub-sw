@@ -2,6 +2,8 @@
 
 namespace App\Models\Line;
 
+use Illuminate\Database\Query\JoinClause;
+
 /**
  * Class OutcomeType
  * @package App\Models\Line
@@ -22,11 +24,18 @@ class OutcomeType extends BaseLineModel
      * @param int $marketTemplateId
      * @return array
      */
-    public function getOutcomeTypeByMarketTemplateId(int $marketTemplateId)
+    public function getOutcomeTypeByMarketTemplateId(int $marketTemplateId):array
     {
-        return \DB::connection($this->connection)
-            ->table('market_template mt')
-            ->join('outcome_type ot', 'ot.id = any (mt.outcome_types)')
+        $connection = \DB::connection($this->connection);
+        $connection->setFetchMode(\PDO::FETCH_ASSOC);
+
+        return $connection
+            ->table('market_template AS mt')
+            ->select('ot.*')
+            ->join($this->table . ' AS ot', function ($join) {
+                /** @var JoinClause $join */
+                $join->whereRaw('ot.id = ANY (mt.outcome_types)');
+            })
             ->where('mt.id', $marketTemplateId)
             ->get()
             ->all();

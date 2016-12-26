@@ -3,13 +3,16 @@
 namespace App\Components\Integrations\VirtualBoxing;
 
 use App\Components\Integrations\VirtualSports\Category;
-use App\Components\Integrations\VirtualSports\ConfigTrait;
+use App\Components\Integrations\VirtualSports\Result;
+use App\Components\Traits\ConfigTrait;
 use App\Components\Integrations\VirtualSports\Event;
 use App\Components\Integrations\VirtualSports\EventParticipant;
 use App\Components\Integrations\VirtualSports\Tournament;
 use App\Components\Integrations\VirtualSports\Translate;
-use App\Exceptions\Api\ApiHttpException;
+use App\Exceptions\Api\VirtualBoxing\DuplicateException;
+use App\Exceptions\Api\VirtualBoxing\ErrorException;
 use App\Models\Line\Sportform;
+use App\Models\VirtualBoxing\EventLink;
 
 /**
  * Class BetService
@@ -30,7 +33,7 @@ class BetService
     protected $eventVbId;
 
     /**
-     * ResultService constructor.
+     * BetService constructor.
      * @param $config
      */
     public function __construct(array $config)
@@ -40,73 +43,84 @@ class BetService
 
     /**
      * @param array $match
-     * @throws \App\Exceptions\Api\ApiHttpException|\Exception
+     * @return void
+     * @throws \RuntimeException
+     * @throws \App\Exceptions\ConfigOptionNotFoundException
+     * @throws \InvalidArgumentException
+     * @throws \App\Exceptions\Api\VirtualBoxing\DuplicateException
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     * @throws \Exception
      */
-    public function setBet(array $match):void
+    public function setBet(array $match)
     {
-        $scheduleId = (int)$match['scheduleId'];
-        $this->eventVbId = $scheduleId;
+        $this->eventVbId = (int)$match['scheduleId'];
 
-        if (EventLink::checkExistsByVbId($scheduleId)) {
-            throw new ApiHttpException(200, 'done_duplicate');
-            //return $this->respondSuccess($this->getMessageByCode('done_duplicate'));
-            /*return $this->Func->success($this->lang->line('done_duplicate') . ' Duplicate-> '
-                . print_r($duplicate, true) . ' obj-> ' . print_r(Input::all(), true));*/
-        }
+        $this->checkDuplicate($this->eventVbId);
 
         $sportId = $this->getConfigOption('sport_id');
-        $sportForm = Sportform::findById($sportId);
 
-        foreach ($sportForm as $item) {
-            $itemId = $item['id'];
-            if ($item['is_alive']) {
-                $liveSportFormId = $itemId;
-            } else {
-                $prebetSportForm = $itemId;
-            }
-        }
-        if (!isset($liveSportFormId, $prebetSportForm)) {
-            throw new ApiHttpException(400, "Can't find sportform");
-        }
+        $sportFormIds = $this->getSportFormIds($sportId);
 
-        \DB::connection('line')->transaction(function () use ($scheduleId, $sportId, $match, $sportForm) {
+        \DB::connection('line')->transaction(function () use ($sportId, $match, $sportFormIds) {
             $category = new Category();
-            $category->create(
+            $categoryCreateResult = $category->create(
                 $match['competition'],
                 $sportId,
                 $this->getConfigOption('country_id')
             );
+            if (!$categoryCreateResult) {
+                throw new ErrorException('error_create_category');
+            }
 
             $tournament = new Tournament($this->config);
-            $tournament->create(
+            $tournamentCreateResult = $tournament->create(
                 $match['location'],
                 $category->getCategoryId(),
-                $sportForm->prebet_id,
-                $sportForm->live_id
+                $sportFormIds['prebet'],
+                $sportFormIds['live']
             );
+            if (!$tournamentCreateResult) {
+                throw new ErrorException('error_create_tournament');
+            }
 
             $event = new Event($this->config);
-            $event->create($match['date'], $match['time'], $match['name'], $tournament->getTournamentId());
+            $eventCreateResult = $event->create(
+                $match['date'],
+                $match['time'],
+                $match['name'],
+                $tournament->getTournamentId()
+            );
+            if (!$eventCreateResult) {
+                throw new ErrorException('Can\'t insert event');
+            }
+
             $eventId = $event->getEventId();
             $this->eventId = $eventId;
 
-            $eventParticipantHome = new EventParticipant($this->config);
-            $eventParticipantHome->create(1, $eventId, $match['home']);
-            $eventParticipantAway = new EventParticipant($this->config);
-            $eventParticipantAway->create(2, $eventId, $match['away']);
+            $eventParticipantHome = $this->createEventParticipant(1, $this->eventId, $match['home']);
+            $eventParticipantAway = $this->createEventParticipant(2, $this->eventId, $match['away']);
 
-            (new ResultService($this->config))->initResultEvent($eventId);
+            $eventType = $this->getConfigOption('event_type');
+            (new Result())->initResultEvent($eventType, $eventId);
 
             $market = new Market(
                 $this->config,
                 $eventParticipantHome->getEventParticipantId(),
                 $eventParticipantAway->getEventParticipantId()
             );
-            $market->setMarkets($match['bet'], $eventId);
+
+            $matchBets = is_numeric(key($match['bet'])) ? $match['bet'] : [$match['bet']];
+            $market->setMarkets($matchBets, $eventId);
 
             Translate::save();
 
-            (new EventLink())->create($scheduleId, $eventId);
+            $eventLinkModel = new EventLink([
+                'event_vb_id' => (string)$this->eventVbId,
+                'event_id' => $eventId
+            ]);
+            if (!$eventLinkModel->save()) {
+                throw new ErrorException('cant_insert_link');
+            }
         });
     }
 
@@ -124,5 +138,57 @@ class BetService
     public function getEventVbId():int
     {
         return $this->eventVbId;
+    }
+
+    /**
+     * @param $eventVbId
+     * @throws \App\Exceptions\Api\VirtualBoxing\DuplicateException
+     */
+    protected function checkDuplicate(int $eventVbId)
+    {
+        if (EventLink::getByVbId($eventVbId)) {
+            throw new DuplicateException(compact($eventVbId));
+        }
+    }
+
+    /**
+     * @param $sportId
+     * @return array
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     */
+    protected function getSportFormIds(int $sportId):array
+    {
+        $sportForm = Sportform::findById($sportId);
+        foreach ($sportForm as $item) {
+            $itemId = $item['id'];
+            if ($item['is_live']) {
+                $liveSportFormId = $itemId;
+            } else {
+                $preBetSportFormId = $itemId;
+            }
+        }
+        if (!isset($liveSportFormId, $preBetSportFormId)) {
+            throw new ErrorException("Can't find sportform");
+        }
+        return [
+            'live' => $liveSportFormId,
+            'prebet' => $preBetSportFormId
+        ];
+    }
+
+    /**
+     * @param int $number
+     * @param int $eventId
+     * @param string $participantName
+     * @return EventParticipant
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     */
+    protected function createEventParticipant(int $number, int $eventId, string $participantName):EventParticipant
+    {
+        $eventParticipant = new EventParticipant($this->config);
+        if (!$eventParticipant->create($number, $eventId, $participantName)) {
+            throw new ErrorException('error_create_participant');
+        }
+        return $eventParticipant;
     }
 }

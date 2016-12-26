@@ -4,7 +4,6 @@ namespace App\Components\Integrations\BetGames;
 
 
 use App\Components\Integrations\CodeMappingBase;
-use App\Components\Transactions\TransactionHelper;
 
 class CodeMapping extends CodeMappingBase
 {
@@ -53,6 +52,23 @@ class CodeMapping extends CodeMappingBase
                 'attribute' => null,
                 'meanings'  => [self::TOKEN]
             ],
+
+            /** not implemented in Bet Games API */
+            StatusCode::UNKNOWN => [
+                'message' => 'unknown error',
+                'map'       => [],
+                'attribute' => null,
+                'meanings'  => []
+            ],
         ];
+    }
+
+    public static function isAttribute($key):bool
+    {
+        return in_array($key, [
+            self::SUCCESS, self::SIGNATURE, self::TIME, self::TOKEN,
+            'params', 'params.method', 'params.amount', 'params.currency', 'params.bet_id',
+            'params.transaction_id', 'params.retrying', 'params.player_id'
+        ]);
     }
 }

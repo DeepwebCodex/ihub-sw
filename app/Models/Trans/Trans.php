@@ -19,12 +19,17 @@ class Trans extends BaseTransModel
     public $timestamps = false;
 
     /**
-     * @param array $arr
-     * @return bool|int|static
+     * {@inheritdoc}
      */
-    public function save(array $arr)
+    public $fillable = ['key', 'value', 'lang'];
+
+    /**
+     * @param array $options
+     * @return bool
+     */
+    public function save(array $options = [])
     {
-        foreach ($arr as $lang => $value) {
+        foreach ($options as $lang => $value) {
             $key = trim($value['key']);
             $value = trim($value['value']);
 
@@ -34,16 +39,17 @@ class Trans extends BaseTransModel
             ])->exists();
 
             if (!$recordExist) {
-                return static::create([
+                static::create([
                     'key' => $key,
                     'value' => $value,
                     'lang' => $lang
                 ]);
             }
-            return \DB::connection($this->connection)
+            \DB::connection($this->connection)
                 ->table($this->table)
                 ->where(['key' => $key, 'lang' => $lang])
                 ->update(['value' => $value]);
         }
+        return true;
     }
 }

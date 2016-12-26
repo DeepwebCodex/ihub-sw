@@ -11,14 +11,29 @@ class Result extends BaseVirtualBoxingModel
     /**
      * {@inheritdoc}
      */
-    protected $table = 'vb.result_vb';
+    protected $table = 'result_vb';
 
     /**
-     * @param string $id
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $timestamps = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $fillable = ['tid'];
+
+    /**
+     * @param string $tid
      * @return bool
      */
-    public static function existsById(string $id)
+    public static function existsById(string $tid)
     {
-        return static::where('tid', $id)->exists();
+        return static::where('tid', $tid)->exists();
     }
 }
