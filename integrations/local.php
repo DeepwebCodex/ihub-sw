@@ -1,24 +1,23 @@
 <?php
 
 return [
-
     'casino' => [
+        'service_id'    => 28,
         'secret_word'   => 'ererr4SD',
-        'service_id'    => 28
     ],
 
     'egt' => [
         'service_id'    => 27,
         'UserName'      => 'FavbetEGTSeamless',
         'Password'      => '6IQLjj8Jowe3X',
-        'secret'        => 'Qasdf3QEFDDCS2',
+        'secret'        => 'Qasdf3QEFDDCS2'
     ],
 
     'microgaming' => [
         'service_id'            => 17,
         'login_server'          => 'microgaming',
         'password_server'       => 'hawai',
-        'time_expire'           => 300,
+        'use_secure_request'    => false,
         'list_currency'         => ['WMZ' => 'USD', 'WMR' => 'RUB', 'WMU' => 'UAH', 'WME' => 'EUR']
     ],
 
@@ -72,7 +71,8 @@ return [
     ],
 
     'betGames' => [
-        'secret' => 'dfF$FF3r4efr',
-        'token_expiration_time' => 60,
+        'service_id' => 13,
+        'token_expiration_time' => 1,
+        'secret' => 'dfFWgbF3r4efr',
     ],
 ];
