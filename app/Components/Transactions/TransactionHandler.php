@@ -2,13 +2,9 @@
 
 namespace App\Components\Transactions;
 
-
-use App\Components\ExternalServices\AccountManager;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
 use App\Facades\AppLog;
-use App\Models\ObjectIdMap;
 
 /**
  * @property  TransactionRequest $request
@@ -26,8 +22,6 @@ class TransactionHandler
      */
     public function __construct($request, $user)
     {
-        $request->object_id = ObjectIdMap::getObjectId($request->object_id, $request->service_id);
-
         $this->request = $request;
         $this->user    = $user;
     }
