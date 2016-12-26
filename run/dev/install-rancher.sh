@@ -18,7 +18,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^LOG_RABBIT_HOST=/LOG_RABBIT_HOST=rabbitmq-server/g" \
        -e "s/^LOG_RABBIT_PORT=/LOG_RABBIT_PORT=5672/g" \
        -e "s/^LOG_RABBIT_USER=/LOG_RABBIT_USER=ihub/g" \
-       -e "s/^LOG_RABBIT_PASS=/LOG_RABBIT_PASS=ihub/g" \
+       -e "s/^LOG_RABBIT_PASS=/LOG_RABBIT_PASS=\"8jm7JMBmCsqp\"/g" \
        -e "s/^STATSD_HOST=localhost/STATSD_HOST=statsd/g" \
        ./.env
 
@@ -31,13 +31,9 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^DB_DATABASE=integrations/DB_DATABASE=\"ihub\"/g" \
        -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
        -e "s/^SESSION_DRIVER=file/SESSION_DRIVER=redis/g" \
-       -e "s/^REDIS_HOST=127.0.0.1/REDIS_HOST=redis/g" \
+       -e "s/^REDIS_HOST=127.0.0.1/REDIS_HOST=de2red01d.dev.favorit/g" \
        -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
        -e "s/^LOG_DRIVER=file/LOG_DRIVER=file/g" \
-       -e "s/^LOG_RABBIT_HOST=/LOG_RABBIT_HOST=rabbitmq-server/g" \
-       -e "s/^LOG_RABBIT_PORT=/LOG_RABBIT_PORT=5672/g" \
-       -e "s/^LOG_RABBIT_USER=/LOG_RABBIT_USER=ihub/g" \
-       -e "s/^LOG_RABBIT_PASS=/LOG_RABBIT_PASS=ihub/g" \
        -e "s/^STATSD_HOST=localhost/STATSD_HOST=statsd/g" \
        ./.env.testing
 
