@@ -3,7 +3,8 @@
 namespace App\Components\Integrations\VirtualBoxing;
 
 use App\Components\Integrations\VirtualSports\Category;
-use App\Components\Integrations\VirtualSports\ConfigTrait;
+use App\Components\Integrations\VirtualSports\Result;
+use App\Components\Traits\ConfigTrait;
 use App\Components\Integrations\VirtualSports\Event;
 use App\Components\Integrations\VirtualSports\EventParticipant;
 use App\Components\Integrations\VirtualSports\Tournament;
@@ -32,7 +33,7 @@ class BetService
     protected $eventVbId;
 
     /**
-     * ResultService constructor.
+     * BetService constructor.
      * @param $config
      */
     public function __construct(array $config)
@@ -43,6 +44,8 @@ class BetService
     /**
      * @param array $match
      * @return void
+     * @throws \RuntimeException
+     * @throws \App\Exceptions\ConfigOptionNotFoundException
      * @throws \InvalidArgumentException
      * @throws \App\Exceptions\Api\VirtualBoxing\DuplicateException
      * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
@@ -50,16 +53,15 @@ class BetService
      */
     public function setBet(array $match)
     {
-        $eventVbId = (int)$match['scheduleId'];
-        $this->eventVbId = $eventVbId;
+        $this->eventVbId = (int)$match['scheduleId'];
 
-        $this->checkDuplicate($eventVbId);
+        $this->checkDuplicate($this->eventVbId);
 
         $sportId = $this->getConfigOption('sport_id');
 
         $sportFormIds = $this->getSportFormIds($sportId);
 
-        \DB::connection('line')->transaction(function () use ($eventVbId, $sportId, $match, $sportFormIds) {
+        \DB::connection('line')->transaction(function () use ($sportId, $match, $sportFormIds) {
             $category = new Category();
             $categoryCreateResult = $category->create(
                 $match['competition'],
@@ -95,10 +97,11 @@ class BetService
             $eventId = $event->getEventId();
             $this->eventId = $eventId;
 
-            $eventParticipantHome = $this->createEventParticipant(1, $eventId, $match['home']);
-            $eventParticipantAway = $this->createEventParticipant(2, $eventId, $match['away']);
+            $eventParticipantHome = $this->createEventParticipant(1, $this->eventId, $match['home']);
+            $eventParticipantAway = $this->createEventParticipant(2, $this->eventId, $match['away']);
 
-            (new ResultService($this->config))->initResultEvent($eventId);
+            $eventType = $this->getConfigOption('event_type');
+            (new Result())->initResultEvent($eventType, $eventId);
 
             $market = new Market(
                 $this->config,
@@ -112,7 +115,7 @@ class BetService
             Translate::save();
 
             $eventLinkModel = new EventLink([
-                'event_vb_id' => (string)$eventVbId,
+                'event_vb_id' => (string)$this->eventVbId,
                 'event_id' => $eventId
             ]);
             if (!$eventLinkModel->save()) {

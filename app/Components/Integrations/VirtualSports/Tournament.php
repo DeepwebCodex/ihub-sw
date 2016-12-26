@@ -2,6 +2,7 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
+use App\Components\Traits\ConfigTrait;
 use App\Models\Line\Tournament as TournamentModel;
 
 /**

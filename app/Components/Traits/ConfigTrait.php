@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Components\Integrations\VirtualSports;
+namespace App\Components\Traits;
 
-use App\Exceptions\Api\VirtualBoxing\ErrorException;
+use App\Exceptions\ConfigOptionNotFoundException;
 
 /**
  * Trait ConfigTrait
- * @package App\Components\Integrations\VirtualSports
+ * @package App\Components\Traits
  */
 trait ConfigTrait
 {
@@ -18,12 +18,12 @@ trait ConfigTrait
     /**
      * @param string $name
      * @return mixed
-     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     * @throws ConfigOptionNotFoundException
      */
     protected function getConfigOption(string $name)
     {
         if (!array_has($this->config, $name)) {
-            throw new ErrorException('Configuration error', ['config_option' => $name]);
+            throw new ConfigOptionNotFoundException();
         }
         return array_get($this->config, $name);
     }

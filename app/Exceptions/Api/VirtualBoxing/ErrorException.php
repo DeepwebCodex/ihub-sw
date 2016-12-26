@@ -12,7 +12,7 @@ class ErrorException extends BaseException
 {
     /**
      * ErrorException constructor.
-     * @param array $message
+     * @param string $message
      * @param array $payload
      */
     public function __construct($message, $payload = [])

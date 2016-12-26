@@ -45,7 +45,7 @@ class AmqpService
                     ]
                 ]
             );
-        } catch (RequestException $e) {
+        } catch (RequestException $exception) {
             throw new \RuntimeException('Could not request AMQP API');
         }
 
