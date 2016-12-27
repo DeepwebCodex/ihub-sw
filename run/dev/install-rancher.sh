@@ -18,7 +18,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^LOG_RABBIT_HOST=/LOG_RABBIT_HOST=rabbitmq-server/g" \
        -e "s/^LOG_RABBIT_PORT=/LOG_RABBIT_PORT=5672/g" \
        -e "s/^LOG_RABBIT_USER=/LOG_RABBIT_USER=ihub/g" \
-       -e "s/^LOG_RABBIT_PASS=/LOG_RABBIT_PASS=ihub/g" \
+       -e "s/^LOG_RABBIT_PASS=/LOG_RABBIT_PASS=\"8jm7JMBmCsqp\"/g" \
        -e "s/^STATSD_HOST=localhost/STATSD_HOST=statsd/g" \
        ./.env
 
