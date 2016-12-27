@@ -128,6 +128,7 @@ manual_rancher_upgrade_prod:
     - upgrade --environment ihub --stack ihub --service php-fpm
     - upgrade --environment ihub --stack ihub --service nginx
   only:
+    - master
   when: manual
 
 manual_push_dev_code:
@@ -141,6 +142,8 @@ manual_push_dev_code:
     - ls -liah
     - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
     - docker push $CONTAINER_IHUB_CODE_IMAGE
+  only:
+    - dev
   when: manual
 
 manual_dev_rancher_upgrade:
