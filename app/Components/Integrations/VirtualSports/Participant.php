@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
-use App\Exceptions\Api\ApiHttpException;
+use App\Components\Traits\ConfigTrait;
 use App\Models\Line\Participant as ParticipantModel;
 
 /**
@@ -29,9 +29,10 @@ class Participant
 
     /**
      * @param string $participantName
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @return bool
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    public function create(string $participantName)
+    public function create(string $participantName):bool
     {
         Translate::add($participantName);
 
@@ -42,19 +43,20 @@ class Participant
             'sport_id' => $this->getConfigOption('sport_id')
         ]);
         if (!$participant->save()) {
-            throw new ApiHttpException(400, 'error_create_participant');
+            return false;
         }
         $this->participantModel = $participant;
+        return true;
     }
 
     /**
-     * @return mixed
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @return int
+     * @throws \RuntimeException
      */
-    public function getParticipantId()
+    public function getParticipantId():int
     {
         if (!$this->participantModel) {
-            throw new ApiHttpException(400, 'error_create_participant');
+            throw new \RuntimeException('Participant not defined');
         }
         return $this->participantModel->id;
     }

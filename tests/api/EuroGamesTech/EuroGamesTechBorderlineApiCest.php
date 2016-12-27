@@ -70,7 +70,7 @@ class EuroGamesTechBorderlineApiCest
             'status' => TransactionRequest::STATUS_PENDING,
             'currency' => $this->testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($request['GameNumber'], array_get($this->options, 'service_id')),
+            'object_id' => $request['GameNumber'],
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -112,7 +112,7 @@ class EuroGamesTechBorderlineApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'currency' => $this->testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($request['GameNumber'], array_get($this->options, 'service_id')),
+            'object_id' => $request['GameNumber'],
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -149,7 +149,7 @@ class EuroGamesTechBorderlineApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'currency' => $this->testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($request['GameNumber'], array_get($this->options, 'service_id')),
+            'object_id' => $request['GameNumber'],
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 

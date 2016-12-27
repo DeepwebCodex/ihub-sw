@@ -45,7 +45,7 @@ Route::group(['prefix' => 'mg'], function () {
 /**VirtualBoxing controller routes */
 Route::group(['prefix' => 'vb'], function () {
     Route::any('{any}', "VirtualBoxingController@error");
-    Route::any('/', "VirtualBoxingController@index");
+    Route::post('/', "VirtualBoxingController@index");
 });
 
 /**GameSession controller routes */

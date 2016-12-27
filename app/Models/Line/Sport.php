@@ -23,9 +23,9 @@ class Sport extends BaseLineModel
      * @param int $eventId
      * @return bool
      */
-    public function checkSportEventExists(int $sportId, int $eventId)
+    public function checkSportEventExists(int $sportId, int $eventId):bool
     {
-        return \DB::connection('line')
+        return \DB::connection($this->connection)
             ->table($this->table .' AS s')
             ->select('s.id')
             ->join('category AS ca', 's.id', 'ca.sport_id')

@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
-use App\Exceptions\Api\ApiHttpException;
+use App\Components\Traits\ConfigTrait;
 use App\Models\Line\Event as EventModel;
 
 /**
@@ -32,10 +32,10 @@ class Event
      * @param $matchTime
      * @param $matchName
      * @param $tournamentId
-     * @return void
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @return bool
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    public function create($matchDate, $matchTime, $matchName, $tournamentId):void
+    public function create($matchDate, $matchTime, $matchName, $tournamentId):bool
     {
         Translate::add($matchName);
 
@@ -54,19 +54,20 @@ class Event
             'user_id' => $this->getConfigOption('user_id'),
         ]);
         if (!$eventModel->save()) {
-            throw new ApiHttpException(400, "Can't insert event");
+            return false;
         }
         $this->eventModel = $eventModel;
+        return true;
     }
 
     /**
      * @return int
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \RuntimeException
      */
     public function getEventId():int
     {
         if (!$this->eventModel) {
-            throw new ApiHttpException(400, "Can't insert event");
+            throw new \RuntimeException('Event not defined');
         }
         return (int)$this->eventModel->id;
     }
