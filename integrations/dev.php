@@ -15,8 +15,8 @@ return [
 
     'microgaming' => [
         'service_id'            => 17,
-        'login_server'          => 'microgaming',
-        'password_server'       => 'hawai',
+        'login_server'          => 'micro',
+        'password_server'       => 'sgsdfsdfsdfr23423',
         'use_secure_request'    => false,
         'list_currency'         => ['WMZ' => 'USD', 'WMR' => 'RUB', 'WMU' => 'UAH', 'WME' => 'EUR']
     ],
