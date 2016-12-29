@@ -61,7 +61,7 @@ build_php_7.0_dev:
 
 build_php_7.0_prod:
   tags:
-    - de2gl02p_dind_1
+    - de2gl03p_dind_1
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
@@ -95,7 +95,7 @@ push_code_dev:
 
 push_code_prod:
   tags:
-    - de2gl02p_dind_1
+    - de2gl03p_dind_1
   stage: deploy
   image: docker:latest
   script:
@@ -120,7 +120,7 @@ rancher_upgrade_dev:
 
 manual_rancher_upgrade_prod:
   tags:
-    - de2gl02p_dind_1
+    - de2gl03p_dind_1
   stage: upgrade
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
