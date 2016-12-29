@@ -65,6 +65,8 @@ build_php_7.0_prod:
   stage: build
   image: gitlab.favorit:4567/integrations/docker:php-fpm
   script:
+    - export http_proxy="http://webproxy.intsrv:3128"
+    - export https_proxy="http://webproxy.intsrv:3128"
     - rm -rf .env .env.testing
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
