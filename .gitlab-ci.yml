@@ -155,6 +155,7 @@ manual_prod_rancher_upgrade:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack ihub --service php-fpm
     - upgrade --environment ihub --stack ihub --service nginx
+    - upgrade --environment ihub --stack ihub --service php-fpm-system
   only:
     - master
   when: manual
