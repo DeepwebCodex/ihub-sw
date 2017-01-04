@@ -14,7 +14,7 @@ composer_and_unit_testing:
   tags:
     - de2gl03d_dind_1
   stage: test
-  image: gitlab.favorit:4567/integrations/docker:php-fpm
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
   services:
     - redis:3.2
   script:
@@ -40,7 +40,7 @@ build_php_7.0_dev:
   tags:
     - de2gl03d_dind_1
   stage: build
-  image: gitlab.favorit:4567/integrations/docker:php-fpm
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
   script:
     - rm -rf .env .env.testing
     - bash ./run/dev/install-rancher.sh
@@ -60,7 +60,7 @@ build_php_7.0_prod:
   tags:
     - de2gl03p_dind_1
   stage: build
-  image: gitlab.favorit:4567/integrations/docker:php-fpm
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-master
   script:
     - export http_proxy="http://10.120.12.56:3128"
     - export https_proxy="http://10.120.12.56:3128"
