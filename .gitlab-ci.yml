@@ -10,9 +10,6 @@ variables:
   RANCHER_PROD_URL: "http://10.120.12.41:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
-before_script:
-  - echo $CI_BUILD_REF
-
 composer_and_unit_testing:
   tags:
     - de2gl03d_dind_1
