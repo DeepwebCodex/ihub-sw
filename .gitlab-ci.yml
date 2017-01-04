@@ -67,6 +67,7 @@ build_php_7.0_prod:
     - rm -rf .env .env.testing
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
+    - cat /root/ihub/env.icms >> .env
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
@@ -117,20 +118,7 @@ rancher_upgrade_dev:
   only:
     - dev
 
-manual_rancher_upgrade_prod:
-  tags:
-    - de2gl03p_dind_1
-  stage: upgrade
-  image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
-  script:
-    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-    - upgrade --environment ihub --stack ihub --service php-fpm
-    - upgrade --environment ihub --stack ihub --service nginx
-  only:
-    - master
-  when: manual
-
-manual_push_dev_code:
+manual_dev_push_code:
   tags:
     - de2gl03d_dind_1
   stage: deploy
@@ -156,4 +144,17 @@ manual_dev_rancher_upgrade:
     - upgrade --environment dev-ihub --stack ihub --service nginx
   only:
     - dev
+  when: manual
+
+manual_prod_rancher_upgrade:
+  tags:
+    - de2gl03p_dind_1
+  stage: upgrade
+  image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
+  script:
+    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
+    - upgrade --environment ihub --stack ihub --service php-fpm
+    - upgrade --environment ihub --stack ihub --service nginx
+  only:
+    - master
   when: manual
