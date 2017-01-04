@@ -14,14 +14,12 @@ class MicroGamingProdObjectIdMap extends Migration
     public function up()
     {
         Schema::connection('integration')->create('microgaming_prod_object_id_map', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->string('currency');
-            $table->bigInteger('game_id');
+            $table->bigIncrements('id');
+            $table->integer('user_id')->unsigned();
+            $table->char('currency', 16);
+            $table->bigInteger('game_id')->unsigned();
 
-            $table->index('user_id', 'microgaming_prod_object_id_user_id');
-            $table->index('currency', 'microgaming_prod_object_id_currency');
-            $table->index('game_id', 'microgaming_prod_object_id_game_id');
+            $table->index(['game_id', 'currency', 'user_id'], 'microgaming_prod_object_id_user_id_currency_game_id');
         });
     }
 
@@ -33,9 +31,7 @@ class MicroGamingProdObjectIdMap extends Migration
     public function down()
     {
         Schema::table('microgaming_prod_object_id_map', function (Blueprint $table) {
-            $table->dropIndex('microgaming_prod_object_id_user_id');
-            $table->dropIndex('microgaming_prod_object_id_currency');
-            $table->dropIndex('microgaming_prod_object_id_game_id');
+            $table->dropIndex('microgaming_prod_object_id_user_id_currency_game_id');
         });
 
         Schema::connection('integration')->dropIfExists('microgaming_prod_object_id_map');

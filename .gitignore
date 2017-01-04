@@ -11,3 +11,4 @@ Homestead.yaml
 /.phpstorm.meta.php
 
 tests/_output/*
+/run/prod/install-rancher.sh
