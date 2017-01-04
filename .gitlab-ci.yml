@@ -67,7 +67,7 @@ build_php_7.0_prod:
     - rm -rf .env .env.testing
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
-    - cat /root/ihub/env.icms >> .env
+    - cat /root/ihub/env.ihub >> .env
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
