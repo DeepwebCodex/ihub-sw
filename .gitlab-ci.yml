@@ -67,10 +67,10 @@ build_php_7.0_prod:
     - rm -rf .env .env.testing
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
-#  cache:
-#    key: $CI_BUILD_REF_NAME
-#    paths:
-#      - ./vendor
+  cache:
+    key: $CI_BUILD_REF_NAME
+    paths:
+      - ./vendor
   artifacts:
     paths:
       - ./vendor
