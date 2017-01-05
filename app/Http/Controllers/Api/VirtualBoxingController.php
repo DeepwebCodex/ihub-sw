@@ -112,7 +112,7 @@ class VirtualBoxingController extends BaseApiController
     {
         $validator = Validator::make(Input::all(), self::PROGRESS_VALIDATION_RULES);
 
-        $statusCode = Input::all()['xu:ups-at.xu:at'][0]['#text'];
+        $statusCode = Input::get('xu:ups-at.xu:at')[0]['#text'];
         if ($validator->fails()) {
             $responseMessage = $this->getMessageDescription('miss_element');
             return $this->respondError($responseMessage);
