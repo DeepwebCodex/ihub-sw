@@ -98,9 +98,11 @@ class VirtualBoxingApiCest
             'name' => 'match_progress',
             'event_id' => $this->eventId,
             'mnem' => 'MB',
-            'xu:ups-at.xu:at' => [
-                [
-                    '#text' => $statusCode
+            'xu:ups-at' => [
+                'xu:at' => [
+                    [
+                        '#text' => $statusCode
+                    ]
                 ]
             ]
         ];
