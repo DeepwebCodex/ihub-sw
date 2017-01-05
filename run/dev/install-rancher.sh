@@ -3,7 +3,6 @@
 echo "--- Preparing config.."
 chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache
 
-
 cp ./.env.example ./.env
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^APP_ENV=local/APP_ENV=dev/g" \
@@ -60,7 +59,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
         \
        -e "s/^STATSD_HOST=example.com/STATSD_HOST=statsd/g" \
        -e "s/^STATSD_PORT=8125/STATSD_PORT=8125/g" \
-       -e "s/^STATSD_PREFIX=statsd_prefix/STATSD_PREFIX=\"ihub_\"/g" \
+       -e "s/^STATSD_PREFIX=statsd_prefix/STATSD_PREFIX=\"ihub\"/g" \
         \
        -e "s/^GAME_SESSION_API_LOGIN=game_session_api_login/GAME_SESSION_API_LOGIN=\"t4ewr\$zAF@#u6esp\"/g" \
        -e "s/^GAME_SESSION_API_PASSWORD=game_session_api_password/GAME_SESSION_API_PASSWORD=\"t4ewr\$zAF@#u6esp\"/g" \
@@ -126,7 +125,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
         \
        -e "s/^STATSD_HOST=example.com/STATSD_HOST=statsd/g" \
        -e "s/^STATSD_PORT=8125/STATSD_PORT=8125/g" \
-       -e "s/^STATSD_PREFIX=statsd_prefix/STATSD_PREFIX=\"ihub_\"/g" \
+       -e "s/^STATSD_PREFIX=statsd_prefix/STATSD_PREFIX=\"ihub\"/g" \
         \
        -e "s/^GAME_SESSION_API_LOGIN=game_session_api_login/GAME_SESSION_API_LOGIN=\"t4ewr\$zAF@#u6esp\"/g" \
        -e "s/^GAME_SESSION_API_PASSWORD=game_session_api_password/GAME_SESSION_API_PASSWORD=\"t4ewr\$zAF@#u6esp\"/g" \
