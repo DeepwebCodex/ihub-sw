@@ -2,19 +2,25 @@
 
 namespace api\BetGames;
 
-use App\Components\Integrations\BetGames\Error;
+use App\Components\Integrations\BetGames\CodeMapping;
+use App\Components\Integrations\BetGames\StatusCode;
+use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
+use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
 use \BetGames\TestData;
 use \BetGames\TestUser;
 
+/**
+ * Class BetGamesApiCest
+ * @package api\BetGames
+ */
 class BetGamesApiCest
 {
     private $data;
-    /**
-     * @var TestUser
-     */
+
+    /** @var TestUser */
     private $testUser;
 
     public function __construct()
@@ -28,24 +34,65 @@ class BetGamesApiCest
         $I->disableMiddleware();
     }
 
-    // tests
     public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendPOST('/bg', $this->data->notFound());
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
 
     }
 
     public function testAuth(\ApiTester $I)
     {
         $I->sendPOST('/bg', $this->data->authFailed());
-        $this->getResponseFail($I, Error::TOKEN);
+        $this->getResponseFail($I, StatusCode::TOKEN);
     }
 
     public function testPing(\ApiTester $I)
     {
         $I->sendPOST('/bg', $this->data->ping());
         $this->getResponseOk($I);
+    }
+
+    private function mock($class)
+    {
+        $mock = \Mockery::mock($class)
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial()
+        ;
+        app()->instance($class, $mock);
+        return $mock;
+    }
+
+    public function testFailPending(\ApiTester $I)
+    {
+        $mock = $this->mock(ProcessBetGames::class);
+        $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
+        $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
+        $request = $this->data->bet();
+        $I->sendPOST('/bg', $request);
+        $this->getResponseFail($I, StatusCode::UNKNOWN);
+        $this->noRecord($I, $request, 'bet');
+    }
+
+    public function testFailCompleted(\ApiTester $I)
+    {
+        $mock = $this->mock(ProcessBetGames::class);
+        $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
+        $mock->shouldReceive('runCompleted')->once()->withAnyArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
+        $request = $this->data->bet();
+        $I->sendPOST('/bg', $request);
+        $this->getResponseFail($I, StatusCode::UNKNOWN);
+        $this->noRecord($I, $request, 'bet');
+    }
+
+    public function testFailDb(\ApiTester $I)
+    {
+        $mock = $this->mock(ProcessBetGames::class);
+        $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
+        $request = $this->data->bet();
+        $I->sendPOST('/bg', $request);
+        $this->getResponseFail($I, StatusCode::UNKNOWN);
+        $this->noRecord($I, $request, 'bet');
     }
 
     public function testAccount(\ApiTester $I)
@@ -164,7 +211,7 @@ class BetGamesApiCest
         $balanceBefore = $this->testUser->getBalanceInCents();
 
         $I->sendPOST('/bg', $request);
-        $this->getResponseFail($I, TransactionHelper::INSUFFICIENT_FUNDS);
+        $this->getResponseFail($I, StatusCode::INSUFFICIENT_FUNDS);
         $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
         $this->data->resetAmount();
 
@@ -177,7 +224,7 @@ class BetGamesApiCest
 
         $request = $this->data->bet();
         $I->sendPOST('/bg', $request);
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
         $this->data->resetAmount();
 
         $this->noRecord($I, $request, 'bet');
@@ -203,7 +250,7 @@ class BetGamesApiCest
         $request = $this->data->bet();
 
         $I->sendPOST('/bg', $request);
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
         $this->data->resetAmount();
 
         $this->noRecord($I, $request, 'bet');
@@ -214,14 +261,14 @@ class BetGamesApiCest
         $data = $this->data->bet();
         $data['signature'] = '123';
         $I->sendPOST('/bg', $data);
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
     }
 
     public function testWrongTime(\ApiTester $I)
     {
         $data = $this->data->wrongTime('get_balance');
         $I->sendPOST('/bg', $data);
-        $this->getResponseFail($I, Error::TIME);
+        $this->getResponseFail($I, StatusCode::TIME);
     }
 
     public function testWrongParams(\ApiTester $I)
@@ -229,11 +276,12 @@ class BetGamesApiCest
         $data = $this->data->bet();
         unset($data['params']['amount']);
         $I->sendPOST('/bg', $data);
-        $this->getResponseFail($I, Error::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::SIGNATURE);
     }
 
     private function getResponseOk(\ApiTester $I)
     {
+        $I->seeResponseCodeIs(200);
         $data = $this->responseToArray($I);
         $I->assertArrayHasKey('method', $data);
         $I->assertArrayHasKey('token', $data);
@@ -261,8 +309,8 @@ class BetGamesApiCest
         $I->assertArrayHasKey('error_code', $data);
         $I->assertArrayHasKey('error_text', $data);
         $I->assertEquals(0, $data['success']);
-        $error = new Error($errorCode);
-        $I->assertEquals($error->getCode(), $data['error_code']);
+        $error = CodeMapping::getByErrorCode($errorCode);
+        $I->assertEquals($error['code'], $data['error_code']);
 
         return $data;
     }

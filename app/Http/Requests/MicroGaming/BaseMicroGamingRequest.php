@@ -37,7 +37,7 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
 
     public function authorizeUser(Request $request){
         try{
-            app('GameSession')->start($request->input('token', ''));
+            app('GameSession')->start($request->input('methodcall.call.token', ''));
         } catch (SessionDoesNotExist $e) {
             throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
         }
@@ -57,7 +57,9 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
      */
     public function authorize(Request $request)
     {
-        $this->isSecureRequest();
+        if(config('integrations.microgaming.use_secure_request', true)) {
+            $this->isSecureRequest();
+        }
 
         $config_user = config('integrations.microgaming.login_server');
         $config_password = config('integrations.microgaming.password_server');

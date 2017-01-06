@@ -2,7 +2,6 @@
 
 namespace BetGames;
 
-use App\Components\Integrations\BetGames\Token;
 use App\Components\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
 
@@ -12,14 +11,17 @@ class TestData
     /**
      * @var IntegrationUser
      */
-    private $user;
+    private $userId;
+    private $currency;
     private $amount;
     private $token;
 
     public function __construct(TestUser $testUser)
     {
-        $this->user = $testUser->getUser();
-        $this->token = Token::create($this->user->id, $this->user->getCurrency());
+        $user = $testUser->getUser();
+        $this->userId = $user->id;
+        $this->currency = $user->getCurrency();
+        $this->token = Token::create($this->userId, $this->currency);
         $this->amount = self::AMOUNT;
     }
 
@@ -81,7 +83,7 @@ class TestData
 
     public function win($bet_id = null, $trans_id = null)
     {
-        return $this->transaction('transaction_bet_payout', $bet_id, $trans_id, $this->user->id);
+        return $this->transaction('transaction_bet_payout', $bet_id, $trans_id, $this->userId);
     }
 
     public function setAmount($amount)
@@ -101,7 +103,7 @@ class TestData
 
     public function wrongTime($method, $params = null)
     {
-        $token = Token::create($this->user->id, $this->user->getCurrency());
+        $token = Token::create($this->userId, $this->currency);
         $data = [
             'method' => $method,
             'token' => $token->get(),
@@ -130,7 +132,7 @@ class TestData
     {
         $params = [
             'amount' => $this->amount,
-            'currency' => $this->user->getCurrency(),
+            'currency' => $this->currency,
             'bet_id' => (empty($bet_id)) ? random_int(100000, 9900000) : (int)$bet_id,
             'transaction_id' => $trans_id ?? random_int(1000, 5000), //md5(str_random()),
             'retrying' => 0,

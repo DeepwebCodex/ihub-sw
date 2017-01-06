@@ -17,4 +17,9 @@ class StatusDesc extends BaseLineModel
      * {@inheritdoc}
      */
     public $timestamps = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $fillable = ['status_type', 'name', 'event_id'];
 }

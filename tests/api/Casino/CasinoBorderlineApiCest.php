@@ -80,7 +80,7 @@ class CasinoBorderlineApiCest
             'status' => TransactionRequest::STATUS_PENDING,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'transaction_id'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->objectId, array_get($this->options, 'service_id')),
+            'object_id' => $this->objectId,
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 

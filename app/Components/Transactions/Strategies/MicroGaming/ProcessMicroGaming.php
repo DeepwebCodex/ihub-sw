@@ -8,6 +8,8 @@ use App\Components\Transactions\BaseSeamlessWalletProcessor;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
+use App\Models\MicroGamingObjectIdMap;
+use App\Models\MicroGamingProdObjectIdMap;
 use App\Models\Transactions;
 
 /**
@@ -26,9 +28,15 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
     {
         $this->request = $request;
 
+        $this->request->object_id = $this->getObjectIdMap(
+            $this->request->user_id,
+            $this->request->currency,
+            $this->request->object_id
+        );
+
         if($this->request->transaction_type != TransactionRequest::TRANS_BET)
         {
-            $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id);
+            $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, request()->server('PARTNER_ID'));
 
             if(!$betTransaction){
                 throw new ApiHttpException(500, "Bet was not placed", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
@@ -40,7 +48,7 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
             return $this->processZeroAmountTransaction();
         }
 
-        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type);
+        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, request()->server('PARTNER_ID'));
 
         $status = is_object($lastRecord) ? $lastRecord->status : null;
 
@@ -80,15 +88,41 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
             $this->request->object_id,
             $this->request->service_id);
 
-        if(!$operation){
+        if(!$operation)
+        {
             throw new ApiHttpException(409, "Finance error", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
         }
-        else if (count($operation) > 1)
+        else if (count($operation) != count($operation, COUNT_RECURSIVE))
         {
             throw new ApiHttpException(409, "Finance error, duplicated duplication", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
         }
 
         $this->responseData = $operation;
         $this->isDuplicate = true;
+    }
+
+    /**
+     * На данный момент для мапинга игровых раундов микрогейминга мы используем две схемы:
+     *  - автоинкремент для прода
+     *  - числовой хеш для дева (не на проде поскольку после 1ккк транзакций шанс пересечения 50% для дева спасает нас от гемороя
+     *  на проде - бомба замедленного действия)
+     *
+     * @param int $user_id
+     * @param string $currency
+     * @param int $game_id
+     * @return int
+     */
+    protected function getObjectIdMap(int $user_id, string $currency, int $game_id) : int
+    {
+        if(app()->environment() == 'production')
+        {
+            return MicroGamingProdObjectIdMap::getObjectId($user_id, $currency, $game_id);
+        }
+
+        return MicroGamingObjectIdMap::getObjectId(
+            $user_id,
+            $currency,
+            $game_id
+        );
     }
 }

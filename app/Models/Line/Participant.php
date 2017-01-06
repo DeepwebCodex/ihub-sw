@@ -17,4 +17,9 @@ class Participant extends BaseLineModel
      * {@inheritdoc}
      */
     public $timestamps = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $fillable = ['name', 'type', 'country_id', 'sport_id'];
 }

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\BetGamesApiFormatter;
 use App\Components\Integrations\BetGames\ApiMethod;
+use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\ResponseData;
+use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Integrations\BetGames\TransactionMap;
 use App\Components\Traits\MetaDataTrait;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
@@ -40,14 +42,14 @@ class BetGamesController extends BaseApiController
         $this->middleware('input.xml')->except(['error']);
 
         /**
-         * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkToken, BetGamesValidation::checkMethod
+         * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkMethod
          */
         Validator::extend('check_signature', 'App\Http\Requests\Validation\BetGamesValidation@checkSignature');
         Validator::extend('check_time', 'App\Http\Requests\Validation\BetGamesValidation@checkTime');
         Validator::extend('check_token', 'App\Http\Requests\Validation\BetGamesValidation@checkToken');
         Validator::extend('check_method', 'App\Http\Requests\Validation\BetGamesValidation@checkMethod');
 
-        $this->userId = app('GameSession')->get('user_id');
+        $this->userId = app('GameSession')->get('user_id') ?? 0;
     }
 
     /**
@@ -146,7 +148,7 @@ class BetGamesController extends BaseApiController
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
-        $response = $transaction->handle(new ProcessBetGames());
+        $response = $transaction->handle(app(ProcessBetGames::class));
 
         return $this->responseOk($request->input('method'), $request->input('token'), [
             'balance_after' => $response->getBalanceInCents(),
@@ -160,7 +162,8 @@ class BetGamesController extends BaseApiController
      */
     public function win(WinRequest $request)
     {
-        $user = IntegrationUser::get($this->userId, $this->getOption('service_id'), 'betGames');
+        $userId = $request->input('params.player_id');
+        $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'betGames');
 
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token'), 'balance' => $user->getBalanceInCents()]);
 
@@ -177,7 +180,7 @@ class BetGamesController extends BaseApiController
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
-        $response = $transaction->handle(new ProcessBetGames());
+        $response = $transaction->handle(app(ProcessBetGames::class));
 
         return $this->responseOk($request->input('method'), $request->input('token'), [
             'balance_after' => $response->getBalanceInCents(),
@@ -197,7 +200,7 @@ class BetGamesController extends BaseApiController
         if($prolong) {
             app('GameSession')->prolong($token);
         }
-        $data = new ResponseData($method, $token, $params);
+        $data = new ResponseData($method, $token, $params, CodeMapping::getByErrorCode(StatusCode::OK));
         return $this->respond(Response::HTTP_OK, '', $data->ok());
     }
 }

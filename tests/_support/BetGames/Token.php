@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Integrations\BetGames;
+namespace BetGames;
 
 use Illuminate\Cache\Repository;
 

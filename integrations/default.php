@@ -1,10 +1,9 @@
 <?php
 
 return [
-
     'casino' => [
+        'service_id'    => 28,
         'secret_word'   => 'ererr4SD',
-        'service_id'    => 28
     ],
 
     'egt' => [
@@ -18,7 +17,7 @@ return [
         'service_id'            => 17,
         'login_server'          => 'microgaming',
         'password_server'       => 'hawai',
-        'time_expire'           => 300,
+        'use_secure_request'    => false,
         'list_currency'         => ['WMZ' => 'USD', 'WMR' => 'RUB', 'WMU' => 'UAH', 'WME' => 'EUR']
     ],
 
@@ -42,6 +41,8 @@ return [
         'info_url' => null,
         'rounds_map' => [1 => 31, 2 => 32, 3 => 33, 4 => 34, 5 => 35, 6 => 36],
         'scope_type' => ['point' => 1, 'knockdown' => 33, 'winner' => 12],
+        'type_participant' => 'athlete',
+        'status_type' => 'notstarted',
         'event_type' => 'prebet',
         'locked' => 'no',
         'weigh' => 100,
@@ -69,17 +70,9 @@ return [
         ],
     ],
 
-    'live_dealer' => [
-        'system_id' => '999',
-        'server_addr' => '0.0.0.0',
-        'api_url' => 'https://apitest.fundist.org/',
-        'api_key' => '19d47072a7e46e82ce07b7d8b843cecc',
-        'api_password' => '4575885165224895',
-    ],
-
     'betGames' => [
-        'secret' => 'dfFWgbF3r4efr',
-        'token_expiration_time' => 1,
         'service_id' => 13,
+        'token_expiration_time' => 1,
+        'secret' => 'dfFWgbF3r4efr',
     ],
 ];

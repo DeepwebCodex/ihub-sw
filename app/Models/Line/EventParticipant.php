@@ -17,4 +17,9 @@ class EventParticipant extends BaseLineModel
      * {@inheritdoc}
      */
     public $timestamps = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $fillable = ['number', 'participant_id', 'event_id'];
 }

@@ -19,13 +19,11 @@ class ResultGame extends BaseLineModel
     public $timestamps = false;
 
     /**
-     * @param array $records
-     * @return mixed
+     * {@inheritdoc}
      */
-    public static function batchCreate(array $records)
-    {
-        return static::insert($records);
-    }
+    public $fillable = [
+        'event_id', 'scope_data_id', 'result_type_id', 'event_particpant_id', 'amount', 'staff_id', 'result_time'
+    ];
 
     /**
      * @param int $eventId
@@ -36,17 +34,17 @@ class ResultGame extends BaseLineModel
         return static::where([
             'event_id' => $eventId,
             'del' => 'no',
-        ])->update('approve', 'yes');
+        ])->update(['approve' => 'yes']);
     }
 
     /**
      * @param int $eventId
-     * @param array $resultType
-     * @param array $participant
-     * @param array $scope
+     * @param array $resultTypes
+     * @param array $participants
+     * @param array $scopes
      * @param int $time
      */
-    public function checkResultTable(int $eventId, array $resultType, array $participant, array $scope, $time = 0)
+    public function checkResultTable(int $eventId, array $resultTypes, array $participants, array $scopes, $time = 0)
     {
         $recordsExist = \DB::connection($this->connection)
             ->table($this->table)
@@ -55,23 +53,27 @@ class ResultGame extends BaseLineModel
                 'event_id' => $eventId
             ])->exists();
 
-        if (!$recordsExist) {
-            foreach ($resultType as $valueR) {
-                foreach ($participant as $valueP) {
-                    if ($valueP['name'] !== 'Blank') {
-                        foreach ($scope as $valueS) {
-                            static::create([
-                                'event_id' => $eventId,
-                                'scope_data_id' => $valueS['id'],
-                                'result_type_id' => $valueR['id'],
-                                'event_particpant_id' => $valueP['event_participant_id'],
-                                'amount' => 0,
-                                'result_time' => $time,
-                            ]);
-                        }
+        if ($recordsExist) {
+            return;
+        }
+
+        $data = [];
+        foreach ($resultTypes as $resultType) {
+            foreach ($participants as $participant) {
+                if ($participant['name'] !== 'Blank') {
+                    foreach ($scopes as $scope) {
+                        $data[] = [
+                            'event_id' => $eventId,
+                            'scope_data_id' => $scope['id'],
+                            'result_type_id' => $resultType['id'],
+                            'event_particpant_id' => $participant['event_participant_id'],
+                            'amount' => 0,
+                            'result_time' => $time,
+                        ];
                     }
                 }
             }
         }
+        static::insert($data);
     }
 }

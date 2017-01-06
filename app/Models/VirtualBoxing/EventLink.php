@@ -22,7 +22,17 @@ class EventLink extends BaseVirtualBoxingModel
     /**
      * {@inheritdoc}
      */
+    public $incrementing = false;
+
+    /**
+     * {@inheritdoc}
+     */
     public $timestamps = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $fillable = ['event_vb_id', 'event_id'];
 
     /**
      * @param int $eventVbId
@@ -32,5 +42,13 @@ class EventLink extends BaseVirtualBoxingModel
     {
         return static::where('event_vb_id', $eventVbId)
             ->first();
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getLastVbId()
+    {
+        return static::orderBy('event_vb_id', 'desc')->first()->event_vb_id;
     }
 }

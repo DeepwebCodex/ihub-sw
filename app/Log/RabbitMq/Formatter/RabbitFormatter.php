@@ -26,7 +26,7 @@ class RabbitFormatter implements FormatterInterface
             [
                 'level' => strtolower($record['level_name']),
                 'time' => $record['datetime']->getTimestamp(),
-                'ip'  => request()->getClientIp(),
+                'ip'  => get_client_ip(),
                 'project' => config('app.name'),
                 'msg' => $message
             ],
