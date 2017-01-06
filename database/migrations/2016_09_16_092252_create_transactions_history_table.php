@@ -23,10 +23,10 @@ class CreateTransactionsHistoryTable extends Migration
             $table->smallInteger('move')->unsigned();
             $table->integer('partner_id');
             $table->integer('cashdesk');
-            $table->char('status', 16);
-            $table->char('currency', 16);
+            $table->string('status', 16);
+            $table->string('currency', 3);
             $table->string('foreign_id');
-            $table->char('transaction_type', 16);
+            $table->string('transaction_type', 16);
             $table->bigInteger('object_id');
             $table->timestamps();
 
