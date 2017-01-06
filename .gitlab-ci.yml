@@ -33,8 +33,6 @@ composer_and_unit_testing:
       - ./storage/logs
       - ./.env.testing
     expire_in: 1 day
-  except:
-    - master
 
 build_php_7.0_dev:
   tags:
