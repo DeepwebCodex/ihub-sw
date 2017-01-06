@@ -143,3 +143,7 @@ echo "TEST_CASHEDESK=-5" >> ./.env.testing
 echo "--- Installing composer.."
 echo ">> composer install"
 composer install
+
+echo "--- Testing.."
+echo ">> ./vendor/bin/codecept run"
+./vendor/bin/codecept run

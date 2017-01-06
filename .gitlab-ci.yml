@@ -45,12 +45,11 @@ build_test_on_dev_env_prod:
     - redis:3.2
   script:
     - bash ./run/prod/tests.sh
-    - ./vendor/bin/codecept run
-#  cache:
-#    key: $CI_BUILD_REF_NAME
-#    untracked: true
-#    paths:
-#      - ./vendor
+  cache:
+    key: $CI_BUILD_REF_NAME
+    untracked: true
+    paths:
+      - ./vendor
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
