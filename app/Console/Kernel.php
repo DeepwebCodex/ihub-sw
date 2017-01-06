@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //FeedListener::class
+        Commands\Orion\Commit::class
     ];
 
     /**
