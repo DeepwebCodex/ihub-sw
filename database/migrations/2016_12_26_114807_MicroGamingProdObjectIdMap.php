@@ -16,7 +16,7 @@ class MicroGamingProdObjectIdMap extends Migration
         Schema::connection('integration')->create('microgaming_prod_object_id_map', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
-            $table->char('currency', 16);
+            $table->string('currency', 3);
             $table->bigInteger('game_id')->unsigned();
 
             $table->index(['game_id', 'currency', 'user_id'], 'microgaming_prod_object_id_user_id_currency_game_id');
