@@ -17,7 +17,7 @@ class MicroGamingObjectIDMapping extends Migration
             $table->bigInteger('id')->unsigned();
 
             $table->integer('user_id')->unsigned();
-            $table->char('currency', 16);
+            $table->string('currency', 3);
             $table->bigInteger('game_id')->unsigned();
             $table->tinyInteger('repeat')->unsigned();
 
