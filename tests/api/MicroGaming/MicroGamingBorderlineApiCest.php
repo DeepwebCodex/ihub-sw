@@ -127,7 +127,6 @@ class MicroGamingBorderlineApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'play\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errorcode=\'6000\']');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errordescription=\'The operation is not found\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
 
         $I->expect('Can see record of transaction applied');
