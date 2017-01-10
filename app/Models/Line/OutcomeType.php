@@ -2,11 +2,19 @@
 
 namespace App\Models\Line;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\JoinClause;
 
 /**
- * Class OutcomeType
- * @package App\Models\Line
+ * @property integer $participant_num
+ * @property string $name
+ * @property string $del
+ * @property integer $weigh
+ * @property string $name_format
+ * @property integer $status_t
+ * @property string  $last_update
+ * @property integer $id
+ *
  */
 class OutcomeType extends BaseLineModel
 {
@@ -39,5 +47,13 @@ class OutcomeType extends BaseLineModel
             ->where('mt.id', $marketTemplateId)
             ->get()
             ->all();
+    }
+
+    public static function getOutcomeTypes(array $outcomeTypesIds)
+    {
+        /**@var Collection $templates*/
+        $templates = static::whereIn('id', $outcomeTypesIds)->get();
+
+        return  $templates->isNotEmpty() ? $templates : null;
     }
 }

@@ -67,3 +67,7 @@ Route::group(['prefix' => 'game_session'], function () {
 Route::group(['prefix' => 'bg'], function () {
     Route::post('/', "BetGamesController@index");
 });
+
+Route::group(['prefix' => 'ivg'], function () {
+    Route::post('/', "InspiredVirtualGaming@index");
+});

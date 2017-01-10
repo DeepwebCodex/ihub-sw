@@ -3,6 +3,7 @@
 namespace App\Components\Integrations\VirtualSports;
 
 use App\Models\Trans\Trans;
+use Illuminate\Support\Collection;
 
 /**
  * Class TranslateService
@@ -25,7 +26,7 @@ class Translate
                 'key' => $value,
                 'value' => $value
             ];
-            (new Trans())->save([
+            (new Trans())->saveAs([
                 'en' => $item,
                 'ru' => $item,
             ]);
@@ -41,4 +42,6 @@ class Translate
     {
         self::$transArr[] = $value;
     }
+
+
 }

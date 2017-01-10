@@ -76,4 +76,8 @@ class ResultGame extends BaseLineModel
         }
         static::insert($data);
     }
+
+    public static function getResult(int $event_id) {
+        return static::where('event_id', $event_id)->where('amount', 0, '>')->first();
+    }
 }

@@ -70,6 +70,94 @@ return [
         ],
     ],
 
+    'inspired' => [
+        'sport_id'      => 86,
+        'country_id'    => 10,
+        'gender'        => 'mixed',
+        'user_id'       => 155,
+        'amqp_exchange' => 'ivgbet',
+        'amqp_key'      => 'ivg.event.',
+        'allowed_ips'   => [ '10.1.4.47', '10.1.25.28', '185.16.228.226' ],
+        'service_id'    => 2,
+        'block_ips'     => true,
+        //Horses = 0, Dogs = 1, Speedway = 2, F1Cars = 3, Football = 4, Numbers = 5, Trotting = 6, Cycling = 7 and Tennis = 8
+        //category_id => ControllerId => some_id ?
+        'sports' => [
+            0 => [
+                'category_id' => [ 101 => 1685, 102 => 1667, 103 => 1676,  104 => 3320, 105 => 1554, 106 => 3334 ],
+                'sportform_prebet_id' => 168,
+                'sportform_live_id' => 167,
+                'max_bet' => 3000,
+                'max_payout' => 15000,
+                'stop_loss' => 1000
+            ],
+            1 => [
+                'category_id' => [ 101 => 1687, 102 => 1669, 103 => 1678, 104 => 3327, 105 => 1556, 106 => 3335 ],
+                'sportform_prebet_id' => 164,
+                'sportform_live_id' => 163,
+                'max_bet' => 3000,
+                'max_payout' => 15000,
+                'stop_loss' => 1000
+            ],
+            2 => [
+                'category_id' => [ 101 => 1688, 102 => 1670, 103 => 1679, 104 => 3328, 105 => 1557, 106 => 3336 ],
+                'sportform_prebet_id' => 174,
+                'sportform_live_id' => 173,
+                'max_bet' => 3000,
+                'max_payout' => 15000,
+                'stop_loss' => 1000
+            ],
+            3 => [
+                'category_id' => [ 101 => 1689, 102 => 1671, 103 => 1680, 104 => 3329, 105 => 1558, 106 => 3337 ],
+                'sportform_prebet_id' => 166,
+                'sportform_live_id' => 165,
+                'max_bet' => 3000,
+                'max_payout' => 15000,
+                'stop_loss' => 1000
+            ],
+            4 => [
+                'category_id' => [ 101 => 1690, 102 => 1672, 103 => 1681, 104 => 2982, 105 => 1559, 106 => 3338 ],
+                'sportform_prebet_id' => 172,
+                'sportform_live_id' => 171,
+                'max_bet' => 3000,
+                'max_payout' => 15000,
+                'stop_loss' => 1000
+            ],
+            5 => [
+                'category_id' => [ 101 => 1691, 102 => 1673, 103 => 1682, 104 => 3330, 105 => 1560, 106 => 3339 ],
+                'sportform_prebet_id' => 170,
+                'sportform_live_id' => 169,
+                'max_bet' => 3000,
+                'max_payout' => 15000,
+                'stop_loss' => 1000
+            ],
+            6 => [
+                'category_id' => [ 101 => 1692, 102 => 1674, 103 => 1683, 104 => 3331, 105 => 1561, 106 => 3340 ],
+                'sportform_prebet_id' => 178,
+                'sportform_live_id' => 177,
+                'max_bet' => 3000,
+                'max_payout' => 15000,
+                'stop_loss' => 1000
+            ],
+            7 => [
+                'category_id' => [ 101 => 1693, 102 => 1675, 103 => 1684, 104 => 3332, 105 => 1562, 106 => 3341 ],
+                'sportform_prebet_id' => 162,
+                'sportform_live_id' => 161,
+                'max_bet' => 3000,
+                'max_payout' => 15000,
+                'stop_loss' => 1000
+            ],
+            8 => [
+                'category_id' => [ 101 => 1686, 102 => 1668, 103 => 1677, 104 => 3333, 105 => 1555, 106 => 3278],
+                'sportform_prebet_id' => 176,
+                'sportform_live_id' => 175,
+                'max_bet' => 3000,
+                'max_payout' => 15000,
+                'stop_loss' => 1000
+            ]
+        ]
+    ],
+
     'betGames' => [
         'service_id' => 13,
         'token_expiration_time' => 1,
