@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Components\Formatters\BetGamesApiFormatter;
 use App\Components\Integrations\BetGames\ApiMethod;
 use App\Components\Integrations\BetGames\CodeMapping;
-use App\Components\Integrations\BetGames\ResponseData;
+use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Integrations\BetGames\TransactionMap;
 use App\Components\Traits\MetaDataTrait;
@@ -200,7 +200,20 @@ class BetGamesController extends BaseApiController
         if($prolong) {
             app('GameSession')->prolong($token);
         }
-        $data = new ResponseData($method, $token, $params, CodeMapping::getByErrorCode(StatusCode::OK));
-        return $this->respond(Response::HTTP_OK, '', $data->ok());
+
+        $error = CodeMapping::getByErrorCode(StatusCode::OK);
+        $view = [
+            'method' => $method,
+            'token' => $token,
+            'success' => 1,
+            'error_code' => $error['code'],
+            'error_text' => $error['message'],
+            'time' => time(),
+            'params' => $params
+        ];
+        $sign = new Signature($view);
+        $view['signature'] = $sign->getHash();
+
+        return $this->respond(Response::HTTP_OK, '', $view);
     }
 }

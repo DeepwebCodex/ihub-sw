@@ -3,12 +3,14 @@
 namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\BetGames\CodeMapping;
-use App\Components\Integrations\BetGames\ResponseData;
+use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Transactions\TransactionHelper;
 
 class BetGamesTemplate implements IExceptionTemplate
 {
+    const TIME_TO_DISCONNECT = 10;
+
     private $code;
     private $token;
     private $method;
@@ -17,6 +19,7 @@ class BetGamesTemplate implements IExceptionTemplate
     private $isApiException;
     private $errorCode;
     private $errorMessage;
+    private $time_to_disconnect;
 
     /**
      * @param array $item
@@ -38,8 +41,17 @@ class BetGamesTemplate implements IExceptionTemplate
             return $this->onUnknownError();
         }
 
-        $data = new ResponseData($this->method, $this->token, [], ['code' => $this->errorCode, 'message' => $this->errorMessage]);
-        return $data->fail();
+        $view = [
+            'method' => $this->method,
+            'token' => $this->token,
+            'success' => 0,
+            'error_code' => $this->errorCode,
+            'error_text' => $this->errorMessage,
+            'time' => time(),
+        ];
+        $this->setSignature($view);
+
+        return $view;
     }
 
     private function initialize(array $item, $statusCode, bool $isApiException)
@@ -54,6 +66,7 @@ class BetGamesTemplate implements IExceptionTemplate
         $error = CodeMapping::getByErrorCode($this->code);
         $this->errorCode = $error['code'] ?? null;
         $this->errorMessage = $error['message'] ?? '';
+        $this->time_to_disconnect = env('BETGAMES_DISCONNECT_TIME', self::TIME_TO_DISCONNECT);
     }
 
     /**
@@ -71,8 +84,19 @@ class BetGamesTemplate implements IExceptionTemplate
      */
     private function onUnknownError():array
     {
-        $response = new ResponseData($this->method, $this->token, [], CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
-        return $response->fail(true);
+        $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
+        sleep($this->time_to_disconnect);
+        $view = [
+            'method' => $this->method,
+            'token' => $this->token,
+            'success' => 0,
+            'error_code' => $error['code'],
+            'error_text' => $error['message'],
+            'time' => time(),
+        ];
+        $this->setSignature($view);
+
+        return $view;
     }
 
     /**
@@ -89,11 +113,31 @@ class BetGamesTemplate implements IExceptionTemplate
     private function onDuplicateWin():array
     {
         app('GameSession')->prolong($this->token);
-        $data = new ResponseData($this->method, $this->token, [
-            'balance_after' => $this->balance,
-            'already_processed' => 1
-        ], CodeMapping::getByErrorCode(StatusCode::OK));
 
-        return $data->ok();
+        $error = CodeMapping::getByErrorCode(StatusCode::OK);
+        $view = [
+            'method' => $this->method,
+            'token' => $this->token,
+            'success' => 1,
+            'error_code' => $error['code'],
+            'error_text' => $error['message'],
+            'time' => time(),
+            'params' => [
+                'balance_after' => $this->balance,
+                'already_processed' => 1
+            ]
+        ];
+        $this->setSignature($view);
+
+        return $view;
+    }
+
+    /**
+     * @param array $data
+     */
+    private function setSignature(array &$data)
+    {
+        $sign = new Signature($data);
+        $data['signature'] = $sign->getHash();
     }
 }
