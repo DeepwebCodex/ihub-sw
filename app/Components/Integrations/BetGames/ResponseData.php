@@ -13,10 +13,6 @@ class ResponseData
     private $method;
     private $token;
     private $params;
-
-    /**
-     * @var Error
-     */
     private $error;
 
     /**
@@ -24,21 +20,21 @@ class ResponseData
      * @param string $method
      * @param string $token
      * @param array $params
-     * @param array|null $error
+     * @param array $error
      */
-    public function __construct(string $method = '', string $token = '', $params = [], array $error = null)
+    public function __construct(string $method, string $token, array $params, array $error)
     {
         $this->method = $method;
         $this->token = $token;
         $this->params = $params;
-        $this->error = $error ?? CodeMapping::getByErrorCode(StatusCode::OK);
-
+        $this->error = $error;
+        $this->time_to_disconnect = env('BETGAMES_DISCONNECT_TIME', self::TIME_TO_DISCONNECT);
     }
 
     /**
      * @return array
      */
-    public function ok():array 
+    public function ok():array
     {
         $view = [
             'method' => $this->method,
@@ -55,10 +51,14 @@ class ResponseData
     }
 
     /**
+     * @param bool $sleep
      * @return array
      */
-    public function fail():array 
+    public function fail(bool $sleep = false):array
     {
+        if($sleep){
+            sleep($this->time_to_disconnect);
+        }
         $view = [
             'method' => $this->method,
             'token' => $this->token,
@@ -70,11 +70,6 @@ class ResponseData
         $this->setSignature($view);
 
         return $view;
-    }
-
-    public function wrong()
-    {
-        sleep(self::TIME_TO_DISCONNECT);
     }
 
     /**

@@ -10,11 +10,12 @@ class StatsdService
 {
 
     public $hitsKey = 'hits';
-    public $failedKey  = 'failed';
+    public $failedKey = 'failed';
 
     protected $prefix = '';
 
     protected $service = null;
+
     /**
      * RemoteSession constructor.
      */
@@ -24,8 +25,7 @@ class StatsdService
         $port = config('log.statsd.port');
         $this->prefix = config('log.statsd.prefix');
 
-        if($host && $port)
-        {
+        if ($host && $port) {
             $this->service = new SService(new StatsdClient(new SocketSender($host, $port)));
         }
     }
@@ -35,7 +35,7 @@ class StatsdService
      */
     public function registerHit(string $actionName)
     {
-        $this->registerAction($this->prefix.' '.$this->hitsKey, $actionName);
+        $this->registerAction($this->prefix . '_' . $this->hitsKey, $actionName);
     }
 
     /**
@@ -43,7 +43,7 @@ class StatsdService
      */
     public function registerFailed(string $actionName)
     {
-        $this->registerAction($this->prefix. ' ' .$this->failedKey, $actionName);
+        $this->registerAction($this->prefix . '_' . $this->failedKey, $actionName);
     }
 
     /**
@@ -54,16 +54,15 @@ class StatsdService
     {
         list($controller, $method) = explode('@', $actionName);
 
-        if($controller)
-        {
-            $this->incrementStatus($status, $controller);
+        $controller = str_replace('\\', '.', $controller);
 
-            if($method) {
+        if ($controller) {
+            if ($method) {
                 $this->incrementStatus($status, $controller . '.' . $method);
             }
         }
 
-        if($this->service) {
+        if ($this->service) {
             $this->service->flush();
         }
     }
@@ -72,8 +71,9 @@ class StatsdService
      * @param string $status
      * @param string $key
      */
-    protected function incrementStatus(string $status, string $key){
-        if($this->service){
+    protected function incrementStatus(string $status, string $key)
+    {
+        if ($this->service) {
             $this->service->increment($status . '.' . $key);
         }
     }

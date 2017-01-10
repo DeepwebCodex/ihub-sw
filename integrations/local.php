@@ -1,24 +1,23 @@
 <?php
 
 return [
-
     'casino' => [
+        'service_id'    => 28,
         'secret_word'   => 'ererr4SD',
-        'service_id'    => 28
     ],
 
     'egt' => [
         'service_id'    => 27,
         'UserName'      => 'FavbetEGTSeamless',
         'Password'      => '6IQLjj8Jowe3X',
-        'secret'        => 'Qasdf3QEFDDCS2',
+        'secret'        => 'Qasdf3QEFDDCS2'
     ],
 
     'microgaming' => [
         'service_id'            => 17,
-        'login_server'          => 'microgaming',
-        'password_server'       => 'hawai',
-        'time_expire'           => 300,
+        'login_server'          => 'micro',
+        'password_server'       => 'sgsdfsdfsdfr23423',
+        'use_secure_request'    => false,
         'list_currency'         => ['WMZ' => 'USD', 'WMR' => 'RUB', 'WMU' => 'UAH', 'WME' => 'EUR']
     ],
 
@@ -42,6 +41,8 @@ return [
         'info_url' => null,
         'rounds_map' => [1 => 31, 2 => 32, 3 => 33, 4 => 34, 5 => 35, 6 => 36],
         'scope_type' => ['point' => 1, 'knockdown' => 33, 'winner' => 12],
+        'type_participant' => 'athlete',
+        'status_type' => 'notstarted',
         'event_type' => 'prebet',
         'locked' => 'no',
         'weigh' => 100,
@@ -70,8 +71,9 @@ return [
     ],
 
     'betGames' => [
-        'secret' => 'dfF$FF3r4efr',
-        'token_expiration_time' => 60,
+        'service_id' => 13,
+        'token_expiration_time' => 1,
+        'secret' => 'dfFWgbF3r4efr',
     ],
      'microgamingOrion' => [
         'baseUrl' => 'http://41.223.121.106/Orion/VanguardAdmin/SOAP2',

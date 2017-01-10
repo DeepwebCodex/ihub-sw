@@ -3,6 +3,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTransactionsHistoryTable extends Migration
 {
@@ -14,25 +15,25 @@ class CreateTransactionsHistoryTable extends Migration
     public function up()
     {
         Schema::connection('integration')->create('transaction_history', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('operation_id');
-            $table->integer('service_id');
+            $table->bigIncrements('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('operation_id')->unsigned();
+            $table->integer('service_id')->unsigned();
             $table->integer('amount')->default(0);
-            $table->smallInteger('move');
+            $table->smallInteger('move')->unsigned();
             $table->integer('partner_id');
             $table->integer('cashdesk');
-            $table->string('status');
-            $table->string('currency');
+            $table->string('status', 16);
+            $table->string('currency', 3);
             $table->string('foreign_id');
-            $table->string('transaction_type');
+            $table->string('transaction_type', 16);
             $table->bigInteger('object_id');
             $table->timestamps();
 
             $table->unique('operation_id');
-            $table->index('operation_id', 'index_op_id');
-            $table->index('user_id', 'user_id_op_id');
-            $table->index('foreign_id', 'foreign_id_op_id');
+
+            $table->index(['service_id', 'partner_id', 'user_id'], 'transaction_history_index_service_partner_user');
+            $table->index(['created_at', 'user_id'], 'transaction_history_index_created_at_user_id');
         });
     }
 
@@ -43,6 +44,11 @@ class CreateTransactionsHistoryTable extends Migration
      */
     public function down()
     {
+        Schema::table('transaction_history', function (Blueprint $table) {
+            $table->dropIndex('transaction_history_index_service_partner_user');
+            $table->dropIndex('transaction_history_index_created_at_user_id');
+        });
+
         Schema::connection('integration')->dropIfExists('transaction_history');
     }
 }

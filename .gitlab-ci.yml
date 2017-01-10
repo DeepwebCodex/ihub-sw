@@ -10,14 +10,11 @@ variables:
   RANCHER_PROD_URL: "http://10.120.12.41:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
-before_script:
-  - echo $CI_BUILD_REF
-
-composer_and_unit_testing:
+build_test_dev:
   tags:
     - de2gl03d_dind_1
   stage: test
-  image: gitlab.favorit:4567/integrations/docker:php-fpm
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
   services:
     - redis:3.2
   script:
@@ -36,12 +33,39 @@ composer_and_unit_testing:
       - ./storage/logs
       - ./.env.testing
     expire_in: 1 day
+  except:
+    - master
 
-build_php_7.0_dev:
+build_test_on_dev_env_prod:
+  tags:
+    - de2gl03d_dind_1
+  stage: test
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
+  services:
+    - redis:3.2
+  script:
+    - bash ./run/prod/tests.sh
+  cache:
+    key: $CI_BUILD_REF_NAME
+    untracked: true
+    paths:
+      - ./vendor
+  artifacts:
+    when: on_failure
+    name: $CI_BUILD_REF_NAME
+    paths:
+      - ./tests/_output
+      - ./storage/logs
+      - ./.env.testing
+    expire_in: 1 day
+  only:
+    - master
+
+build_dev:
   tags:
     - de2gl03d_dind_1
   stage: build
-  image: gitlab.favorit:4567/integrations/docker:php-fpm
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
   script:
     - rm -rf .env .env.testing
     - bash ./run/dev/install-rancher.sh
@@ -57,15 +81,18 @@ build_php_7.0_dev:
   only:
     - dev
 
-build_php_7.0_master:
+build_prod:
   tags:
-    - de2gl02p_dind_1
+    - de2gl03p_dind_1
   stage: build
-  image: gitlab.favorit:4567/integrations/docker:php-fpm
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-master
   script:
+    - export http_proxy="http://10.120.12.56:3128"
+    - export https_proxy="http://10.120.12.56:3128"
     - rm -rf .env .env.testing
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
+    - cat /root/ihub/env.ihub >> .env
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
@@ -78,7 +105,7 @@ build_php_7.0_master:
   only:
     - master
 
-push_code:
+push_code_dev:
   tags:
     - de2gl03d_dind_1
   stage: deploy
@@ -90,6 +117,18 @@ push_code:
     - docker push $CONTAINER_IHUB_CODE_IMAGE
   only:
     - dev
+
+push_code_prod:
+  tags:
+    - de2gl03p_dind_1
+  stage: deploy
+  image: docker:latest
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
+    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
+    - docker push $CONTAINER_IHUB_CODE_IMAGE
+  only:
     - master
 
 rancher_upgrade_dev:
@@ -104,19 +143,7 @@ rancher_upgrade_dev:
   only:
     - dev
 
-rancher_upgrade_master:
-  tags:
-    - de2gl02p_dind_1
-  stage: upgrade
-  image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
-  script:
-    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-    - upgrade --environment ihub --stack ihub --service php-fpm
-    - upgrade --environment ihub --stack ihub --service nginx
-  only:
-  when: manual
-
-manual_push_dev_code:
+manual_dev_push_code:
   tags:
     - de2gl03d_dind_1
   stage: deploy
@@ -127,6 +154,8 @@ manual_push_dev_code:
     - ls -liah
     - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
     - docker push $CONTAINER_IHUB_CODE_IMAGE
+  only:
+    - dev
   when: manual
 
 manual_dev_rancher_upgrade:
@@ -140,4 +169,18 @@ manual_dev_rancher_upgrade:
     - upgrade --environment dev-ihub --stack ihub --service nginx
   only:
     - dev
+  when: manual
+
+manual_prod_rancher_upgrade:
+  tags:
+    - de2gl03p_dind_1
+  stage: upgrade
+  image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
+  script:
+    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
+    - upgrade --environment ihub --stack ihub --service php-fpm
+    - upgrade --environment ihub --stack ihub --service nginx
+    - upgrade --environment ihub --stack ihub --service php-fpm-system
+  only:
+    - master
   when: manual

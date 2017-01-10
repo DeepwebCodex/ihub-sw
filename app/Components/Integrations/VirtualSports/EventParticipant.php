@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
-use App\Exceptions\Api\ApiHttpException;
+use App\Models\Line\EventParticipant as EventParticipantModel;
 
 /**
  * Class EventParticipant
@@ -11,7 +11,7 @@ use App\Exceptions\Api\ApiHttpException;
 class EventParticipant
 {
     /**
-     * @var EventParticipant
+     * @var EventParticipantModel
      */
     protected $eventParticipantModel;
 
@@ -28,37 +28,39 @@ class EventParticipant
      * @param int $number
      * @param int $eventId
      * @param string $participantName
-     * @return void
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @return bool
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
-    public function create(int $number, int $eventId, string $participantName):void
+    public function create(int $number, int $eventId, string $participantName):bool
     {
         $participant = new Participant($this->config);
-        $participant->create($participantName);
+        if (!$participant->create($participantName)) {
+            return false;
+        }
         $participantId = $participant->getParticipantId();
 
         if ($participantId) {
-            $eventParticipant = new EventParticipant([
+            $eventParticipant = new EventParticipantModel([
                 'number' => $number,
                 'participant_id' => $participantId,
                 'event_id' => $eventId
             ]);
-            if (!$eventParticipant->save()) {
-                throw new ApiHttpException(400, 'error_create_participant2');
+            if ($eventParticipant->save()) {
+                $this->eventParticipantModel = $eventParticipant;
+                return true;
             }
-            $this->eventParticipantModel = $eventParticipant;
         }
-        throw new ApiHttpException(400, 'error_create_participant');
+        return false;
     }
 
     /**
      * @return int
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \RuntimeException
      */
     public function getEventParticipantId():int
     {
         if (!$this->eventParticipantModel) {
-            throw new ApiHttpException(400, 'error_create_participant');
+            throw new \RuntimeException('Event participant not defined');
         }
         return (int)$this->eventParticipantModel->id;
     }

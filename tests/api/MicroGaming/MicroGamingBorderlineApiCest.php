@@ -1,6 +1,7 @@
 <?php
 
 use App\Components\Transactions\TransactionRequest;
+use App\Models\MicroGamingObjectIdMap;
 use App\Models\Transactions;
 use Carbon\Carbon;
 
@@ -103,7 +104,11 @@ class MicroGamingBorderlineApiCest
             'status' => TransactionRequest::STATUS_PENDING,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'methodcall.call.actionid'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameID, array_get($this->options, 'service_id')),
+            'object_id' => MicroGamingObjectIdMap::getObjectId(
+                env('TEST_USER_ID'),
+                $testUser->getCurrency(),
+                $this->gameID
+            ),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -122,7 +127,6 @@ class MicroGamingBorderlineApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'play\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errorcode=\'6000\']');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errordescription=\'The operation is not found\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
 
         $I->expect('Can see record of transaction applied');
@@ -172,7 +176,11 @@ class MicroGamingBorderlineApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'methodcall.call.actionid'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameID, array_get($this->options, 'service_id')),
+            'object_id' => MicroGamingObjectIdMap::getObjectId(
+                env('TEST_USER_ID'),
+                $testUser->getCurrency(),
+                $this->gameID
+            ),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 
@@ -233,7 +241,11 @@ class MicroGamingBorderlineApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'methodcall.call.actionid'),
-            'object_id' => \App\Models\ObjectIdMap::getObjectId($this->gameID, array_get($this->options, 'service_id')),
+            'object_id' => MicroGamingObjectIdMap::getObjectId(
+                env('TEST_USER_ID'),
+                $testUser->getCurrency(),
+                $this->gameID
+            ),
             'transaction_type' => TransactionRequest::TRANS_BET
         ]);
 

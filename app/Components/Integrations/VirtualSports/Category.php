@@ -2,7 +2,6 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
-use App\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Category as CategoryModel;
 
 /**
@@ -20,15 +19,14 @@ class Category
      * @param string $categoryName
      * @param $sportId
      * @param $countryId
-     * @return void
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @return bool
      */
-    public function create(string $categoryName, $sportId, $countryId):void
+    public function create(string $categoryName, int $sportId, int $countryId):bool
     {
         Translate::add($categoryName);
 
         $category = CategoryModel::findByNameForSport($categoryName, $sportId);
-        if ($category === false) {
+        if ($category === null) {
             $category = new CategoryModel([
                 'name' => $categoryName,
                 'weigh' => 100,
@@ -39,20 +37,21 @@ class Category
                 'slug' => null
             ]);
             if (!$category->save()) {
-                throw new ApiHttpException(400, 'error_create_category');
+                return false;
             }
-            $this->categoryModel = $category;
         }
+        $this->categoryModel = $category;
+        return true;
     }
 
     /**
      * @return int
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws \RuntimeException
      */
     public function getCategoryId():int
     {
         if (!$this->categoryModel) {
-            throw new ApiHttpException(400, 'error_create_category');
+            throw new \RuntimeException('Category not defined');
         }
         return (int)$this->categoryModel->id;
     }

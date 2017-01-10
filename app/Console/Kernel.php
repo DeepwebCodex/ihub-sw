@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Components\DetectEnvironment;
+use App\Console\Commands\MicrogamingSequence;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,7 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //FeedListener::class
-        Commands\Orion\Commit::class
+        Commands\Orion\Commit::class,
+        MicrogamingSequence::class
     ];
 
     /**

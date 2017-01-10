@@ -2,11 +2,12 @@
 
 namespace api\BetGames;
 
-//use App\Components\Integrations\BetGames\Error;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\StatusCode;
+use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
+use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
 use \BetGames\TestData;
 use \BetGames\TestUser;
@@ -50,6 +51,48 @@ class BetGamesApiCest
     {
         $I->sendPOST('/bg', $this->data->ping());
         $this->getResponseOk($I);
+    }
+
+    private function mock($class)
+    {
+        $mock = \Mockery::mock($class)
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial()
+        ;
+        app()->instance($class, $mock);
+        return $mock;
+    }
+
+    public function testFailPending(\ApiTester $I)
+    {
+        $mock = $this->mock(ProcessBetGames::class);
+        $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
+        $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
+        $request = $this->data->bet();
+        $I->sendPOST('/bg', $request);
+        $this->getResponseFail($I, StatusCode::UNKNOWN);
+        $this->noRecord($I, $request, 'bet');
+    }
+
+    public function testFailCompleted(\ApiTester $I)
+    {
+        $mock = $this->mock(ProcessBetGames::class);
+        $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
+        $mock->shouldReceive('runCompleted')->once()->withAnyArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
+        $request = $this->data->bet();
+        $I->sendPOST('/bg', $request);
+        $this->getResponseFail($I, StatusCode::UNKNOWN);
+        $this->noRecord($I, $request, 'bet');
+    }
+
+    public function testFailDb(\ApiTester $I)
+    {
+        $mock = $this->mock(ProcessBetGames::class);
+        $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
+        $request = $this->data->bet();
+        $I->sendPOST('/bg', $request);
+        $this->getResponseFail($I, StatusCode::UNKNOWN);
+        $this->noRecord($I, $request, 'bet');
     }
 
     public function testAccount(\ApiTester $I)
@@ -238,6 +281,7 @@ class BetGamesApiCest
 
     private function getResponseOk(\ApiTester $I)
     {
+        $I->seeResponseCodeIs(200);
         $data = $this->responseToArray($I);
         $I->assertArrayHasKey('method', $data);
         $I->assertArrayHasKey('token', $data);
