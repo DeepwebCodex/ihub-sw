@@ -147,3 +147,10 @@ composer install
 echo "--- Running migrate.."
 echo ">> php artisan migrate"
 php artisan migrate
+
+echo "--- Optimizing project.."
+echo ">> php artisan config:cache"
+php artisan config:cache
+
+echo ">> php artisan route:cache"
+php artisan route:cache
