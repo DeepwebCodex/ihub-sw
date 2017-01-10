@@ -16,7 +16,6 @@ class BetGamesTemplate implements IExceptionTemplate
     private $method;
     private $balance;
     private $statusCode;
-    private $isApiException;
     private $errorCode;
     private $errorMessage;
     private $time_to_disconnect;
@@ -54,18 +53,19 @@ class BetGamesTemplate implements IExceptionTemplate
         return $view;
     }
 
-    private function initialize(array $item, $statusCode, bool $isApiException)
+    private function initialize(array $item, $statusCode, bool $isApiException = false)
     {
         $this->code = $item['code'] ?? StatusCode::UNKNOWN;
         $this->token = $item['token'] ?? '';
         $this->method = $item['method'] ?? '';
         $this->balance = $item['balance'] ?? null;
         $this->statusCode = $statusCode ?? 500;
-        $this->isApiException = $isApiException ?? false;
 
         $error = CodeMapping::getByErrorCode($this->code);
         $this->errorCode = $error['code'] ?? null;
-        $this->errorMessage = $error['message'] ?? '';
+        $message = ($isApiException && isset($item['message'])) ? $item['message'] : null;
+        $this->errorMessage = $message ?? $error['message'] ?? '';
+
         $this->time_to_disconnect = env('BETGAMES_DISCONNECT_TIME', self::TIME_TO_DISCONNECT);
     }
 
