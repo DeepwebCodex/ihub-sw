@@ -15,8 +15,8 @@
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use App\Components\ThirdParty\Array2Xml;
+use Illuminate\Support\Facades\Config;
 use Ramsey\Uuid\Uuid;
-use function config;
 
 class GetCommitQueueData extends Request {
 
@@ -35,7 +35,7 @@ class GetCommitQueueData extends Request {
             'soapenv:Body' => [
                 'adm:GetCommitQueueData' => [
                     'adm:serverIds' => [
-                        'arr:int' => config('integrations.microgamingOrion.username')
+                        'arr:int' => Config::get('integrations.microgamingOrion.username')
                     ]
                 ]
             ]

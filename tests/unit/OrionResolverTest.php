@@ -1,5 +1,6 @@
 <?php
 
+use App\Components\Integrations\MicroGaming\Orion\ProcessOperation;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetCommitQueueData;
 use App\Components\Integrations\MicroGaming\Orion\SoapEmul;
 use App\Components\ThirdParty\Array2Xml;
@@ -115,7 +116,6 @@ class OrionResolverTest extends Unit {
     }
 
     public function testValidationCommitData() {
-
         $testData[] = [
             'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(), 'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
             'transactionNumber' => $this->generateUniqId(), 'serverId' => config('integrations.microgamingOrion.serverId'), 'referenceNumber' => $this->generateUniqId()
@@ -128,7 +128,26 @@ class OrionResolverTest extends Unit {
         $data = $commit->getData();
         $validatorCommitData = new CommitValidation();
         $this->specify("Test validation commit data", function() use($data, $validatorCommitData) {
-            verify("Must be fill", $validatorCommitData->validateBaseStructure($data))->true();
+            verify("Validation passed", $validatorCommitData->validateBaseStructure($data))->true();
+        });
+    }
+
+    public function testProsseccTransaction() {
+        $testData[] = [
+            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(), 'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(), 'serverId' => config('integrations.microgamingOrion.serverId'), 'referenceNumber' => $this->generateUniqId()
+        ];
+        $xmlMock = $this->generatedMockXml($testData);
+        $clientMock = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMock->method('sendRequest')->will($this->returnValue($xmlMock));
+        $commit = new GetCommitQueueData($clientMock);
+
+        $data = $commit->getData();
+        $validatorCommitData = new CommitValidation();
+        $validatorCommitData->validateBaseStructure($data);
+
+        $this->specify("Test process commit operation", function() use($data) {
+            $handleCommit = ProcessOperation::commit($data);
         });
     }
 

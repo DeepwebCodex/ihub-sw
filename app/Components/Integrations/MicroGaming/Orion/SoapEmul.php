@@ -17,7 +17,9 @@ namespace App\Components\Integrations\MicroGaming\Orion;
 use App\Components\Integrations\MicroGaming\Orion\Request\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use function config;
+use Illuminate\Support\Facades\Config;
+
+
 
 class SoapEmul extends Client{
 
@@ -25,11 +27,11 @@ class SoapEmul extends Client{
         try {
 
 
-            $response = $this->request('POST', config('integrations.microgamingOrion.baseUrl'), [
-                'auth' => [config('integrations.microgamingOrion.username'), config('integrations.microgamingOrion.password')],
+            $response = $this->request('POST', Config::get('integrations.microgamingOrion.baseUrl'), [
+                'auth' => [Config::get('integrations.microgamingOrion.username'), Config::get('integrations.microgamingOrion.password')],
                 'headers' => ['Content-Type' => 'text/xml',
                     'Request-Id' => $request->getUuid(),
-                    'SOAPAction' => config('integrations.microgamingOrion.actionUrl') . $request->getMethod()
+                    'SOAPAction' => Config::get('integrations.microgamingOrion.actionUrl') . $request->getMethod()
                 ],
                 'body' => $request->getBody()
             ]);

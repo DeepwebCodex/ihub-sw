@@ -21,8 +21,17 @@ class CommitValidation extends Validation {
             's:Body' => 'required',
             's:Body.GetCommitQueueDataResponse' => 'required',
             's:Body.GetCommitQueueDataResponse.GetCommitQueueDataResult' => 'required',
-            's:Body.GetCommitQueueDataResponse.GetCommitQueueDataResult.a:QueueDataResponse' => 'required',
         ];
+    }
+
+    public function validateBaseStructure(array $data): bool {
+        parent::validateBaseStructure($data);
+        if (isset($data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult']['a:QueueDataResponse'])) {
+            foreach ($data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult']['a:QueueDataResponse'] as $key => $value) {
+                $this->validate($value, $this->rulesStructuresCoommitRollback);
+            }
+        }
+        return true;
     }
 
 }

@@ -35,16 +35,16 @@ class Validation {
         'a:MgsPayoutReferenceNumber' => 'required',
         'a:PayoutAmount' => 'required',
         'a:ProgressiveWin' => 'required',
-        'a:ProgressiveWinDesc' => 'required',
-        'a:FreeGameOfferName' => 'required',
+//        'a:ProgressiveWinDesc' => 'required',
+//        'a:FreeGameOfferName' => 'required',
         'a:TournamentId' => 'required',
-        'a:Description' => 'required',
-        'a:ExtInfo' => 'required',
+//        'a:Description' => 'required',
+//        'a:ExtInfo' => 'required',
         'a:RowIdLong' => 'required',
     ];
     protected $errors;
 
-    protected function validate($data, $rules) {
+    protected function validate(array $data, array $rules): bool {
         // make a new validator object
         $v = Validator::make($data, $rules);
 
@@ -59,11 +59,11 @@ class Validation {
         return true;
     }
 
-    public function validateBaseStructure($data) {
+    public function validateBaseStructure(array $data): bool {
         return $this->validate($data, $this->rulesStructures);
     }
 
-    public function errors() {
+    public function errors(): array {
         return $this->errors;
     }
 
