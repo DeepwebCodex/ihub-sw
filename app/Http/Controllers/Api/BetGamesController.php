@@ -211,8 +211,7 @@ class BetGamesController extends BaseApiController
             'time' => time(),
             'params' => $params
         ];
-        $sign = new Signature($view);
-        $view['signature'] = $sign->getHash();
+        $view['signature'] = (new Signature($view))->getHash();
 
         return $this->respond(Response::HTTP_OK, '', $view);
     }

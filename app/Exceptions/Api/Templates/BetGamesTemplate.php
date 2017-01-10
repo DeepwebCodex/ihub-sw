@@ -48,7 +48,7 @@ class BetGamesTemplate implements IExceptionTemplate
             'error_text' => $this->errorMessage,
             'time' => time(),
         ];
-        $this->setSignature($view);
+        $view['signature'] = (new Signature($view))->getHash();
 
         return $view;
     }
@@ -94,7 +94,7 @@ class BetGamesTemplate implements IExceptionTemplate
             'error_text' => $error['message'],
             'time' => time(),
         ];
-        $this->setSignature($view);
+        $view['signature'] = (new Signature($view))->getHash();
 
         return $view;
     }
@@ -127,17 +127,8 @@ class BetGamesTemplate implements IExceptionTemplate
                 'already_processed' => 1
             ]
         ];
-        $this->setSignature($view);
+        $view['signature'] = (new Signature($view))->getHash();
 
         return $view;
-    }
-
-    /**
-     * @param array $data
-     */
-    private function setSignature(array &$data)
-    {
-        $sign = new Signature($data);
-        $data['signature'] = $sign->getHash();
     }
 }
