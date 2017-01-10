@@ -1,6 +1,6 @@
 <?php
 
-use App\Components\Integrations\MicroGaming\Orion\ProcessOperation;
+use App\Components\Integrations\MicroGaming\Orion\ProcessOperations;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetCommitQueueData;
 use App\Components\Integrations\MicroGaming\Orion\SoapEmul;
 use App\Components\ThirdParty\Array2Xml;
@@ -147,7 +147,7 @@ class OrionResolverTest extends Unit {
         $validatorCommitData->validateBaseStructure($data);
 
         $this->specify("Test process commit operation", function() use($data) {
-            $handleCommit = ProcessOperation::commit($data);
+            $handleCommit = ProcessOperations::commit($data);
         });
     }
 

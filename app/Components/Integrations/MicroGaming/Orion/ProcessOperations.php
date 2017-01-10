@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Config;
  *
  * @author petroff
  */
-class ProcessOperation {
+class ProcessOperations {
     //put your code here
     
     static function commit($data_t) {
