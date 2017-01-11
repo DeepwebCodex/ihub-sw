@@ -13,7 +13,7 @@ class VirtualBoxingApiCest
 
     protected $eventId;
 
-    public function testMethodNotFound(ApiTester $I)
+    public function testInvalidMethod(ApiTester $I)
     {
         $I->sendGET(self::URI_PREFIX . 'test');
         $I->seeResponseCodeIs(400);
