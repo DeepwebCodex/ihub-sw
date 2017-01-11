@@ -29,7 +29,8 @@ class Transactions extends Model
         'currency',
         'foreign_id',
         'object_id',
-        'transaction_type'
+        'transaction_type',
+        'game_id'
     ];
 
     public function getAmountAttribute($value){

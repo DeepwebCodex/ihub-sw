@@ -70,7 +70,7 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
 
             return true;
         }
-
+        //dd(app()->environment());
         return false;
     }
 
