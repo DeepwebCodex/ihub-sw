@@ -77,7 +77,7 @@ class VirtualBoxingController extends BaseApiController
             return app()->call([$this, $method], $request->all());
         }
 
-        return app()->call([$this, 'error'], $request->all());
+        return $this->respond(Response::HTTP_OK, '');
     }
 
     /**
