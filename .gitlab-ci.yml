@@ -10,7 +10,7 @@ variables:
   RANCHER_PROD_URL: "http://10.120.12.41:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
-dev_build_test:
+build_test_dev:
   tags:
     - de2gl03d_dind_1
   stage: test
@@ -36,7 +36,7 @@ dev_build_test:
   except:
     - master
 
-prod_build_test:
+build_test_on_dev_env_prod:
   tags:
     - de2gl03d_dind_1
   stage: test
@@ -45,7 +45,6 @@ prod_build_test:
     - redis:3.2
   script:
     - bash ./run/prod/tests.sh
-    - ./vendor/bin/codecept run
   cache:
     key: $CI_BUILD_REF_NAME
     untracked: true
@@ -62,7 +61,7 @@ prod_build_test:
   only:
     - master
 
-build_php_7.0_dev:
+build_dev:
   tags:
     - de2gl03d_dind_1
   stage: build
@@ -82,7 +81,7 @@ build_php_7.0_dev:
   only:
     - dev
 
-build_php_7.0_prod:
+build_prod:
   tags:
     - de2gl03p_dind_1
   stage: build
