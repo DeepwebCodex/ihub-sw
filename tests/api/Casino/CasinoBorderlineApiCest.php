@@ -81,7 +81,8 @@ class CasinoBorderlineApiCest
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'transaction_id'),
             'object_id' => $this->objectId,
-            'transaction_type' => TransactionRequest::TRANS_BET
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'game_id'   => 0
         ]);
 
         $I->canSeeRecord(\App\Models\Transactions::class, [

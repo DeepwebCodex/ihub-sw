@@ -71,7 +71,8 @@ class EuroGamesTechBorderlineApiCest
             'currency' => $this->testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
             'object_id' => $request['GameNumber'],
-            'transaction_type' => TransactionRequest::TRANS_BET
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'game_id'       => 0
         ]);
 
         $I->canSeeRecord(\App\Models\Transactions::class, [
@@ -113,7 +114,8 @@ class EuroGamesTechBorderlineApiCest
             'currency' => $this->testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
             'object_id' => $request['GameNumber'],
-            'transaction_type' => TransactionRequest::TRANS_BET
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'game_id'       => 0
         ]);
 
         $I->canSeeRecord(\App\Models\Transactions::class, [
@@ -150,7 +152,8 @@ class EuroGamesTechBorderlineApiCest
             'currency' => $this->testUser->getCurrency(),
             'foreign_id' => array_get($request, 'TransferId'),
             'object_id' => $request['GameNumber'],
-            'transaction_type' => TransactionRequest::TRANS_BET
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'game_id'       => 0
         ]);
 
         $I->canSeeRecord(\App\Models\Transactions::class, [
