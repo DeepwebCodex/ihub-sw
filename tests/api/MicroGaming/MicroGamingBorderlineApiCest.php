@@ -109,7 +109,8 @@ class MicroGamingBorderlineApiCest
                 $testUser->getCurrency(),
                 $this->gameID
             ),
-            'transaction_type' => TransactionRequest::TRANS_BET
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'game_id'       => 0
         ]);
 
         $I->canSeeRecord(\App\Models\Transactions::class, [
@@ -181,7 +182,8 @@ class MicroGamingBorderlineApiCest
                 $testUser->getCurrency(),
                 $this->gameID
             ),
-            'transaction_type' => TransactionRequest::TRANS_BET
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'game_id'       => 0
         ]);
 
         $I->canSeeRecord(\App\Models\Transactions::class, [
@@ -246,7 +248,8 @@ class MicroGamingBorderlineApiCest
                 $testUser->getCurrency(),
                 $this->gameID
             ),
-            'transaction_type' => TransactionRequest::TRANS_BET
+            'transaction_type' => TransactionRequest::TRANS_BET,
+            'game_id'       => 0
         ]);
 
         $I->canSeeRecord(\App\Models\Transactions::class, [

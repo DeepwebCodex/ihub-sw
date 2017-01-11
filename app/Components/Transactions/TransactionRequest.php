@@ -32,11 +32,24 @@ class TransactionRequest
     public $direction;
     public $object_id;
     public $comment;
+    public $game_id;
 
     public $transaction_type;
     public $foreign_id;
 
-    public function __construct(int $service_id, int $object_id, int $user_id, string $currency, int $direction, float $amount, $transaction_type, $foreign_id = null)
+    /**
+     * TransactionRequest constructor.
+     * @param int $service_id
+     * @param int $object_id
+     * @param int $user_id
+     * @param string $currency
+     * @param int $direction
+     * @param float $amount
+     * @param $transaction_type
+     * @param $foreign_id
+     * @param $game_id
+     */
+    public function __construct(int $service_id, int $object_id, int $user_id, string $currency, int $direction, float $amount, $transaction_type, $foreign_id , $game_id)
     {
         $this->service_id  = $service_id;
         $this->object_id   = $object_id;
@@ -44,6 +57,8 @@ class TransactionRequest
         $this->direction   = $direction;
         $this->amount      = $amount;
         $this->currency    = $currency;
+
+        $this->game_id     = $game_id;
 
         $this->transaction_type = $transaction_type;
 
