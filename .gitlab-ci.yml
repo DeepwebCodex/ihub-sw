@@ -10,7 +10,7 @@ variables:
   RANCHER_PROD_URL: "http://10.120.12.41:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
-composer_and_unit_testing:
+build_test_dev:
   tags:
     - de2gl03d_dind_1
   stage: test
@@ -36,7 +36,32 @@ composer_and_unit_testing:
   except:
     - master
 
-build_php_7.0_dev:
+build_test_on_dev_env_prod:
+  tags:
+    - de2gl03d_dind_1
+  stage: test
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
+  services:
+    - redis:3.2
+  script:
+    - bash ./run/prod/tests.sh
+  cache:
+    key: $CI_BUILD_REF_NAME
+    untracked: true
+    paths:
+      - ./vendor
+  artifacts:
+    when: on_failure
+    name: $CI_BUILD_REF_NAME
+    paths:
+      - ./tests/_output
+      - ./storage/logs
+      - ./.env.testing
+    expire_in: 1 day
+  only:
+    - master
+
+build_dev:
   tags:
     - de2gl03d_dind_1
   stage: build
@@ -56,7 +81,7 @@ build_php_7.0_dev:
   only:
     - dev
 
-build_php_7.0_prod:
+build_prod:
   tags:
     - de2gl03p_dind_1
   stage: build
