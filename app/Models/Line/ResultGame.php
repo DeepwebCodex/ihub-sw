@@ -37,6 +37,14 @@ class ResultGame extends BaseLineModel
         ])->update(['approve' => 'yes']);
     }
 
+    public static function isResultsApproved(int $eventId) : bool
+    {
+        return ! ((bool) static::where([
+            'event_id' => $eventId,
+            'approve'  => 'no'
+        ])->count());
+    }
+
     /**
      * @param int $eventId
      * @param array $resultTypes

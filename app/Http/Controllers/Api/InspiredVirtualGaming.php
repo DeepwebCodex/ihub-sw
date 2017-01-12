@@ -9,6 +9,7 @@ use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\InspiredVirtualGamingTemplate;
 use App\Http\Requests\InspiredVirtualGaming\BaseInspiredRequest;
 use App\Http\Requests\InspiredVirtualGaming\EventCardRequest;
+use App\Http\Requests\InspiredVirtualGaming\ResultRequest;
 use App\Http\Requests\InspiredVirtualGaming\VoidRequest;
 use App\Models\InspiredVirtualGaming\EventLink;
 use Illuminate\Http\Response;
@@ -50,7 +51,7 @@ class InspiredVirtualGaming extends BaseApiController
     {
         $ivgControllerId = (int) $request->input('ControllerId');
 
-        foreach ($request->input('events.event') as $eventData){
+        foreach ($request->input('events.event') as $eventData) {
 
             $ivgEventId = (int) array_get($eventData, 'EventId');
 
@@ -64,7 +65,6 @@ class InspiredVirtualGaming extends BaseApiController
                     throw new \RuntimeException("Unable to create event");
                 }
             } else {
-                //We already processed this event
                 continue;
             }
         }
@@ -72,9 +72,15 @@ class InspiredVirtualGaming extends BaseApiController
         return $this->respondOk();
     }
 
-    public function result()
+    public function result(ResultRequest $request)
     {
+        $ivgEventId = $request->input('event.EventId');
 
+        $processor = EventProcessor::getEvent((int) $ivgEventId);
+
+        $processor->setResult($request->input());
+
+        return $this->respondOk();
     }
 
     public function void(VoidRequest $request)

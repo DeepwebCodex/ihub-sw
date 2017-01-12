@@ -96,8 +96,17 @@ class OutcomeService
 
     public function resolve() : Outcome
     {
-        /** @var MarketOutcomeMapInterface $mapper */
-        $mapper = $this->getMapper();
+        try {
+            /** @var MarketOutcomeMapInterface $mapper */
+            $mapper = $this->getMapper();
+        } catch (\RuntimeException $exception) {
+
+            if($exception->getCode() == 6667) {
+                return new Outcome();
+            }
+
+            throw $exception;
+        }
 
         $outcome = Outcome::create([
             'event_market_id'       => $this->marketModel->id,
@@ -122,7 +131,7 @@ class OutcomeService
         $mapperClass = array_get($this->mappingRegistry, $this->market);
 
         if(!$mapperClass) {
-            throw new \RuntimeException("Unable to locate mapper for outcome market {$this->market}");
+            throw new \RuntimeException("Unable to locate mapper for outcome market {$this->market}", 6667);
         }
 
         return new $mapperClass($this->outcome, $this->mappedMarketsWithOutcomes, $this->marketTemplate, $this->outcomeTypes, $this->eventParticipants);

@@ -59,6 +59,27 @@ class EventProcessor
         return new static($eventId);
     }
 
+    public function setResult(array $eventData)
+    {
+        DB::connection('line')->beginTransaction();
+        try {
+            if (!ResultGame::isResultsApproved($this->eventId)) {
+                $this->sendMassageFinished();
+            }
+
+            $eventResult = new EventResult($eventData, $this->eventId);
+
+            $eventResult->process();
+
+        $this->sendMassageFinished();
+
+        } catch (\Exception $exception) {
+            DB::connection('line')->rollBack();
+            throw $exception;
+        }
+        DB::connection('line')->commit();
+    }
+
     public function cancel() : bool
     {
         if(!$this->eventId) {
@@ -119,6 +140,16 @@ class EventProcessor
         $this->sendAmQpMessage(StatusDesc::STATUS_IN_PROGRESS);
 
         return true;
+    }
+
+    protected function sendMassageFinished()
+    {
+        if(($status = Calculator::sendMessageApprove($this->eventId)) !== 'ok')
+        {
+            throw new \RuntimeException("Unable to send approve");
+        }
+
+        $this->sendAmQpMessage(StatusDesc::STATUS_FINISHED);
     }
 
     protected function updateGameResult()

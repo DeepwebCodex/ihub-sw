@@ -37,14 +37,6 @@ class EventBuilder
 
         $this->eventType = (int) array_get($this->eventData, 'EventType');
         $this->controllerId = (int) array_get($this->eventData, 'ControllerId');
-
-
-        //EventName - CourseName|EventName|MeetingName
-        //EventType - EventType
-        //EventControllerID - ControllerId
-        //EventTime - EventTime
-        //Participants - racer(array)[][Num, Name] | Team1 Team2 | player(array)[][name]
-        //EventIdIvg - EventId
     }
 
     public function create()
