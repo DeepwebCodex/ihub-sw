@@ -47,7 +47,7 @@ class CasinoController extends BaseApiController
 
     /**
      * @param AuthRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function auth(AuthRequest $request)
     {
@@ -65,7 +65,7 @@ class CasinoController extends BaseApiController
 
     /**
      * @param AuthRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function getBalance(AuthRequest $request)
     {
@@ -97,7 +97,7 @@ class CasinoController extends BaseApiController
 
     /**
      * @param PayInRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function payIn(PayInRequest $request)
     {
@@ -113,7 +113,8 @@ class CasinoController extends BaseApiController
             TransactionRequest::D_WITHDRAWAL,
             TransactionHelper::amountCentsToWhole($request->input('amount')),
             TransactionRequest::TRANS_BET,
-            $request->input('transaction_id')
+            $request->input('transaction_id'),
+            0 // TODO:: filler - get actual game id from partner
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
@@ -128,7 +129,7 @@ class CasinoController extends BaseApiController
 
     /**
      * @param PayOutRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function payOut(PayOutRequest $request)
     {
@@ -145,7 +146,8 @@ class CasinoController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('amount')),
             $request->input('type_operation') === 'rollback'
                 ? TransactionRequest::TRANS_REFUND : TransactionRequest::TRANS_WIN,
-            $request->input('transaction_id')
+            $request->input('transaction_id'),
+            0 // TODO:: filler - get actual game id from partner
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
