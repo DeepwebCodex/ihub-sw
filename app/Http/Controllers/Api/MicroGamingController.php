@@ -62,12 +62,6 @@ class MicroGamingController extends BaseApiController
 
     public function logIn(LogInRequest $request)
     {
-        /*$time = app('GameSession')->get('created');
-
-        if((time() - $time) >= 360) {
-            throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::TIME_EXPIRED));
-        }*/
-
         $user = IntegrationUser::get(app('GameSession')->get('user_id'), $this->getOption('service_id'), 'microgaming');
 
         $this->addMetaField('currency', $user->getCurrency());
