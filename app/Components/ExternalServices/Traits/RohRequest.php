@@ -84,7 +84,10 @@ trait RohRequest
                 $this->sendPostRoh($url, $params, $retry);
             }
 
-            AppLog::critical($e->getMessage());
+            AppLog::critical([
+                'message' => $e->getMessage(),
+                'params'  => $params
+            ]);
 
             throw new GenericApiHttpException($statusCode, $e->getMessage(), [], null, [], $e->getCode());
         }
