@@ -33,6 +33,8 @@ build_and_test:
       - ./storage/logs
       - ./.env.testing
     expire_in: 1 day
+  only:
+    - /^ihub-[0..9]{1,3}-*$/
 
 build_test_on_dev_env_prod:
   tags:
