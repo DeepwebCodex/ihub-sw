@@ -1,8 +1,9 @@
 stages:
 - test
-- build
-- deploy
-- upgrade
+- compile_project
+- build_docker_image
+- deploy_to_servers
+- manual_deploy_to_servers
 
 variables:
   GIT_SSL_NO_VERIFY: "true"
@@ -10,69 +11,83 @@ variables:
   RANCHER_PROD_URL: "http://10.120.12.41:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
-build_and_test:
+#====================== templates ======================#
+.template_dev: &template_dev
   tags:
     - de2gl03d_dind_1
-  stage: test
-  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
-  services:
-    - redis:3.2
-  script:
-    - cat $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
-    - bash ./run/dev/install-rancher.sh
-    - ./vendor/bin/codecept run
-  cache:
-    key: $CI_BUILD_REF_NAME
-    untracked: true
-    paths:
-      - ./vendor
-  artifacts:
-    when: on_failure
-    name: $CI_BUILD_REF_NAME
-    paths:
-      - ./tests/_output
-      - ./storage/logs
-      - ./.env.testing
-    expire_in: 1 day
   only:
-    - /^ihub-[0-9]{1,3}-.*$/
     - dev
-    - staging
-    - prod
-    - tags
 
-build_test_on_dev_env_prod:
+.template_prod: &template_prod
   tags:
-    - de2gl03d_dind_1
-  stage: test
-  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
-  services:
-    - redis:3.2
-  script:
-    - bash ./run/prod/tests.sh
-  cache:
-    key: $CI_BUILD_REF_NAME
-    untracked: true
-    paths:
-      - ./vendor
-  artifacts:
-    when: on_failure
-    name: $CI_BUILD_REF_NAME
-    paths:
-      - ./tests/_output
-      - ./storage/logs
-      - ./.env.testing
-    expire_in: 1 day
+    - de2gl03p_dind_1
   only:
     - master
+    - tags
 
-build_dev:
-  tags:
-    - de2gl03d_dind_1
-  stage: build
+.template_compile_n_test: &template_compile_n_test
+  <<: *template_dev
+  stage: test
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
+  services:
+    - redis:3.2
+  cache:
+    key: $CI_BUILD_REF_NAME
+    untracked: true
+    paths:
+      - ./vendor
+  artifacts:
+    when: on_failure
+    name: $CI_BUILD_REF_NAME
+    paths:
+      - ./tests/_output
+      - ./storage/logs
+      - ./.env.testing
+    expire_in: 1 day
+
+.template_build_docker_image: &template_build_docker_image
+  stage: build_docker_image
+  image: docker:latest
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
+    - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
+    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
+    - docker push $CONTAINER_IHUB_CODE_IMAGE
+
+.template_build_docker_image: &template_build_docker_image_dev
+  <<: *template_dev
+  <<: *template_build_docker_image
+
+.template_build_docker_image: &template_build_docker_image_prod
+  <<: *template_prod
+  <<: *template_build_docker_image
+
+
+#====================== templates ======================#
+
+test_features_n_dev:
+  <<: *template_compile_n_test
+  script:
+    - bash ./run/dev/install-rancher.sh
+    - ./vendor/bin/codecept run
+  only:
+    - /^[a-zA-Z]{1,6}-[0-9]{1,3}-.*$/
+    - dev
+
+test_on_dev_env_prod:
+  <<: *template_compile_n_test
+  script:
+    - bash ./run/prod/tests.sh
+  only:
+    - master
+    - tags
+
+compile_dev:
+  <<: *template_dev
+  stage: compile_project
   image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
   script:
-    - rm -rf .env .env.testing
+    - rm -rf .env .env.testing .git
     - bash ./run/dev/install-rancher.sh
   cache:
     key: $CI_BUILD_REF_NAME
@@ -82,19 +97,18 @@ build_dev:
     paths:
       - ./vendor
       - ./
-    expire_in: 1 week
+    expire_in: 1 day
   only:
     - dev
 
-build_prod:
-  tags:
-    - de2gl03p_dind_1
-  stage: build
+compile_prod:
+  <<: *template_prod
+  stage: compile_project
   image: gitlab.favorit:4567/integrations/docker:php-fpm-master
   script:
     - export http_proxy="http://10.120.12.56:3128"
     - export https_proxy="http://10.120.12.56:3128"
-    - rm -rf .env .env.testing
+    - rm -rf .env .env.testing ./tests .git
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
     - cat /root/ihub/env.ihub >> .env
@@ -106,86 +120,41 @@ build_prod:
     paths:
       - ./vendor
       - ./
-    expire_in: 1 week
+    expire_in: 1 day
   only:
     - master
+    - tags
 
-push_code_dev:
-  tags:
-    - de2gl03d_dind_1
-  stage: deploy
-  image: docker:latest
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
-    - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
-    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
-    - docker push $CONTAINER_IHUB_CODE_IMAGE
+build_docker_image_dev:
+  <<: *template_build_docker_image_dev
   only:
     - dev
 
-push_code_prod:
-  tags:
-    - de2gl03p_dind_1
-  stage: deploy
-  image: docker:latest
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
-    - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
-    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
-    - docker push $CONTAINER_IHUB_CODE_IMAGE
+build_docker_image_prod:
+  <<: *template_build_docker_image_prod
   only:
-    - master
+    - tags
 
-rancher_upgrade_dev:
-  tags:
-    - de2gl03d_dind_1
-  stage: upgrade
+deploy_to_servers_dev:
+  <<: *template_dev
+  stage: deploy_to_servers
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
     - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
-    - upgrade --environment dev-ihub --stack ihub --service php-fpm
-    - upgrade --environment dev-ihub --stack ihub --service nginx
+    - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-image $CONTAINER_IHUB_CODE_IMAGE
+    - upgrade --environment dev-ihub --stack ihub --service nginx --new-image $CONTAINER_IHUB_CODE_IMAGE
   only:
     - dev
 
-manual_dev_push_code:
-  tags:
-    - de2gl03d_dind_1
-  stage: deploy
-  image: docker:latest
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
-    - rm -rf .git .gitlab-ci.yml .gitignore .env.example
-    - ls -liah
-    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
-    - docker push $CONTAINER_IHUB_CODE_IMAGE
-  only:
-    - dev
-  when: manual
-
-manual_dev_rancher_upgrade:
-  tags:
-    - de2gl03d_dind_1
-  stage: upgrade
-  image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
-  script:
-    - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_SECRET_KEY
-    - upgrade --environment dev-ihub --stack ihub --service php-fpm
-    - upgrade --environment dev-ihub --stack ihub --service nginx
-  only:
-    - dev
-  when: manual
-
-manual_prod_rancher_upgrade:
-  tags:
-    - de2gl03p_dind_1
-  stage: upgrade
+manual_deploy_to_servers_prod:
+  <<: *template_prod
+  stage: deploy_to_servers
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-    - upgrade --environment ihub --stack ihub --service php-fpm
-    - upgrade --environment ihub --stack ihub --service nginx
-    - upgrade --environment ihub --stack ihub --service php-fpm-system
+    - upgrade --environment ihub --stack ihub --service php-fpm --new-image $CONTAINER_IHUB_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service nginx --new-image $CONTAINER_IHUB_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service php-fpm-system --new-image $CONTAINER_IHUB_CODE_IMAGE
   only:
     - master
   when: manual
