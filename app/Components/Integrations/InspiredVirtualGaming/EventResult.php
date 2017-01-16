@@ -62,11 +62,12 @@ class EventResult
         }
 
         foreach ($results as $result) {
+
             $resultGame = ResultGame::create([
                 'event_id'              => $event->id,
                 'scope_data_id'         => array_get($result, 'game_result_scope_id', $this->getConfigOption('sports.' . $this->eventType . '.game_result_scope_id')),
                 'result_type_id'        => data_get($resultType, '0.id'),
-                'event_participant_id'  => data_get($participants, array_get($result, 'num') . '.id'),
+                'event_particpant_id'   => data_get($participants, array_get($result, 'num') . '.id'),
                 'amount'                => array_get($result, 'amount'),
                 'result_time'           => 0,
                 'approve'               => 'yes',
@@ -83,7 +84,7 @@ class EventResult
             'result_type_id'    => data_get($resultType, '0.id'),
             'result_total_json' => json_encode(array_merge([
                 'result_type_id' => data_get($resultType, '0.id')
-            ]), $dataMap->getTotalResultForJson($results, $participants))
+            ], $dataMap->getTotalResultForJson($results, $participants)))
         ], $event->id) ) {
             throw new \RuntimeException("Unable to update result game total for event {$event->id}");
         }
