@@ -47,7 +47,6 @@ class MicroGamingTemplate implements IExceptionTemplate
                 'result' => [
                     '@attributes' => [
                         'seq'               => $request->input('methodcall.call.seq'),
-                        //'token'             => $request->input('methodcall.call.token'),
                         'errorcode'         => $code,
                         'errordescription'  => S::substr($message, 0, 240)
                     ],
