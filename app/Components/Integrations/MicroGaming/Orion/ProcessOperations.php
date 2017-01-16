@@ -13,8 +13,11 @@ use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGaming;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Transactions\TransactionResponse;
 use App\Components\Users\IntegrationUser;
+use App\Facades\AppLog;
 use Illuminate\Support\Facades\Config;
+use SebastianBergmann\RecursionContext\Exception;
 
 /**
  * Description of Process
@@ -30,16 +33,19 @@ class ProcessOperations {
 
         foreach ($data as $key => $value) {
             $user_id = (int) $value['a:LoginName'];
-            $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
-            $response = self::pushOperation(TransactionRequest::TRANS_WIN, $value, $user);
+            try {
+                $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
+                $response = self::pushOperation(TransactionRequest::TRANS_WIN, $value, $user);
+            } catch (Exception $e) {
+                unset($data[$key]);
+                AppLog::warning("one  canceled. Cause: " . print_r($e->getMessage()));
+            }
         }
     }
 
     static function pushOperation(string $typeOperation, array $data, IntegrationUser $user): TransactionResponse {
         $transactionRequest = new TransactionRequest(
-                Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $user->getCurrency(), 
-                MicroGamingHelper::getTransactionDirection($typeOperation), 
-                TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber']
+                Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName']
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);

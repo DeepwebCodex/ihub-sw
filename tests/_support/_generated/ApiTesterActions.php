@@ -1,7 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <?php  //[STAMP] d5515e50dfc61907b4dd63d855eac240
 =======
 <?php  //[STAMP] c368e51359bdf608e1e5801e579413f0
+>>>>>>> master
+=======
+<?php  //[STAMP] d5515e50dfc61907b4dd63d855eac240
 >>>>>>> master
 namespace _generated;
 

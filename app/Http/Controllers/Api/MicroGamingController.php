@@ -112,7 +112,8 @@ class MicroGamingController extends BaseApiController
             MicroGamingHelper::getTransactionDirection($request->input('methodcall.call.playtype')),
             TransactionHelper::amountCentsToWhole($request->input('methodcall.call.amount')),
             MicroGamingHelper::getTransactionType($request->input('methodcall.call.playtype')),
-            $request->input('methodcall.call.actionid')
+            $request->input('methodcall.call.actionid'),
+            $request->input('methodcall.call.gamereference')
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
