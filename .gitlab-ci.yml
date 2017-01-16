@@ -18,6 +18,7 @@ build_and_test:
   services:
     - redis:3.2
   script:
+    - cat $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
     - bash ./run/dev/install-rancher.sh
     - ./vendor/bin/codecept run
   cache:
