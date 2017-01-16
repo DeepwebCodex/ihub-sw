@@ -28,7 +28,7 @@ class SessionStoreItem
     /**
      * @var string
      */
-    protected $reference = '';
+    protected $referenceId = '';
 
     /**
      * @var string
@@ -55,7 +55,7 @@ class SessionStoreItem
     {
         $sessionStoreItem = new self($sessionId);
         $sessionStoreItem->setData($sessionData);
-        $sessionStoreItem->setReference($referenceId);
+        $sessionStoreItem->setReferenceId($referenceId);
         return $sessionStoreItem->save();
     }
 
@@ -81,7 +81,7 @@ class SessionStoreItem
             $this->storageKey,
             [
                 'data' => $this->serialize($this->data),
-                'reference' => $this->reference
+                'reference' => $this->referenceId
             ]
         );
         $this->prolong();
@@ -118,18 +118,18 @@ class SessionStoreItem
     /**
      * @return string
      */
-    public function getReference():string
+    public function getReferenceId():string
     {
-        return $this->reference;
+        return $this->referenceId;
     }
 
     /**
-     * @param string $reference
+     * @param string $referenceId
      * @return self
      */
-    public function setReference(string $reference):self
+    public function setReferenceId(string $referenceId):self
     {
-        $this->reference = $reference;
+        $this->referenceId = $referenceId;
         return $this;
     }
 
@@ -173,7 +173,7 @@ class SessionStoreItem
         $data = Redis::hgetall($this->storageKey);
 
         $this->data = $this->unserialize($data['data']);
-        $this->reference = $data['reference'];
+        $this->referenceId = $data['reference'];
         return $this;
     }
 
