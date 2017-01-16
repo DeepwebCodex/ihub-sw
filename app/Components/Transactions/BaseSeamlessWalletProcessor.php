@@ -8,12 +8,13 @@ use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\CodeMappingBase;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\GenericApiHttpException;
+use App\Exceptions\Api\SkipProcessing;
 use App\Models\Transactions;
 /**
  * @property  CodeMappingBase $codeMapping;
  * @property  TransactionRequest $request;
  */
-class BaseSeamlessWalletProcessor
+abstract class BaseSeamlessWalletProcessor
 {
     /**@var CodeMappingBase */
     protected $codeMapping;
@@ -22,6 +23,19 @@ class BaseSeamlessWalletProcessor
 
     protected $responseData = [];
     protected $isDuplicate = false;
+
+    public function runProcess(TransactionRequest $request)
+    {
+        try
+        {
+            return $this->process($request);
+
+        } catch (SkipProcessing $exception) {
+            return $this->responseData;
+        }
+    }
+
+    abstract protected function process(TransactionRequest $request);
 
     protected function runPending()
     {
@@ -61,18 +75,19 @@ class BaseSeamlessWalletProcessor
             case TransactionRequest::STATUS_NULL:
             case TransactionRequest::STATUS_PENDING:
                 $model = Transactions::create([
-                    'operation_id' => app('AccountManager')->getFreeOperationId(),
-                    'user_id' => $this->request->user_id,
-                    'service_id' => $this->request->service_id,
-                    'amount' => $this->request->amount,
-                    'move'  => $this->request->direction,
-                    'partner_id' => request()->server('PARTNER_ID'),
-                    'cashdesk' => $this->request->cashdesk_id,
-                    'status' => TransactionRequest::STATUS_COMPLETED,
-                    'currency' => $this->request->currency,
-                    'foreign_id' => $this->request->foreign_id,
-                    'object_id' => $this->request->object_id,
-                    'transaction_type' => $this->request->transaction_type
+                    'operation_id'      => app('AccountManager')->getFreeOperationId(),
+                    'user_id'           => $this->request->user_id,
+                    'service_id'        => $this->request->service_id,
+                    'amount'            => $this->request->amount,
+                    'move'              => $this->request->direction,
+                    'partner_id'        => request()->server('PARTNER_ID'),
+                    'cashdesk'          => $this->request->cashdesk_id,
+                    'status'            => TransactionRequest::STATUS_COMPLETED,
+                    'currency'          => $this->request->currency,
+                    'foreign_id'        => $this->request->foreign_id,
+                    'object_id'         => $this->request->object_id,
+                    'transaction_type'  => $this->request->transaction_type,
+                    'game_id'           => $this->request->game_id
                 ]);
                 if($model){
                     $this->responseData = $model->attributesToArray();
@@ -135,9 +150,10 @@ class BaseSeamlessWalletProcessor
         }
 
         $model = Transactions::create(array_merge($this->responseData, [
-            'object_id'  => $this->request->object_id,
-            'foreign_id' => $this->request->foreign_id,
-            'transaction_type' => $this->request->transaction_type
+            'object_id'          => $this->request->object_id,
+            'foreign_id'         => $this->request->foreign_id,
+            'transaction_type'   => $this->request->transaction_type,
+            'game_id'            => $this->request->game_id
         ]));
 
         if(!$model) {
@@ -174,13 +190,17 @@ class BaseSeamlessWalletProcessor
         switch (TransactionHelper::getTransactionErrorState($errorCode))
         {
             case TransactionHelper::DUPLICATE:
-                return $this->onTransactionDuplicate($e);
+                $this->onTransactionDuplicate($e);
+                throw new SkipProcessing(500);
             case TransactionHelper::BAD_OPERATION_ORDER:
-                return $this->onHaveNotBet($e);
+                $this->onHaveNotBet($e);
+                throw new SkipProcessing(500);
             case TransactionHelper::INSUFFICIENT_FUNDS:
-                return $this->onInsufficientFunds($e);
+                $this->onInsufficientFunds($e);
+                throw new SkipProcessing(500);
             case TransactionHelper::ACCOUNT_DENIED:
-                return $this->onAccountDenied($e);
+                $this->onAccountDenied($e);
+                throw new SkipProcessing(500);
             default:
                 throw $e;
         }

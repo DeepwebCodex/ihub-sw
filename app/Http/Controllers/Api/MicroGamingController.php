@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\MicroGamingApiFormatter;
-use App\Components\Integrations\Casino\CodeMapping;
+use App\Components\Integrations\MicroGaming\CodeMapping;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use App\Components\Traits\MetaDataTrait;
@@ -44,6 +44,7 @@ class MicroGamingController extends BaseApiController
 
         Validator::extend('validate_token', 'App\Http\Requests\Validation\MicroGamingValidation@validateToken');
         Validator::extend('validate_play_type', 'App\Http\Requests\Validation\MicroGamingValidation@validatePlayType');
+        Validator::extend('validate_first_use_token', 'App\Http\Requests\Validation\MicroGamingValidation@validateFirstUseToken');
     }
 
     public function index(Request $request)
@@ -80,7 +81,6 @@ class MicroGamingController extends BaseApiController
             'balance'       => $user->getBalanceInCents(),
             'bonusbalance'  => '0',
             'wallet'        => 'local',
-            'idnumber'      => '0',
             'token'         => $token
         ]);
     }
@@ -112,7 +112,8 @@ class MicroGamingController extends BaseApiController
             MicroGamingHelper::getTransactionDirection($request->input('methodcall.call.playtype')),
             TransactionHelper::amountCentsToWhole($request->input('methodcall.call.amount')),
             MicroGamingHelper::getTransactionType($request->input('methodcall.call.playtype')),
-            $request->input('methodcall.call.actionid')
+            $request->input('methodcall.call.actionid'),
+            $request->input('methodcall.call.gamereference')
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);

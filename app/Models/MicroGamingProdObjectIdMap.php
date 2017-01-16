@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Components\Transactions\TransactionRequest;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class MicroGamingProdObjectIdMap extends Model
 {
@@ -47,5 +48,23 @@ class MicroGamingProdObjectIdMap extends Model
         }
 
         return isset($model->id) ? $model->id : 0;
+    }
+
+    public static function getNextPrimaryIndex() : int
+    {
+        $mapModel = new static();
+
+        $connection = $mapModel->getConnectionName();
+
+        $table = $mapModel->getTable();
+
+        $sequence_name = $table . '_id_seq';
+
+        $value = DB::connection($connection)->select("SELECT nextval('{$sequence_name}')");
+
+        /*microgaming_prod_object_id_map_id_seq
+        microgaming_prod_object_id_map_id_seq*/
+
+        return intval($value['0']->nextval);
     }
 }

@@ -144,7 +144,8 @@ class BetGamesController extends BaseApiController
             TransactionRequest::D_WITHDRAWAL,
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
-            $request->input('params.transaction_id')
+            $request->input('params.transaction_id'),
+            0 // TODO:: filler - get actual game id from partner
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
@@ -176,7 +177,8 @@ class BetGamesController extends BaseApiController
             TransactionRequest::D_DEPOSIT,
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
-            $request->input('params.transaction_id')
+            $request->input('params.transaction_id'),
+            0 // TODO:: filler - get actual game id from partner
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);

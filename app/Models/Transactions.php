@@ -5,6 +5,24 @@ namespace App\Models;
 use App\Components\Transactions\TransactionRequest;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property integer $id
+ * @property integer $user_id
+ * @property integer $operation_id
+ * @property integer $service_id
+ * @property integer $amount
+ * @property integer $move
+ * @property integer $partner_id
+ * @property integer $cashdesk
+ * @property string $status
+ * @property string $currency
+ * @property string $foreign_id
+ * @property string $transaction_type
+ * @property integer $object_id
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $game_id
+*/
 class Transactions extends Model
 {
     /**
@@ -29,7 +47,8 @@ class Transactions extends Model
         'currency',
         'foreign_id',
         'object_id',
-        'transaction_type'
+        'transaction_type',
+        'game_id'
     ];
 
     public function getAmountAttribute($value){
