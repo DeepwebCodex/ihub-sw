@@ -34,7 +34,11 @@ build_and_test:
       - ./.env.testing
     expire_in: 1 day
   only:
-    - /^ihub-[0..9]{1,3}.*$/
+    - /^ihub-[0-9]{1,3}-.*$/
+    - dev
+    - staging
+    - prod
+    - tags
 
 build_test_on_dev_env_prod:
   tags:
