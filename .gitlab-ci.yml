@@ -156,5 +156,5 @@ manual_deploy_to_servers_prod:
     - upgrade --environment ihub --stack ihub --service nginx --new-image $CONTAINER_IHUB_CODE_IMAGE
     - upgrade --environment ihub --stack ihub --service php-fpm-system --new-image $CONTAINER_IHUB_CODE_IMAGE
   only:
-    - master
+    - tags
   when: manual
