@@ -46,7 +46,6 @@ class Kernel extends HttpKernel
 
         'api' => [
             'log.hits',
-            'throttle:60,1',
             'bindings',
             'check.partner_id',
             'log.request.response'
