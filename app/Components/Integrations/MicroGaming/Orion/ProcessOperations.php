@@ -22,29 +22,29 @@ use Illuminate\Support\Facades\Config;
  * @author petroff
  */
 class ProcessOperations {
+
     //put your code here
-    
-    static function commit($data_t) {
+
+    static function commit(array $data_t) {
         $data = $data_t['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult']['a:QueueDataResponse'];
 
         foreach ($data as $key => $value) {
             $user_id = (int) $value['a:LoginName'];
             $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
-            $transactionRequest = new TransactionRequest(
-            Config::get('integrations.microgaming.service_id'),
-            $value['a:TransactionNumber'],
-            $user->id,
-            $user->getCurrency(),
-            MicroGamingHelper::getTransactionDirection(TransactionRequest::TRANS_WIN),
-            TransactionHelper::amountCentsToWhole($value['a:ChangeAmount']),
-            MicroGamingHelper::getTransactionType(TransactionRequest::TRANS_WIN),
-            $value['a:MgsReferenceNumber']
+            $response = self::pushOperation(TransactionRequest::TRANS_WIN, $value, $user);
+        }
+    }
+
+    static function pushOperation(string $typeOperation, array $data, IntegrationUser $user): TransactionResponse {
+        $transactionRequest = new TransactionRequest(
+                Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $user->getCurrency(), 
+                MicroGamingHelper::getTransactionDirection($typeOperation), 
+                TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber']
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
 
-        $transactionResponse = $transactionHandler->handle(new ProcessMicroGaming());
-        }
+        return $transactionHandler->handle(new ProcessMicroGaming());
     }
-      
+
 }

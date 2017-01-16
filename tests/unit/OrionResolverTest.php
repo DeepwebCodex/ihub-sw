@@ -4,6 +4,7 @@ use App\Components\Integrations\MicroGaming\Orion\ProcessOperations;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetCommitQueueData;
 use App\Components\Integrations\MicroGaming\Orion\SoapEmul;
 use App\Components\ThirdParty\Array2Xml;
+use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\Validation\Orion\CommitValidation;
 use Carbon\Carbon;
 use Codeception\Specify;
@@ -132,7 +133,7 @@ class OrionResolverTest extends Unit {
         });
     }
 
-    public function testProsseccTransaction() {
+    public function testProcessTransaction() {
         $testData[] = [
             'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(), 'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
             'transactionNumber' => $this->generateUniqId(), 'serverId' => config('integrations.microgamingOrion.serverId'), 'referenceNumber' => $this->generateUniqId()
@@ -146,9 +147,12 @@ class OrionResolverTest extends Unit {
         $validatorCommitData = new CommitValidation();
         $validatorCommitData->validateBaseStructure($data);
 
-        $this->specify("Test process commit operation", function() use($data) {
-            $handleCommit = ProcessOperations::commit($data);
+        $this->specify("Test absent bet", function() use($data) {
+            $this->expectException(ApiHttpException::class);
+            $handleCommit = ProcessOperations::commit($data);   
         });
+        
+        
     }
 
 }
