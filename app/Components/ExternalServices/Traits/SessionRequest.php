@@ -49,7 +49,10 @@ trait SessionRequest
                 $this->sendGetSession($url, $params, $retry);
             }
 
-            AppLog::critical($e->getMessage());
+            AppLog::critical([
+                'message' => $e->getMessage(),
+                'params'  => $params
+            ]);
 
             throw new GenericApiHttpException(500, $e->getMessage());
         }

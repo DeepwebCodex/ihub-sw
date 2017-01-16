@@ -17,6 +17,7 @@ class LogInRequest extends BaseMicroGamingRequest
     {
         return [
             'methodcall.call.token.validate_token' => 'Invalid token',
+            'methodcall.call.token.validate_first_use_token' => 'Token expired',
         ];
     }
     /**
@@ -29,7 +30,7 @@ class LogInRequest extends BaseMicroGamingRequest
         return [
             'methodcall.system'     => 'bail|required|string|in:casino',
             'methodcall.call.seq'   => 'bail|required|string',
-            'methodcall.call.token' => 'bail|required|string|validate_token',
+            'methodcall.call.token' => 'bail|required|string|validate_token|validate_first_use_token',
         ];
     }
 }
