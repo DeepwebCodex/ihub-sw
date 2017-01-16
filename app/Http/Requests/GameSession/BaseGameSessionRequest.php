@@ -3,6 +3,7 @@
 namespace App\Http\Requests\GameSession;
 
 use App\Exceptions\Api\ApiHttpException;
+use App\Http\Requests\ApiRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Request;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Request;
  * Class BaseGameSessionRequest
  * @package App\Http\Requests\GameSession
  */
-class BaseGameSessionRequest extends FormRequest
+class BaseGameSessionRequest extends ApiRequest
 {
     /**
      * @return bool

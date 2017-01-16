@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\MicroGamingApiFormatter;
-use App\Components\Integrations\Casino\CodeMapping;
+use App\Components\Integrations\MicroGaming\CodeMapping;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use App\Components\Traits\MetaDataTrait;
@@ -44,6 +44,7 @@ class MicroGamingController extends BaseApiController
 
         Validator::extend('validate_token', 'App\Http\Requests\Validation\MicroGamingValidation@validateToken');
         Validator::extend('validate_play_type', 'App\Http\Requests\Validation\MicroGamingValidation@validatePlayType');
+        Validator::extend('validate_first_use_token', 'App\Http\Requests\Validation\MicroGamingValidation@validateFirstUseToken');
     }
 
     public function index(Request $request)
@@ -61,6 +62,12 @@ class MicroGamingController extends BaseApiController
 
     public function logIn(LogInRequest $request)
     {
+        /*$time = app('GameSession')->get('created');
+
+        if((time() - $time) >= 360) {
+            throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::TIME_EXPIRED));
+        }*/
+
         $user = IntegrationUser::get(app('GameSession')->get('user_id'), $this->getOption('service_id'), 'microgaming');
 
         $this->addMetaField('currency', $user->getCurrency());
@@ -80,7 +87,6 @@ class MicroGamingController extends BaseApiController
             'balance'       => $user->getBalanceInCents(),
             'bonusbalance'  => '0',
             'wallet'        => 'local',
-            'idnumber'      => '0',
             'token'         => $token
         ]);
     }

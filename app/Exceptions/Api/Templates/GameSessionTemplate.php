@@ -17,6 +17,9 @@ class GameSessionTemplate implements IExceptionTemplate
     public function mapping($item, $statusCode, $isApiException)
     {
         // TODO: Implement mapping() method.
-        return [];
+        return [
+            'status' => false,
+            'message' => data_get($item, 'message', 'Error')
+        ];
     }
 }

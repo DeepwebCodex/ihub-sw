@@ -17,8 +17,7 @@ interface TransactionProcessorInterface
      * @param TransactionRequest $request
      * @return array
      */
-    public function process(TransactionRequest $request);
-
+    public function runProcess(TransactionRequest $request);
 
     /**
      * @return array

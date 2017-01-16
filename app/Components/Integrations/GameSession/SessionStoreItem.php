@@ -111,7 +111,7 @@ class SessionStoreItem
      */
     public function setData(array $data):self
     {
-        $this->data = $data;
+        $this->data = array_merge($data, ['created' => time()]);
         return $this;
     }
 
