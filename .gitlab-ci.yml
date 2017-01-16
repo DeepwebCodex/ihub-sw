@@ -10,7 +10,7 @@ variables:
   RANCHER_PROD_URL: "http://10.120.12.41:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
-build_test_dev:
+build_and_test:
   tags:
     - de2gl03d_dind_1
   stage: test
@@ -33,8 +33,6 @@ build_test_dev:
       - ./storage/logs
       - ./.env.testing
     expire_in: 1 day
-  except:
-    - master
 
 build_test_on_dev_env_prod:
   tags:
