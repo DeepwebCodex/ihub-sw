@@ -17,11 +17,12 @@ use App\Models\Transactions;
 class ProcessBetGames extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
     protected $codeMapping = CodeMapping::class;
+
     /**
      * @param TransactionRequest $request
      * @return array
      */
-    public function process(TransactionRequest $request):array
+    protected function process(TransactionRequest $request):array
     {
         $this->request = $request;
 

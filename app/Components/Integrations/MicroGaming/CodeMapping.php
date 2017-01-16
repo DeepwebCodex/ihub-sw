@@ -34,7 +34,7 @@ class CodeMapping extends CodeMappingBase
                 'meanings'  => [self::INVALID_TOKEN]
             ],
             StatusCode::TOKEN_EXPIRED => [
-                'message'   => 'Срок действия токена игрока истек.',
+                'message'   => 'The player token expired.',
                 'map'       => [],
                 'attribute' => 'timestamp',
                 'meanings'  => [self::TIME_EXPIRED]
