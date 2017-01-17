@@ -5,7 +5,7 @@ chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache
 
 cp ./.env.example ./.env
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
-       -e "s/^APP_ENV=local/APP_ENV=dev/g" \
+       -e "s/^APP_ENV=local/APP_ENV=production/g" \
        -e "s/^APP_DEBUG=true/APP_DEBUG=false/g" \
        -e "s/^APP_REQUEST_DEBUG=true/APP_REQUEST_DEBUG=true/g" \
        -e "s/^APP_LOG_LEVEL=debug/APP_LOG_LEVEL=debug/g" \
