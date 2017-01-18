@@ -20,7 +20,7 @@ class ProcessCasino extends BaseSeamlessWalletProcessor implements TransactionPr
      * @param TransactionRequest $request
      * @return array
      */
-    public function process(TransactionRequest $request)
+    protected function process(TransactionRequest $request)
     {
         $this->request = $request;
 

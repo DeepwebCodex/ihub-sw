@@ -8,12 +8,13 @@ use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\CodeMappingBase;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\GenericApiHttpException;
+use App\Exceptions\Api\SkipProcessing;
 use App\Models\Transactions;
 /**
  * @property  CodeMappingBase $codeMapping;
  * @property  TransactionRequest $request;
  */
-class BaseSeamlessWalletProcessor
+abstract class BaseSeamlessWalletProcessor
 {
     /**@var CodeMappingBase */
     protected $codeMapping;
@@ -22,6 +23,19 @@ class BaseSeamlessWalletProcessor
 
     protected $responseData = [];
     protected $isDuplicate = false;
+
+    public function runProcess(TransactionRequest $request)
+    {
+        try
+        {
+            return $this->process($request);
+
+        } catch (SkipProcessing $exception) {
+            return $this->responseData;
+        }
+    }
+
+    abstract protected function process(TransactionRequest $request);
 
     protected function runPending()
     {
@@ -176,13 +190,17 @@ class BaseSeamlessWalletProcessor
         switch (TransactionHelper::getTransactionErrorState($errorCode))
         {
             case TransactionHelper::DUPLICATE:
-                return $this->onTransactionDuplicate($e);
+                $this->onTransactionDuplicate($e);
+                throw new SkipProcessing(500);
             case TransactionHelper::BAD_OPERATION_ORDER:
-                return $this->onHaveNotBet($e);
+                $this->onHaveNotBet($e);
+                throw new SkipProcessing(500);
             case TransactionHelper::INSUFFICIENT_FUNDS:
-                return $this->onInsufficientFunds($e);
+                $this->onInsufficientFunds($e);
+                throw new SkipProcessing(500);
             case TransactionHelper::ACCOUNT_DENIED:
-                return $this->onAccountDenied($e);
+                $this->onAccountDenied($e);
+                throw new SkipProcessing(500);
             default:
                 throw $e;
         }

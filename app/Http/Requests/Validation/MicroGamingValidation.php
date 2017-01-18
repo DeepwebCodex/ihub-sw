@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Validation;
 
 use App\Components\Integrations\Casino\CasinoHelper;
+use App\Components\Integrations\GameSession\TokenControl\TokenControl;
 use App\Components\Integrations\MicroGaming\CodeMapping;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use App\Exceptions\Api\ApiHttpException;
@@ -10,7 +11,29 @@ use Illuminate\Support\Facades\Request;
 
 class MicroGamingValidation
 {
-    public static function validateToken($attribute, $value, $parameters, $validator)
+
+    /**
+     * @var TokenControl
+     */
+    protected $tokenControl;
+
+    public function __construct()
+    {
+        $this->tokenControl = new TokenControl('micro_gaming', 7);
+    }
+
+    public function validateFirstUseToken($attribute, $value, $parameters, $validator)
+    {
+        if($this->tokenControl->isUsed($value)) {
+            throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::TIME_EXPIRED));
+        }
+
+        $this->tokenControl->setUsed($value);
+
+        return true;
+    }
+
+    public function validateToken($attribute, $value, $parameters, $validator)
     {
         $message = null;
 
@@ -26,7 +49,7 @@ class MicroGamingValidation
         return true;
     }
 
-    public static function validatePlayType($attribute, $value, $parameters, $validator)
+    public function validatePlayType($attribute, $value, $parameters, $validator)
     {
         if(!in_array($value, ['bet', 'win', 'refund']))
         {

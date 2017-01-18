@@ -66,4 +66,9 @@ class MicroGamingObjectIdMap extends Model
     {
         return hexdec( substr(md5($user_id.$currency.$game_id.$repeat),0,15) );
     }
+
+    public static function getNextPrimaryIndex(int $user_id, string $currency, int $game_id)
+    {
+        return self::getObjectId($user_id, $currency, $game_id, 2000);
+    }
 }
