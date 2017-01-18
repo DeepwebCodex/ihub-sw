@@ -166,7 +166,8 @@ class IntegrationUser implements UserInterface
         return false;
     }
 
-    public function isTestUser(){
+    public function isTestUser()
+    {
         if(app()->environment() === 'production' && isset($this->group) && $this->group == 4){
             return true;
         }

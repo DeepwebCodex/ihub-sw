@@ -42,8 +42,8 @@ class GameSessionService
         $sessionId = $this->makeSessionId($sessionData);
 
         $this->sessionStoreItem = SessionStoreItem::create($sessionId, $sessionData, $referenceId);
-
         ReferenceStoreItem::create($referenceId, $sessionId);
+
         $this->sessionStarted = true;
 
         return $sessionId;
@@ -60,6 +60,32 @@ class GameSessionService
     }
 
     /**
+     * Start an existing session
+     *
+     * @param string $sessionId
+     * @throws \RuntimeException
+     */
+    public function start(string $sessionId)
+    {
+        $this->sessionStoreItem = new SessionStoreItem($sessionId);
+        $this->sessionStoreItem->read();
+        $this->sessionStarted = true;
+
+        $referenceId = $this->sessionStoreItem->getReferenceId();
+        $this->prolongReferenceStore($referenceId);
+    }
+
+    /**
+     * Prolong reference store item
+     * @param $referenceId
+     */
+    protected function prolongReferenceStore($referenceId)
+    {
+        $referenceStoreItem = new ReferenceStoreItem($referenceId);
+        $referenceStoreItem->prolong();
+    }
+
+    /**
      * Make session id
      *
      * @param array $data
@@ -73,19 +99,6 @@ class GameSessionService
     }
 
     /**
-     * Start an existing session
-     *
-     * @param string $sessionId
-     * @throws \RuntimeException
-     */
-    public function start(string $sessionId)
-    {
-        $this->sessionStoreItem = new SessionStoreItem($sessionId);
-        $this->sessionStoreItem->read();
-        $this->sessionStarted = true;
-    }
-
-    /**
      * Prolong session
      *
      * @param string $sessionId
@@ -94,8 +107,10 @@ class GameSessionService
     public function prolong(string $sessionId)
     {
         $sessionStoreItem = new SessionStoreItem($sessionId);
-        $sessionStoreItem->checkExists()
-            ->prolong();
+        $sessionStoreItem->read();
+
+        $referenceId = $sessionStoreItem->getReferenceId();
+        $this->prolongReferenceStore($referenceId);
     }
 
     /**
@@ -110,14 +125,16 @@ class GameSessionService
         $sessionStoreItem = new SessionStoreItem($sessionId);
         $sessionStoreItem->read();
         $sessionData = $sessionStoreItem->getData();
-        $referenceId = $sessionStoreItem->getReference();
+        $referenceId = $sessionStoreItem->getReferenceId();
 
         $newSessionId = $this->makeSessionId($sessionData);
 
         $sessionStoreItem->delete();
 
-        $this->sessionStoreItem = SessionStoreItem::create($newSessionId, $sessionData, $referenceId);
+        $referenceStoreItem = new ReferenceStoreItem($referenceId);
+        $referenceStoreItem->delete();
 
+        $this->sessionStoreItem = SessionStoreItem::create($newSessionId, $sessionData, $referenceId);
         ReferenceStoreItem::create($referenceId, $newSessionId);
 
         return $newSessionId;
@@ -195,6 +212,9 @@ class GameSessionService
     {
         $this->validateSessionStarted();
         $this->sessionStoreItem->save();
+
+        $referenceId = $this->sessionStoreItem->getReferenceId();
+        $this->prolongReferenceStore($referenceId);
     }
 
     /**

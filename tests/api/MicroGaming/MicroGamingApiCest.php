@@ -23,7 +23,7 @@ class MicroGamingApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('both items are in response');
-        $I->seeXmlResponseIncludes(" <result seq=\"\" token=\"\" errorcode=\"6000\" errordescription=\"Empty source\"><extinfo/></result>");
+        $I->seeXmlResponseIncludes(" <result seq=\"\" errorcode=\"6000\" errordescription=\"Empty source\"><extinfo/></result>");
     }
 
     public function testMethodLogIn(ApiTester $I)
@@ -41,7 +41,7 @@ class MicroGamingApiCest
                 ],
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
-                    'token' => "e4fda8473f68894a11c99acc25ecca11"
+                    'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
             ]
         ];
@@ -72,7 +72,7 @@ class MicroGamingApiCest
                 ],
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
-                    'token' => "e4fda8473f68894a11c99acc25ecca11"
+                    'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
             ]
         ];
@@ -103,7 +103,7 @@ class MicroGamingApiCest
                 ],
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
-                    'token' => "e4fda8473f68894a11c99acc25ecca11"
+                    'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
             ]
         ];
@@ -140,7 +140,7 @@ class MicroGamingApiCest
                     'actionid' => random_int(9900000, 99000000),
                     'amount' => 10,
                     'gamereference' => str_random(),
-                    'token' => "e4fda8473f68894a11c99acc25ecca11"
+                    'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
             ]
         ];
@@ -187,7 +187,7 @@ class MicroGamingApiCest
                     'actionid' => random_int(9900000, 99000000),
                     'amount' => 10,
                     'gamereference' => str_random(),
-                    'token' => "e4fda8473f68894a11c99acc25ecca11"
+                    'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
             ]
         ];
