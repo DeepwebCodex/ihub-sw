@@ -32,7 +32,7 @@ class TransactionHandler
      */
     public function handle(TransactionProcessorInterface $strategy)
     {
-        $strategy->process($this->request);
+        $strategy->runProcess($this->request);
 
         $transactionData = $strategy->getTransactionData();
         $isDuplicate = $strategy->isDuplicate();

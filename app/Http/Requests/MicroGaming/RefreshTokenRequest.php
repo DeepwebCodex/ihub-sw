@@ -27,7 +27,6 @@ class RefreshTokenRequest extends BaseMicroGamingRequest
     public function rules()
     {
         return [
-            'methodcall.system'     => 'bail|required|string|in:casino',
             'methodcall.call.seq'   => 'bail|required|string',
             'methodcall.call.token' => 'bail|required|string|validate_token',
         ];

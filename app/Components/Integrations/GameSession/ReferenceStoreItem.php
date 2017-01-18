@@ -56,7 +56,7 @@ class ReferenceStoreItem
      */
     public function save():self
     {
-        Redis::set($this->storageKey, $this->sessionId);
+        Redis::setex($this->storageKey, $this->getConfigOption('ttl'), $this->sessionId);
         return $this;
     }
 
@@ -84,6 +84,24 @@ class ReferenceStoreItem
     public function read():self
     {
         $this->sessionId = Redis::get($this->storageKey);
+        return $this;
+    }
+
+    /**
+     * @return self
+     */
+    public function delete():self
+    {
+        Redis::del($this->storageKey);
+        return $this;
+    }
+
+    /**
+     * @return self
+     */
+    public function prolong()
+    {
+        Redis::expire($this->storageKey, $this->getConfigOption('ttl'));
         return $this;
     }
 }

@@ -20,13 +20,16 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
 {
 
     protected $codeMapping = CodeMapping::class;
+
     /**
      * @param TransactionRequest $request
      * @return array
      */
-    public function process(TransactionRequest $request)
+    protected function process(TransactionRequest $request)
     {
         $this->request = $request;
+
+        //$originalObjectId = $this->request->object_id;
 
         $this->request->object_id = $this->getObjectIdMap(
             $this->request->user_id,
@@ -34,12 +37,22 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
             $this->request->object_id
         );
 
+        /**@var Transactions $betTransaction*/
+        $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, request()->server('PARTNER_ID'));
+
         if($this->request->transaction_type != TransactionRequest::TRANS_BET)
         {
-            $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, request()->server('PARTNER_ID'));
-
             if(!$betTransaction){
-                throw new ApiHttpException(500, "Bet was not placed", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
+                $this->onHaveNotBet(new ApiHttpException(500, null, ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR)));
+                return $this->responseData;
+            }
+        } elseif ($this->request->transaction_type == TransactionRequest::TRANS_BET) {
+            //unique double bet
+            if($betTransaction && $betTransaction->foreign_id != $this->request->foreign_id) {
+                $this->request->object_id = $this->getObjectIdMapForDuplicate(
+                    $this->request->user_id,
+                    $this->request->currency,
+                    $this->request->object_id);
             }
         }
 
@@ -101,6 +114,13 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
         $this->isDuplicate = true;
     }
 
+    protected function onHaveNotBet($e)
+    {
+        if($this->request->transaction_type !== TransactionRequest::TRANS_REFUND) {
+            parent::onHaveNotBet($e);
+        }
+    }
+
     /**
      * На данный момент для мапинга игровых раундов микрогейминга мы используем две схемы:
      *  - автоинкремент для прода
@@ -120,6 +140,20 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
         }
 
         return MicroGamingObjectIdMap::getObjectId(
+            $user_id,
+            $currency,
+            $game_id
+        );
+    }
+
+    protected function getObjectIdMapForDuplicate(int $user_id, string $currency, int $game_id) : int
+    {
+        if(app()->environment() == 'production')
+        {
+            return MicroGamingProdObjectIdMap::getNextPrimaryIndex();
+        }
+
+        return MicroGamingObjectIdMap::getNextPrimaryIndex(
             $user_id,
             $currency,
             $game_id

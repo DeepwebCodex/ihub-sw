@@ -26,6 +26,10 @@ class CheckPartnerId
             return $next($request);
         }
 
+        /** @var \App\Components\AppLog $logger */
+        $logger = app('AppLog');
+        $logger->critical('PartnerId not found');
+
         throw new ApiHttpException(503, 'Service unavailable');
     }
 }

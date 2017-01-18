@@ -48,11 +48,11 @@ class CustomValidationTest extends \Codeception\Test\Unit
         $token = "e4fda8473f68894a11c99acc25ecca11";
 
         $this->specify("Check validate token method", function() use($token) {
-            verify("Validation passes", MicroGamingValidation::validateToken(null, $token, null, null))->true();
+            verify("Validation passes", (new MicroGamingValidation)->validateToken(null, $token, null, null))->true();
 
             $this->expectException(\App\Exceptions\Api\ApiHttpException::class);
             $this->expectExceptionMessage("Token field is empty");
-            MicroGamingValidation::validateToken(null, '', null, null);
+            (new MicroGamingValidation)->validateToken(null, '', null, null);
         });
     }
 
@@ -60,11 +60,11 @@ class CustomValidationTest extends \Codeception\Test\Unit
     public function testMicroGamingValidationPlayType()
     {
         $this->specify("Check validate play type method", function() {
-            verify("Validation passes", MicroGamingValidation::validatePlayType(null, 'bet', null, null))->true();
+            verify("Validation passes", (new MicroGamingValidation)->validatePlayType(null, 'bet', null, null))->true();
 
             $this->expectException(\App\Exceptions\Api\ApiHttpException::class);
             $this->expectExceptionMessage("Playtype 'gogobugs' is not implemented");
-            MicroGamingValidation::validatePlayType(null, 'gogobugs', null, null);
+            (new MicroGamingValidation)->validatePlayType(null, 'gogobugs', null, null);
         });
     }
 }
