@@ -14,8 +14,8 @@
 
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
+use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use GuzzleHttp\ClientInterface;
-use Nathanmac\Utilities\Parser\Facades\Parser;
 
 abstract class Request {
 
@@ -24,22 +24,24 @@ abstract class Request {
     protected $body;
     protected $soap;
     protected $client;
+    protected $source;
 
-    abstract function prepare();
+    abstract function prepare(array $data = []);
 
     abstract function parse(string $result): array;
 
-    function __construct(ClientInterface $client) {
+    function __construct(ClientInterface $client, SourceProcessor $source) {
         $this->client = $client;
+        $this->source = $source;
     }
 
-    protected function parseXml(string $result): array {
-        $result = Parser::xml($result);
-        return $result;
+    protected function parseSource(string $result): array {
+        $resultArray = $this->source->parser($result);
+        return $resultArray;
     }
 
-    public function getData(): array {
-        $this->prepare();
+    public function getData(array $data = []): array {
+        $this->prepare($data);
         $result = $this->client->sendRequest($this);
         return $this->parse($result);
     }

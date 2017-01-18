@@ -17,25 +17,35 @@ namespace App\Components\Integrations\MicroGaming\Orion\Request;
 use Illuminate\Support\Facades\Config;
 use Ramsey\Uuid\Uuid;
 
-class GetCommitQueueData extends Request {
+class ManuallyValidateBet extends Request {
 
-    const MODULE = "GetCommitQueueData";
+    const MODULE = "ManuallyValidateBet";
 
     public function prepare(array $data = []) {
+
         $this->uuid = Uuid::uuid1()->toString();
         $this->method = GetCommitQueueData::MODULE;
+        $dataValidateBet = array();
+        foreach ($data as $key => $value) {
+            $dataValidateBet['ori:ValidteBetRequest'] [] = [
+                'ori:ExternalReference' => $value['operationId'],
+                'ori:RowId' => $value['a:RowId'],
+                'ori:ServerId' => Config::get('integrations.microgamingOrion.username'),
+                'ori:UnlockType' => $value['unlockType'],
+                'ori:UserId' => $value['a:UserId']
+            ];
+        }
+
         $dataTmp = [
             '@attributes' => [
                 'xmlns:soapenv' => 'http://schemas.xmlsoap.org/soap/envelope/',
                 'xmlns:adm' => 'http://mgsops.net/AdminAPI_Admin',
-                'xmlns:arr' => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays'
+                'xmlns:ori' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures'
             ],
             'soapenv:Header' => '',
             'soapenv:Body' => [
-                'adm:GetCommitQueueData' => [
-                    'adm:serverIds' => [
-                        'arr:int' => Config::get('integrations.microgamingOrion.username')
-                    ]
+                'adm:ManuallyValidateBet' => [
+                    'adm:validateRequests' => $dataValidateBet
                 ]
             ]
         ];

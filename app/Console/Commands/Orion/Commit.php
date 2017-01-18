@@ -2,7 +2,13 @@
 
 namespace App\Console\Commands\Orion;
 
+use App\Components\Integrations\MicroGaming\Orion\OperationsProcessor;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetCommitQueueData;
+use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
+use App\Components\Integrations\MicroGaming\Orion\SoapEmul;
+use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
+use App\Http\Requests\Validation\Orion\CommitValidation;
+use App\Http\Requests\Validation\Orion\ManualValidation;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Console\Command;
@@ -41,9 +47,19 @@ class Commit extends Command {
      * @return mixed
      */
     public function handle() {
-        $commitSource = new GetCommitQueueData();
+        $sourceProcessor = new SourceProcessor();
+        $soapEmul = new SoapEmul();
+        $dataResponse = array();
         try {
+            $commitSource = new GetCommitQueueData($soapEmul, $sourceProcessor);
             $data = $commitSource->getData();
+            $validatorCommitData = new CommitValidation();
+            $validatorCommitData->validateBaseStructure($data);
+            $handleCommitRes = OperationsProcessor::commit($data);
+            $manualValidateBet = new ManuallyValidateBet($soapEmul, $sourceProcessor);
+            $dataResponse = $manualValidateBet->getData($handleCommitRes);
+            $mBetValidation = new ManualValidation();
+            $mBetValidation->validateBaseStructure($dataResponse);
         } catch (RequestException $re) {
             $message = 'Request has error.  Request: ' . str($re->getRequest());
             if ($re->hasResponse()) {
@@ -53,6 +69,8 @@ class Commit extends Command {
         } catch (Exception $ex) {
             $this->handleError($ex->getMessage(), GetCommitQueueData::MODULE, $ex->getLine());
         }
+
+        $this->handleSuccess($dataResponse);
     }
 
 }

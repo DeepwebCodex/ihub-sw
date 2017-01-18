@@ -17,11 +17,16 @@ use App\Facades\AppLog;
  */
 trait Operation {
 
-    public function handleError($message, $module, $line) {
+    public function handleError(string $message, string $module, string $line): int {
         //critical($message, $node = '', $module = '', $line = '')
-        AppLog::critical($message, 'orion', $module, $line);  
+        AppLog::critical($message, 'orion', $module, $line);
         $this->error('Something went wrong!');
         return -1;
+    }
+
+    public function handleSuccess(array $dataSuccess) {
+        AppLog::info('Success. Data: ' . print_r($dataSuccess, true));
+        $this->info('succes');
     }
 
 }

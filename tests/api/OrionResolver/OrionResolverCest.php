@@ -1,21 +1,12 @@
 <?php
 
-use App\Components\Transactions\TransactionRequest;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
 
-class OrionResolverCest
-{
-    // tests
-    public function testResolver(ApiTester $I)
-    {
+class OrionResolverCest {
 
+    public function testCommandCommit(ApiTester $I) {
+        $I->callArtisan('orion:commit');
+        $outpat = Artisan::output();
     }
-    
-    //    //TODO move to integration test
-//    public function testCommandCommit() {
-//        $commit = new Commit();
-//        $this->specify("Test get commit QueueData", function() use($commit) {
-//            $t = $commit->handle();
-//        });
-//    }
+
 }

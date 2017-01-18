@@ -27,11 +27,21 @@ class CommitValidation extends Validation {
     public function validateBaseStructure(array $data): bool {
         parent::validateBaseStructure($data);
         if (isset($data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult']['a:QueueDataResponse'])) {
-            foreach ($data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult']['a:QueueDataResponse'] as $key => $value) {
+            $dataT = self::getData($data);
+            foreach ($dataT as $key => $value) {
                 $this->validate($value, $this->rulesStructuresCoommitRollback);
             }
         }
         return true;
+    }
+
+    static function getData(array $data): array {
+        if (isset($data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult']['a:QueueDataResponse'][0])) {
+            $dataT = $data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult']['a:QueueDataResponse'];
+        } else {
+            $dataT[] = $data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult']['a:QueueDataResponse'];
+        }
+        return $dataT;
     }
 
 }

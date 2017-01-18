@@ -45,7 +45,6 @@ class Validation {
     protected $errors;
 
     protected function validate(array $data, array $rules): bool {
-        // make a new validator object
         $v = Validator::make($data, $rules);
 
         // check for failure
