@@ -47,7 +47,7 @@ class EventResult
 
     public function process()
     {
-        $dataMap = new DataMapper($this->eventData);
+        $dataMap = new DataMapper($this->eventData, (int) array_get($this->eventData, 'EventType'));
 
         $event = Event::findById($this->eventId);
 

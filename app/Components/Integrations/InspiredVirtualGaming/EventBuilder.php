@@ -41,7 +41,7 @@ class EventBuilder
 
     public function create()
     {
-        $dataMap = new DataMapper($this->eventData);
+        $dataMap = new DataMapper($this->eventData, (int) array_get($this->eventData, 'EventType'));
 
         //need a category for event
         $eventCategory = $this->getCategory();
