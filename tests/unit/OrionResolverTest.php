@@ -1,9 +1,11 @@
 <?php
 
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
-use App\Components\Integrations\MicroGaming\Orion\OperationsProcessor;
+use App\Components\Integrations\MicroGaming\Orion\CommitProcessor;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetCommitQueueData;
+use App\Components\Integrations\MicroGaming\Orion\Request\GetRollbackQueueData;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
+use App\Components\Integrations\MicroGaming\Orion\RollbackProcessor;
 use App\Components\Integrations\MicroGaming\Orion\SoapEmul;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use App\Components\ThirdParty\Array2Xml;
@@ -12,13 +14,16 @@ use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
+use App\Exceptions\Internal\Orion\CheckEmptyValidation;
 use App\Http\Requests\Validation\Orion\CommitValidation;
 use App\Http\Requests\Validation\Orion\ManualValidation;
+use App\Http\Requests\Validation\Orion\RollbackValidation;
 use App\Models\MicroGamingObjectIdMap;
 use Carbon\Carbon;
 use Codeception\Specify;
 use Codeception\Test\Unit;
 use Helper\TestUser;
+use Illuminate\Support\Facades\Config;
 use Nathanmac\Utilities\Parser\Exceptions\ParserException;
 
 class OrionResolverTest extends Unit {
@@ -59,7 +64,7 @@ class OrionResolverTest extends Unit {
         return Array2Xml::createXML('s:Envelope', $data)->saveXML();
     }
 
-    protected function generatedMockXml($userArray, $count = 1, $modify = false, $makeBet = false) {
+    protected function generatedMockXml($userArray, $type, $count = 1, $modify = false, $makeBet = false) {
         $tmpArray = array();
         foreach ($userArray as $key => $value) {
             for ($i = 0; $i < $count; $i++) {
@@ -68,52 +73,78 @@ class OrionResolverTest extends Unit {
                     $transactionNumber = $transactionNumber + 1;
                     $referenceNumber = $referenceNumber + 2;
                 }
-                $tmpArray[] = [
-                    'a:LoginName' => $loginName,
-                    'a:UserId' => $this->generateUniqId(),
-                    'a:ChangeAmount' => $amount,
-                    'a:TransactionCurrency' => $currency,
-                    'a:Status' => 'Unknown',
-                    'a:RowId' => $rowId,
-                    'a:TransactionNumber' => $transactionNumber,
-                    'a:GameName' => 'MGS_TombRaider',
-                    'a:DateCreated' => Carbon::now('UTC')->format('Y/m/d H:i:s.000'),
-                    'a:MgsReferenceNumber' => $referenceNumber,
-                    'a:ServerId' => $serverId,
-                    'a:MgsPayoutReferenceNumber' => $referenceNumber,
-                    'a:PayoutAmount' => $amount,
-                    'a:ProgressiveWin' => false,
-                    'a:ProgressiveWinDesc' => '',
-                    'a:FreeGameOfferName' => '',
-                    'a:TournamentId' => 0,
-                    'a:Description' => '',
-                    'a:ExtInfo' => '',
-                    'a:RowIdLong' => $rowId,
-                ];
+                if (isset($loginName)) {
+                    $tmpArray[] = [
+                        'a:LoginName' => $loginName,
+                        'a:UserId' => $this->generateUniqId(),
+                        'a:ChangeAmount' => $amount,
+                        'a:TransactionCurrency' => $currency,
+                        'a:Status' => 'Unknown',
+                        'a:RowId' => $rowId,
+                        'a:TransactionNumber' => $transactionNumber,
+                        'a:GameName' => 'MGS_TombRaider',
+                        'a:DateCreated' => Carbon::now('UTC')->format('Y/m/d H:i:s.000'),
+                        'a:MgsReferenceNumber' => $referenceNumber,
+                        'a:ServerId' => $serverId,
+                        'a:MgsPayoutReferenceNumber' => $referenceNumber,
+                        'a:PayoutAmount' => $amount,
+                        'a:ProgressiveWin' => false,
+                        'a:ProgressiveWinDesc' => '',
+                        'a:FreeGameOfferName' => '',
+                        'a:TournamentId' => 0,
+                        'a:Description' => '',
+                        'a:ExtInfo' => '',
+                        'a:RowIdLong' => $rowId,
+                    ];
+                }
             }
         }
         if ($makeBet) {
             $this->madeBet($tmpArray);
         }
-        $data = [
-            '@attributes' => [
-                'xmlns:s' => 'http://schemas.xmlsoap.org/soap/envelope/',
-            ],
-            's:Body' => [
-                'GetCommitQueueDataResponse' => [
-                    '@attributes' => [
-                        'xmlns' => 'http://mgsops.net/AdminAPI_Admin'
-                    ],
-                    'GetCommitQueueDataResult' => [
+        if ($type == 'commit') {
+            $data = [
+                '@attributes' => [
+                    'xmlns:s' => 'http://schemas.xmlsoap.org/soap/envelope/',
+                ],
+                's:Body' => [
+                    'GetCommitQueueDataResponse' => [
                         '@attributes' => [
-                            'xmlns:a' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures',
-                            'xmlns:i' => 'http://www.w3.org/2001/XMLSchema-instance'
+                            'xmlns' => 'http://mgsops.net/AdminAPI_Admin'
                         ],
-                        'a:QueueDataResponse' => $tmpArray
+                        'GetCommitQueueDataResult' => [
+                            '@attributes' => [
+                                'xmlns:a' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures',
+                                'xmlns:i' => 'http://www.w3.org/2001/XMLSchema-instance'
+                            ],
+                            'a:QueueDataResponse' => $tmpArray
+                        ]
                     ]
                 ]
-            ]
-        ];
+            ];
+        } else if ($type == 'rollback') {
+            $data = [
+                '@attributes' => [
+                    'xmlns:s' => 'http://schemas.xmlsoap.org/soap/envelope/',
+                ],
+                's:Body' => [
+                    'GetRollbackQueueDataResponse' => [
+                        '@attributes' => [
+                            'xmlns' => 'http://mgsops.net/AdminAPI_Admin'
+                        ],
+                        'GetRollbackQueueDataResult' => [
+                            '@attributes' => [
+                                'xmlns:a' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures',
+                                'xmlns:i' => 'http://www.w3.org/2001/XMLSchema-instance'
+                            ],
+                            'a:QueueDataResponse' => $tmpArray
+                        ]
+                    ]
+                ]
+            ];
+        } else {
+            $data = [];
+        }
         return Array2Xml::createXML('s:Envelope', $data)->saveXML();
     }
 
@@ -135,133 +166,183 @@ class OrionResolverTest extends Unit {
         }
     }
 
-    // tests
-    public function estGetCommitQueueData() {
+    private function init($testData, $xmlMockB = '') {
+        if (is_array($testData)) {
+            $xmlMock = $this->generatedMockXml($testData, 'commit', 2, true, true);
+        } else {
+            $xmlMock = $testData;
+        }
+        $clientMockQ = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
 
-        $testData[] = [
-            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
-            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
-            'transactionNumber' => $this->generateUniqId(), 'serverId' => config('integrations.microgamingOrion.serverId'),
-            'referenceNumber' => $this->generateUniqId()
-        ];
-        $xmlMock = $this->generatedMockXml($testData);
-        $clientMock = $this->createMock(SoapEmul::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->will($this->returnValue($xmlMock));
-        $commit = new GetCommitQueueData($clientMock, new SourceProcessor());
-        $this->specify("Test get commit QueueData", function() use($commit) {
-            $t = $commit->getData();
-            verify("Must be fill", $t)->notEmpty();
-            verify("Must be array", $t)->containsOnly('array');
-        });
-
-
-        $clientMock = $this->createMock(SoapEmul::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->will($this->returnValue('wrong xml'));
-        $commit = new GetCommitQueueData($clientMock, new SourceProcessor());
-        $this->specify("Test commit QueueData when source empty", function() use($commit) {
-            $this->expectException(ParserException::class);
-            $t = $commit->getData();
-        });
-    }
-
-    public function estGetCommitQueueDataWithSample() {
-        $clientMock = $this->createMock(SoapEmul::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->will($this->returnValue($this->sampleCommitQ));
-        $commit = new GetCommitQueueData($clientMock, new SourceProcessor());
-        $this->specify("Test get commit QueueData with sample", function() use($commit) {
-            $t = $commit->getData();
-            verify("Must be fill", $t)->notEmpty();
-            verify("Must be array", $t)->containsOnly('array');
-            $tmpArray = CommitValidation::getData($t);
-            verify("Count must be equal 12", $tmpArray)->count(12);
-        });
-    }
-
-    public function estValidationCommitData() {
-        $testData[] = [
-            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
-            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
-            'transactionNumber' => $this->generateUniqId(), 'serverId' => config('integrations.microgamingOrion.serverId'),
-            'referenceNumber' => $this->generateUniqId()
-        ];
-        $xmlMock = $this->generatedMockXml($testData);
-        $clientMock = $this->createMock(SoapEmul::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->will($this->returnValue($xmlMock));
-        $commit = new GetCommitQueueData($clientMock, new SourceProcessor());
-
-        $data = $commit->getData();
-        $validatorCommitData = new CommitValidation();
-        $this->specify("Test validation commit data", function() use($data, $validatorCommitData) {
-            verify("Validation passed", $validatorCommitData->validateBaseStructure($data))->true();
-        });
-    }
-
-    public function estProcessTransaction() {
-        $testData[] = [
-            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
-            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
-            'transactionNumber' => $this->generateUniqId(), 'serverId' => config('integrations.microgamingOrion.serverId'),
-            'referenceNumber' => $this->generateUniqId()
-        ];
-        $xmlMock = $this->generatedMockXml($testData);
-        $clientMock = $this->createMock(SoapEmul::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->will($this->returnValue($xmlMock));
-        $commit = new GetCommitQueueData($clientMock, new SourceProcessor());
-
-        $data = $commit->getData();
-        $validatorCommitData = new CommitValidation();
-        $validatorCommitData->validateBaseStructure($data);
-
-        $this->specify("Test absent bet", function() use($data) {
-            $handleCommitRes = OperationsProcessor::commit($data);
-            verify("Must be array", $handleCommitRes)->containsOnly('array');
-            verify("Must be equls zero", $handleCommitRes)->count(0);
-        });
-
-        $xmlMock = $this->generatedMockXml($testData, 1, true, true);
-        $clientMock = $this->createMock(SoapEmul::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->will($this->returnValue($xmlMock));
-        $commit = new GetCommitQueueData($clientMock, new SourceProcessor());
-
-        $data = $commit->getData();
-        $validatorCommitData = new CommitValidation();
-        $validatorCommitData->validateBaseStructure($data);
-
-        $this->specify("Test valid bet = commit", function() use($data) {
-            $handleCommitRes = OperationsProcessor::commit($data);
-            verify("Must be array", $handleCommitRes)->containsOnly('array');
-            verify("Must be equls count one", $handleCommitRes)->count(1);
-        });
-    }
-
-    public function testOperationManualBet() {
-        $testData[] = [
-            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
-            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
-            'transactionNumber' => $this->generateUniqId(), 'serverId' => config('integrations.microgamingOrion.serverId'),
-            'referenceNumber' => $this->generateUniqId()
-        ];
-        $xmlMock = $this->generatedMockXml($testData, 2, true, true);
-        $clientMock = $this->createMock(SoapEmul::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->will($this->returnValue($xmlMock));
-        $commit = new GetCommitQueueData($clientMock, new SourceProcessor());
-
-        $data = $commit->getData();
-        $validatorCommitData = new CommitValidation();
-        $validatorCommitData->validateBaseStructure($data);
-        $handleCommitRes = OperationsProcessor::commit($data);
-
-        $xmlMock = $this->generatedMockXmlManualBet($xmlMock);
+        if (!$xmlMockB) {
+            $xmlMockB = $this->generatedMockXmlManualBet($xmlMock);
+        }
         $clientManualVBMock = $this->createMock(SoapEmul::class, ['sendRequest']);
-        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMock));
-        $manualValidateBet = new ManuallyValidateBet($clientManualVBMock, new SourceProcessor());
+        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
 
-        $this->specify("Test manual bet", function() use($handleCommitRes, $manualValidateBet) {
-            $dataResponse = $manualValidateBet->getData($handleCommitRes);
-            $mBetValidation = new ManualValidation();
-            $mBetValidation->validateBaseStructure($dataResponse);
-            verify("Must be array", $handleCommitRes)->containsOnly('array');
-            verify("Must be equls count one", $handleCommitRes)->count(2);
+
+
+        $obj = new stdClass();
+        $sourceProcessor = new SourceProcessor();
+        $obj->source = new GetCommitQueueData($clientMockQ, $sourceProcessor);
+        $obj->validatorData = new CommitValidation();
+        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
+        $obj->validationResolveData = new ManualValidation();
+        $obj->operationsProcessor = new CommitProcessor();
+        return $obj;
+    }
+
+    private function initRollback($testData, $xmlMockB = '') {
+        if (is_array($testData)) {
+            $xmlMock = $this->generatedMockXml($testData, 'rollback', 2, true, true);
+        } else {
+            $xmlMock = $testData;
+        }
+        $clientMockQ = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
+
+        if (!$xmlMockB) {
+            $xmlMockB = $this->generatedMockXmlManualBet($xmlMock);
+        }
+        $clientManualVBMock = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
+
+
+
+        $obj = new stdClass();
+        $sourceProcessor = new SourceProcessor();
+        $obj->source = new GetRollbackQueueData($clientMockQ, $sourceProcessor);
+        $obj->validatorData = new RollbackValidation();
+        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
+        $obj->validationResolveData = new ManualValidation();
+        $obj->operationsProcessor = new RollbackProcessor();
+        return $obj;
+    }
+
+    private function operation($obj) {
+        $response = new stdClass();
+        $response->data = $obj->source->getData();
+        $obj->validatorData->validateBaseStructure($response->data);
+        $elements = $obj->validatorData->getData($response->data);
+        $response->finishedDataWin = $obj->operationsProcessor->make($elements);
+        $response->dataResponse = $obj->requestResolveData->getData($response->finishedDataWin);
+        $obj->validationResolveData->validateBaseStructure($response->dataResponse);
+        return $response;
+    }
+
+    // tests Commit
+
+
+    public function testCommit() {
+        $testData[] = [
+            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
+            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $obj = $this->init($testData);
+
+        $this->specify("Test correct commit", function() use($obj) {
+            $response = $this->operation($obj);
+            verify("Must be array", $response->finishedDataWin)->containsOnly('array');
+            verify("Must be  count two", $response->finishedDataWin)->count(2);
+            verify("Must be equls zeroe", $response->finishedDataWin[0]['isDuplicate'])->equals(0);
+            verify("Resposne must be array", $response->dataResponse)->containsOnly('array');
+        });
+    }
+
+    public function testCommitDuplicate() {
+        $testData[] = [
+            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
+            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $obj = $this->init($testData);
+
+        $this->specify("Test correct commit", function() use($obj) {
+            $this->operation($obj);
+            $response = $this->operation($obj);
+            verify("Must be array", $response->finishedDataWin)->containsOnly('array');
+            verify("Must be count two", $response->finishedDataWin)->count(2);
+            verify("Must be equls true", $response->finishedDataWin[0]['isDuplicate'])->equals(1);
+            verify("Response must be array", $response->dataResponse)->containsOnly('array');
+        });
+    }
+
+    public function testException() {
+        $testData = 'l>';
+        $obj = $this->init($testData);
+
+        $this->specify("Test incorrect data from sourse commit", function() use($obj) {
+            $this->expectException(ParserException::class);
+            $obj->source->getData();
+        });
+    }
+
+    public function testException2() {
+        $testData = '<xml><INCORRECT/></xml>';
+        $obj = $this->init($testData);
+
+        $this->specify("Test incorrect data from validator data commit", function() use($obj) {
+            $this->expectException(Exception::class);
+            $data = $obj->source->getData();
+            $obj->validatorData->validateBaseStructure($data);
+        });
+    }
+
+    public function testEmptyData() {
+        $testData = [];
+        $obj = $this->init($testData);
+
+        $this->specify("Test incorrect data from validator data commit", function() use($obj) {
+            $this->expectException(CheckEmptyValidation::class);
+            $data = $obj->source->getData();
+            $obj->validatorData->validateBaseStructure($data);
+        });
+    }
+
+    // test Rollback
+
+    public function testRollback() {
+        $testData[] = [
+            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
+            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $obj = $this->initRollback($testData);
+
+        $this->specify("Test correct rollback", function() use($obj) {
+            $response = $this->operation($obj);
+            verify("Must be array", $response->finishedDataWin)->containsOnly('array');
+            verify("Must be  count two", $response->finishedDataWin)->count(2);
+            verify("Must be equls zero", $response->finishedDataWin[0]['isDuplicate'])->equals(0);
+            verify("Resposne must be array", $response->dataResponse)->containsOnly('array');
+        });
+    }
+
+    public function testRollbackDuplicate() {
+        $testData[] = [
+            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
+            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $obj = $this->initRollback($testData);
+
+        $this->specify("Test correct duplicate rollback", function() use($obj) {
+            $response = $this->operation($obj);
+            verify("Must be array", $response->finishedDataWin)->containsOnly('array');
+            verify("Must be  count two", $response->finishedDataWin)->count(2);
+            verify("Must be equls zero", $response->finishedDataWin[0]['isDuplicate'])->equals(0);
+            verify("Resposne must be array", $response->dataResponse)->containsOnly('array');
+            $responseDuplicate = $this->operation($obj);
+            verify("Must be array", $responseDuplicate->finishedDataWin)->containsOnly('array');
+            verify("Must be  count two", $responseDuplicate->finishedDataWin)->count(2);
+            verify("Must be equls zero", $responseDuplicate->finishedDataWin[0]['isDuplicate'])->equals(1);
+            verify("Resposne must be array", $responseDuplicate->dataResponse)->containsOnly('array');
         });
     }
 

@@ -6,7 +6,8 @@ class OrionResolverCest {
 
     public function testCommandCommit(ApiTester $I) {
         $I->callArtisan('orion:commit');
-        $outpat = Artisan::output();
+        $output = Artisan::output();
+        
     }
 
 }

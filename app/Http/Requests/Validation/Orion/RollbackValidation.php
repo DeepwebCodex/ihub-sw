@@ -13,19 +13,20 @@ namespace App\Http\Requests\Validation\Orion;
  *
  * @author petroff
  */
-class CommitValidation extends Validation {
+class RollbackValidation extends Validation {
 
     function __construct() {
+        $this->rules = [];
         $this->rulesStructures = [
             's:Body' => 'required',
-            's:Body.GetCommitQueueDataResponse' => 'required',
-            's:Body.GetCommitQueueDataResponse.GetCommitQueueDataResult' => 'checkEmpty',
+            's:Body.GetRollbackQueueDataResponse' => 'required',
+            's:Body.GetRollbackQueueDataResponse.GetRollbackQueueDataResult' => 'checkEmpty',
         ];
         $this->rulesElements = $this->rulesRollbackCommit;
     }
 
     public function getData(array $data): array {
-        $this->elements = $data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult'][$this->nameCommitRollbackElement];
+        $this->elements = $data['s:Body']['GetRollbackQueueDataResponse']['GetRollbackQueueDataResult']['a:QueueDataResponse'];
         if (isset($this->elements[0])) {
             $dataT = $this->elements;
         } else {

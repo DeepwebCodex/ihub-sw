@@ -2,17 +2,14 @@
 
 namespace App\Console\Commands\Orion;
 
-use App\Components\Integrations\MicroGaming\Orion\OperationsProcessor;
+use App\Components\Integrations\MicroGaming\Orion\CommitProcessor;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetCommitQueueData;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
 use App\Components\Integrations\MicroGaming\Orion\SoapEmul;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use App\Http\Requests\Validation\Orion\CommitValidation;
 use App\Http\Requests\Validation\Orion\ManualValidation;
-use Exception;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Console\Command;
-use function GuzzleHttp\Psr7\str;
 
 class Commit extends Command {
 
@@ -46,31 +43,16 @@ class Commit extends Command {
      *
      * @return mixed
      */
-    public function handle() {
-        $sourceProcessor = new SourceProcessor();
-        $soapEmul = new SoapEmul();
-        $dataResponse = array();
-        try {
-            $commitSource = new GetCommitQueueData($soapEmul, $sourceProcessor);
-            $data = $commitSource->getData();
-            $validatorCommitData = new CommitValidation();
-            $validatorCommitData->validateBaseStructure($data);
-            $handleCommitRes = OperationsProcessor::commit($data);
-            $manualValidateBet = new ManuallyValidateBet($soapEmul, $sourceProcessor);
-            $dataResponse = $manualValidateBet->getData($handleCommitRes);
-            $mBetValidation = new ManualValidation();
-            $mBetValidation->validateBaseStructure($dataResponse);
-        } catch (RequestException $re) {
-            $message = 'Request has error.  Request: ' . str($re->getRequest());
-            if ($re->hasResponse()) {
-                $message .= " Response" . str($re->getResponse());
-            }
-            $this->handleError($message, GetCommitQueueData::MODULE, $re->getLine());
-        } catch (Exception $ex) {
-            $this->handleError($ex->getMessage(), GetCommitQueueData::MODULE, $ex->getLine());
-        }
-
-        $this->handleSuccess($dataResponse);
+    
+     public function handle() {
+        $sourceProcessor = app(SourceProcessor::class);
+        $soapEmul = app(SoapEmul::class);
+        $commitSource = app(GetCommitQueueData::class, [$soapEmul, $sourceProcessor]);
+        $validatorCommitData = app(CommitValidation::class);
+        $manualValidateBet = app(ManuallyValidateBet::class, [$soapEmul, $sourceProcessor]);
+        $mBetValidation = app(ManualValidation::class);
+        $operationsProcessor = app(CommitProcessor::class);
+        $this->make($commitSource, $validatorCommitData, $operationsProcessor, $manualValidateBet, $mBetValidation);
     }
 
 }

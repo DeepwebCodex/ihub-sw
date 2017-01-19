@@ -8,7 +8,8 @@
 
 namespace App\Http\Requests\Validation\Orion;
 
-use Exception;
+use App\Exceptions\Internal\Orion\CheckEmptyValidation;
+use Illuminate\Validation\ValidationException;
 use Validator;
 
 /**
@@ -16,11 +17,13 @@ use Validator;
  *
  * @author petroff
  */
-class Validation {
+abstract class Validation {
 
-    protected $rules = [];
+    protected $elements;
     protected $rulesStructures = [];
-    protected $rulesStructuresCoommitRollback = [
+    protected $rulesElements = [];
+    protected $nameCommitRollbackElement = 'a:QueueDataResponse';
+    protected $rulesRollbackCommit = [
         'a:LoginName' => 'required',
         'a:UserId' => 'required',
         'a:ChangeAmount' => 'required',
@@ -44,22 +47,36 @@ class Validation {
     ];
     protected $errors;
 
+    abstract function getData(array $data): array;
+
     protected function validate(array $data, array $rules): bool {
+ 
         $v = Validator::make($data, $rules);
-
-        // check for failure
-        if ($v->fails()) {
-            // set errors and return false
+        if ($v->fails()) { 
+            $failedRules = $v->failed();
+            
+            //look for rule checkEmpty 
+            foreach ($failedRules as $elements => $failedRules) {
+                if (isset($failedRules['CheckEmpty'])) {
+                    throw new CheckEmptyValidation();
+                }
+            }
             $this->errors = $v->errors();
-            throw new Exception("Error validation" . print_r($this->errors, true));
+            throw new ValidationException($v);
         }
-
-        // validation pass
         return true;
     }
 
     public function validateBaseStructure(array $data): bool {
-        return $this->validate($data, $this->rulesStructures);
+        Validator::extend('checkEmpty', function ($attribute, $value, $parameters, $validator) {
+            return (is_array($value) && isset($value[$this->nameCommitRollbackElement]));
+        });
+        $this->validate($data, $this->rulesStructures);
+        $elements = $this->getData($data);
+        foreach ($elements as $key => $value) {
+            $this->validate($value, $this->rulesElements);
+        }
+        return true;
     }
 
     public function errors(): array {

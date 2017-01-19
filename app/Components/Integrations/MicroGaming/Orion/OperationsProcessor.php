@@ -15,8 +15,9 @@ use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Transactions\TransactionResponse;
 use App\Components\Users\IntegrationUser;
+use App\Components\Users\Interfaces\UserInterface;
 use App\Facades\AppLog;
-use App\Http\Requests\Validation\Orion\CommitValidation;
+use App\Http\Requests\Validation\Orion\Validation;
 use Exception;
 use Illuminate\Support\Facades\Config;
 
@@ -29,17 +30,24 @@ class OperationsProcessor {
 
     //RollbackQueue
 
-    static function commit(array $data_t): array {
+    protected $unlockType;
+    protected $transType;
 
-        $data = CommitValidation::getData($data_t);
+    function __construct(string $unlockType, string $transType) {
+        $this->unlockType = $unlockType;
+        $this->transType = $transType;
+    }
+
+    public function make(array $data): array {
         $dataRes = array();
         foreach ($data as $key => $value) {
             $user_id = (int) $value['a:LoginName'];
             try {
                 $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
-                $response = self::pushOperation(TransactionRequest::TRANS_WIN, $value, $user);
-                $value['unlockType'] = 'CommitQueue';
+                $response = $this->pushOperation($this->transType, $value, $user);
+                $value['unlockType'] = $this->unlockType;
                 $value['operationId'] = $response->operation_id;
+                $value['isDuplicate'] = $response->isDuplicate;
                 $dataRes[] = $value;
             } catch (Exception $e) {
                 AppLog::warning("One records was canceled. Cause: " . print_r($e->getMessage(), true) . " Data: " . print_r($value, true));
@@ -48,7 +56,7 @@ class OperationsProcessor {
         return $dataRes;
     }
 
-    static function pushOperation(string $typeOperation, array $data, IntegrationUser $user): TransactionResponse {
+    public function pushOperation(string $typeOperation, array $data, UserInterface $user): TransactionResponse {
         $transactionRequest = new TransactionRequest(
                 Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName']
         );

@@ -22,4 +22,8 @@ class ManualValidation extends Validation {
         ];
     }
 
+    public function getData(array $data): array {
+        return $data;
+    }
+
 }
