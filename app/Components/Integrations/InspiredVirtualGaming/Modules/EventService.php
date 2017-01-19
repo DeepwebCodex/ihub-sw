@@ -30,6 +30,7 @@ class EventService
     private $sportId;
     private $origEventId;
     private $participants;
+    private $user_id;
 
     /**
      * @var Collection
@@ -46,6 +47,7 @@ class EventService
         float $stopLoss,
         int $countryId,
         int $sportId,
+        int $user_id,
         $origEventId,
         array $participants
     )
@@ -62,6 +64,7 @@ class EventService
         $this->sportId = $sportId;
         $this->origEventId = $origEventId;
         $this->participants = $participants;
+        $this->user_id = $user_id;
 
         $this->eventParticipants = new Collection();
     }
@@ -81,7 +84,10 @@ class EventService
             'enet_stat_url' => 'none',
             'max_bet'       => $this->maxBet,
             'max_payout'    => $this->maxPayout,
-            'stop_loss'     => $this->stopLoss
+            'stop_loss'     => $this->stopLoss,
+            'margin'        => 108,
+            'margin_prebet' => 108,
+            'user_id'       => $this->user_id
         ]);
 
         EventLink::create([

@@ -85,7 +85,7 @@ class InspiredVirtualGaming extends BaseApiController
 
     public function void(VoidRequest $request)
     {
-        $processor = EventProcessor::getEvent((int) $request->input('Event.EventId'));
+        $processor = EventProcessor::getEvent((int) $request->input('event.EventId'));
 
         $processor->cancel();
 
@@ -94,7 +94,7 @@ class InspiredVirtualGaming extends BaseApiController
 
     public function noMoreBets(VoidRequest $request)
     {
-        $processor = EventProcessor::getEvent((int) $request->input('Event.EventId'));
+        $processor = EventProcessor::getEvent((int) $request->input('event.EventId'));
 
         $processor->stopBets();
 

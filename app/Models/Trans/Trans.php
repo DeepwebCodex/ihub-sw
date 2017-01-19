@@ -27,6 +27,8 @@ class Trans extends BaseTransModel
 
     protected $translations;
 
+    public $incrementing = false;
+
     protected $languages = [
         'ru',
         'en',
@@ -42,30 +44,32 @@ class Trans extends BaseTransModel
 
     protected function mapTranslations(string $originalName) : string
     {
-        $translatedName = transliterate($originalName);
+        if($this->isNonLatin($originalName)) {
+            $translatedName = transliterate($originalName);
+        } else {
+            $translatedName = $originalName;
+        }
 
-        foreach ($this->languages as $language)
-        {
-            switch ($language)
-            {
+        foreach ($this->languages as $language) {
+            switch ($language) {
                 case 'ru':
                     $this->translations->push([
-                        'lang'  => $language,
-                        'key'   => $translatedName,
+                        'lang' => $language,
+                        'key' => $translatedName,
                         'value' => $originalName
                     ]);
                     break;
                 case 'en':
                     $this->translations->push([
-                        'lang'  => $language,
-                        'key'   => $translatedName,
+                        'lang' => $language,
+                        'key' => $translatedName,
                         'value' => $translatedName
                     ]);
                     break;
                 case 'uk':
                     $this->translations->push([
-                        'lang'  => $language,
-                        'key'   => $translatedName,
+                        'lang' => $language,
+                        'key' => $translatedName,
                         'value' => $translatedName
                     ]);
                     break;
@@ -79,21 +83,22 @@ class Trans extends BaseTransModel
 
     public function translate(string $name) : string
     {
-        if($this->isNonLatin($name)) {
-            $translatedName = $this->mapTranslations($name);
+        $this->translations = new Collection();
 
-            $this->translations->each(function ($translation) {
-                if (!static::where(['key' => $translation['key'], 'lang' => $translation['lang']])->exists()) {
-                    static::create($translation);
-                } else {
-                    static::update($translation);
-                }
-            });
+        $translatedName = $this->mapTranslations($name);
 
-            return $translatedName;
-        }
+        $this->translations->each(function ($translation) {
+            if (!static::where(['key' => $translation['key'], 'lang' => $translation['lang']])->exists()) {
+                Trans::create($translation);
+            } else {
+                \DB::connection($this->connection)
+                    ->table($this->table)
+                    ->where(['key' => $translation['key'], 'lang' => $translation['lang']])
+                    ->update(['value' => $translation['value']]);
+            }
+        });
 
-        return $name;
+        return $translatedName;
     }
 
     protected function isNonLatin(string $name) : bool

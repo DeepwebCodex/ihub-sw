@@ -40,9 +40,9 @@ class EventProcessor
 
             return false;
         }
-
-        DB::connection('line')->commit();
         DB::connection('trans')->commit();
+        DB::connection('line')->commit();
+
 
         return true;
     }

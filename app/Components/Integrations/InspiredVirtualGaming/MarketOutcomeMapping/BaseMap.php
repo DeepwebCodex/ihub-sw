@@ -116,7 +116,11 @@ abstract class BaseMap
 
         $numParticipant = (int) $this->outcomeType->participant_num;
 
-        if($numParticipant === null || $this->isParticipantRequired($this->marketTemplate->market_type_id) === false) {
+        if($numParticipant === null) {
+            if ($this->isParticipantRequired($this->marketTemplate->market_type_id) === false) {
+                return null;
+            }
+
             return null;
         }
 

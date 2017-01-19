@@ -159,6 +159,7 @@ class EventBuilder
             $this->getConfigOption('sports.'. $this->eventType . '.stop_loss'),
             $this->getConfigOption('country_id'),
             $this->getConfigOption('sport_id'),
+            $this->getConfigOption('user_id'),
             $originalEventId,
             $participants
         ));

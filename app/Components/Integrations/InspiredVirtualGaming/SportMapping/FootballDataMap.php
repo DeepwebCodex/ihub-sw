@@ -26,7 +26,7 @@ class FootballDataMap extends BaseSportDataMap implements SportDataMapInterface
                 'type' => Participant::TYPE_TEAM
             ],
             [
-                'name' => array_get($this->eventData, 'Team1'),
+                'name' => array_get($this->eventData, 'Team2'),
                 'number' => 2,
                 'type' => Participant::TYPE_TEAM
             ]

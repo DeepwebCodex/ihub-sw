@@ -16,7 +16,7 @@ class VoidRequest extends BaseInspiredRequest
     public function rules()
     {
         return [
-            'Event' => 'bail|required',
+            'event' => 'bail|required',
         ];
     }
 }
