@@ -19,11 +19,9 @@ use Ramsey\Uuid\Uuid;
 
 class GetCommitQueueData extends Request {
 
-    const MODULE = "GetCommitQueueData";
-
     public function prepare(array $data = []) {
         $this->uuid = Uuid::uuid1()->toString();
-        $this->method = GetCommitQueueData::MODULE;
+        $this->method = "GetCommitQueueData";
         $dataTmp = [
             '@attributes' => [
                 'xmlns:soapenv' => 'http://schemas.xmlsoap.org/soap/envelope/',
@@ -41,11 +39,6 @@ class GetCommitQueueData extends Request {
         ];
 
         $this->body = $this->source->create('soapenv:Envelope', $dataTmp);
-    }
-
-    public function parse(string $result): array {
-        $resultArray = $this->parseSource($result);
-        return $resultArray;
     }
 
 }

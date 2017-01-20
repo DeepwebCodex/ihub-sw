@@ -17,11 +17,11 @@ namespace App\Components\Integrations\MicroGaming\Orion\Request;
 use Illuminate\Support\Facades\Config;
 use Ramsey\Uuid\Uuid;
 
-class GetRollbackQueueData extends Request {
+class GetFailedEndGameQueue extends Request {
 
     public function prepare(array $data = []) {
         $this->uuid = Uuid::uuid1()->toString();
-        $this->method = "GetRollbackQueueData";
+        $this->method = "GetFailedEndGameQueue";
         $dataTmp = [
             '@attributes' => [
                 'xmlns:soapenv' => 'http://schemas.xmlsoap.org/soap/envelope/',
@@ -30,7 +30,7 @@ class GetRollbackQueueData extends Request {
             ],
             'soapenv:Header' => '',
             'soapenv:Body' => [
-                'adm:GetRollbackQueueData' => [
+                'adm:GetFailedEndGameQueue' => [
                     'adm:serverIds' => [
                         'arr:int' => Config::get('integrations.microgamingOrion.username')
                     ]

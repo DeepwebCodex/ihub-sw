@@ -13,21 +13,23 @@ namespace App\Http\Requests\Validation\Orion;
  *
  * @author petroff
  */
-class RollbackValidation extends Validation {
+class ManualCompleteValidation extends Validation {
 
     function __construct() {
-        $this->rules = [];
         $this->rulesStructures = [
             's:Body' => 'required',
-            's:Body.GetRollbackQueueDataResponse' => 'required',
-            's:Body.GetRollbackQueueDataResponse.GetRollbackQueueDataResult' => 'checkEmpty',
+            's:Body.ManuallyCompleteGame' => 'checkEmpty',
         ];
-        $this->rulesElements = $this->rulesRollbackCommit;
-        $this->nameElement = $this->nameCommitRollbackElement;
+        $this->rulesElements = [
+            'a:RowId' => 'required',
+            'a:ServerId' => 'required',
+            'a:Success' => 'required|boolean'
+        ];
+        $this->nameElement = 'a:CompleteGameResponse';
     }
 
     public function getElements(array $data): array {
-        return $data['s:Body']['GetRollbackQueueDataResponse']['GetRollbackQueueDataResult'][$this->nameElement];
+        return $data['s:Body']['ManuallyCompleteGame'][$this->nameElement];
     }
 
 }

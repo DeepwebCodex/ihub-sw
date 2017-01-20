@@ -19,12 +19,10 @@ use Ramsey\Uuid\Uuid;
 
 class ManuallyValidateBet extends Request {
 
-    const MODULE = "ManuallyValidateBet";
-
     public function prepare(array $data = []) {
 
         $this->uuid = Uuid::uuid1()->toString();
-        $this->method = GetCommitQueueData::MODULE;
+        $this->method = "ManuallyValidateBet";
         $dataValidateBet = array();
         foreach ($data as $key => $value) {
             $dataValidateBet['ori:ValidteBetRequest'] [] = [
@@ -51,11 +49,6 @@ class ManuallyValidateBet extends Request {
         ];
 
         $this->body = $this->source->create('soapenv:Envelope', $dataTmp);
-    }
-
-    public function parse(string $result): array {
-        $resultArray = $this->parseSource($result);
-        return $resultArray;
     }
 
 }

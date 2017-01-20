@@ -8,18 +8,15 @@
 
 namespace App\Components\Integrations\MicroGaming\Orion;
 
-use App\Components\Transactions\TransactionRequest;
-use App\Http\Requests\Validation\Orion\Validation;
-
 /**
  * Description of Process
  *
  * @author petroff
  */
-class RollbackProcessor extends OperationsProcessor {
+class CompleteGameProcessor implements IOperationsProcessor {
 
-    function __construct() {
-        parent::__construct('RollbackQueue', TransactionRequest::TRANS_REFUND);
+    public function make(array $data): array {
+        return $data;
     }
 
 }

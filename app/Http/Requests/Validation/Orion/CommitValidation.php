@@ -22,16 +22,11 @@ class CommitValidation extends Validation {
             's:Body.GetCommitQueueDataResponse.GetCommitQueueDataResult' => 'checkEmpty',
         ];
         $this->rulesElements = $this->rulesRollbackCommit;
+        $this->nameElement = $this->nameCommitRollbackElement;
     }
 
-    public function getData(array $data): array {
-        $this->elements = $data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult'][$this->nameCommitRollbackElement];
-        if (isset($this->elements[0])) {
-            $dataT = $this->elements;
-        } else {
-            $dataT[] = $this->elements;
-        }
-        return $dataT;
+    public function getElements(array $data): array {
+        return $data['s:Body']['GetCommitQueueDataResponse']['GetCommitQueueDataResult'][$this->nameElement];
     }
 
 }

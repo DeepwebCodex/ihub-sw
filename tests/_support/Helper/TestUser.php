@@ -15,6 +15,7 @@ class TestUser {
         } else {
             $this->userId = $userId;
         }
+        
         $this->user = IntegrationUser::get($this->userId, 0, 'tests');
     }
 

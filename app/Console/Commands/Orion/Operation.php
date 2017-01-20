@@ -30,7 +30,7 @@ trait Operation {
 
     public function handleSuccess(array $dataSuccess) {
         AppLog::info('Success. Data: ' . print_r($dataSuccess, true), 'orion', __CLASS__, __LINE__);
-        $this->info('succes');
+        $this->info('Success.');
     }
 
     public function make(Request $requestQueueData, Validation $validatorQueueData, $operationsProcessor, Request $requestResolveData, Validation $validatorResolveData) {

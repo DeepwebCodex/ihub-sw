@@ -3,7 +3,7 @@
 use App\Exceptions\Internal\Orion\CheckEmptyValidation;
 use Codeception\Specify;
 use Codeception\Test\Unit;
-use Helper\TestUser;
+
 use Illuminate\Support\Facades\Config;
 use Nathanmac\Utilities\Parser\Exceptions\ParserException;
 use Orion\TestData;
@@ -20,12 +20,16 @@ class OrionResolverTest extends Unit {
     private $testUser2;
     private $data;
 
-
-
-    protected function _before() {
-          $this->testUser = new TestUser(10);
+    public function __construct() {
+        app('AppLog');
+        die();
+        $this->testUser = new TestUser(10);
         $this->testUser2 = new TestUser(660);
         $this->data = new TestData();
+    }
+
+    protected function _before() {
+        
     }
 
     protected function _after() {
@@ -57,7 +61,7 @@ class OrionResolverTest extends Unit {
         $testData[] = [
             'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
             'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->data->generateUniqId(),
-            'transactionNumber' => $this->data->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'transactionNumber' => da, 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
             'referenceNumber' => $this->data->generateUniqId()
         ];
         $obj = $this->data->init($testData);

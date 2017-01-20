@@ -28,16 +28,9 @@ abstract class Request {
 
     abstract function prepare(array $data = []);
 
-    abstract function parse(string $result): array;
-
     function __construct(ClientInterface $client, SourceProcessor $source) {
         $this->client = $client;
         $this->source = $source;
-    }
-
-    protected function parseSource(string $result): array {
-        $resultArray = $this->source->parser($result);
-        return $resultArray;
     }
 
     public function getData(array $data = []): array {
@@ -56,6 +49,11 @@ abstract class Request {
 
     public function getBody(): string {
         return $this->body;
+    }
+
+    public function parse(string $result): array {
+        $resultArray = $this->source->parser($result);
+        return $resultArray;
     }
 
 }

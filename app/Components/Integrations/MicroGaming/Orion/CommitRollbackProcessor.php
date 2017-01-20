@@ -17,7 +17,6 @@ use App\Components\Transactions\TransactionResponse;
 use App\Components\Users\IntegrationUser;
 use App\Components\Users\Interfaces\UserInterface;
 use App\Facades\AppLog;
-use App\Http\Requests\Validation\Orion\Validation;
 use Exception;
 use Illuminate\Support\Facades\Config;
 
@@ -26,7 +25,7 @@ use Illuminate\Support\Facades\Config;
  *
  * @author petroff
  */
-class OperationsProcessor {
+class CommitRollbackProcessor implements IOperationsProcessor{
 
     //RollbackQueue
 

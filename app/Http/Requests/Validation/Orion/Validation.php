@@ -19,10 +19,10 @@ use Validator;
  */
 abstract class Validation {
 
-    protected $elements;
     protected $rulesStructures = [];
     protected $rulesElements = [];
     protected $nameCommitRollbackElement = 'a:QueueDataResponse';
+    protected $nameElement = '';
     protected $rulesRollbackCommit = [
         'a:LoginName' => 'required',
         'a:UserId' => 'required',
@@ -38,23 +38,28 @@ abstract class Validation {
         'a:MgsPayoutReferenceNumber' => 'required',
         'a:PayoutAmount' => 'required',
         'a:ProgressiveWin' => 'required',
-//        'a:ProgressiveWinDesc' => 'required',
-//        'a:FreeGameOfferName' => 'required',
         'a:TournamentId' => 'required',
-//        'a:Description' => 'required',
-//        'a:ExtInfo' => 'required',
         'a:RowIdLong' => 'required',
     ];
     protected $errors;
 
-    abstract function getData(array $data): array;
+    abstract function getElements(array $data): array;
+
+    public function prepareElement(array $data): array {
+        if (isset($data[0])) {
+            $dataT = $data;
+        } else {
+            $dataT[] = $data;
+        }
+        return $dataT;
+    }
 
     protected function validate(array $data, array $rules): bool {
- 
+
         $v = Validator::make($data, $rules);
-        if ($v->fails()) { 
+        if ($v->fails()) {
             $failedRules = $v->failed();
-            
+
             //look for rule checkEmpty 
             foreach ($failedRules as $elements => $failedRules) {
                 if (isset($failedRules['CheckEmpty'])) {
@@ -69,8 +74,9 @@ abstract class Validation {
 
     public function validateBaseStructure(array $data): bool {
         Validator::extend('checkEmpty', function ($attribute, $value, $parameters, $validator) {
-            return (is_array($value) && isset($value[$this->nameCommitRollbackElement]));
+            return (is_array($value) && isset($value[$this->nameElement]));
         });
+        
         $this->validate($data, $this->rulesStructures);
         $elements = $this->getData($data);
         foreach ($elements as $key => $value) {
@@ -81,6 +87,11 @@ abstract class Validation {
 
     public function errors(): array {
         return $this->errors;
+    }
+
+    public function getData(array $data): array {
+        $preElements = $this->getElements($data);
+        return $this->prepareElement($preElements);
     }
 
 }

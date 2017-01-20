@@ -22,7 +22,7 @@ class ManualValidation extends Validation {
         ];
     }
 
-    public function getData(array $data): array {
+    public function getElements(array $data): array {
         return $data;
     }
 

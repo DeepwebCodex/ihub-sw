@@ -3,17 +3,17 @@
 namespace App\Console\Commands\Orion;
 
 use App\Components\Integrations\MicroGaming\Orion\CommitRollbackProcessor;
-use App\Components\Integrations\MicroGaming\Orion\Request\GetCommitQueueData;
+use App\Components\Integrations\MicroGaming\Orion\Request\GetRollbackQueueData;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
 use App\Components\Integrations\MicroGaming\Orion\SoapEmul;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use App\Components\Transactions\TransactionRequest;
-use App\Http\Requests\Validation\Orion\CommitValidation;
 use App\Http\Requests\Validation\Orion\ManualValidation;
+use App\Http\Requests\Validation\Orion\RollbackValidation;
 use Illuminate\Console\Command;
 use function app;
 
-class Commit extends Command {
+class Rollback extends Command {
 
     use Operation;
 
@@ -22,14 +22,14 @@ class Commit extends Command {
      *
      * @var string
      */
-    protected $signature = 'orion:commit';
+    protected $signature = 'orion:rollback';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Commit orion transactions';
+    protected $description = 'Rollback orion transactions';
 
     /**
      * Create a new command instance.
@@ -48,12 +48,12 @@ class Commit extends Command {
     public function handle() {
         $sourceProcessor = app(SourceProcessor::class);
         $soapEmul = app(SoapEmul::class);
-        $requestQueueData = app(GetCommitQueueData::class, [$soapEmul, $sourceProcessor]);
-        $validatorQueueData = app(CommitValidation::class);
+        $requestQueueData = app(GetRollbackQueueData::class, [$soapEmul, $sourceProcessor]);
+        $validatorQueueData = app(RollbackValidation::class);
         $requestResolveData = app(ManuallyValidateBet::class, [$soapEmul, $sourceProcessor]);
         $validatorResolveData = app(ManualValidation::class);
-        $operationsProcessor = app(CommitRollbackProcessor::class, ['CommitQueue',
-            TransactionRequest::TRANS_WIN]);
+        $operationsProcessor = app(CommitRollbackProcessor::class, ['RollbackQueue',
+            TransactionRequest::TRANS_REFUND]);
         $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $requestResolveData, $validatorResolveData);
     }
 
