@@ -18,7 +18,7 @@ class SessionCreateRequest extends BaseGameSessionRequest
             'partner_id' => 'bail|required|numeric',
             'game_id' => 'bail|required',
             'currency' => 'bail|required|string',
-            'cashdesk_id' => 'bail|required|numeric'
+            'cashdesk_id' => 'bail|numeric'
         ];
     }
 }
