@@ -41,14 +41,12 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             'check.partner_id',
-            'log.hits'
         ],
 
         'api' => [
-            'log.hits',
             'bindings',
             'check.partner_id',
-            'log.request.response'
+            'log.request.response',
         ]
     ];
 
@@ -69,7 +67,6 @@ class Kernel extends HttpKernel
         'input.json' => \App\Http\Middleware\InputJson::class,
         'check.partner_id' => \App\Http\Middleware\CheckPartnerId::class,
         'input.xml' => \App\Http\Middleware\InputXml::class,
-        'log.hits'  => \App\Http\Middleware\LogHits::class,
         'log.request.response' => \App\Http\Middleware\LogRequestResponse::class
     ];
 }
