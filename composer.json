@@ -14,7 +14,6 @@
         "spatie/laravel-fractal": "^1.9",
         "danielstjules/stringy": "~2.3",
         "php-amqplib/php-amqplib": "2.6.*",
-        "liuggio/statsd-php-client": "^1.0",
         "doctrine/dbal": "^2.5"
     },
     "require-dev": {
