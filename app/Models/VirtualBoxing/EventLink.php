@@ -49,6 +49,7 @@ class EventLink extends BaseVirtualBoxingModel
      */
     public static function getLastVbId()
     {
-        return static::orderBy('event_vb_id', 'desc')->first()->event_vb_id;
+        $eventLink = static::orderBy('event_vb_id', 'desc')->first();
+        return $eventLink ? $eventLink->event_vb_id : 0;
     }
 }
