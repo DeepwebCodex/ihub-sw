@@ -215,7 +215,6 @@ return [
         'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
         'AppLog' => \App\Facades\AppLog::class,
         'Fractal' => Spatie\Fractal\FractalFacade::class,
-        'Uuid' => Webpatser\Uuid\UuidFacade::class,
     ],
 
 ];
