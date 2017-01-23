@@ -155,6 +155,7 @@ class AccountManager
      * @param int $direction //transaction direction 0 - deposit, 1 - withdrawal
      * @param int $object_id //unique id of transaction integration side
      * @param string $comment //transaction comment
+     * @param int $partner_id
      * @return mixed
      */
     public function createTransaction(
@@ -166,7 +167,8 @@ class AccountManager
         string $currency,
         int $direction,
         int $object_id,
-        string $comment
+        string $comment,
+        int $partner_id
     ) {
 
         return $this->postMessageRoh('accounts/operation/new', [
@@ -180,7 +182,7 @@ class AccountManager
             'status' => $status,
             'object_id' => $object_id,
             'comment' => $comment,
-            'partner_id' => (int)$this->request->server('PARTNER_ID')
+            'partner_id' => $partner_id
         ], 3);
     }
 
