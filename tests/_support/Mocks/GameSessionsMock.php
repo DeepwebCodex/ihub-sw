@@ -23,6 +23,7 @@ class GameSessionsMock
         $game_session->shouldReceive('get')->withArgs(['user_id'])->andReturn(env('TEST_USER_ID'));
         $game_session->shouldReceive('get')->withArgs(['created'])->andReturn(time());
         $game_session->shouldReceive('get')->withArgs(['currency'])->andReturn("EUR");
+        $game_session->shouldReceive('get')->withArgs(['cashdesk_id'])->andReturn(env('TEST_CASHEDESK'));
         $game_session->shouldReceive('regenerate')->andReturn("e4fda8473f68894a11c99acc25ecca11");
         $game_session->shouldReceive('prolong');
 
