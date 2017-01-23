@@ -57,7 +57,9 @@ class AuthRequest extends BaseEgtRequest
             'PlayerId' => 'bail|required|integer',
             'DefenceCode' => 'bail|required|string|validate_defence_code',
             'PortalCode' => 'bail|required|string',
-            'SessionId' => 'bail|required|string'
+            'SessionId' => 'bail|required|string',
+            'PartnerId' => 'bail|integer',
+            'CashdeskId' => 'bail|integer',
         ];
     }
 }

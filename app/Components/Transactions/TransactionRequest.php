@@ -25,6 +25,7 @@ class TransactionRequest
     const TRANS_BONUS_WIN = 'bonus_win';
 
     public $service_id;
+    public $partner_id;
     public $cashdesk_id;
     public $user_id;
     public $amount;
@@ -48,25 +49,39 @@ class TransactionRequest
      * @param $transaction_type
      * @param $foreign_id
      * @param $game_id
+     * @param int $partner_id
+     * @param int $cashdesk_id
      */
-    public function __construct(int $service_id, int $object_id, int $user_id, string $currency, int $direction, float $amount, $transaction_type, $foreign_id , $game_id)
-    {
-        $this->service_id  = $service_id;
-        $this->object_id   = $object_id;
-        $this->user_id     = $user_id;
-        $this->direction   = $direction;
-        $this->amount      = $amount;
-        $this->currency    = $currency;
+    public function __construct(
+        int $service_id,
+        int $object_id,
+        int $user_id,
+        string $currency,
+        int $direction,
+        float $amount,
+        $transaction_type,
+        $foreign_id,
+        $game_id,
+        int $partner_id,
+        int $cashdesk_id
+    ) {
+        $this->service_id = $service_id;
+        $this->object_id = $object_id;
+        $this->user_id = $user_id;
+        $this->direction = $direction;
+        $this->amount = $amount;
+        $this->currency = $currency;
 
-        $this->game_id     = $game_id;
+        $this->game_id = $game_id;
 
         $this->transaction_type = $transaction_type;
 
         $this->foreign_id = $foreign_id;
 
-        $this->comment     = json_encode($this->getComment());
+        $this->comment = json_encode($this->getComment());
 
-        $this->cashdesk_id = app('GameSession')->get('cashdesk_id') ?? app('Request')::getFacadeRoot()->server('FRONTEND_NUM');
+        $this->partner_id = $partner_id !== 0 ? $partner_id : app('Request')::getFacadeRoot()->server('PARTNER_ID');
+        $this->cashdesk_id = $cashdesk_id !== 0 ? $cashdesk_id : app('Request')::getFacadeRoot()->server('FRONTEND_NUM');
     }
 
     public function getComment()

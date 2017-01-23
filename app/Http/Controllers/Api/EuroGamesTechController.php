@@ -80,7 +80,9 @@ class EuroGamesTechController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('Amount')),
             EgtHelper::getTransactionType($request->input('Reason')),
             $request->input('TransferId'),
-            $request->input('GameId')
+            $request->input('GameId'),
+            $request->input('PartnerId', 0),
+            $request->input('CashdeskId', 0)
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -106,7 +108,9 @@ class EuroGamesTechController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('Amount')),
             EgtHelper::getTransactionType($request->input('Reason'), true),
             $request->input('TransferId'),
-            $request->input('GameId')
+            $request->input('GameId'),
+            $request->input('PartnerId', 0),
+            $request->input('CashdeskId', 0)
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -132,7 +136,9 @@ class EuroGamesTechController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('Amount')),
             TransactionRequest::TRANS_BET,
             $request->input('TransferId'),
-            $request->input('GameId')
+            $request->input('GameId'),
+            $request->input('PartnerId', 0),
+            $request->input('CashdeskId', 0)
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -148,7 +154,9 @@ class EuroGamesTechController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('WinAmount')),
             EgtHelper::getTransactionType($request->input('Reason')),
             $request->input('TransferId'),
-            $request->input('GameId')
+            $request->input('GameId'),
+            $request->input('PartnerId', 0),
+            $request->input('CashdeskId', 0)
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);

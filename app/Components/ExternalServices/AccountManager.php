@@ -138,8 +138,9 @@ class AccountManager
     /**
      * @return mixed
      */
-    public function getFreeCardId(){
-        return $this->postMessageCardRoh('cards/card/get_free_id',[]);
+    public function getFreeCardId()
+    {
+        return $this->postMessageCardRoh('cards/card/get_free_id', []);
     }
 
     /**
@@ -158,21 +159,28 @@ class AccountManager
      */
     public function createTransaction(
         string $status,
-        int $service_id, int $cashdesk, int $user_id,
-        $amount, string $currency, int $direction, int $object_id, string $comment){
+        int $service_id,
+        int $cashdesk,
+        int $user_id,
+        $amount,
+        string $currency,
+        int $direction,
+        int $object_id,
+        string $comment
+    ) {
 
         return $this->postMessageRoh('accounts/operation/new', [
-            'service_id'    => $service_id,
-            'cashdesk'      => $cashdesk,
-            'user_id'       => $user_id,
-            'amount'        => $amount,
-            'currency'      => $currency,
-            'client_ip'     => get_client_ip() ?: '127.0.0.1',
-            'move'          => $direction,
-            'status'        => $status,
-            'object_id'     => $object_id,
-            'comment'       => $comment,
-            'partner_id'    => (int) $this->request->server('PARTNER_ID')
+            'service_id' => $service_id,
+            'cashdesk' => $cashdesk,
+            'user_id' => $user_id,
+            'amount' => $amount,
+            'currency' => $currency,
+            'client_ip' => get_client_ip() ?: '127.0.0.1',
+            'move' => $direction,
+            'status' => $status,
+            'object_id' => $object_id,
+            'comment' => $comment,
+            'partner_id' => (int)$this->request->server('PARTNER_ID')
         ], 3);
     }
 

@@ -82,7 +82,7 @@ trait RohRequest
             if ($retry > 0 && ($statusCode >= Response::HTTP_INTERNAL_SERVER_ERROR || $statusCode == Response::HTTP_SERVICE_UNAVAILABLE)) {
                 $retry--;
                 sleep(1);
-                $this->sendPostRoh($url, $params, $retry);
+                return $this->sendPostRoh($url, $params, $retry);
             }
 
             AppLog::critical([

@@ -29,18 +29,20 @@ class WithdrawAndDepositRequest extends BaseEgtRequest
     public function rules()
     {
         return [
-            'UserName'      => 'bail|required|string',
-            'Password'      => 'bail|required|string',
-            'PlayerId'      => 'bail|required|integer',
-            'TransferId'    => 'bail|required|string',
-            'GameId'        => 'bail|required|integer',
-            'GameNumber'    => 'bail|required|integer',
-            'SessionId'     => 'bail|required|string',
-            'Amount'        => 'bail|required|numeric|min:0',
-            'Currency'      => 'bail|required|string',
-            'Reason'        => 'bail|required|string|validate_deposit',
-            'PortalCode'    => 'bail|required|string',
-            'WinAmount'     => 'bail|required|numeric|min:0'
+            'UserName' => 'bail|required|string',
+            'Password' => 'bail|required|string',
+            'PlayerId' => 'bail|required|integer',
+            'TransferId' => 'bail|required|string',
+            'GameId' => 'bail|required|integer',
+            'GameNumber' => 'bail|required|integer',
+            'SessionId' => 'bail|required|string',
+            'Amount' => 'bail|required|numeric|min:0',
+            'Currency' => 'bail|required|string',
+            'Reason' => 'bail|required|string|validate_deposit',
+            'PortalCode' => 'bail|required|string',
+            'WinAmount' => 'bail|required|numeric|min:0',
+            'PartnerId' => 'bail|integer',
+            'CashdeskId' => 'bail|integer',
         ];
     }
 }
