@@ -74,6 +74,9 @@ fail_build_for_incorrect_branches:
     - exit 1
   only:
     - /^(?![a-zA-Z]{1,6}-[0-9]{1,3}-).*$/
+  except:
+    - dev
+    - master
 
 test_features_n_dev:
   <<: *template_compile_n_test
