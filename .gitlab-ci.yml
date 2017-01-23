@@ -65,22 +65,11 @@ variables:
 
 #====================== templates ======================#
 
-test_carting:
-  <<: *template_prod
-  script:
-    - cat /root/ihub/env.ihub
-#    - bash ./run/dev/install-rancher.sh
-#    - ./vendor/bin/codecept run
-  only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,3}-carting.*$/
-    - dev
-
 test_features_n_dev:
   <<: *template_compile_n_test
   script:
-    - cat /root/ihub/env.ihub
-#    - bash ./run/dev/install-rancher.sh
-#    - ./vendor/bin/codecept run
+    - bash ./run/dev/install-rancher.sh
+    - ./vendor/bin/codecept run
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,3}-.*$/
     - dev
@@ -122,8 +111,7 @@ compile_prod:
     - rm -rf .env .env.testing ./tests .git
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
-#    - rm -rf ./run/prod/install-rancher.sh
-    - cat /root/ihub/env.ihub
+    - rm -rf ./run/prod/install-rancher.sh
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
