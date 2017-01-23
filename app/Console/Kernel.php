@@ -26,6 +26,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        //FeedListener::class
+        Commands\Orion\Commit::class,
+        Commands\Orion\Rollback::class,
+        Commands\Orion\EndGame::class,
         MicrogamingSequence::class
     ];
 
