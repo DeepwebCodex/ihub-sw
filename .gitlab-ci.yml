@@ -111,7 +111,8 @@ compile_prod:
     - rm -rf .env .env.testing ./tests .git
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
-    - cat /root/ihub/env.ihub >> .env
+    - rm -rf ./run/prod/install-rancher.sh
+    - cat /root/ihub/env.ihub
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
