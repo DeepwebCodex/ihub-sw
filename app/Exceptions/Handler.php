@@ -96,12 +96,6 @@ class Handler extends ExceptionHandler
         {
             return false;
         }
-
-        $currentAction = $route->getActionName();
-
-        if($currentAction) {
-            app('Statsd')->registerFailed($currentAction);
-        }
     }
 
     /**
