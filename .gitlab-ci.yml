@@ -68,8 +68,9 @@ variables:
 test_features_n_dev:
   <<: *template_compile_n_test
   script:
-    - bash ./run/dev/install-rancher.sh
-    - ./vendor/bin/codecept run
+    - cat /root/ihub/env.ihub
+#    - bash ./run/dev/install-rancher.sh
+#    - ./vendor/bin/codecept run
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,3}-.*$/
     - dev
