@@ -56,7 +56,7 @@ trait RohRequest
                 ]
             );
 
-            if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < Response::HTTP_BAD_REQUEST) {
+            if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < Response::HTTP_NOT_EXTENDED) {
                 if ($data = $response->getBody()) {
                     if ($data = json_decode($data->getContents(), true)) {
                         //validate response data
