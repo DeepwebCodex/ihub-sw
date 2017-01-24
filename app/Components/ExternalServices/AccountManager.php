@@ -72,7 +72,6 @@ class AccountManager
     private function setUpConfig(){
 
         if(!config('external.api.account_roh') ||
-            !config('external.api.account_session') ||
             !config('external.api.account_op') ||
             !config('external.api.cards_roh') ||
             !config('external.api.cash_desk_roh')) {
@@ -82,9 +81,6 @@ class AccountManager
 
         $this->accountRohHost = config('external.api.account_roh.host');
         $this->accountRohPort = config('external.api.account_roh.port');
-
-        $this->sessionHost = config('external.api.account_session.host');
-        $this->sessionPort = config('external.api.account_session.port');
 
         $this->restHost = config('external.api.account_op.host');
         $this->restPort = config('external.api.account_op.port');
@@ -116,16 +112,6 @@ class AccountManager
         }
 
         return $this->postMessageRoh('accounts/account/get', $params);
-    }
-
-    /**
-     * @param string $login
-     * @return mixed
-     */
-    public function checkLoginSession(string $login){
-        return $this->getSession('session/exists', [
-            'login' => $login
-        ]);
     }
 
     /**
@@ -351,11 +337,6 @@ class AccountManager
     private function postMessageCardRoh(string $method, array $params, int $retry = 0)
     {
         return $this->sendPostRoh($this->buildCardsRohHost($method), $params, $retry);
-    }
-
-    private function getSession(string $method, array $params, int $retry = 0)
-    {
-        return $this->sendGetSession($this->buildSessionHost($method), $params, $retry);
     }
 
     private function getRest(string $method, array $params, int $retry = 0){

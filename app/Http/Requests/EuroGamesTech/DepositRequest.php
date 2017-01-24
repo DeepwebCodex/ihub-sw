@@ -39,8 +39,8 @@ class DepositRequest extends BaseEgtRequest
             'Currency' => 'bail|required|string',
             'Reason' => 'bail|required|string|validate_deposit',
             'PortalCode' => 'bail|required|string',
-            'PartnerId' => 'bail|integer',
-            'CashdeskId' => 'bail|integer',
+            'PartnerId' => 'bail|integer|nullable',
+            'CashdeskId' => 'bail|integer|nullable',
         ];
     }
 }

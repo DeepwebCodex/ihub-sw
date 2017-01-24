@@ -39,8 +39,8 @@ class WithdrawRequest extends BaseEgtRequest
             'Reason' => 'bail|required|string|validate_withdraw',
             'PortalCode' => 'bail|required|string',
             'SessionId' => 'bail|required|string',
-            'PartnerId' => 'bail|integer',
-            'CashdeskId' => 'bail|integer',
+            'PartnerId' => 'bail|integer|nullable',
+            'CashdeskId' => 'bail|integer|nullable',
         ];
     }
 }

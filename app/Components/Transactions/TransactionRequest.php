@@ -62,8 +62,8 @@ class TransactionRequest
         $transaction_type,
         $foreign_id,
         $game_id,
-        int $partner_id,
-        int $cashdesk_id
+        int $partner_id = null,
+        int $cashdesk_id = null
     ) {
         $this->service_id = $service_id;
         $this->object_id = $object_id;
@@ -80,8 +80,8 @@ class TransactionRequest
 
         $this->comment = json_encode($this->getComment());
 
-        $this->partner_id = $partner_id !== 0 ? $partner_id : app('Request')::getFacadeRoot()->server('PARTNER_ID');
-        $this->cashdesk_id = $cashdesk_id !== 0 ? $cashdesk_id : app('Request')::getFacadeRoot()->server('FRONTEND_NUM');
+        $this->partner_id = $partner_id ?? app('Request')::getFacadeRoot()->server('PARTNER_ID');
+        $this->cashdesk_id = $cashdesk_id ?? app('Request')::getFacadeRoot()->server('FRONTEND_NUM');
     }
 
     public function getComment()
