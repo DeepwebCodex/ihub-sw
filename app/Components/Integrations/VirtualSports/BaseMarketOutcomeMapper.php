@@ -6,7 +6,7 @@
  * Time: 12:13 PM
  */
 
-namespace App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping;
+namespace App\Components\Integrations\VirtualSports;
 
 
 use App\Models\Line\EventParticipant;
@@ -15,7 +15,7 @@ use App\Models\Line\OutcomeType;
 use Illuminate\Database\Eloquent\Collection;
 
 
-abstract class BaseMap
+abstract class BaseMarketOutcomeMapper
 {
 
     protected $outcome;
@@ -77,14 +77,25 @@ abstract class BaseMap
         $this->eventParticipants = $eventParticipants;
 
         $this->outcomeType = $this->getOutcomeType();
+
         $this->mappedMarketsWithOutcomes = $mappedMarketsWithOutcomes;
     }
 
-    private function getOutcomeType() : OutcomeType
+    protected function getOutcomeType() : OutcomeType
     {
         $outcomeName = array_get($this->outcome, array_get($this->outcomeConfig, 'outcomeFiled'));
 
-        return $this->outcomeTypes->where('id', array_get($this->outcomeTypeMap, $outcomeName))->first();
+        $outcomeType = $this->outcomeTypes->where('id', array_get($this->outcomeTypeMap, $outcomeName))->first();
+
+        if($outcomeType === null) {
+            $this->failedToGetOutcomeType();
+        }
+
+        return $outcomeType;
+    }
+
+    protected function failedToGetOutcomeType() {
+        throw new \RuntimeException("Unable to locate outcome");
     }
 
     private function isParticipantRequired(int $marketTypeId) : bool

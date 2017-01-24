@@ -6,7 +6,7 @@
  * Time: 12:27 PM
  */
 
-namespace App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping;
+namespace App\Components\Integrations\VirtualSports\Interfaces;
 
 
 interface MarketOutcomeMapInterface

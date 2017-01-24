@@ -48,6 +48,12 @@ Route::group(['prefix' => 'vb'], function () {
     Route::post('/', "VirtualBoxingController@index");
 });
 
+/**VirtualBox controller routes */
+Route::group(['prefix' => 'vb2'], function () {
+    Route::any('{any}', "VirtualBoxController@error");
+    Route::post('/', "VirtualBoxController@index");
+});
+
 /**GameSession controller routes */
 Route::group(['prefix' => 'game_session'], function () {
     Route::post('create', "GameSessionController@create");

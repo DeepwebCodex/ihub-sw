@@ -6,7 +6,7 @@
  * Time: 11:16 AM
  */
 
-namespace App\Components\Integrations\InspiredVirtualGaming\SportMapping;
+namespace App\Components\Integrations\VirtualSports\Interfaces;
 
 
 interface SportDataMapInterface
@@ -20,4 +20,6 @@ interface SportDataMapInterface
     public function getTotalResult(array $results, array $participants) : string;
 
     public function getTotalResultForJson(array $results, array $participants) : array;
+
+    public function getResultTypeId(int $default) : int;
 }

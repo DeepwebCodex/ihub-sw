@@ -6,9 +6,7 @@
  * Time: 2:56 PM
  */
 
-namespace App\Components\Integrations\InspiredVirtualGaming\Modules;
-
-
+namespace App\Components\Integrations\VirtualSports\Services;
 
 use App\Models\Line\Tournament;
 use App\Models\Trans\Trans;

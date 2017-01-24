@@ -31,7 +31,7 @@ class InspiredVirtualGaming extends BaseApiController
 
         $this->options = config('integrations.inspired');
 
-        $this->middleware('input.xml');
+        $this->middleware('input.xml')->except(['error']);
     }
 
     public function index(BaseInspiredRequest $request)

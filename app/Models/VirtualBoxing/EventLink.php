@@ -51,4 +51,19 @@ class EventLink extends BaseVirtualBoxingModel
     {
         return static::orderBy('event_vb_id', 'desc')->first()->event_vb_id;
     }
+
+    public static function getEventId(int $vbEventId)
+    {
+        return static::where('event_link.event_vb_id', $vbEventId)
+            ->join('event', function($join){
+                /** @var JoinClause $join */
+                $join->on('event_link.event_id', 'event.id')->where('event.del', 'no');
+            })
+            ->value('event_id');
+    }
+
+    public static function isExists(int $ivgEventId) : bool
+    {
+        return (bool) static::getEventId($ivgEventId);
+    }
 }

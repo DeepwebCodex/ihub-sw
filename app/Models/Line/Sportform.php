@@ -40,4 +40,29 @@ class Sportform extends BaseLineModel
             })
             ->value('participant_num');
     }
+
+    /**
+     * @param $sportId
+     * @return array
+     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     */
+    public static function getSportFormIds(int $sportId):array
+    {
+        $sportForm = Sportform::findById($sportId);
+        foreach ($sportForm as $item) {
+            $itemId = $item['id'];
+            if ($item['is_live']) {
+                $liveSportFormId = $itemId;
+            } else {
+                $preBetSportFormId = $itemId;
+            }
+        }
+        if (!isset($liveSportFormId, $preBetSportFormId)) {
+            throw new \RuntimeException("Can't find sportform");
+        }
+        return [
+            'live' => $liveSportFormId,
+            'prebet' => $preBetSportFormId
+        ];
+    }
 }

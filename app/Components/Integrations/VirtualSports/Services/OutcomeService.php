@@ -6,30 +6,17 @@
  * Time: 11:52 AM
  */
 
-namespace App\Components\Integrations\InspiredVirtualGaming\Modules;
+namespace App\Components\Integrations\VirtualSports\Services;
 
 
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapDoubleChances;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapEuropeanHandicaps;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapForecastData;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapGoals;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapOverUnders;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapPlayerWinOutcomes;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapRacer;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapScoreBetOutcomes;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapScores;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapTotalPointsOutcomes;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapWdls;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapWinnerOddEven;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapWinnerOneOfTwo;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MapWinnerYesNo;
-use App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping\MarketOutcomeMapInterface;
+
+use App\Components\Integrations\VirtualSports\Interfaces\MarketOutcomeMapInterface;
 use App\Models\Line\Market;
 use App\Models\Line\MarketTemplate;
 use App\Models\Line\Outcome;
 use Illuminate\Database\Eloquent\Collection;
 
-class OutcomeService
+abstract class OutcomeService
 {
     /**
      * @var array
@@ -55,20 +42,6 @@ class OutcomeService
     private $market;
 
     protected $mappingRegistry = [
-        'wdls' => MapWdls::class,
-        'PlayerWinOutcomes' => MapPlayerWinOutcomes::class,
-        'doubleChances' => MapDoubleChances::class,
-        'scores' => MapScores::class,
-        'goals' => MapGoals::class,
-        'TotalPointsOutcomes' => MapTotalPointsOutcomes::class,
-        'ScoreBetOutcomes' => MapScoreBetOutcomes::class,
-        'winnerOddEven' => MapWinnerOddEven::class,
-        'racer' => MapRacer::class,
-        'winnerYesNo' => MapWinnerYesNo::class,
-        'forecastData' => MapForecastData::class,
-        'winnerOneOfTwo' => MapWinnerOneOfTwo::class,
-        'overUnders' => MapOverUnders::class,
-        'europeanHandicaps' => MapEuropeanHandicaps::class
     ];
 
     private $mappedMarketsWithOutcomes;

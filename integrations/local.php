@@ -52,7 +52,6 @@ return [
         'margin' => 108.00,
         'margin_prebet' => 108.00,
         'market' => [
-            'OW' => 1,
             'OW_result_type' => 1,
             'max_bet' => 10000.00,
             'max_payout' => 10000.00,
@@ -67,7 +66,27 @@ return [
             'KO2' => 1315,
             'KO3' => 1316,
             'KO4' => 1317,
+            'result_type_id' => 1
         ],
+        'sports' => [
+            'box' => [
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
+                'game_result_scope_id' => '',
+                'markets' => [
+                    'OW' => [1],
+                    'CS' => [1318],
+                    'CSR' => [1319],
+                    'T65' => [50],
+                    'OE' => [74],
+                    'KO1' => [1314],
+                    'KO2' => [1315],
+                    'KO3' => [1316],
+                    'KO4' => [1317]
+                ]
+            ]
+        ]
     ],
 
     'inspired' => [
@@ -94,9 +113,9 @@ return [
                 'category_id' => [ 101 => 1685, 102 => 1667, 103 => 1676,  104 => 3320, 105 => 1554, 106 => 3334 ],
                 'sportform_prebet_id' => 168,
                 'sportform_live_id' => 167,
-                'max_bet' => 3000,
-                'max_payout' => 15000,
-                'stop_loss' => 1000,
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
                 'markets' => [
                     'racer' => [1119, 1122, 1116]
                 ]
@@ -107,9 +126,9 @@ return [
                 'category_id' => [ 101 => 1687, 102 => 1669, 103 => 1678, 104 => 3327, 105 => 1556, 106 => 3335 ],
                 'sportform_prebet_id' => 164,
                 'sportform_live_id' => 163,
-                'max_bet' => 3000,
-                'max_payout' => 15000,
-                'stop_loss' => 1000,
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
                 'markets' => [
                     'forecastData' => [ 1049 ],
                     'racer' => [ 1116, 1119, 1122, 1124, 1125, 1126 ],
@@ -124,9 +143,9 @@ return [
                 'category_id' => [ 101 => 1688, 102 => 1670, 103 => 1679, 104 => 3328, 105 => 1557, 106 => 3336 ],
                 'sportform_prebet_id' => 174,
                 'sportform_live_id' => 173,
-                'max_bet' => 3000,
-                'max_payout' => 15000,
-                'stop_loss' => 1000,
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
                 'markets' => [
                     'racer' => [ 1116, 1119, 1122 ]
                 ]
@@ -137,22 +156,22 @@ return [
                 'category_id' => [ 101 => 1689, 102 => 1671, 103 => 1680, 104 => 3329, 105 => 1558, 106 => 3337 ],
                 'sportform_prebet_id' => 166,
                 'sportform_live_id' => 165,
-                'max_bet' => 3000,
-                'max_payout' => 15000,
-                'stop_loss' => 1000,
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
                 'markets' => [
                     'racer' => [ 1116, 1119, 1122 ]
                 ]
             ],
             4 => [
-                'name'  => 'Football',
+                'name'  => 'Soccer',
                 'game_result_scope_id' => 1,
                 'category_id' => [ 101 => 1690, 102 => 1672, 103 => 1681, 104 => 2982, 105 => 1559, 106 => 3338 ],
                 'sportform_prebet_id' => 172,
                 'sportform_live_id' => 171,
-                'max_bet' => 3000,
-                'max_payout' => 15000,
-                'stop_loss' => 1000,
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
                 'markets' => [
                     'doubleChances' => [ 40 ],
                     'europeanHandicaps' => [ 30 ],
@@ -168,9 +187,9 @@ return [
                 'category_id' => [ 101 => 1691, 102 => 1673, 103 => 1682, 104 => 3330, 105 => 1560, 106 => 3339 ],
                 'sportform_prebet_id' => 170,
                 'sportform_live_id' => 169,
-                'max_bet' => 3000,
-                'max_payout' => 15000,
-                'stop_loss' => 1000,
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
                 'markets' => [
                     null
                 ]
@@ -181,9 +200,9 @@ return [
                 'category_id' => [ 101 => 1692, 102 => 1674, 103 => 1683, 104 => 3331, 105 => 1561, 106 => 3340 ],
                 'sportform_prebet_id' => 178,
                 'sportform_live_id' => 177,
-                'max_bet' => 3000,
-                'max_payout' => 15000,
-                'stop_loss' => 1000,
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
                 'markets' => [
                     'racer' => [ 1116, 1119, 1122 ]
                 ]
@@ -194,9 +213,9 @@ return [
                 'category_id' => [ 101 => 1693, 102 => 1675, 103 => 1684, 104 => 3332, 105 => 1562, 106 => 3341 ],
                 'sportform_prebet_id' => 162,
                 'sportform_live_id' => 161,
-                'max_bet' => 3000,
-                'max_payout' => 15000,
-                'stop_loss' => 1000,
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
                 'markets' => [
                     'racer' => [ 1116, 1119, 1122 ]
                 ]
@@ -207,9 +226,9 @@ return [
                 'category_id' => [ 101 => 1686, 102 => 1668, 103 => 1677, 104 => 3333, 105 => 1555, 106 => 3278],
                 'sportform_prebet_id' => 176,
                 'sportform_live_id' => 175,
-                'max_bet' => 3000,
-                'max_payout' => 15000,
-                'stop_loss' => 1000,
+                'max_bet' => 10000,
+                'max_payout' => 10000,
+                'stop_loss' => 1000000,
                 'markets' => [
                     'PlayerWinOutcomes' => [ 5 ],
                     'ScoreBetOutcomes' => [ 1115 ],

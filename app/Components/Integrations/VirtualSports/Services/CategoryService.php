@@ -6,10 +6,11 @@
  * Time: 2:56 PM
  */
 
-namespace App\Components\Integrations\InspiredVirtualGaming\Modules;
+namespace App\Components\Integrations\VirtualSports\Services;
 
 
 use App\Models\Line\Category;
+use App\Models\Trans\Trans;
 
 class CategoryService
 {
@@ -35,6 +36,9 @@ class CategoryService
         $category = Category::findByNameForSport($this->name, $this->sportId);
 
         if(!$category) {
+
+            $this->name = (new Trans())->translate($this->name);
+
             $category = Category::create([
                 'name' => $this->name,
                 'weigh' => $this->weight,

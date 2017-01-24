@@ -9,7 +9,10 @@
 namespace App\Components\Integrations\InspiredVirtualGaming\MarketOutcomeMapping;
 
 
-class MapTotalPointsOutcomes extends BaseMap implements MarketOutcomeMapInterface
+use App\Components\Integrations\VirtualSports\BaseMarketOutcomeMapper;
+use App\Components\Integrations\VirtualSports\Interfaces\MarketOutcomeMapInterface;
+
+class MapTotalPointsOutcomes extends BaseMarketOutcomeMapper implements MarketOutcomeMapInterface
 {
     protected $outcomeConfig = [
         'outcomeFiled' => 'Outcome',

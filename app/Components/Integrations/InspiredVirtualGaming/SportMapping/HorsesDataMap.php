@@ -9,6 +9,8 @@
 namespace App\Components\Integrations\InspiredVirtualGaming\SportMapping;
 
 
+use App\Components\Integrations\VirtualSports\Interfaces\SportDataMapInterface;
+use App\Components\Integrations\VirtualSports\BaseSportDataMap;
 use App\Models\Line\Participant;
 
 class HorsesDataMap extends BaseSportDataMap implements SportDataMapInterface

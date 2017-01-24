@@ -6,10 +6,8 @@
  * Time: 2:56 PM
  */
 
-namespace App\Components\Integrations\InspiredVirtualGaming\Modules;
+namespace App\Components\Integrations\VirtualSports\Services;
 
-
-use App\Models\InspiredVirtualGaming\EventLink;
 use App\Models\Line\Event;
 use App\Models\Line\EventParticipant;
 use App\Models\Line\Participant;
@@ -28,7 +26,6 @@ class EventService
     private $stopLoss;
     private $countryId;
     private $sportId;
-    private $origEventId;
     private $participants;
     private $user_id;
 
@@ -48,7 +45,6 @@ class EventService
         int $countryId,
         int $sportId,
         int $user_id,
-        $origEventId,
         array $participants
     )
     {
@@ -62,7 +58,6 @@ class EventService
         $this->stopLoss = $stopLoss;
         $this->countryId = $countryId;
         $this->sportId = $sportId;
-        $this->origEventId = $origEventId;
         $this->participants = $participants;
         $this->user_id = $user_id;
 
@@ -88,11 +83,6 @@ class EventService
             'margin'        => 108,
             'margin_prebet' => 108,
             'user_id'       => $this->user_id
-        ]);
-
-        EventLink::create([
-            'event_id' => $eventModel->id,
-            'event_id_ivg' => (int) $this->origEventId
         ]);
 
         if(!$eventModel) {
