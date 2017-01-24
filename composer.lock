@@ -429,16 +429,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.5.9",
+            "version": "v2.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "0d2f8187d4b4c7b72d8e2acba359e25c36feaf5e"
+                "reference": "fc376f7a61498e18520cd6fa083752a4ca08072b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/0d2f8187d4b4c7b72d8e2acba359e25c36feaf5e",
-                "reference": "0d2f8187d4b4c7b72d8e2acba359e25c36feaf5e",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/fc376f7a61498e18520cd6fa083752a4ca08072b",
+                "reference": "fc376f7a61498e18520cd6fa083752a4ca08072b",
                 "shasum": ""
             },
             "require": {
@@ -496,7 +496,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-01-19T13:27:33+00:00"
+            "time": "2017-01-23T23:17:10+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -3023,23 +3023,23 @@
     "packages-dev": [
         {
             "name": "barryvdh/laravel-ide-helper",
-            "version": "v2.2.2",
+            "version": "v2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-ide-helper.git",
-                "reference": "105f14a50d0959a0e80004a15b3350fdf78f9623"
+                "reference": "a7fc2ec489aada6062d3a63ddc915004a21e38af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/105f14a50d0959a0e80004a15b3350fdf78f9623",
-                "reference": "105f14a50d0959a0e80004a15b3350fdf78f9623",
+                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/a7fc2ec489aada6062d3a63ddc915004a21e38af",
+                "reference": "a7fc2ec489aada6062d3a63ddc915004a21e38af",
                 "shasum": ""
             },
             "require": {
                 "barryvdh/reflection-docblock": "^2.0.4",
-                "illuminate/console": "^5.0,<5.4",
-                "illuminate/filesystem": "^5.0,<5.4",
-                "illuminate/support": "^5.0,<5.4",
+                "illuminate/console": "^5.0,<5.5",
+                "illuminate/filesystem": "^5.0,<5.5",
+                "illuminate/support": "^5.0,<5.5",
                 "php": ">=5.4.0",
                 "symfony/class-loader": "^2.3|^3.0"
             },
@@ -3085,7 +3085,7 @@
                 "phpstorm",
                 "sublime"
             ],
-            "time": "2016-11-15T08:21:23+00:00"
+            "time": "2017-01-05T21:20:42+00:00"
         },
         {
             "name": "barryvdh/reflection-docblock",
@@ -3201,12 +3201,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "0a87d4b19070a24636125993450a9d3f698a6663"
+                "reference": "30092302728297dddab6b3d12cc5142e575ad3c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/0a87d4b19070a24636125993450a9d3f698a6663",
-                "reference": "0a87d4b19070a24636125993450a9d3f698a6663",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/30092302728297dddab6b3d12cc5142e575ad3c1",
+                "reference": "30092302728297dddab6b3d12cc5142e575ad3c1",
                 "shasum": ""
             },
             "require": {
@@ -3285,7 +3285,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2017-01-20T00:54:15+00:00"
+            "time": "2017-01-23T23:49:15+00:00"
         },
         {
             "name": "codeception/specify",

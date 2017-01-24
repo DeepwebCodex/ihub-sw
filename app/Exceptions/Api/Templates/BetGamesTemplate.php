@@ -76,10 +76,7 @@ class BetGamesTemplate implements IExceptionTemplate
      */
     private function isUnknownError():bool
     {
-        return
-            in_array($this->statusCode, [500, 503, 504]) &&
-            is_null(TransactionHelper::getTransactionErrorCode($this->code)) &&
-            $this->code !== StatusCode::BAD_OPERATION_ORDER;
+        return in_array($this->statusCode, [500, 503, 504]) && is_null(TransactionHelper::getTransactionErrorCode($this->code));
     }
 
     /**
@@ -107,7 +104,7 @@ class BetGamesTemplate implements IExceptionTemplate
      */
     private function isDuplicateWin():bool
     {
-        return ($this->method == 'transaction_bet_payout') && ($this->code == StatusCode::DUPLICATED_WIN);
+        return ($this->method == 'transaction_bet_payout') && ($this->code == StatusCode::BAD_OPERATION_ORDER);
     }
 
     /**
