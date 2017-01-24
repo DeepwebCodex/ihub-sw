@@ -72,7 +72,6 @@ class AccountManager
     private function setUpConfig(){
 
         if(!config('external.api.account_roh') ||
-            !config('external.api.account_session') ||
             !config('external.api.account_op') ||
             !config('external.api.cards_roh') ||
             !config('external.api.cash_desk_roh')) {
@@ -82,9 +81,6 @@ class AccountManager
 
         $this->accountRohHost = config('external.api.account_roh.host');
         $this->accountRohPort = config('external.api.account_roh.port');
-
-        $this->sessionHost = config('external.api.account_session.host');
-        $this->sessionPort = config('external.api.account_session.port');
 
         $this->restHost = config('external.api.account_op.host');
         $this->restPort = config('external.api.account_op.port');
@@ -119,16 +115,6 @@ class AccountManager
     }
 
     /**
-     * @param string $login
-     * @return mixed
-     */
-    public function checkLoginSession(string $login){
-        return $this->getSession('session/exists', [
-            'login' => $login
-        ]);
-    }
-
-    /**
      * @return mixed
      */
     public function getFreeOperationId(){
@@ -138,8 +124,9 @@ class AccountManager
     /**
      * @return mixed
      */
-    public function getFreeCardId(){
-        return $this->postMessageCardRoh('cards/card/get_free_id',[]);
+    public function getFreeCardId()
+    {
+        return $this->postMessageCardRoh('cards/card/get_free_id', []);
     }
 
     /**
@@ -154,25 +141,34 @@ class AccountManager
      * @param int $direction //transaction direction 0 - deposit, 1 - withdrawal
      * @param int $object_id //unique id of transaction integration side
      * @param string $comment //transaction comment
+     * @param int $partner_id
      * @return mixed
      */
     public function createTransaction(
         string $status,
-        int $service_id, int $cashdesk, int $user_id,
-        $amount, string $currency, int $direction, int $object_id, string $comment){
+        int $service_id,
+        int $cashdesk,
+        int $user_id,
+        $amount,
+        string $currency,
+        int $direction,
+        int $object_id,
+        string $comment,
+        int $partner_id
+    ) {
 
         return $this->postMessageRoh('accounts/operation/new', [
-            'service_id'    => $service_id,
-            'cashdesk'      => $cashdesk,
-            'user_id'       => $user_id,
-            'amount'        => $amount,
-            'currency'      => $currency,
-            'client_ip'     => get_client_ip() ?: '127.0.0.1',
-            'move'          => $direction,
-            'status'        => $status,
-            'object_id'     => $object_id,
-            'comment'       => $comment,
-            'partner_id'    => (int) $this->request->server('PARTNER_ID')
+            'service_id' => $service_id,
+            'cashdesk' => $cashdesk,
+            'user_id' => $user_id,
+            'amount' => $amount,
+            'currency' => $currency,
+            'client_ip' => get_client_ip() ?: '127.0.0.1',
+            'move' => $direction,
+            'status' => $status,
+            'object_id' => $object_id,
+            'comment' => $comment,
+            'partner_id' => $partner_id
         ], 3);
     }
 
@@ -341,11 +337,6 @@ class AccountManager
     private function postMessageCardRoh(string $method, array $params, int $retry = 0)
     {
         return $this->sendPostRoh($this->buildCardsRohHost($method), $params, $retry);
-    }
-
-    private function getSession(string $method, array $params, int $retry = 0)
-    {
-        return $this->sendGetSession($this->buildSessionHost($method), $params, $retry);
     }
 
     private function getRest(string $method, array $params, int $retry = 0){

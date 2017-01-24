@@ -49,6 +49,18 @@ class EuroGamesTechApiCest
     {
         $request = $this->data->authenticate();
 
+        $this->dataAuthenticate($I, $request);
+    }
+
+    public function testMethodAuthenticateCompoundId(\ApiTester $I)
+    {
+        $request = $this->data->authenticate(false);
+
+        $this->dataAuthenticate($I, $request);
+    }
+
+    protected function dataAuthenticate(\ApiTester $I, $request)
+    {
         $I->disableMiddleware();
         $this->defenceCode = md5(uniqid('egt'.random_int(-99999,999999)));
         $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $this->defenceCode]));
@@ -64,6 +76,18 @@ class EuroGamesTechApiCest
     {
         $request = $this->data->getBalance();
 
+        $this->dataGetPlayerBalance($I, $request);
+    }
+
+    public function testMethodGetPlayerBalanceCompoundId(\ApiTester $I)
+    {
+        $request = $this->data->getBalance(false);
+
+        $this->dataGetPlayerBalance($I, $request);
+    }
+
+    private function dataGetPlayerBalance(\ApiTester $I, $request)
+    {
         $I->disableMiddleware();
         $I->sendPOST('/egt/GetPlayerBalance', $request);
         $I->seeResponseCodeIs(200);
@@ -76,8 +100,21 @@ class EuroGamesTechApiCest
 
     public function testMethodWithdraw(\ApiTester $I)
     {
-        $balance = $this->testUser->getBalanceInCents();
         $request = $this->data->bet();
+
+        $this->dataWithdraw($I, $request);
+    }
+
+    public function testMethodWithdrawCompoundId(\ApiTester $I)
+    {
+        $request = $this->data->bet(false);
+
+        $this->dataWithdraw($I, $request);
+    }
+
+    private function dataWithdraw(\ApiTester $I, $request)
+    {
+        $balance = $this->testUser->getBalanceInCents();
         $this->gameNumber = $request['GameNumber'];
 
         $I->disableMiddleware();
@@ -102,8 +139,22 @@ class EuroGamesTechApiCest
     public function testMethodDeposit(\ApiTester $I)
     {
         $this->testMethodWithdraw($I);
-        $balance = $this->testUser->getBalanceInCents();
         $request = $this->data->win($this->gameNumber);
+
+        $this->dataDeposit($I, $request);
+    }
+
+    public function testMethodDepositCompoundId(\ApiTester $I)
+    {
+        $this->testMethodWithdrawCompoundId($I);
+        $request = $this->data->win($this->gameNumber, false);
+
+        $this->dataDeposit($I, $request);
+    }
+
+    private function dataDeposit(\ApiTester $I, $request)
+    {
+        $balance = $this->testUser->getBalanceInCents();
 
         $I->disableMiddleware();
         $I->sendPOST('/egt/Deposit', $request);
@@ -128,6 +179,18 @@ class EuroGamesTechApiCest
     {
         $request = $this->data->betWin();
 
+        $this->dataWithdrawAndDeposit($I, $request);
+    }
+
+    public function testWithdrawAndDepositCompoundId(\ApiTester $I)
+    {
+        $request = $this->data->betWin(false);
+
+        $this->dataWithdrawAndDeposit($I, $request);
+    }
+
+    private function dataWithdrawAndDeposit(\ApiTester $I, $request)
+    {
         $I->disableMiddleware();
         $I->sendPOST('/egt/WithdrawAndDeposit', $request);
         $I->seeResponseCodeIs(200);
@@ -158,6 +221,19 @@ class EuroGamesTechApiCest
     public function testWithdrawAndDepositLost(\ApiTester $I)
     {
         $request = $this->data->betLost();
+
+        $this->dataWithdrawAndDepositLost($I, $request);
+    }
+
+    public function testWithdrawAndDepositLostCompoundId(\ApiTester $I)
+    {
+        $request = $this->data->betLost(false);
+
+        $this->dataWithdrawAndDepositLost($I, $request);
+    }
+
+    private function dataWithdrawAndDepositLost(\ApiTester $I, $request)
+    {
         $expectedBalance = $this->testUser->getBalanceInCents() - $this->data->getAmount();
 
         $I->disableMiddleware();
