@@ -60,13 +60,6 @@ class CodeMapping extends CodeMappingBase
                 'attribute' => null,
                 'meanings'  => []
             ],
-
-            StatusCode::DUPLICATED_WIN => [
-                'message'   => '',
-                'map'       => [],
-                'attribute' => null,
-                'meanings'  => [self::SUCCESS]
-            ],
         ];
     }
 

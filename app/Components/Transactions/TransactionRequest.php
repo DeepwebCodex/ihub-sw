@@ -66,7 +66,7 @@ class TransactionRequest
 
         $this->comment     = json_encode($this->getComment());
 
-        $this->cashdesk_id = app('GameSession')->get('cashdesk_id') ?? app('Request')::getFacadeRoot()->server('FRONTEND_NUM');
+        $this->cashdesk_id = app('Request')::getFacadeRoot()->server('FRONTEND_NUM', 0);
     }
 
     public function getComment()

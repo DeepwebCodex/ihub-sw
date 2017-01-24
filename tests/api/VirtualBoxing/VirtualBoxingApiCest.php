@@ -11,11 +11,9 @@ class VirtualBoxingApiCest
 
     const DUPLICATE_RESPONSE_TEXT = 'duplicate';
 
-    const ID_PREFIX_COUNTER = 50000000;
-
     protected $eventId;
 
-    public function testInvalidMethod(ApiTester $I)
+    public function testMethodNotFound(ApiTester $I)
     {
         $I->sendGET(self::URI_PREFIX . 'test');
         $I->seeResponseCodeIs(400);
@@ -45,8 +43,6 @@ class VirtualBoxingApiCest
 
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
         $I->seeResponseCodeIs(200);
-
-        $this->clearEvent($this->eventId);
     }
 
     /**
@@ -54,15 +50,7 @@ class VirtualBoxingApiCest
      */
     protected function getEventId()
     {
-        return EventLink::getLastVbId() + self::ID_PREFIX_COUNTER + random_int(0, 1000);
-    }
-
-    /**
-     * @param $eventVbId
-     */
-    protected function clearEvent($eventVbId)
-    {
-        EventLink::where('event_vb_id', $eventVbId)->delete();
+        return EventLink::getLastVbId() + 1;
     }
 
     /**
@@ -74,25 +62,25 @@ class VirtualBoxingApiCest
             'name' => 'match_bet',
             'match' => [
                 'scheduleId' => $this->eventId,
-                'competition' => 'ihub: Test competition',
+                'competition' => 'Test competition',
                 'bet' => [
                     'code' => 'R5',
                     'selection' => [
                         [
                             'home' => 'H',
-                            'name' => 'ihub: Boxer 1',
+                            'name' => 'Boxer 1',
                             'price' => [
                                 'dec' => 2.97
                             ]
                         ]
                     ]
                 ],
-                'away' => 'ihub: Away player',
-                'home' => 'ihub: Home player',
-                'location' => 'ihub: Test location',
+                'away' => 'Away player',
+                'home' => 'Home player',
+                'location' => 'Test location',
                 'date' => date('Y-m-d'),
                 'time' => date('H:i:s'),
-                'name' => 'ihub: Test match name',
+                'name' => 'Test match name',
             ]
         ];
 
@@ -110,11 +98,9 @@ class VirtualBoxingApiCest
             'name' => 'match_progress',
             'event_id' => $this->eventId,
             'mnem' => 'MB',
-            'xu:ups-at' => [
-                'xu:at' => [
-                    [
-                        '#text' => $statusCode
-                    ]
+            'xu:ups-at.xu:at' => [
+                [
+                    '#text' => $statusCode
                 ]
             ]
         ];
@@ -197,8 +183,6 @@ class VirtualBoxingApiCest
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::DUPLICATE_RESPONSE_TEXT);
-
-        $this->clearEvent($this->eventId);
     }
 
     public function testDuplicateResult(ApiTester $I)
@@ -229,8 +213,6 @@ class VirtualBoxingApiCest
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::DUPLICATE_RESPONSE_TEXT);
-
-        $this->clearEvent($this->eventId);
     }
 
     public function testCancelEvent(ApiTester $I)
@@ -246,7 +228,5 @@ class VirtualBoxingApiCest
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
-
-        $this->clearEvent($this->eventId);
     }
 }

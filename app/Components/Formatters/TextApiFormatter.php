@@ -8,24 +8,24 @@
 
 namespace App\Components\Formatters;
 
+
+use App\Components\ThirdParty\Array2Xml;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 
-/**
- * Class TextApiFormatter
- * @package App\Components\Formatters
- */
 class TextApiFormatter extends BaseApiFormatter
 {
+
     /**
      * @param array $data
      * @return string
      */
     public function format(array $data)
     {
-        if ($data) {
+        if($data) {
             return implode(' ', $data);
         }
+
         return '';
     }
 
@@ -42,15 +42,10 @@ class TextApiFormatter extends BaseApiFormatter
         ]);
     }
 
-    /**
-     * @param $statusCode
-     * @param string $message
-     * @param array $payload
-     * @return mixed
-     */
     public function formatResponse($statusCode, string $message, array $payload = [])
     {
-        $payload = array_merge($payload, $message ? compact('message') : []);
+
+        $payload = array_merge($this->getMetaData()?:[], $payload, $message ? compact('message') : []);
 
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'text/plain'
