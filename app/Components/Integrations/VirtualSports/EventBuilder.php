@@ -18,37 +18,32 @@ abstract class EventBuilder
 {
     use ConfigTrait;
 
-    protected $eventData;
     protected $eventType;
 
     protected $eventParticipants;
 
-    protected $dataMapperClass;
+    protected $dataMapper;
 
-    public function __construct(array $eventData, $dataMapperClass)
+    public function __construct(DataMapperInterface $dataMapper)
     {
-        $this->eventData = $eventData;
-        $this->dataMapperClass = $dataMapperClass;
+        $this->dataMapper = $dataMapper;
     }
 
     public function create()
     {
-        /**@var DataMapperInterface $dataMap*/
-        $dataMap = new $this->dataMapperClass($this->eventData, $this->eventType);
-
         //need a category for event
         $eventCategory = $this->getCategory();
 
         //creating tournament for category
-        $tournament = $this->getTournament($eventCategory->id, $dataMap->getEventName());
+        $tournament = $this->getTournament($eventCategory->id, $this->dataMapper->getEventName());
 
         //creating event for this tournament
         $event = $this->getEvent(
             $tournament->id,
-            $dataMap->getEventTime(),
+            $this->dataMapper->getEventTime(),
             $tournament->name,
-            $dataMap->getEventId(),
-            $dataMap->getParticipants()
+            $this->dataMapper->getEventId(),
+            $this->dataMapper->getParticipants()
         );
 
         //initializing results for this event with zero data
@@ -66,7 +61,7 @@ abstract class EventBuilder
             throw new \RuntimeException("There is no market templates for event type {$this->eventType}");
         }
 
-        $mappedMarketsWithOutcomes = $dataMap->getMarketsWithOutcomes();
+        $mappedMarketsWithOutcomes = $this->dataMapper->getMarketsWithOutcomes();
 
         foreach ($mappedMarketsWithOutcomes as $market => $outcomes) {
 

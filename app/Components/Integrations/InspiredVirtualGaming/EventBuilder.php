@@ -2,8 +2,8 @@
 
 namespace App\Components\Integrations\InspiredVirtualGaming;
 
-use App\Components\Integrations\InspiredVirtualGaming\Services\DataMapper;
 use App\Components\Integrations\InspiredVirtualGaming\Services\OutcomeService;
+use App\Components\Integrations\VirtualSports\Interfaces\DataMapperInterface;
 use App\Components\Integrations\VirtualSports\Interfaces\EventBuilderInterface;
 use App\Components\Integrations\VirtualSports\Services\CategoryService;
 use App\Components\Integrations\VirtualSports\Services\EventService;
@@ -24,14 +24,14 @@ class EventBuilder extends \App\Components\Integrations\VirtualSports\EventBuild
 
     protected $controllerId;
 
-    public function __construct(array $eventData)
+    public function __construct(DataMapperInterface $dataMapper)
     {
         $this->config = config('integrations.inspired');
 
-        $this->eventType = (int) array_get($this->eventData, 'EventType');
-        $this->controllerId = (int) array_get($this->eventData, 'ControllerId');
+        $this->eventType = $dataMapper->getEventType();
+        $this->controllerId = (int) array_get($dataMapper->getRawData(), 'ControllerId');
 
-        parent::__construct($eventData, DataMapper::class);
+        parent::__construct($dataMapper);
     }
 
     protected function getCategory() : Category

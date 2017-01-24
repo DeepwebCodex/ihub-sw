@@ -17,6 +17,8 @@ use Stringy\StaticStringy as S;
 
 interface DataMapperInterface
 {
+    public function getEventType();
+
     public function getEventTime();
 
     public function getEventId();
@@ -34,4 +36,6 @@ interface DataMapperInterface
     public function getMarketsWithOutcomes() : array;
 
     public function getResultTypeId(int $default) : int;
+
+    public function getRawData() : array;
 }

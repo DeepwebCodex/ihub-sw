@@ -8,10 +8,6 @@
 
 namespace App\Components\Integrations\VirtualSports\Services;
 
-use App\Components\Integrations\InspiredVirtualGaming\SportMapping\FootballDataMap;
-use App\Components\Integrations\InspiredVirtualGaming\SportMapping\HorsesDataMap;
-use App\Components\Integrations\InspiredVirtualGaming\SportMapping\NumbersDataMap;
-use App\Components\Integrations\InspiredVirtualGaming\SportMapping\TennisDataMap;
 use App\Components\Integrations\VirtualSports\Interfaces\DataMapperInterface;
 use App\Components\Integrations\VirtualSports\Interfaces\SportDataMapInterface;
 
@@ -23,17 +19,7 @@ abstract class DataMapper implements DataMapperInterface
 
     protected $mapper;
 
-    protected $mappingRegistry = [
-        0 => HorsesDataMap::class,
-        1 => HorsesDataMap::class,
-        2 => HorsesDataMap::class,
-        3 => HorsesDataMap::class,
-        4 => FootballDataMap::class,
-        5 => NumbersDataMap::class,
-        6 => HorsesDataMap::class,
-        7 => HorsesDataMap::class,
-        8 => TennisDataMap::class
-    ];
+    protected $mappingRegistry = [];
 
     public function __construct(array $eventData, $eventType)
     {
@@ -89,5 +75,15 @@ abstract class DataMapper implements DataMapperInterface
     public function getResultTypeId(int $default) : int
     {
         return $this->mapper->getResultTypeId($default);
+    }
+
+    public function getRawData() : array
+    {
+        return $this->eventData;
+    }
+
+    public function getEventType()
+    {
+        return $this->eventType;
     }
 }

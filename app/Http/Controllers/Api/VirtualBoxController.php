@@ -75,7 +75,9 @@ class VirtualBoxController extends BaseApiController
 
         $eventProcessor = new EventProcessor();
 
-        $created = $eventProcessor->create($request->all());
+        $dataMap = new DataMapper($request->all(), 'box');
+
+        $created = $eventProcessor->create($dataMap);
 
         if(!$created) {
             throw new \RuntimeException("Unable to create event");
@@ -118,7 +120,9 @@ class VirtualBoxController extends BaseApiController
 
         if(! Result::existsById($request->input('result.tid'))) {
 
-            $processor->setResult($request->input(), false);
+            $dataMap = new DataMapper(array_get($request->input(), 'result', []), 'box');
+
+            $processor->setResult($dataMap, false);
 
             Result::create(['tid' => $request->input('result.tid')]);
 
@@ -128,7 +132,6 @@ class VirtualBoxController extends BaseApiController
                 (int) $request->input('result.event_id'),
                 $request->input('result.tid')
             ]);
-
         }
 
         return $this->respondSuccess(null, [

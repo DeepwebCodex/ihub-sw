@@ -2,6 +2,7 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
+use App\Components\Integrations\VirtualSports\Interfaces\DataMapperInterface;
 use App\Components\Integrations\VirtualSports\Interfaces\EventBuilderInterface;
 use App\Components\Integrations\VirtualSports\Interfaces\EventResultInterface;
 use App\Models\Line\Market;
@@ -24,10 +25,10 @@ abstract class EventProcessor
         $this->eventId = $eventId;
     }
 
-    public function create(array $eventData) : bool
+    public function create(DataMapperInterface $dataMapper) : bool
     {
         /**@var EventBuilderInterface $eventBuilder*/
-        $eventBuilder = new $this->eventBuilderClass($eventData);
+        $eventBuilder = new $this->eventBuilderClass($dataMapper);
 
         DB::connection('line')->beginTransaction();
         DB::connection('trans')->beginTransaction();
@@ -52,7 +53,7 @@ abstract class EventProcessor
         return true;
     }
 
-    public function setResult(array $eventData, bool $finish = true)
+    public function setResult(DataMapperInterface $dataMapper, bool $finish = true)
     {
         DB::connection('line')->beginTransaction();
         try {
@@ -64,7 +65,7 @@ abstract class EventProcessor
             }
 
             /**@var EventResultInterface $eventResult*/
-            $eventResult = new $this->eventResultClass($eventData, $this->eventId);
+            $eventResult = new $this->eventResultClass($dataMapper, $this->eventId);
 
             $this->eventId = $eventResult->process();
 

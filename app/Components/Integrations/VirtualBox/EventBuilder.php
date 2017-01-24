@@ -2,8 +2,8 @@
 
 namespace App\Components\Integrations\VirtualBox;
 
-use App\Components\Integrations\VirtualBox\Services\DataMapper;
 use App\Components\Integrations\VirtualBox\Services\OutcomeService;
+use App\Components\Integrations\VirtualSports\Interfaces\DataMapperInterface;
 use App\Components\Integrations\VirtualSports\Interfaces\EventBuilderInterface;
 use App\Components\Integrations\VirtualSports\Services\CategoryService;
 use App\Components\Integrations\VirtualSports\Services\EventService;
@@ -23,18 +23,18 @@ class EventBuilder extends \App\Components\Integrations\VirtualSports\EventBuild
 {
     use ConfigTrait;
 
-    public function __construct(array $eventData)
+    public function __construct(DataMapperInterface $dataMapper)
     {
         $this->config = config('integrations.virtualBoxing');
 
-        $this->eventType = 'box';
+        $this->eventType = $dataMapper->getEventType();
 
-        parent::__construct($eventData, DataMapper::class);
+        parent::__construct($dataMapper);
     }
 
     protected function getCategory() : Category
     {
-        $eventName = array_get($this->eventData, 'match.competition');
+        $eventName = array_get($this->dataMapper->getRawData(), 'match.competition');
 
         $category = (new CategoryService(
             $eventName,

@@ -15,34 +15,27 @@ abstract class EventResult
 {
     use ConfigTrait;
 
-    protected $requestData;
-    protected $dataMapperClass;
+    protected $dataMapper;
 
-    protected $eventData;
     protected $eventType;
 
     private $eventId;
 
-    public function __construct(array $data, int $eventId, $dataMapperClass)
+    public function __construct(int $eventId, DataMapperInterface $dataMapper)
     {
-        $this->requestData = $data;
-
         $this->eventId = $eventId;
-        $this->dataMapperClass = $dataMapperClass;
+        $this->dataMapper = $dataMapper;
     }
 
     public function process() : int
     {
-        /**@var DataMapperInterface $dataMap*/
-        $dataMap = new $this->dataMapperClass($this->eventData, $this->eventType);
-
         $event = Event::findById($this->eventId);
 
         $participants = $event->preGetParticipant($event->id);
 
         $resultType = $event->preGetPeriodStart($event->id, 'prebet');
 
-        $results = $dataMap->getMappedResults();
+        $results = $this->dataMapper->getMappedResults();
 
         if(empty($results)) {
             throw new \RuntimeException("No valid event results");
@@ -66,19 +59,19 @@ abstract class EventResult
             }
         }
 
-        $resultTotalJson = $dataMap->getTotalResultForJson($results, $participants);
+        $resultTotalJson = $this->dataMapper->getTotalResultForJson($results, $participants);
 
         if(!empty($resultTotalJson)) {
             $resultTotalJson = json_encode(array_merge([
-                'result_type_id' => $dataMap->getResultTypeId(data_get($resultType, '0.id'))
-            ], $dataMap->getTotalResultForJson($results, $participants)));
+                'result_type_id' => $this->dataMapper->getResultTypeId(data_get($resultType, '0.id'))
+            ], $resultTotalJson));
         } else {
             $resultTotalJson = '';
         }
 
         if(! ResultGameTotal::updateResultGameTotal([
-            'result_total'      => $dataMap->getTotalResult($results, $participants),
-            'result_type_id'    => $dataMap->getResultTypeId(data_get($resultType, '0.id')),
+            'result_total'      => $this->dataMapper->getTotalResult($results, $participants),
+            'result_type_id'    => $this->dataMapper->getResultTypeId(data_get($resultType, '0.id')),
             'result_total_json' => $resultTotalJson
         ], $event->id) ) {
             throw new \RuntimeException("Unable to update result game total for event {$event->id}");

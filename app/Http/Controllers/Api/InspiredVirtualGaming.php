@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\TextApiFormatter;
 use App\Components\Integrations\InspiredVirtualGaming\EventProcessor;
+use App\Components\Integrations\InspiredVirtualGaming\Services\DataMapper;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\InspiredVirtualGamingTemplate;
@@ -59,7 +60,12 @@ class InspiredVirtualGaming extends BaseApiController
             {
                 $eventProcessor = new EventProcessor();
 
-                $created = $eventProcessor->create(array_merge($eventData, [ 'ControllerId' => $ivgControllerId]));
+                $dataMap = new DataMapper(
+                    array_merge($eventData, [ 'ControllerId' => $ivgControllerId]),
+                    (int) array_get($eventData, 'EventType')
+                );
+
+                $created = $eventProcessor->create($dataMap);
 
                 if(!$created) {
                     throw new \RuntimeException("Unable to create event");
@@ -78,7 +84,12 @@ class InspiredVirtualGaming extends BaseApiController
 
         $processor = EventProcessor::getEvent((int) $ivgEventId);
 
-        $processor->setResult($request->input());
+        $dataMap = new DataMapper(
+            array_get($request->input(), 'event', []),
+            (int) array_get($request->input(), 'event.EventType')
+        );
+
+        $processor->setResult($dataMap);
 
         return $this->respondOk();
     }

@@ -4,11 +4,11 @@ namespace App\Components\Integrations\VirtualSports\Interfaces;
 
 interface EventProcessorInterface
 {
-    public function create(array $eventData) : bool;
+    public function create(DataMapperInterface $dataMapper) : bool;
 
     public static function getEvent(int $eventId) : EventProcessorInterface;
 
-    public function setResult(array $eventData, bool $finish = true);
+    public function setResult(DataMapperInterface $dataMapper, bool $finish = true);
 
     public function cancel() : bool;
 
