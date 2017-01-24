@@ -58,11 +58,11 @@ abstract class EventBuilder
 
         $marketTemplates = MarketTemplate::getMarketTemplates($marketTemplatesIds);
 
-        if(!$marketTemplates) {
-            throw new \RuntimeException("There is no market templates for event type {$this->eventType}");
-        }
-
         $mappedMarketsWithOutcomes = $this->dataMapper->getMarketsWithOutcomes();
+
+        if(!$marketTemplates || empty($mappedMarketsWithOutcomes)) {
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_CREATE_MARKET));
+        }
 
         foreach ($mappedMarketsWithOutcomes as $market => $outcomes) {
 
@@ -80,7 +80,7 @@ abstract class EventBuilder
                     $outcomeTypes = OutcomeType::getOutcomeTypes($currentMarketTemplate->outcome_types);
 
                     if(!$outcomeTypes) {
-                        throw new \RuntimeException("There is no outcome types for market {$market} with template id: {$currentMarketTemplate->id}");
+                        throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_FIND_OUTCOME));
                     }
 
                     //Group markets by result types

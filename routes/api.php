@@ -44,12 +44,6 @@ Route::group(['prefix' => 'mg'], function () {
 
 /**VirtualBoxing controller routes */
 Route::group(['prefix' => 'vb'], function () {
-    Route::any('{any}', "VirtualBoxingController@error");
-    Route::post('/', "VirtualBoxingController@index");
-});
-
-/**VirtualBox controller routes */
-Route::group(['prefix' => 'vb2'], function () {
     Route::any('{any}', "VirtualBoxController@error");
     Route::post('/', "VirtualBoxController@index");
 });

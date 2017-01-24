@@ -22,7 +22,7 @@ class InspiredVirtualGamingTemplate implements IExceptionTemplate
      */
     public function mapping($item, $statusCode, $isApiException)
     {
-        $message = array_get($item, 'message', 'BADFORMAT');
+        $message = config('app.debug') ? array_get($item, 'message', 'BADFORMAT') : 'BADFORMAT';
 
         return [
             'message' => $message

@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Components\Formatters\TextApiFormatter;
 use App\Components\Integrations\VirtualBox\EventProcessor;
 use App\Components\Integrations\VirtualBox\Services\DataMapper;
-use App\Components\Integrations\VirtualBoxing\BetService;
-use App\Components\Integrations\VirtualBoxing\ProgressService;
-use App\Components\Integrations\VirtualBoxing\ResultService;
 use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
@@ -19,8 +16,6 @@ use App\Models\VirtualBoxing\EventLink;
 use App\Models\VirtualBoxing\Result;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use Stringy\StaticStringy as S;
 
 /**
@@ -81,7 +76,7 @@ class VirtualBoxController extends BaseApiController
         $created = $eventProcessor->create($dataMap);
 
         if(!$created) {
-            throw new \RuntimeException("Unable to create event");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::EVENT_NOT_FOUND));
         }
 
         //creates event, markets, categories, outcomes and in-its base results with all ok calculator message

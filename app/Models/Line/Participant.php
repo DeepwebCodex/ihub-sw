@@ -30,7 +30,6 @@ class Participant extends BaseLineModel
      */
     public $fillable = ['name', 'type', 'country_id', 'sport_id'];
 
-    //$data = collect($data)->map(function($x){ return (array) $x; })->toArray();
 
     public static function createOrUpdate(array $attributes = []) : Participant
     {

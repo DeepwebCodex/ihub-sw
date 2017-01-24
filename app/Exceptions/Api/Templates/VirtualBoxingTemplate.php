@@ -27,7 +27,9 @@ class VirtualBoxingTemplate implements IExceptionTemplate
             unset($item['code']);
         }
 
-        $item['method'] = 'f_' . $item['method'];
+        if (isset($item['method'])) {
+            $item['method'] = 'f_' . $item['method'];
+        }
 
         if (!$isApiException && isset($item['message'])) {
             $item['message'] = 'Error';
