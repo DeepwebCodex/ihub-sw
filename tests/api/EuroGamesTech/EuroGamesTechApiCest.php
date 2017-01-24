@@ -61,7 +61,6 @@ class EuroGamesTechApiCest
 
     protected function dataAuthenticate(\ApiTester $I, $request)
     {
-        dd($request);
         $I->disableMiddleware();
         $this->defenceCode = md5(uniqid('egt'.random_int(-99999,999999)));
         $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $this->defenceCode]));
