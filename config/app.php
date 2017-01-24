@@ -164,7 +164,6 @@ return [
         \App\Providers\AppLogServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
         \App\Providers\AmqpServiceProvider::class,
-        \App\Providers\StatsdServiceProvider::class,
         \App\Providers\GameSessionServiceProvider::class
     ],
 
@@ -216,6 +215,7 @@ return [
         'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
         'AppLog' => \App\Facades\AppLog::class,
         'Fractal' => Spatie\Fractal\FractalFacade::class,
+        'Uuid' => Webpatser\Uuid\UuidFacade::class,
     ],
 
 ];

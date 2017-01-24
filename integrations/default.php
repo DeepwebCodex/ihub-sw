@@ -5,25 +5,23 @@ return [
         'service_id'    => 28,
         'secret_word'   => 'ererr4SD',
     ],
-
     'egt' => [
-        'service_id'    => 27,
-        'UserName'      => 'FavbetEGTSeamless',
-        'Password'      => '6IQLjj8Jowe3X',
-        'secret'        => 'Qasdf3QEFDDCS2'
+        'service_id' => 27,
+        'UserName' => 'FavbetEGTSeamless',
+        'Password' => '6IQLjj8Jowe3X',
+        'secret' => 'Qasdf3QEFDDCS2'
     ],
-
     'microgaming' => [
         'service_id'            => 17,
         'login_server'          => 'microgaming',
         'password_server'       => 'hawai',
         'use_secure_request'    => false,
         'list_currency'         => ['WMZ' => 'USD', 'WMR' => 'RUB', 'WMU' => 'UAH', 'WME' => 'EUR']
-    ],
 
+    ],
     'virtualBoxing' => [
         'service_id' => 23,
-        'sport_id'  => 100,
+        'sport_id' => 100,
         'amqp' => [
             'exchange' => 'service_23',
             'key' => 'service_23.event.'
@@ -163,4 +161,12 @@ return [
         'token_expiration_time' => 1,
         'secret' => 'dfFWgbF3r4efr',
     ],
+    'microgamingOrion' => [
+        'baseUrl' => 'http://41.223.121.106/Orion/VanguardAdmin/SOAP2',
+        'actionUrl' => 'http://mgsops.net/AdminAPI_Admin/IVanguardAdmin2/',
+        'username' => 5034,
+        'password' => 'test',
+        'ns' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures',
+        'serverId' => 5034
+    ]
 ];

@@ -5,6 +5,7 @@ namespace App\Components\Integrations\VirtualBoxing;
 use App\Components\Integrations\VirtualSports\Calculator;
 use App\Components\Traits\ConfigTrait;
 use App\Exceptions\Api\VirtualBoxing\ErrorException;
+use App\Exceptions\Api\VirtualBoxing\WarningException;
 use App\Models\Line\Event;
 use App\Models\Line\Market as MarketModel;
 use App\Models\Line\ResultGame;
@@ -35,7 +36,7 @@ class ProgressService
      * ProgressService constructor.
      * @param array $config
      * @param int $eventVbId
-     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
+     * @throws \App\Exceptions\Api\VirtualBoxing\WarningException
      */
     public function __construct(array $config, int $eventVbId)
     {
@@ -43,7 +44,7 @@ class ProgressService
 
         $event = EventLink::getByVbId($eventVbId);
         if (!$event) {
-            throw new ErrorException('cant_find_event');
+            throw new WarningException('cant_find_event');
         }
         $this->eventId = $event->event_id;
     }
