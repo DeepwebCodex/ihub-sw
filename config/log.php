@@ -53,4 +53,10 @@ return [
             ]
         ]
     ],
+
+    'statsd' => [
+        'host' => env('STATSD_HOST'),
+        'port' => env('STATSD_PORT'),
+        'prefix' => env('STATSD_PREFIX', '')
+    ]
 ];
