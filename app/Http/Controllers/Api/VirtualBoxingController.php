@@ -68,16 +68,15 @@ class VirtualBoxingController extends BaseApiController
     public function index(Request $request)
     {
         $method = $request->input('name', $request->input('type', 'error'));
+        $this->addMetaField('method', $method);
 
         $method = (string)S::camelize($method);
-
-        $this->addMetaField('method', $method);
 
         if (method_exists($this, $method)) {
             return app()->call([$this, $method], $request->all());
         }
 
-        return app()->call([$this, 'error'], $request->all());
+        return $this->respond(Response::HTTP_OK, '');
     }
 
     /**
@@ -112,7 +111,7 @@ class VirtualBoxingController extends BaseApiController
     {
         $validator = Validator::make(Input::all(), self::PROGRESS_VALIDATION_RULES);
 
-        $statusCode = Input::all()['xu:ups-at.xu:at'][0]['#text'];
+        $statusCode = Input::get('xu:ups-at.xu:at')[0]['#text'];
         if ($validator->fails()) {
             $responseMessage = $this->getMessageDescription('miss_element');
             return $this->respondError($responseMessage);
@@ -196,7 +195,7 @@ class VirtualBoxingController extends BaseApiController
      */
     public function respondSuccess(string $message)
     {
-        $message = $this->getMessageDescription('done') . ' ' . $this->getMetaField('method') . ' ' . $message;
+        $message = $this->getMessageDescription('done') . ' ' . 'f_' . $this->getMetaField('method') . ' ' . $message;
         return $this->respond(Response::HTTP_OK, $message);
     }
 
