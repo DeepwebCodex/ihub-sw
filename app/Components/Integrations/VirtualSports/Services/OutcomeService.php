@@ -10,7 +10,9 @@ namespace App\Components\Integrations\VirtualSports\Services;
 
 
 
+use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
 use App\Components\Integrations\VirtualSports\Interfaces\MarketOutcomeMapInterface;
+use App\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Market;
 use App\Models\Line\MarketTemplate;
 use App\Models\Line\Outcome;
@@ -93,7 +95,7 @@ abstract class OutcomeService
         ]);
 
         if(! $outcome) {
-            throw new \RuntimeException("Unable to create outcome of type {$mapper->getOutcomeTypeId()} for market {$this->market}");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_CREATE_OUTCOME));
         }
 
         return $outcome;

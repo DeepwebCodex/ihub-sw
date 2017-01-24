@@ -14,8 +14,6 @@ namespace App\Exceptions\Api\Templates;
  */
 class VirtualBoxingTemplate implements IExceptionTemplate
 {
-    private $item;
-
     /**
      * @param array $item
      * @param $statusCode
@@ -24,15 +22,17 @@ class VirtualBoxingTemplate implements IExceptionTemplate
      */
     public function mapping($item, $statusCode, $isApiException)
     {
-        $this->item = $item;
 
-        if (!$isApiException && isset($this->item['message'])) {
-            $this->item['message'] = 'Error';
-            if (isset($this->item['code'])) {
-                unset($this->item['code']);
-            }
+        if (isset($item['code'])) {
+            unset($item['code']);
         }
 
-        return $this->item;
+        $item['method'] = 'f_' . $item['method'];
+
+        if (!$isApiException && isset($item['message'])) {
+            $item['message'] = 'Error';
+        }
+
+        return $item;
     }
 }

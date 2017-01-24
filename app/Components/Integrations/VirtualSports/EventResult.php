@@ -5,6 +5,7 @@ namespace App\Components\Integrations\VirtualSports;
 
 use App\Components\Integrations\VirtualSports\Interfaces\DataMapperInterface;
 use App\Components\Traits\ConfigTrait;
+use App\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Event;
 use App\Models\Line\Market;
 use App\Models\Line\ResultGame;
@@ -55,7 +56,7 @@ abstract class EventResult
             ]);
 
             if(! $resultGame) {
-                throw new \RuntimeException("Unable to create a game result for event {$event->id}");
+                throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_CREATE_RESULT));
             }
         }
 
@@ -74,12 +75,10 @@ abstract class EventResult
             'result_type_id'    => $this->dataMapper->getResultTypeId(data_get($resultType, '0.id')),
             'result_total_json' => $resultTotalJson
         ], $event->id) ) {
-            throw new \RuntimeException("Unable to update result game total for event {$event->id}");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_CREATE_GAME_TOTAL));
         }
 
-        if(! ResultGame::updateApprove($event->id)) {
-            throw new \RuntimeException("Unable to update approve for event {$event->id}");
-        }
+        ResultGame::updateApprove($event->id);
 
         $this->eventId = $event->id;
 
@@ -90,7 +89,7 @@ abstract class EventResult
     {
         if(! (new Market())->suspendMarketEvent($this->eventId))
         {
-            throw new \RuntimeException("Unable to suspend market event {$this->eventId}");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_UPDATE_EVENT_STATUS));
         }
 
         if(! StatusDesc::create([
@@ -98,7 +97,7 @@ abstract class EventResult
             'name' => StatusDesc::STATUS_FINISHED,
             'event_id' => $this->eventId
         ])) {
-            throw new \RuntimeException("Can't insert status_desc");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_UPDATE_EVENT_STATUS));
         }
     }
 }

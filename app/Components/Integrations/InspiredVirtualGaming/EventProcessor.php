@@ -2,7 +2,9 @@
 
 namespace App\Components\Integrations\InspiredVirtualGaming;
 
+use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
 use App\Components\Integrations\VirtualSports\Interfaces\EventProcessorInterface;
+use App\Exceptions\Api\ApiHttpException;
 use App\Models\InspiredVirtualGaming\EventLink;
 
 class EventProcessor extends \App\Components\Integrations\VirtualSports\EventProcessor implements EventProcessorInterface
@@ -26,7 +28,7 @@ class EventProcessor extends \App\Components\Integrations\VirtualSports\EventPro
 
         if($eventId == null)
         {
-            throw new \RuntimeException("Event not found");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::EVENT_MODEL_NOT_FOUND));
         }
 
         return new static($eventId);

@@ -9,6 +9,7 @@
 namespace App\Components\Integrations\VirtualSports;
 
 
+use App\Exceptions\Api\ApiHttpException;
 use App\Models\Line\EventParticipant;
 use App\Models\Line\MarketTemplate;
 use App\Models\Line\OutcomeType;
@@ -95,7 +96,7 @@ abstract class BaseMarketOutcomeMapper
     }
 
     protected function failedToGetOutcomeType() {
-        throw new \RuntimeException("Unable to locate outcome");
+        throw new ApiHttpException('500', null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_FIND_OUTCOME));
     }
 
     private function isParticipantRequired(int $marketTypeId) : bool

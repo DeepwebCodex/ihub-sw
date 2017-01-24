@@ -3,7 +3,9 @@
 namespace App\Components\Integrations\VirtualBox;
 
 
+use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
 use App\Components\Integrations\VirtualSports\Interfaces\EventProcessorInterface;
+use App\Exceptions\Api\ApiHttpException;
 use App\Models\VirtualBoxing\EventLink;
 
 class EventProcessor extends \App\Components\Integrations\VirtualSports\EventProcessor implements EventProcessorInterface
@@ -27,7 +29,7 @@ class EventProcessor extends \App\Components\Integrations\VirtualSports\EventPro
 
         if($eventId == null)
         {
-            throw new \RuntimeException("Event not found");
+            throw new ApiHttpException('500', null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_FIND_EVENT));
         }
 
         return new static($eventId);

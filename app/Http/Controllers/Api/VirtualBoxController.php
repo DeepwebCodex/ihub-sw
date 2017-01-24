@@ -8,6 +8,7 @@ use App\Components\Integrations\VirtualBox\Services\DataMapper;
 use App\Components\Integrations\VirtualBoxing\BetService;
 use App\Components\Integrations\VirtualBoxing\ProgressService;
 use App\Components\Integrations\VirtualBoxing\ResultService;
+use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\VirtualBoxingTemplate;
@@ -146,7 +147,7 @@ class VirtualBoxController extends BaseApiController
      */
     public function error()
     {
-        throw new ApiHttpException(404, "Method not found");
+        throw new ApiHttpException(404, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::METHOD_NOT_FOUND));
     }
 
 

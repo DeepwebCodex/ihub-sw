@@ -8,6 +8,8 @@
 
 namespace App\Components\Integrations\VirtualSports\Services;
 
+use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
+use App\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Event;
 use App\Models\Line\EventParticipant;
 use App\Models\Line\Participant;
@@ -110,7 +112,7 @@ class EventService
             ]);
 
             if(!$participantModel) {
-                throw new \RuntimeException("Unable to create event participant");
+                throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CREATE_EVENT_PARTICIPANT));
             }
 
             $this->eventParticipants->add($participantModel);
@@ -131,7 +133,7 @@ class EventService
             ]);
 
             if(!$participantModel) {
-                throw new \RuntimeException("Unable to get a participant");
+                throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CREATE_PARTICIPANT));
             }
 
             $this->participants[$key]['participant_id'] = $participantModel->id;

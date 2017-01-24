@@ -4,6 +4,7 @@ namespace App\Components\Integrations\VirtualSports;
 
 use App\Components\Integrations\VirtualSports\Interfaces\DataMapperInterface;
 use App\Components\Traits\ConfigTrait;
+use App\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Category;
 use App\Models\Line\Event;
 use App\Models\Line\Market;
@@ -105,7 +106,7 @@ abstract class EventBuilder
                         ]);
 
                         if (!$marketModel) {
-                            throw new \RuntimeException("Unable to create market for template {$currentMarketTemplate->id}");
+                            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_CREATE_MARKET));
                         }
 
                         foreach ($groupedOutcomes as $outcome) {
@@ -119,7 +120,7 @@ abstract class EventBuilder
         //by default market is created as suspended=yes so to resume setting it to no
         if(!(new Market())->resumeMarketEvent($event->id))
         {
-            throw new \RuntimeException("Unable to resume market event {$event->id}");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_UPDATE_MARKET));
         }
 
         //creating new status description for this event
@@ -128,7 +129,7 @@ abstract class EventBuilder
             'name' => StatusDesc::STATUS_NOT_STARTED,
             'event_id' => $event->id
         ])){
-            throw new \RuntimeException("Can't insert status_desc");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_UPDATE_EVENT_STATUS));
         }
 
         return $event->id;

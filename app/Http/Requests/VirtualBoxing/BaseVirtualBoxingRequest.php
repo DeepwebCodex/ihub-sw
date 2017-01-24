@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\VirtualBoxing;
 
+use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
@@ -29,16 +30,12 @@ class BaseVirtualBoxingRequest extends ApiRequest implements ApiValidationInterf
 
     public function failedAuthorization()
     {
-        throw new ApiHttpException(503, "Service not available");
+        throw new ApiHttpException(404, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::METHOD_NOT_FOUND));
     }
 
     public function response(array $errors)
     {
-        $firstError = $this->getFirstError($errors);
-
-        throw new ApiHttpException('400',
-            array_get($firstError, 'message', 'Invalid input')
-        );
+        throw new ApiHttpException(400, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::MISS_ELEMENT));
     }
 
     function rules()

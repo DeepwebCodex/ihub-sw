@@ -5,6 +5,8 @@ namespace App\Components\Integrations\VirtualSports;
 use App\Components\Integrations\VirtualSports\Interfaces\DataMapperInterface;
 use App\Components\Integrations\VirtualSports\Interfaces\EventBuilderInterface;
 use App\Components\Integrations\VirtualSports\Interfaces\EventResultInterface;
+use App\Exceptions\Api\ApiHttpException;
+use App\Models\Line\Event;
 use App\Models\Line\Market;
 use App\Models\Line\ResultGame;
 use App\Models\Line\StatusDesc;
@@ -89,6 +91,12 @@ abstract class EventProcessor
 
         $result = ResultGame::getResult($this->eventId);
 
+        $event = Event::findById($this->eventId);
+
+        if($event && $event->status_type == 'finished') {
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_VOID_FINISHED));
+        }
+
         if($result !== null) {
 
             DB::connection('line')->beginTransaction();
@@ -106,7 +114,7 @@ abstract class EventProcessor
 
             if(($status = Calculator::sendMessageApprove($this->eventId)) !== 'ok')
             {
-                throw new \RuntimeException("Unable to send approve");
+                throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_CALCULATE_BET));
             }
 
             $this->sendAmQpMessage(StatusDesc::STATUS_CANCELLED);
@@ -135,7 +143,7 @@ abstract class EventProcessor
 
         if(($status = Calculator::sendMessageApprove($this->eventId)) !== 'ok')
         {
-            throw new \RuntimeException("Unable to send approve");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_CALCULATE_BET));
         }
 
         $this->sendAmQpMessage(StatusDesc::STATUS_IN_PROGRESS);
@@ -179,7 +187,7 @@ abstract class EventProcessor
     {
         if(($status = Calculator::sendMessageApprove($this->eventId)) !== 'ok')
         {
-            throw new \RuntimeException("Unable to send approve");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_CALCULATE_BET));
         }
 
         $this->sendAmQpMessage(StatusDesc::STATUS_FINISHED);
@@ -188,7 +196,7 @@ abstract class EventProcessor
     protected function updateGameResult()
     {
         if(!ResultGame::updateApprove($this->eventId)) {
-            throw new \RuntimeException("Can't update approve event");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_UPDATE_EVENT_STATUS));
         }
     }
 
@@ -196,14 +204,14 @@ abstract class EventProcessor
     {
         if(!(new Market())->suspendMarketEvent($this->eventId))
         {
-            throw new \RuntimeException("Can't suspend market");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_UPDATE_MARKET));
         }
     }
 
     protected function createStatusDesc(string $statusName)
     {
         if(! StatusDesc::createStatus($statusName, $this->eventId)){
-            throw new \RuntimeException("Can't insert status_desc");
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_UPDATE_EVENT_STATUS));
         }
     }
 
@@ -221,7 +229,7 @@ abstract class EventProcessor
         );
 
         if(!$response){
-            throw new \RuntimeException('AmQp send failed');
+            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_CALCULATE_BET));
         }
 
         return true;
