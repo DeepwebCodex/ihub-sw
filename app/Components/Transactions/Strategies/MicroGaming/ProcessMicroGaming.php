@@ -36,7 +36,7 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
         );
 
         /**@var Transactions $betTransaction*/
-
+        $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, $this->request->partner_id);
 
         if($this->request->transaction_type != TransactionRequest::TRANS_BET)
         {
@@ -46,6 +46,14 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
                 $this->onHaveNotBet(new ApiHttpException(500, null, ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR)));
                 return $this->responseData;
             }
+        } elseif ($this->request->transaction_type == TransactionRequest::TRANS_BET) {
+            //unique double bet
+            if($betTransaction && $betTransaction->foreign_id != $this->request->foreign_id) {
+                $this->request->object_id = $this->getObjectIdMapForDuplicate(
+                    $this->request->user_id,
+                    $this->request->currency,
+                    $this->request->object_id);
+            }
         }
 
         if($this->request->amount == 0)
@@ -53,7 +61,7 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
             return $this->processZeroAmountTransaction();
         }
 
-        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, request()->server('PARTNER_ID'));
+        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
 
         $status = is_object($lastRecord) ? $lastRecord->status : null;
 

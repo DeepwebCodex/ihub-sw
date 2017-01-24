@@ -49,7 +49,8 @@ abstract class BaseSeamlessWalletProcessor
                 $this->request->currency,
                 $this->request->direction,
                 $this->request->object_id,
-                $this->request->comment
+                $this->request->comment,
+                $this->request->partner_id
             );
 
             if(!$this->responseData){
@@ -67,7 +68,7 @@ abstract class BaseSeamlessWalletProcessor
      * @return array
      */
     protected function processZeroAmountTransaction(){
-        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, request()->server('PARTNER_ID'));
+        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
 
         $status = is_object($lastRecord) ? $lastRecord->status : null;
 
@@ -80,7 +81,7 @@ abstract class BaseSeamlessWalletProcessor
                     'service_id'        => $this->request->service_id,
                     'amount'            => $this->request->amount,
                     'move'              => $this->request->direction,
-                    'partner_id'        => request()->server('PARTNER_ID'),
+                    'partner_id'        => $this->request->partner_id,
                     'cashdesk'          => $this->request->cashdesk_id,
                     'status'            => TransactionRequest::STATUS_COMPLETED,
                     'currency'          => $this->request->currency,

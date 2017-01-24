@@ -18,27 +18,27 @@ class TestData
         $this->amount = 10;
     }
 
-    public function authenticate()
+    public function authenticate($simple = true)
     {
-        return $this->basic();
+        return $this->basic($simple);
     }
 
-    public function getBalance()
+    public function getBalance($simple = true)
     {
-        return array_merge($this->basic(), [
+        return array_merge($this->basic($simple), [
             'Currency' => $this->user->getCurrency(),
             'GameId' => random_int(1, 500),
         ]);
     }
 
-    public function bet()
+    public function bet($simple = true)
     {
-        return array_merge($this->transaction(), ['Reason' => 'ROUND_BEGIN']);
+        return array_merge($this->transaction($simple), ['Reason' => 'ROUND_BEGIN']);
     }
 
-    public function win($gameNumber = null)
+    public function win($gameNumber = null, $simple = true)
     {
-        $data = array_merge($this->transaction(), ['Reason' => 'ROUND_END']);
+        $data = array_merge($this->transaction($simple), ['Reason' => 'ROUND_END']);
         if ($gameNumber) {
             $data['GameNumber'] = $gameNumber;
         }
@@ -46,16 +46,16 @@ class TestData
         return $data;
     }
 
-    public function betWin()
+    public function betWin($simple = true)
     {
-        return array_merge($this->transaction(), [
+        return array_merge($this->transaction($simple), [
             'WinAmount' => $this->amount,
             'Reason' => 'ROUND_END']);
     }
 
-    public function betLost()
+    public function betLost($simple = true)
     {
-        return array_merge($this->transaction(), [
+        return array_merge($this->transaction($simple), [
             'WinAmount' => 0,
             'Reason' => 'ROUND_END']);
     }
@@ -66,20 +66,33 @@ class TestData
     }
 
 
-    private function basic()
+    private function basic($simple = true)
     {
-        return [
+        return array_merge($this->getCompoundId($simple), [
             'UserName' => config('integrations.egt.UserName'),
             'Password' => config('integrations.egt.Password'),
-            'PlayerId' => $this->user->id,
             'PortalCode' => $this->user->getCurrency(),
             'SessionId' => md5(str_random())
-        ];
+        ]);
     }
 
-    private function transaction()
+    private function getCompoundId($simple = true)
     {
-        return array_merge($this->basic(), [
+        $data = [];
+        if ($simple === true) {
+            $data['PlayerId'] = $this->user->id;
+        } else {
+            $data['PlayerId'] = $this->user->id;
+            $data['PartnerId'] = env('TEST_PARTNER_ID');
+            $data['CashdeskId'] = env('TEST_CASHEDESK');
+        }
+
+        return $data;
+    }
+
+    private function transaction($simple = true)
+    {
+        return array_merge($this->basic($simple), [
             'Currency' => $this->user->getCurrency(),
             'GameId' => random_int(1, 500),
             'TransferId' => md5(str_random()),

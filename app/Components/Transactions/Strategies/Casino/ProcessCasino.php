@@ -34,7 +34,8 @@ class ProcessCasino extends BaseSeamlessWalletProcessor implements TransactionPr
                 $request->currency,
                 $request->direction,
                 $request->object_id,
-                $request->comment
+                $request->comment,
+                $request->partner_id
             );
 
             $this->writeTransaction();
