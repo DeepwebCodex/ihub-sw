@@ -96,7 +96,9 @@ class Market
             'name' => $statusType,
             'event_id' => $this->eventId,
         ]);
-        if (!$statusDescModel->save()) {
+        try {
+            $statusDescModel->save();
+        } catch (\Exception $exception) {
             throw new ErrorException("Can't insert status_desc");
         }
     }
