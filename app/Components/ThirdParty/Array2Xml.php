@@ -3,8 +3,6 @@
 namespace App\Components\ThirdParty;
 
 use DOMDocument;
-use DOMNode;
-use Exception;
 
 /**
  * Array2XML: A class to convert array in PHP to XML
