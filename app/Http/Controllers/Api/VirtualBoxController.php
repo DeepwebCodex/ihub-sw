@@ -66,7 +66,7 @@ class VirtualBoxController extends BaseApiController
         $vbEventId = (int) $request->input('match.scheduleId');
 
         if(EventLink::isExists($vbEventId)) {
-           return $this->respond(200, 'Match duplicate');
+           return $this->respond(200, CodeMappingVirtualSports::DONE_DUPLICATE);
         }
 
         $eventProcessor = new EventProcessor();
@@ -123,7 +123,7 @@ class VirtualBoxController extends BaseApiController
             Result::create(['tid' => $request->input('result.tid')]);
 
         } else {
-            return $this->respondSuccess('Done this is duplicate', [
+            return $this->respondSuccess('This is duplicate', [
                 $processor->getEventId(),
                 (int) $request->input('result.event_id'),
                 $request->input('result.tid')
