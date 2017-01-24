@@ -15,9 +15,10 @@ class SessionCreateRequest extends BaseGameSessionRequest
     {
         return [
             'user_id' => 'bail|required|numeric',
-            'project_id' => 'bail|required|string',
+            'partner_id' => 'bail|numeric',
             'game_id' => 'bail|required',
             'currency' => 'bail|required|string',
+            'cashdesk_id' => 'bail|numeric'
         ];
     }
 }
