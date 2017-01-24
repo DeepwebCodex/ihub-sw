@@ -5,6 +5,7 @@ namespace api\BetGames;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
+use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
@@ -184,7 +185,7 @@ class BetGamesApiCest
         $balanceBefore = $this->testUser->getBalanceInCents();
         $request = $this->data->win();
         $I->sendPOST('/bg', $request);
-        $this->getResponseFail($I, StatusCode::BAD_OPERATION_ORDER);
+        $this->getResponseFail($I, TransactionHelper::BAD_OPERATION_ORDER);
         $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
 
         $this->noRecord($I, $request, 'win');
