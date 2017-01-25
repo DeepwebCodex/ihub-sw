@@ -50,9 +50,9 @@ class VirtualBoxController extends BaseApiController
     {
         $method = $request->input('name', $request->input('type', 'error'));
 
-        $method = (string)S::camelize($method);
-
         $this->addMetaField('method', $method);
+
+        $method = (string)S::camelize($method);
 
         if (method_exists($this, $method)) {
             return app()->call([$this, $method], $request->all());
