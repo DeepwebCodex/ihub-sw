@@ -22,7 +22,7 @@ class InspiredVirtualGamingApiCest
 
     public function testInvalidMethod(ApiTester $I)
     {
-        $I->sendPOST(self::URL);
+        $I->sendGet(self::URL);
         $I->seeResponseCodeIs(500);
         $I->seeResponseContains('BADFORMAT');
     }
