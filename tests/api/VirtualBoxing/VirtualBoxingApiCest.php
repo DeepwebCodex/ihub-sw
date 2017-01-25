@@ -17,7 +17,7 @@ class VirtualBoxingApiCest
     public function testInvalidMethod(ApiTester $I)
     {
         $I->sendGET(self::URI_PREFIX . 'test');
-        $I->seeResponseCodeIs(404);
+        $I->seeResponseCodeIs(400);
         $I->seeResponseContains('Method not found');
     }
 

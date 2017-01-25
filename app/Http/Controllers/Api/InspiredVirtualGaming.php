@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\Formatters\TextApiFormatter;
+use App\Components\Formatters\TextApiFormatterIVG;
 use App\Components\Integrations\InspiredVirtualGaming\EventProcessor;
 use App\Components\Integrations\InspiredVirtualGaming\Services\DataMapper;
 use App\Components\Traits\MetaDataTrait;
@@ -26,7 +26,7 @@ class InspiredVirtualGaming extends BaseApiController
 
     public static $exceptionTemplate = InspiredVirtualGamingTemplate::class;
 
-    public function __construct(TextApiFormatter $formatter)
+    public function __construct(TextApiFormatterIVG $formatter)
     {
         parent::__construct($formatter);
 
