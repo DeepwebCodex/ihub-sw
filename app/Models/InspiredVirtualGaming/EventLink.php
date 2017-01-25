@@ -50,4 +50,13 @@ class EventLink extends BaseInspiredModel
     {
         return (bool) static::getEventId($ivgEventId);
     }
+
+    /**
+     * @return mixed
+     */
+    public static function getLastId()
+    {
+        $eventLink = static::orderBy('event_id_ivg', 'desc')->first();
+        return $eventLink ? $eventLink->event_id_ivg : 0;
+    }
 }
