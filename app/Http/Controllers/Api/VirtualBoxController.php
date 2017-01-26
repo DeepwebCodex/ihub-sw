@@ -137,12 +137,17 @@ class VirtualBoxController extends BaseApiController
         ]);
     }
 
+    public function fixtureList()
+    {
+        $this->respond(200, '');
+    }
+
     /**
      * @return Response
      */
     public function error()
     {
-        throw new ApiHttpException(404, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::METHOD_NOT_FOUND));
+        throw new ApiHttpException(400, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::METHOD_NOT_FOUND));
     }
 
 
