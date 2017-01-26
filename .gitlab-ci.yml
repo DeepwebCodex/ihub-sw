@@ -79,14 +79,13 @@ fail_build_for_incorrect_branches:
     - master
     - tags
 
-test_features_n_dev:
+test_features:
   <<: *template_compile_n_test
   script:
     - bash ./run/dev/install-rancher.sh
     - ./vendor/bin/codecept run
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,3}-.*$/
-    - dev
 
 test_on_dev_env_prod:
   <<: *template_compile_n_test
