@@ -54,8 +54,10 @@ class VirtualBoxController extends BaseApiController
 
         $method = (string)S::camelize($method);
 
-        if (method_exists($this, $method)) {
+        if (method_exists($this, $method) && !S::isBlank($method)) {
             return app()->call([$this, $method], $request->all());
+        } else {
+            return $this->emptyResponse();
         }
 
         return app()->call([$this, 'error'], $request->all());
@@ -137,7 +139,7 @@ class VirtualBoxController extends BaseApiController
         ]);
     }
 
-    public function fixtureList()
+    public function emptyResponse()
     {
         $this->respond(200, '');
     }
