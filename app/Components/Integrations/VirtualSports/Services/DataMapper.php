@@ -50,6 +50,11 @@ abstract class DataMapper implements DataMapperInterface
         return $this->mapper->getEventName();
     }
 
+    public function getTournamentName() : string
+    {
+        return $this->mapper->getTournamentName();
+    }
+
     public function getParticipants() : array
     {
         return $this->mapper->getParticipants();

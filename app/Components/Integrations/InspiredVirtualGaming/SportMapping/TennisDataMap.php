@@ -19,6 +19,11 @@ class TennisDataMap extends BaseSportDataMap implements SportDataMapInterface
         return array_get($this->eventData, 'MeetingName');
     }
 
+    public function getTournamentName(): string
+    {
+        return array_get($this->eventData, 'MeetingName');
+    }
+
     public function getParticipants(): array
     {
         $participants = [

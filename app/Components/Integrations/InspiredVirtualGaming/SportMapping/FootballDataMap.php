@@ -16,6 +16,11 @@ class FootballDataMap extends BaseSportDataMap implements SportDataMapInterface
 {
     public function getEventName(): string
     {
+        return array_get($this->eventData, 'Team1') . '-' . array_get($this->eventData, 'Team2');
+    }
+
+    public function getTournamentName(): string
+    {
         return array_get($this->eventData, 'EventName');
     }
 

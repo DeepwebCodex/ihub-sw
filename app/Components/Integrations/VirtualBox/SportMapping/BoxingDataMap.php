@@ -17,6 +17,11 @@ class BoxingDataMap extends BaseSportDataMap implements SportDataMapInterface
 {
     public function getEventName(): string
     {
+        return array_get($this->eventData, 'match.name');
+    }
+
+    public function getTournamentName(): string
+    {
         return array_get($this->eventData, 'match.location');
     }
 

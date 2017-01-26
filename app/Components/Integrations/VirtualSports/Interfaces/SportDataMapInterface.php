@@ -13,6 +13,8 @@ interface SportDataMapInterface
 {
     public function getEventName() : string;
 
+    public function getTournamentName() : string;
+
     public function getParticipants() : array;
 
     public function getMappedResults() : array;

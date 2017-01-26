@@ -20,6 +20,11 @@ class HorsesDataMap extends BaseSportDataMap implements SportDataMapInterface
         return array_get($this->eventData, 'CourseName');
     }
 
+    public function getTournamentName(): string
+    {
+        return array_get($this->eventData, 'CourseName');
+    }
+
     public function getParticipants(): array
     {
         $participants = [];

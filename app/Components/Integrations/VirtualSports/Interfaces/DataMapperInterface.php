@@ -25,6 +25,8 @@ interface DataMapperInterface
 
     public function getEventName();
 
+    public function getTournamentName();
+
     public function getParticipants() : array;
 
     public function getMappedResults() : array;

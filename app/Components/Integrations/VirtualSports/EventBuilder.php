@@ -36,13 +36,13 @@ abstract class EventBuilder
         $eventCategory = $this->getCategory();
 
         //creating tournament for category
-        $tournament = $this->getTournament($eventCategory->id, $this->dataMapper->getEventName());
+        $tournament = $this->getTournament($eventCategory->id, $this->dataMapper->getTournamentName());
 
         //creating event for this tournament
         $event = $this->getEvent(
             $tournament->id,
             $this->dataMapper->getEventTime(),
-            $tournament->name,
+            $this->dataMapper->getEventName(),
             $this->dataMapper->getEventId(),
             $this->dataMapper->getParticipants()
         );
