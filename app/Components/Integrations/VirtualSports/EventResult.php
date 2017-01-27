@@ -39,7 +39,7 @@ abstract class EventResult
         $results = $this->dataMapper->getMappedResults();
 
         if(empty($results)) {
-            throw new \RuntimeException("No valid event results");
+            return (int) $event->id;
         }
 
         foreach ($results as $result) {
