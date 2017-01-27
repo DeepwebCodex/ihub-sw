@@ -75,4 +75,9 @@ return [
         'token_expiration_time' => 1,
         'secret' => 'dfFWgbF3r4efr',
     ],
+
+    'netEnt' => [
+        'service_id' => 37,
+        'secret' => 'uachahGhui4Ui8thogh9ahl8hiem9aedeK4xo7Xivohfeng9bai6IeQuu4nahvee',
+    ],
 ];

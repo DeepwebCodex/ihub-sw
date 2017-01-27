@@ -67,3 +67,15 @@ Route::group(['prefix' => 'game_session'], function () {
 Route::group(['prefix' => 'bg'], function () {
     Route::post('/', "BetGamesController@index");
 });
+
+/** NetEnt controller routes
+ * @see App\Http\Controllers\Api\NetEntController::index,
+ * @see App\Http\Controllers\Api\NetEntController::ping,
+ * @see App\Http\Controllers\Api\NetEntController::getBalance,
+ * @see App\Http\Controllers\Api\NetEntController::roundInfo,
+ * @see App\Http\Controllers\Api\NetEntController::bet,
+ * @see App\Http\Controllers\Api\NetEntController::win,
+ */
+Route::group(['prefix' => 'nt'], function () {
+    Route::post('/', "NetEntController@index");
+});
