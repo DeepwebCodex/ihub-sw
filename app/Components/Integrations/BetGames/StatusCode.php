@@ -12,5 +12,4 @@ abstract class StatusCode
     const BAD_OPERATION_ORDER = 700;
     /** not implemented in Bet Games API */
     const UNKNOWN = -1;
-    const DUPLICATED_WIN = -10;
 }
