@@ -18,18 +18,19 @@ class ManualCompleteValidation extends Validation {
     function __construct() {
         $this->rulesStructures = [
             's:Body' => 'required',
-            's:Body.ManuallyCompleteGame' => 'checkEmpty',
+            's:Body.ManuallyCompleteGameResponse' => 'required',
+            's:Body.ManuallyCompleteGameResponse.ManuallyCompleteGameResult' => 'checkEmpty',
         ];
         $this->rulesElements = [
             'a:RowId' => 'required',
             'a:ServerId' => 'required',
-            'a:Success' => 'required|boolean'
+            'a:Success' => 'required'
         ];
         $this->nameElement = 'a:CompleteGameResponse';
     }
 
     public function getElements(array $data): array {
-        return $data['s:Body']['ManuallyCompleteGame'][$this->nameElement];
+        return $data['s:Body']['ManuallyCompleteGameResponse']['ManuallyCompleteGameResult'][$this->nameElement];
     }
 
 }

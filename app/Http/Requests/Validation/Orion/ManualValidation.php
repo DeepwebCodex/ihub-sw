@@ -18,7 +18,8 @@ class ManualValidation extends Validation {
     function __construct() {
         $this->rulesStructures = [
             's:Body' => 'required',
-            's:Body.ManuallyValidateBet' => 'required|boolean',
+            's:Body.ManuallyValidateBetResponse' => 'required',
+            's:Body.ManuallyValidateBetResponse.ManuallyValidateBetResult' => 'required',
         ];
     }
 

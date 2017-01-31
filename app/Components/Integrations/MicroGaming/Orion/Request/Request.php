@@ -15,6 +15,7 @@
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
+use AppLog;
 use GuzzleHttp\ClientInterface;
 
 abstract class Request {
@@ -36,6 +37,7 @@ abstract class Request {
     public function getData(array $data = []): array {
         $this->prepare($data);
         $result = $this->client->sendRequest($this);
+        AppLog::info(' Data: ' . print_r($result, true), 'orion', __CLASS__, __LINE__);
         return $this->parse($result);
     }
 

@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Config;
  *
  * @author petroff
  */
-class CommitRollbackProcessor implements IOperationsProcessor{
+class CommitRollbackProcessor implements IOperationsProcessor {
 
     //RollbackQueue
 
@@ -52,6 +52,7 @@ class CommitRollbackProcessor implements IOperationsProcessor{
                 AppLog::warning("One records was canceled. Cause: " . print_r($e->getMessage(), true) . " Data: " . print_r($value, true));
             }
         }
+
         return $dataRes;
     }
 
