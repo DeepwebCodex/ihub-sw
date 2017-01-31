@@ -9,11 +9,6 @@ return [
             'port'  => env('API_ACCOUNT_ROH_PORT', 7768)
         ],
 
-        'account_session' => [
-            'host'  => env('API_ACCOUNT_SESSION_HOST', 'de2ef01d.dev.favorit'),
-            'port'  => env('API_ACCOUNT_SESSION_PORT', 8061)
-        ],
-
         'account_op' => [
             'host'  => env('API_ACCOUNT_OP_HOST', 'de2ef01d.dev.favorit'),
             'port'  => env('API_ACCOUNT_OP_PORT', 8008)

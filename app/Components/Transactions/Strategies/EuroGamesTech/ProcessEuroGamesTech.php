@@ -29,7 +29,7 @@ class ProcessEuroGamesTech extends BaseSeamlessWalletProcessor implements Transa
 
         if($this->request->transaction_type != TransactionRequest::TRANS_BET)
         {
-            $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, request()->server('PARTNER_ID'));
+            $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, $this->request->partner_id);
 
             if(!$betTransaction){
                 throw new ApiHttpException(500, "Bet was not placed", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
@@ -41,7 +41,7 @@ class ProcessEuroGamesTech extends BaseSeamlessWalletProcessor implements Transa
             return $this->processZeroAmountTransaction();
         }
 
-        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, request()->server('PARTNER_ID'));
+        $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
 
         $status = is_object($lastRecord) ? $lastRecord->status : null;
 
