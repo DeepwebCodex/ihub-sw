@@ -20,10 +20,8 @@ class OrionResolverTest extends Unit {
     private $testUser2;
     private $data;
 
-
-
     protected function _before() {
-          $this->testUser = new TestUser(10);
+        $this->testUser = new TestUser(10);
         $this->testUser2 = new TestUser(660);
         $this->data = new TestData();
     }
