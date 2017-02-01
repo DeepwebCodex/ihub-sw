@@ -94,7 +94,7 @@ abstract class EventProcessor
         $event = Event::findById($this->eventId);
 
         if($event && $event->status_type == 'finished') {
-            throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_VOID_FINISHED));
+            throw new ApiHttpException(200, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_VOID_FINISHED));
         }
 
         if($result !== null) {

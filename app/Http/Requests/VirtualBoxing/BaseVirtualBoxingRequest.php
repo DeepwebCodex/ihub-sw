@@ -35,7 +35,7 @@ class BaseVirtualBoxingRequest extends ApiRequest implements ApiValidationInterf
 
     public function response(array $errors)
     {
-        throw new ApiHttpException(400, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::MISS_ELEMENT));
+        throw new ApiHttpException(200, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::MISS_ELEMENT));
     }
 
     function rules()

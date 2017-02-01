@@ -29,7 +29,7 @@ class EventProcessor extends \App\Components\Integrations\VirtualSports\EventPro
 
         if($eventId == null)
         {
-            throw new ApiHttpException('500', null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_FIND_EVENT));
+            throw new ApiHttpException(200, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::CANT_FIND_EVENT));
         }
 
         return new static($eventId);
