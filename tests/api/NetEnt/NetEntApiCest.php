@@ -17,6 +17,7 @@ use \NetEnt\TestUser;
 class NetEntApiCest
 {
     private $data;
+    private $action;
 
     /** @var TestUser */
     private $testUser;
@@ -25,6 +26,7 @@ class NetEntApiCest
     {
         $this->testUser = new TestUser();
         $this->data = new TestData($this->testUser);
+        $this->action = '/netent';
     }
 
     public function _before(\ApiTester $I)
@@ -34,19 +36,19 @@ class NetEntApiCest
 
     public function testMethodNotFound(\ApiTester $I)
     {
-        $I->sendPOST('/nt', $this->data->notFound());
+        $I->sendPOST($this->action, $this->data->notFound());
         $this->getResponseFail($I, StatusCode::METHOD);
     }
 
     public function testPing(\ApiTester $I)
     {
-        $I->sendPOST('/nt', $this->data->ping());
+        $I->sendPOST($this->action, $this->data->ping());
         $this->getResponseOk($I);
     }
 
     public function testBalance(\ApiTester $I)
     {
-        $I->sendPOST('/nt', $this->data->getBalance());
+        $I->sendPOST($this->action, $this->data->getBalance());
         $data = $this->getResponseOk($I);
         $I->assertNotNull($data['balance']);
     }
@@ -57,7 +59,7 @@ class NetEntApiCest
 
         $request = $this->data->bet();
 
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $response = $this->getResponseOk($I, true);
         $I->assertNotNull($response['balance']);
         $I->assertEquals($balanceBefore - $this->data->getAmount(), $response['balance']);
@@ -72,7 +74,7 @@ class NetEntApiCest
         $request = $this->data->bet();
         $request['currency'] = 'QQ';
         $request = $this->data->renewHmac($request);
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $this->getResponseFail($I, StatusCode::HMAC);
     }
 
@@ -83,7 +85,7 @@ class NetEntApiCest
         $request = $this->data->bet();
         $balanceBefore = $this->testUser->getBalance();
 
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $this->getResponseFail($I, StatusCode::INSUFFICIENT_FUNDS);
         $I->assertEquals($balanceBefore, $this->testUser->getBalance());
         $this->data->resetAmount();
@@ -94,12 +96,12 @@ class NetEntApiCest
     public function testDuplicateBet(\ApiTester $I)
     {
         $betData = $this->data->bet();
-        $I->sendPOST('/nt', $betData);
+        $I->sendPOST($this->action, $betData);
 
         $balanceBefore = $this->testUser->getBalance();
         $request = $this->data->bet(null, $betData['tid']);
 
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore, $response['balance']);
     }
@@ -107,11 +109,11 @@ class NetEntApiCest
     public function testWin(\ApiTester $I)
     {
         $bet = $this->data->bet();
-        $I->sendPOST('/nt', $bet);
+        $I->sendPOST($this->action, $bet);
 
         $balanceBefore = $this->testUser->getBalance();
         $request = $this->data->win($bet['i_gameid']);
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore + $this->data->getAmount(), $response['balance']);
 
@@ -127,7 +129,7 @@ class NetEntApiCest
         $balanceBefore = $this->testUser->getBalance();
         $request = $this->data->win($win['i_gameid'], $win['tid']);
 
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore, $response['balance']);
     }
@@ -135,7 +137,7 @@ class NetEntApiCest
     public function testRound(\ApiTester $I)
     {
         $request = $this->data->roundInfo();
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $this->getResponseOk($I);
     }
 
@@ -144,7 +146,7 @@ class NetEntApiCest
         $balanceBefore = $this->testUser->getBalance();
         $game_number = $this->getUniqueNumber();
         $request = $this->data->win($game_number);
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $this->getResponseFail($I, StatusCode::BAD_OPERATION_ORDER);
         $I->assertEquals($balanceBefore, $this->testUser->getBalance());
 
@@ -156,7 +158,7 @@ class NetEntApiCest
     {
         $request = $this->data->ping();
         $request['hmac'] = 'qwerty';
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $this->getResponseFail($I, StatusCode::HMAC);
     }
 
@@ -165,7 +167,7 @@ class NetEntApiCest
         $request = $this->data->getBalance();
         $request['userid'] = 'qwerty';
         $request = $this->data->renewHmac($request);
-        $I->sendPOST('/nt', $request);
+        $I->sendPOST($this->action, $request);
         $this->getResponseFail($I);
     }
 

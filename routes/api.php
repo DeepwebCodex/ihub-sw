@@ -76,6 +76,6 @@ Route::group(['prefix' => 'bg'], function () {
  * @see App\Http\Controllers\Api\NetEntController::bet,
  * @see App\Http\Controllers\Api\NetEntController::win,
  */
-Route::group(['prefix' => 'nt'], function () {
+Route::group(['prefix' => 'netent'], function () {
     Route::post('/', "NetEntController@index");
 });
