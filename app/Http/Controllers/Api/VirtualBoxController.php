@@ -90,6 +90,8 @@ class VirtualBoxController extends BaseApiController
 
     public function matchProgress(MatchProgressRequest $request)
     {
+        $this->addMetaField('event_id', (int) $request->input('event_id'));
+
         $processor = EventProcessor::getEvent((int) $request->input('event_id'));
 
         switch ($request->input('xu:ups-at.xu:at.0.#text')) {
@@ -114,6 +116,8 @@ class VirtualBoxController extends BaseApiController
 
     public function result(ResultRequest $request)
     {
+        $this->addMetaField('event_id', $request->input('result.event_id').':'.$request->input('result.tid'));
+
         $processor = EventProcessor::getEvent((int)$request->input('result.event_id'));
 
         if(! Result::existsById($request->input('result.tid'))) {
