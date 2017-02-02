@@ -4,10 +4,11 @@ namespace BetGames;
 
 use App\Components\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
+use GuzzleHttp\Psr7\Response;
 
 class TestData
 {
-    const AMOUNT = 10;
+    const AMOUNT = 1;
     /**
      * @var IntegrationUser
      */
@@ -43,10 +44,39 @@ class TestData
         return array_merge($data, ['signature' => $sign->getHash()]);
     }
 
+    public function auth()
+    {
+        $data = [
+            'method' => 'get_account_details',
+            'token' => $this->getToken(),
+            'time' => time(),
+            'params' => null,
+        ];
+        $this->setSignature($data);
+
+        return $data;
+    }
+
+    private function getToken()
+    {
+        $data = [
+            "partner_id" => 1,
+            "user_id" => 89,
+            "cashdesk_id" => -5
+        ];
+
+        /**@var Response $response*/
+        $response = app('Guzzle')::post('http://icms.dev:8181/internal/v2/bg/generateToken',
+            ['json' => $data]
+        );
+
+        return json_decode($response->getBody()->getContents(), true)['token'];
+    }
+
     public function authFailed()
     {
         $data = [
-            'method' => 'ping',
+            'method' => 'get_account_details',
             'token' => 'authorization_must_fails',
             'time' => time(),
             'params' => [],

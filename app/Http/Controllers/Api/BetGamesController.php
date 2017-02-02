@@ -48,8 +48,6 @@ class BetGamesController extends BaseApiController
         Validator::extend('check_time', 'App\Http\Requests\Validation\BetGamesValidation@checkTime');
         Validator::extend('check_token', 'App\Http\Requests\Validation\BetGamesValidation@checkToken');
         Validator::extend('check_method', 'App\Http\Requests\Validation\BetGamesValidation@checkMethod');
-
-        $this->userId = app('GameSession')->get('user_id') ?? 0;
     }
 
     /**
@@ -58,6 +56,9 @@ class BetGamesController extends BaseApiController
      */
     public function index(BaseRequest $request)
     {
+        if($request->input('method') != 'ping') {
+            $this->userId = app('GameSession')->get('user_id') ?? 0;
+        }
         $apiMethod = new ApiMethod($request->input('method'));
         return app()->call([$this, $apiMethod->get()], $request->all());
     }
@@ -69,7 +70,7 @@ class BetGamesController extends BaseApiController
     public function ping(BaseRequest $request)
     {
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
-        return $this->responseOk('ping', $request->input('token'));
+        return $this->responseOk('ping', $request->input('token'), [], false);
     }
 
     /**
@@ -108,7 +109,7 @@ class BetGamesController extends BaseApiController
     {
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
         $newToken = app('GameSession')->regenerate($request->input('token'));
-        return $this->responseOk($request->input('method'), $newToken, [], false);
+        return $this->responseOk($request->input('method'), $request->input('token'), ['new_token' => $newToken], false);
     }
 
     /**

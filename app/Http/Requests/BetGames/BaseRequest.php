@@ -27,6 +27,9 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
+        if($request->input('method') == 'ping'){
+            return true;
+        }
         try {
             app('GameSession')->start($request->input('token', ''));
         } catch (SessionDoesNotExist $e) {
