@@ -44,7 +44,7 @@ class TestData
         return array_merge($data, ['signature' => $sign->getHash()]);
     }
 
-    public function auth()
+    public function token()
     {
         $data = [
             'method' => 'get_account_details',
@@ -57,7 +57,19 @@ class TestData
         return $data;
     }
 
-    private function getToken()
+    public function getToken()
+    {
+        return  [
+            "user_id" => $this->userId,
+            "partner_id" => 1,
+            "game_id" => 1,
+            "currency" => $this->currency,
+            "unique_id" => time(),
+            "cashdesk_id" => -5
+        ];
+    }
+
+    private function getIcmsToken()
     {
         $data = [
             "partner_id" => 1,

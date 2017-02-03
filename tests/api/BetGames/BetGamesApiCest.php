@@ -4,6 +4,7 @@ namespace api\BetGames;
 
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\StatusCode;
+use App\Components\Integrations\GameSession\GameSessionService;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\GenericApiHttpException;
@@ -11,6 +12,7 @@ use App\Models\Transactions;
 use \BetGames\TestData;
 use \BetGames\TestUser;
 use Codeception\Scenario;
+use Testing\GameSessionsMock;
 
 /**
  * Class BetGamesApiCest
@@ -33,9 +35,10 @@ class BetGamesApiCest
     {
         $I->disableMiddleware();
 
-//        if ($s->getFeature() != 'test auth') {
-//            GameSessionsMock::getMock();
-//        }
+        if ($s->getFeature() != 'test token') {
+            $I->getApplication()->instance( GameSessionService::class, GameSessionsMock::getMock() );
+            $I->haveInstance( GameSessionService::class, GameSessionsMock::getMock() );
+        }
     }
 
     public function testMethodNotFound(\ApiTester $I)
@@ -44,13 +47,6 @@ class BetGamesApiCest
         $this->getResponseFail($I, StatusCode::SIGNATURE);
 
     }
-
-//    public function testAuth(\ApiTester $I)
-//    {
-//        $d = $this->data->auth();
-//        $I->sendPOST('/bg', $d);
-//        $this->getResponseOk($I);
-//    }
 
     public function testPing(\ApiTester $I)
     {
@@ -289,6 +285,25 @@ class BetGamesApiCest
         unset($data['params']['amount']);
         $I->sendPOST('/bg', $data);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
+    }
+
+
+//    public function testToken(\ApiTester $I)
+//    {
+//        $data = $this->getToken($I);
+//        $I->sendPOST('/bg', $data);
+//        $response = $this->getResponseOk($I);
+//        $I->assertEquals($this->testUser->getUser()->id, $response['params']['user_id']);
+//    }
+
+    private function getToken(\ApiTester $I)
+    {
+        $data = $this->data->getToken();
+
+        $I->sendPOST('/game_session/create', $data);
+
+        $data = $this->responseToArray($I);
+        return $data;
     }
 
     private function execBet(\ApiTester $I)
