@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\NetEnt;
 
+use App\Components\AppLog;
 use App\Components\Integrations\NetEnt\CodeMapping;
 use App\Components\Integrations\NetEnt\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
@@ -28,7 +29,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     public function authorize(Request $request)
     {
         try {
-            app('GameSession')->start($request->input('token', ''));
+            app('GameSession')->start($request->input('i_extparam', ''));
         } catch (SessionDoesNotExist $e) {
             return false;
         }
