@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\NetEntApiFormatter;
 use App\Components\Integrations\NetEnt\ApiMethod;
+use App\Components\Integrations\NetEnt\ApiValidation;
 use App\Components\Integrations\NetEnt\Balance;
 use App\Components\Integrations\NetEnt\Hmac;
 use App\Components\Integrations\NetEnt\StatusCode;
@@ -80,9 +81,16 @@ class NetEntController extends BaseApiController
         $service_id = $this->getOption('service_id') ?? config('integrations.netEnt.service_id');
         $user = IntegrationUser::get($this->userId, $service_id, 'netEnt');
 
-        if($user->getCurrency() != $request->input('currency')){
+        $validator = new ApiValidation($request);
+        if (!$validator->checkCurrency($user->getCurrency())) {
             throw new ApiHttpException(Response::HTTP_OK, null, [
                 'code' => StatusCode::CURRENCY,
+            ]);
+        }
+
+        if (!$validator->checkTransactionParams($service_id, TransactionRequest::TRANS_BET, request()->server('PARTNER_ID'))) {
+            throw new ApiHttpException(Response::HTTP_OK, null, [
+                'code' => StatusCode::TRANSACTION_MISMATCH,
             ]);
         }
 
@@ -111,9 +119,16 @@ class NetEntController extends BaseApiController
         $service_id = $this->getOption('service_id') ?? config('integrations.netEnt.service_id');
         $user = IntegrationUser::get($this->userId, $service_id, 'netEnt');
 
-        if($user->getCurrency() != $request->input('currency')){
+        $validator = new ApiValidation($request);
+        if (!$validator->checkCurrency($user->getCurrency())) {
             throw new ApiHttpException(Response::HTTP_OK, null, [
                 'code' => StatusCode::CURRENCY,
+            ]);
+        }
+
+        if (!$validator->checkTransactionParams($service_id, TransactionRequest::TRANS_BET, request()->server('PARTNER_ID'))) {
+            throw new ApiHttpException(Response::HTTP_OK, null, [
+                'code' => StatusCode::TRANSACTION_MISMATCH,
             ]);
         }
 

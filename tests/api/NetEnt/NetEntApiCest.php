@@ -107,6 +107,18 @@ class NetEntApiCest
         $I->assertEquals($balanceBefore, $response['balance']);
     }
 
+    public function testMismatchBet(\ApiTester $I)
+    {
+        $betData = $this->data->bet();
+        $I->sendPOST($this->action, $betData);
+
+        $betData['userid'] = $betData['userid'] + 1;
+        $betData = $this->data->renewHmac($betData);
+        $I->sendPOST($this->action, $betData);
+
+        $this->getResponseFail($I, StatusCode::TRANSACTION_MISMATCH);
+    }
+
     public function testWin(\ApiTester $I)
     {
         $bet = $this->data->bet();

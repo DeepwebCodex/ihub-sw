@@ -67,6 +67,13 @@ class CodeMapping extends CodeMappingBase
                 'meanings'  => [self::SUCCESS]
             ],
 
+            StatusCode::DUPLICATED_TRANSACTION => [
+                'message'   => 'Duplicated transaction',
+                'map'       => [],
+                'attribute' => null,
+                'meanings'  => [self::SUCCESS]
+            ],
+
             StatusCode::METHOD => [
                 'message'   => 'wrong `type` parameter',
                 'map'       => [],

@@ -9,6 +9,7 @@ use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
 use App\Models\Transactions;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @property  TransactionRequest $request
@@ -27,7 +28,7 @@ class ProcessNetEnt extends BaseSeamlessWalletProcessor implements TransactionPr
         if ($this->request->transaction_type == TransactionRequest::TRANS_WIN) {
             $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, request()->server('PARTNER_ID'));
             if (!$betTransaction) {
-                throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER));
+                throw new ApiHttpException(Response::HTTP_OK, null, CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER));
             }
         }
 
@@ -38,7 +39,7 @@ class ProcessNetEnt extends BaseSeamlessWalletProcessor implements TransactionPr
         }
 
         if ($this->responseData['operation_id'] === null) {
-            throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
+            throw new ApiHttpException(Response::HTTP_OK, null, CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
         }
 
         return $this->responseData;
@@ -80,14 +81,14 @@ class ProcessNetEnt extends BaseSeamlessWalletProcessor implements TransactionPr
     protected function onTransactionDuplicate($e)
     {
         if($this->request->transaction_type == TransactionRequest::TRANS_WIN){
-            throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByErrorCode(StatusCode::DUPLICATED_WIN));
+            throw new ApiHttpException(Response::HTTP_OK, null, CodeMapping::getByErrorCode(StatusCode::DUPLICATED_WIN));
         }
 
-        throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER));
+        throw new ApiHttpException(Response::HTTP_OK, null, CodeMapping::getByErrorCode(StatusCode::DUPLICATED_TRANSACTION));
     }
 
     protected function onInsufficientFunds($e)
     {
-        throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByErrorCode(StatusCode::INSUFFICIENT_FUNDS));
+        throw new ApiHttpException(Response::HTTP_OK, null, CodeMapping::getByErrorCode(StatusCode::INSUFFICIENT_FUNDS));
     }
 }

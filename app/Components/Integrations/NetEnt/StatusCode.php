@@ -16,4 +16,5 @@ abstract class StatusCode
     const METHOD = 8;
     const VALIDATION = 9;
     const TRANSACTION_MISMATCH = 10;
+    const DUPLICATED_TRANSACTION = 11;
 }
