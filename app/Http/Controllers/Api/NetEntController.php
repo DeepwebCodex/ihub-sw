@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\Formatters\JsonApiFormatter;
+use App\Components\Formatters\NetEntApiFormatter;
 use App\Components\Integrations\NetEnt\ApiMethod;
 use App\Components\Integrations\NetEnt\Balance;
 use App\Components\Integrations\NetEnt\Hmac;
@@ -31,9 +31,9 @@ class NetEntController extends BaseApiController
 
     /**
      * NetEntController constructor.
-     * @param JsonApiFormatter $formatter
+     * @param NetEntApiFormatter $formatter
      */
-    public function __construct(JsonApiFormatter $formatter)
+    public function __construct(NetEntApiFormatter $formatter)
     {
         parent::__construct($formatter);
 
@@ -81,7 +81,7 @@ class NetEntController extends BaseApiController
         $user = IntegrationUser::get($this->userId, $service_id, 'netEnt');
 
         if($user->getCurrency() != $request->input('currency')){
-            throw new ApiHttpException(400, null, [
+            throw new ApiHttpException(Response::HTTP_OK, null, [
                 'code' => StatusCode::CURRENCY,
             ]);
         }
@@ -112,7 +112,7 @@ class NetEntController extends BaseApiController
         $user = IntegrationUser::get($this->userId, $service_id, 'netEnt');
 
         if($user->getCurrency() != $request->input('currency')){
-            throw new ApiHttpException(400, null, [
+            throw new ApiHttpException(Response::HTTP_OK, null, [
                 'code' => StatusCode::CURRENCY,
             ]);
         }

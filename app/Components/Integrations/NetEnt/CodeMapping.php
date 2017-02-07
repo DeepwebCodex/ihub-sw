@@ -33,7 +33,7 @@ class CodeMapping extends CodeMappingBase
                 'meanings'  => [self::TIME]
             ],
             StatusCode::TOKEN=> [
-                'message'   => 'invalid token',
+                'message'   => 'SESSION_EXPIRED',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::TOKEN]
@@ -54,7 +54,7 @@ class CodeMapping extends CodeMappingBase
             ],
 
             StatusCode::UNKNOWN => [
-                'message' => '408 Request Timeout',
+                'message' => '',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => []
@@ -69,6 +69,13 @@ class CodeMapping extends CodeMappingBase
 
             StatusCode::METHOD => [
                 'message'   => 'wrong `type` parameter',
+                'map'       => [],
+                'attribute' => null,
+                'meanings'  => []
+            ],
+
+            StatusCode::TRANSACTION_MISMATCH => [
+                'message'   => 'Transaction parameter mismatch',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => []

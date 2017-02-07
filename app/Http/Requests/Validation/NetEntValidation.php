@@ -6,21 +6,20 @@ use App\Components\Integrations\NetEnt\ApiMethod;
 use App\Components\Integrations\NetEnt\Hmac;
 use App\Components\Integrations\NetEnt\StatusCode;
 use App\Exceptions\Api\ApiHttpException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Request;
 
 class NetEntValidation
 {
     public function checkHmac($attribute, $value, $parameters, $validator):bool
     {
-        return true;
         if (!($request = Request::getFacadeRoot())) {
             return false;
         }
         $all = $request->all();
         unset($all['hmac']);
-        $hmac = new Hmac($all, $value);
-        if (!$hmac->isCorrect()) {
-            throw new ApiHttpException(400, null, [
+        if (!(new Hmac($all, $value))->isCorrect()) {
+            throw new ApiHttpException(Response::HTTP_OK, null, [
                 'code' => StatusCode::HMAC,
             ]);
         }
@@ -32,7 +31,7 @@ class NetEntValidation
     {
         $apiMethod = new ApiMethod($value);
         if (!$apiMethod->get()) {
-            throw new ApiHttpException(400, null, [
+            throw new ApiHttpException(Response::HTTP_OK, null, [
                 'code' => StatusCode::METHOD,
             ]);
         }

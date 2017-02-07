@@ -15,4 +15,5 @@ abstract class StatusCode
     const DUPLICATED_WIN = 7;
     const METHOD = 8;
     const VALIDATION = 9;
+    const TRANSACTION_MISMATCH = 10;
 }

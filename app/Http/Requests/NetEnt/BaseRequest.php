@@ -3,6 +3,7 @@
 namespace App\Http\Requests\NetEnt;
 
 use App\Components\AppLog;
+use App\Components\Integrations\NetEnt\ApiMethod;
 use App\Components\Integrations\NetEnt\CodeMapping;
 use App\Components\Integrations\NetEnt\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
@@ -11,6 +12,7 @@ use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\ApiRequest;
 use App\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class BaseRequest
@@ -46,7 +48,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
 
     public function failedAuthorization()
     {
-        throw new ApiHttpException(403, null, [
+        throw new ApiHttpException(Response::HTTP_OK, null, [
             'code' => StatusCode::TOKEN,
             'method' => $this->input('method'),
             'token' => $this->input('token'),
@@ -72,24 +74,22 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     public function response(array $errors)
     {
         $firstError = array_first($errors);
-        if (CodeMapping::isTransactionAttribute(key($errors))) {
+        if (CodeMapping::isTransactionAttribute(key($errors)) && (new ApiMethod($this->request->get('type')))->isTransaction()) {
             $item = [
-                'code' => StatusCode::VALIDATION,
-                'message' => 'Transaction parameter mismatch'
+                'code' => StatusCode::TRANSACTION_MISMATCH,
             ];
-            $httpStatus = 400;
+            $httpStatus = Response::HTTP_REQUEST_TIMEOUT;
         } elseif (CodeMapping::isAttribute(key($errors))) {
             $item = [
                 'code' => StatusCode::VALIDATION,
                 'message' => array_first($firstError)
             ];
-            $httpStatus = 400;
+            $httpStatus = Response::HTTP_OK;
         } else {
             $item = [
                 'code' => StatusCode::UNKNOWN,
-                'message' => ''
             ];
-            $httpStatus = 500;
+            $httpStatus = Response::HTTP_OK;
         }
 
         throw new ApiHttpException($httpStatus, null, $item);

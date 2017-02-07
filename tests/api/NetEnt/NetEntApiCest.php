@@ -9,6 +9,7 @@ use App\Components\Transactions\TransactionRequest;
 use App\Models\Transactions;
 use \NetEnt\TestData;
 use \NetEnt\TestUser;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class BetGamesApiCest
@@ -75,7 +76,7 @@ class NetEntApiCest
         $request['currency'] = 'QQ';
         $request = $this->data->renewHmac($request);
         $I->sendPOST($this->action, $request);
-        $this->getResponseFail($I, StatusCode::HMAC);
+        $this->getResponseFail($I);
     }
 
 
@@ -154,13 +155,13 @@ class NetEntApiCest
     }
 
     /** wrong data tests */
-//    public function testWrongHmac(\ApiTester $I)
-//    {
-//        $request = $this->data->ping();
-//        $request['hmac'] = 'qwerty';
-//        $I->sendPOST($this->action, $request);
-//        $this->getResponseFail($I, StatusCode::HMAC);
-//    }
+    public function testWrongHmac(\ApiTester $I)
+    {
+        $request = $this->data->ping();
+        $request['hmac'] = 'qwerty';
+        $I->sendPOST($this->action, $request);
+        $this->getResponseFail($I, StatusCode::HMAC);
+    }
 
     public function testWrongParam(\ApiTester $I)
     {
@@ -169,6 +170,15 @@ class NetEntApiCest
         $request = $this->data->renewHmac($request);
         $I->sendPOST($this->action, $request);
         $this->getResponseFail($I);
+    }
+
+    public function testWrongTransactionParam(\ApiTester $I)
+    {
+        $request = $this->data->bet();
+        $request['userid'] = 'qwerty';
+        $request = $this->data->renewHmac($request);
+        $I->sendPOST($this->action, $request);
+        $this->getResponseFail($I, StatusCode::TRANSACTION_MISMATCH, Response::HTTP_REQUEST_TIMEOUT);
     }
 
     protected function getUniqueNumber()
@@ -201,13 +211,16 @@ class NetEntApiCest
         return $data;
     }
 
-    private function getResponseFail(\ApiTester $I, $errorCode=null)
+    private function getResponseFail(\ApiTester $I, $errorCode=null, $httpCode = 200)
     {
+        $I->seeResponseCodeIs($httpCode);
         $data = $this->responseToArray($I);
         $I->assertNotNull($data['error']);
         $I->assertNotNull($data['hmac']);
-        //$error = CodeMapping::getByErrorCode($errorCode);
-        //$I->assertEquals($error['message'], $data['error']);
+        if($errorCode) {
+            $error = CodeMapping::getByErrorCode($errorCode);
+            $I->assertEquals($error['message'], $data['error']);
+        }
 
         return $data;
     }

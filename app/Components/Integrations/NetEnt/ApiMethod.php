@@ -38,4 +38,12 @@ class ApiMethod
 
         return $map[$this->method] ?? '';
     }
+
+    /**
+     * @return string
+     */
+    public function isTransaction(): string
+    {
+        return in_array($this->method, ['debit', 'credit']);
+    }
 }
