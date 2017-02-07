@@ -81,18 +81,9 @@ class NetEntController extends BaseApiController
         $service_id = $this->getOption('service_id') ?? config('integrations.netEnt.service_id');
         $user = IntegrationUser::get($this->userId, $service_id, 'netEnt');
 
-        $validator = new ApiValidation($request);
-        if (!$validator->checkCurrency($user->getCurrency())) {
-            throw new ApiHttpException(Response::HTTP_OK, null, [
-                'code' => StatusCode::CURRENCY,
-            ]);
-        }
-
-        if (!$validator->checkTransactionParams($service_id, TransactionRequest::TRANS_BET, request()->server('PARTNER_ID'))) {
-            throw new ApiHttpException(Response::HTTP_OK, null, [
-                'code' => StatusCode::TRANSACTION_MISMATCH,
-            ]);
-        }
+        (new ApiValidation($request))
+            ->checkTransactionParams($service_id, TransactionRequest::TRANS_BET, request()->server('PARTNER_ID'))
+            ->checkCurrency($user);
 
         $transactionRequest = new TransactionRequest(
             $service_id,
@@ -119,18 +110,9 @@ class NetEntController extends BaseApiController
         $service_id = $this->getOption('service_id') ?? config('integrations.netEnt.service_id');
         $user = IntegrationUser::get($this->userId, $service_id, 'netEnt');
 
-        $validator = new ApiValidation($request);
-        if (!$validator->checkCurrency($user->getCurrency())) {
-            throw new ApiHttpException(Response::HTTP_OK, null, [
-                'code' => StatusCode::CURRENCY,
-            ]);
-        }
-
-        if (!$validator->checkTransactionParams($service_id, TransactionRequest::TRANS_BET, request()->server('PARTNER_ID'))) {
-            throw new ApiHttpException(Response::HTTP_OK, null, [
-                'code' => StatusCode::TRANSACTION_MISMATCH,
-            ]);
-        }
+        (new ApiValidation($request))
+            ->checkTransactionParams($service_id, TransactionRequest::TRANS_WIN, request()->server('PARTNER_ID'))
+            ->checkCurrency($user);
 
         $transactionRequest = new TransactionRequest(
             $service_id,

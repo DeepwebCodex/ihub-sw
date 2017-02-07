@@ -4,8 +4,11 @@
 namespace App\Components\Integrations\NetEnt;
 
 
+use App\Components\Users\IntegrationUser;
+use App\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\NetEnt\BaseRequest;
 use App\Models\Transactions;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApiValidation
 {
@@ -20,17 +23,30 @@ class ApiValidation
     {
         $result = Transactions::getTransaction($service_id, $this->request->input('tid'), $transaction_type, $partner_id);
         if(!$result){
-            return true;
+            return $this;
         }
         $trans = $result->getAttributes();
 
-        return $trans['user_id'] == $this->request->input('userid')
-            && $trans['currency'] == $this->request->input('currency')
-            && $trans['amount'] == $this->request->input('amount')*100;
+        if ($trans['user_id'] != $this->request->input('userid')
+            || $trans['currency'] != $this->request->input('currency')
+            || $trans['amount'] != $this->request->input('amount') * 100
+        ) {
+            throw new ApiHttpException(Response::HTTP_OK, null, [
+                'code' => StatusCode::TRANSACTION_MISMATCH,
+            ]);
+        }
+
+        return $this;
     }
 
-    public function checkCurrency($currency)
+    public function checkCurrency(IntegrationUser $user)
     {
-        return $currency == $this->request->input('currency');
+        if ($user->getCurrency() != $this->request->input('currency')) {
+            throw new ApiHttpException(Response::HTTP_OK, null, [
+                'code' => StatusCode::CURRENCY,
+            ]);
+        }
+
+        return $this;
     }
 }
