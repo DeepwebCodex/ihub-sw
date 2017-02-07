@@ -107,17 +107,7 @@ class NetEntApiCest
         $I->assertEquals($balanceBefore, $response['balance']);
     }
 
-    public function testMismatchBet(\ApiTester $I)
-    {
-        $betData = $this->data->bet();
-        $I->sendPOST($this->action, $betData);
 
-        $betData['userid'] = $betData['userid'] + 1;
-        $betData = $this->data->renewHmac($betData);
-        $I->sendPOST($this->action, $betData);
-
-        $this->getResponseFail($I, StatusCode::TRANSACTION_MISMATCH);
-    }
 
     public function testWin(\ApiTester $I)
     {
@@ -184,13 +174,22 @@ class NetEntApiCest
         $this->getResponseFail($I);
     }
 
-    public function testWrongTransactionParam(\ApiTester $I)
+    private function transMismatch(\ApiTester $I, $request, $attr, $value)
     {
-        $request = $this->data->bet();
-        $request['userid'] = 'qwerty';
+        $request[$attr] = $value;
         $request = $this->data->renewHmac($request);
         $I->sendPOST($this->action, $request);
-        $this->getResponseFail($I, StatusCode::TRANSACTION_MISMATCH, Response::HTTP_REQUEST_TIMEOUT);
+        $this->getResponseFail($I, StatusCode::TRANSACTION_MISMATCH);
+    }
+
+    public function testMismatch(\ApiTester $I)
+    {
+        $request = $this->data->bet();
+        $I->sendPOST($this->action, $request);
+
+        $this->transMismatch($I, $request, 'userid', $request['userid'] + 1);
+        $this->transMismatch($I, $request, 'currency', 'QQ');
+        $this->transMismatch($I, $request, 'amount', $request['amount'] + 1);
     }
 
     protected function getUniqueNumber()

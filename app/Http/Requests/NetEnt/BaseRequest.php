@@ -74,12 +74,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     public function response(array $errors)
     {
         $firstError = array_first($errors);
-        if (CodeMapping::isTransactionAttribute(key($errors)) && (new ApiMethod($this->request->get('type')))->isTransaction()) {
-            $item = [
-                'code' => StatusCode::TRANSACTION_MISMATCH,
-            ];
-            $httpStatus = Response::HTTP_REQUEST_TIMEOUT;
-        } elseif (CodeMapping::isAttribute(key($errors))) {
+        if (CodeMapping::isAttribute(key($errors))) {
             $item = [
                 'code' => StatusCode::VALIDATION,
                 'message' => array_first($firstError)
