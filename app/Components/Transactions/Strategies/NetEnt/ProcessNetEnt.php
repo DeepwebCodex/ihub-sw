@@ -39,7 +39,7 @@ class ProcessNetEnt extends BaseSeamlessWalletProcessor implements TransactionPr
         }
 
         if ($this->responseData['operation_id'] === null) {
-            throw new ApiHttpException(Response::HTTP_OK, null, CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
+            throw new ApiHttpException(Response::HTTP_REQUEST_TIMEOUT, null, CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
         }
 
         return $this->responseData;

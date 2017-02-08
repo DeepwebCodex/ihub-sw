@@ -97,11 +97,4 @@ class CodeMapping extends CodeMappingBase
             'i_extparam', 'i_gamedesc', 'i_actionid', 'i_rollback'
         ]);
     }
-
-    public static function isTransactionAttribute($key):bool
-    {
-        return in_array($key, [
-            'tid', 'userid', 'currency', 'amount'
-        ]);
-    }
 }

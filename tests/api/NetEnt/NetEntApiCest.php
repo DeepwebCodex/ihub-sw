@@ -5,7 +5,9 @@ namespace api\BetGames;
 use App\Components\Integrations\NetEnt\CodeMapping;
 use App\Components\Integrations\NetEnt\Hmac;
 use App\Components\Integrations\NetEnt\StatusCode;
+use App\Components\Transactions\Strategies\NetEnt\ProcessNetEnt;
 use App\Components\Transactions\TransactionRequest;
+use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
 use \NetEnt\TestData;
 use \NetEnt\TestUser;
@@ -190,6 +192,28 @@ class NetEntApiCest
         $this->transMismatch($I, $request, 'userid', $request['userid'] + 1);
         $this->transMismatch($I, $request, 'currency', 'QQ');
         $this->transMismatch($I, $request, 'amount', $request['amount'] + 1);
+    }
+
+    /** fail in runtime */
+    public function testFailPending(\ApiTester $I)
+    {
+        $mock = $this->mock(ProcessNetEnt::class);
+        $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
+        $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
+        $request = $this->data->bet();
+        $I->sendPOST($this->action, $request);
+        $this->getResponseFail($I, StatusCode::UNKNOWN, Response::HTTP_REQUEST_TIMEOUT);
+        $this->noRecord($I, $request, 'bet');
+    }
+
+    public function testFailDb(\ApiTester $I)
+    {
+        $mock = $this->mock(ProcessNetEnt::class);
+        $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
+        $request = $this->data->bet();
+        $I->sendPOST($this->action, $request);
+        $this->getResponseFail($I, StatusCode::UNKNOWN, Response::HTTP_REQUEST_TIMEOUT);
+        $this->noRecord($I, $request, 'bet');
     }
 
     protected function getUniqueNumber()

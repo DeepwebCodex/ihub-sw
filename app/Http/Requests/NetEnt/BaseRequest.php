@@ -38,12 +38,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
 
         $userId = app('GameSession')->get('user_id');
 
-        if ($userId) {
-//            $this->addMetaField('token', $request->input('token'));
-            return true;
-        }
-
-        return false;
+        return ($userId) ? true : false;
     }
 
     public function failedAuthorization()

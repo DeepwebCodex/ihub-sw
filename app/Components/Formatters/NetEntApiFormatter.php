@@ -16,7 +16,12 @@ class NetEntApiFormatter extends JsonApiFormatter
 
         list($payload, $statusCode) = array_values($this->transformException($exception));
 
-        $httpCode = ($statusCode == Response::HTTP_REQUEST_TIMEOUT) ? Response::HTTP_REQUEST_TIMEOUT : Response::HTTP_OK;
+        $codes = [
+            Response::HTTP_REQUEST_TIMEOUT,
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            Response::HTTP_SERVICE_UNAVAILABLE
+        ];
+        $httpCode = (in_array($statusCode, $codes)) ? Response::HTTP_REQUEST_TIMEOUT : Response::HTTP_OK;
 
         return ResponseFacade::make($this->format($payload), $httpCode, [
             'Content-type' => 'application/json'
