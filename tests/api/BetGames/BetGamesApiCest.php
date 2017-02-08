@@ -288,23 +288,21 @@ class BetGamesApiCest
     }
 
 
-//    public function testToken(\ApiTester $I)
-//    {
-//        $data = $this->getToken($I);
-//        $I->sendPOST('/bg', $data);
-//        $response = $this->getResponseOk($I);
-//        $I->assertEquals($this->testUser->getUser()->id, $response['params']['user_id']);
-//    }
-
-    private function getToken(\ApiTester $I)
+    public function testToken(\ApiTester $I)
     {
-        $data = $this->data->getToken();
-
-        $I->sendPOST('/game_session/create', $data);
-
-        $data = $this->responseToArray($I);
-        return $data;
+        $data = $this->data->token();
+        $I->sendPOST('/bg', $data);
+        $response = $this->getResponseOk($I);
+        $I->assertEquals($this->testUser->getUser()->id, $response['params']['user_id']);
     }
+
+//    private function getToken(\ApiTester $I)
+//    {
+//        $data = $this->data->getToken();
+//        $I->sendPOST('/game_session/create', $data);
+//        $data = $this->responseToArray($I);
+//        return $data;
+//    }
 
     private function execBet(\ApiTester $I)
     {

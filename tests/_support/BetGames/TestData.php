@@ -48,7 +48,7 @@ class TestData
     {
         $data = [
             'method' => 'get_account_details',
-            'token' => $this->getToken(),
+            'token' => $this->getIcmsToken(),
             'time' => time(),
             'params' => null,
         ];
@@ -57,7 +57,7 @@ class TestData
         return $data;
     }
 
-    public function getToken()
+    public function tokenData()
     {
         return  [
             "user_id" => $this->userId,
@@ -69,20 +69,32 @@ class TestData
         ];
     }
 
-    private function getIcmsToken()
+    public function getIcmsToken()
     {
         $data = [
             "partner_id" => 1,
-            "user_id" => 89,
+            "user_id" => $this->userId,
             "cashdesk_id" => -5
         ];
 
         /**@var Response $response*/
-        $response = app('Guzzle')::post('http://icms.dev:8181/internal/v2/bg/generateToken',
+        $response = app('Guzzle')::post('http://' . $this->getIcmsServer() . '/internal/v2/bg/generateToken',
             ['json' => $data]
         );
 
         return json_decode($response->getBody()->getContents(), true)['token'];
+    }
+
+    private function getIcmsServer()
+    {
+        switch (env('APP_URL')) {
+            case 'http://ihub.dev' :
+                return 'icms.dev:8181';
+            case 'http://ihub.favbet.dev' :
+                return 'ihub.favbet.dev:8180';
+            default :
+                throw new \Exception('APP_URL not found');
+        }
     }
 
     public function authFailed()
