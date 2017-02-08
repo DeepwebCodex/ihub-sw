@@ -23,8 +23,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
         parent::boot();
     }
 
@@ -38,7 +36,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
 
         $this->mapApiRoutes();
-
     }
 
     /**
@@ -70,8 +67,33 @@ class RouteServiceProvider extends ServiceProvider
         Route::group([
             'middleware' => 'api',
             'namespace' => $this->namespace . '\Api'
-        ], function ($router) {
-            require base_path('routes/api.php');
+        ], function () {
+            $path = base_path('routes/api');
+            $regexIterator = $this->getRegexIteratorForPath($path, '/^.+\.php$/i');
+            $routeBasePath = $path;
+
+            foreach ($regexIterator as $route) {
+                $routeFilePath = $route[0];
+                $routePath = str_replace($routeBasePath, '', $routeFilePath);
+                Route::group(
+                    ['prefix' => pathinfo($routePath, PATHINFO_DIRNAME)],
+                    function () use ($routeFilePath) {
+                        require $routeFilePath;
+                    }
+                );
+            }
         });
+    }
+
+    /**
+     * @param $path
+     * @param $regexRule
+     * @return \RegexIterator
+     */
+    protected function getRegexIteratorForPath(string $path, string $regexRule): \RegexIterator
+    {
+        $directoryIterator = new \RecursiveDirectoryIterator($path);
+        $iterator = new \RecursiveIteratorIterator($directoryIterator);
+        return new \RegexIterator($iterator, $regexRule, \RecursiveRegexIterator::GET_MATCH);
     }
 }
