@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'service_id' => 17,
+    'service_id' => 49,
     'login_server' => 'microgaming',
     'password_server' => 'greDrt12Fghqq',
     'use_secure_request' => false,
