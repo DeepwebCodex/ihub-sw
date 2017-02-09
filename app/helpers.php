@@ -6,18 +6,30 @@ if (! function_exists('integration_config')) {
      * @param \Illuminate\Foundation\Application $app
      * @param string $environment
      */
-    function integration_config(\Illuminate\Foundation\Application $app, $environment){
-        if($environment && $app){
-            $basePath = $app->basePath().DIRECTORY_SEPARATOR.'integrations'.DIRECTORY_SEPARATOR;
-            $environmentConfig = $basePath . $environment . '.php';
-
-            if(!file_exists($environmentConfig)){
-                $environmentConfig = $basePath . 'default.php';
+    function integration_config(\Illuminate\Foundation\Application $app, $environment)
+    {
+        if ($environment && $app) {
+            $basePath = $app->basePath() . DIRECTORY_SEPARATOR . 'integrations' . DIRECTORY_SEPARATOR;
+            $environmentConfigDir = $basePath . $environment . DIRECTORY_SEPARATOR;
+            if (!file_exists($environmentConfigDir)) {
+                $environmentConfigDir = $basePath . 'default' . DIRECTORY_SEPARATOR;
             }
-
-            $integrations = require $environmentConfig;
-
-            Illuminate\Container\Container::getInstance()->make('config')->set('integrations', $integrations);
+            $handle = opendir($environmentConfigDir);
+            $directoryList = [$environmentConfigDir];
+            while (false !== ($filename = readdir($handle))) {
+                if ($filename !== '.' && $filename !== '..' && is_dir($environmentConfigDir . $filename)) {
+                    $directoryList[] = $environmentConfigDir . $filename . DIRECTORY_SEPARATOR;
+                }
+            }
+            $integrationsConfig = [];
+            foreach ($directoryList as $directory) {
+                foreach (glob($directory . '*.php') as $filename) {
+                    $config = require $filename;
+                    $filenameWithoutExtension = basename($filename, '.php');
+                    $integrationsConfig[$filenameWithoutExtension] = $config;
+                }
+            }
+            Illuminate\Container\Container::getInstance()->make('config')->set('integrations', $integrationsConfig);
         }
     }
 
