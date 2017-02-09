@@ -2,10 +2,18 @@
 
 use App\Components\Transactions\TransactionRequest;
 use Carbon\Carbon;
+use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\GameSessionsMock;
 
 class MicroGamingPartnerApiCest
 {
     const URI = '/mg';
+
+    public function _before(\ApiTester $I)
+    {
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
+    }
 
     public function testRefreshToken(\ApiTester $I)
     {
