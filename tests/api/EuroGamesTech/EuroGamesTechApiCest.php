@@ -3,10 +3,10 @@
 namespace api\EuroGamesTech;
 
 use App\Components\Transactions\TransactionRequest;
-use \App\Components\Integrations\EuroGamesTech\StatusCode;
-use \App\Components\Integrations\EuroGamesTech\DefenceCode;
 use \EuroGamesTech\TestData;
 use \EuroGamesTech\TestUser;
+use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\GameSessionsMock;
 
 class EuroGamesTechApiCest
 {
@@ -25,9 +25,10 @@ class EuroGamesTechApiCest
         $this->data = new TestData($this->testUser);
     }
 
-    public function _before()
+    public function _before(\ApiTester $I)
     {
-
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
     public function _after()
