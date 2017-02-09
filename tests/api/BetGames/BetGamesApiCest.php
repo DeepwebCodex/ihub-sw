@@ -4,12 +4,15 @@ namespace api\BetGames;
 
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\StatusCode;
+use App\Components\Integrations\GameSession\GameSessionService;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
 use \BetGames\TestData;
 use \BetGames\TestUser;
+use Codeception\Scenario;
+use Testing\GameSessionsMock;
 
 /**
  * Class BetGamesApiCest
@@ -28,9 +31,14 @@ class BetGamesApiCest
         $this->data = new TestData($this->testUser);
     }
 
-    public function _before(\ApiTester $I)
+    public function _before(\ApiTester $I, Scenario $s)
     {
         $I->disableMiddleware();
+
+        if ($s->getFeature() != 'test token') {
+            $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+            $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
+        }
     }
 
     public function testMethodNotFound(\ApiTester $I)

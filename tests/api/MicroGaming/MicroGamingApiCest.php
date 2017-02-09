@@ -2,14 +2,17 @@
 
 use App\Components\Transactions\TransactionRequest;
 use Carbon\Carbon;
+use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\GameSessionsMock;
 
 class MicroGamingApiCest
 {
     private $gameID;
 
-    public function _before()
+    public function _before(\ApiTester $I)
     {
-
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
     public function _after()
