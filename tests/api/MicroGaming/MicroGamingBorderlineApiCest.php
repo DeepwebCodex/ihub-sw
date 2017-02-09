@@ -4,15 +4,19 @@ use App\Components\Transactions\TransactionRequest;
 use App\Models\MicroGamingObjectIdMap;
 use App\Models\Transactions;
 use Carbon\Carbon;
+use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\GameSessionsMock;
 
 class MicroGamingBorderlineApiCest
 {
     private $gameID;
     private $options;
 
-    public function _before()
+    public function _before(\ApiTester $I)
     {
         $this->options = config('integrations.microgaming');
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
     public function _after()
