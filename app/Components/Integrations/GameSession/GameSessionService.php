@@ -24,12 +24,12 @@ class GameSessionService
      * Create session
      *
      * @param array $sessionData
+     * @param $algorithm
      * @return string
-     * @throws \RuntimeException
      */
-    public function create(array $sessionData):string
+    public function create(array $sessionData, $algorithm = 'sha256'):string
     {
-        $referenceId = $this->makeReferenceId($sessionData);
+        $referenceId = $this->makeReferenceId($sessionData, $algorithm);
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
         $referenceStoreItem->read();
         $sessionId = $referenceStoreItem->getSessionId();
@@ -51,12 +51,13 @@ class GameSessionService
 
     /**
      * @param array $data
+     * @param string $algorithm
      * @return string
      */
-    protected function makeReferenceId(array $data):string
+    protected function makeReferenceId(array $data, $algorithm = 'sha512'):string
     {
         $referenceKey = implode('', array_values($data));
-        return hash_hmac('sha512', $referenceKey, $this->getConfigOption('storage_secret'));
+        return hash_hmac($algorithm, $referenceKey, $this->getConfigOption('storage_secret'));
     }
 
     /**
