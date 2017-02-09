@@ -3,7 +3,6 @@
 namespace api\BetGames;
 
 use App\Components\Integrations\NetEnt\CodeMapping;
-use App\Components\Integrations\NetEnt\Hmac;
 use App\Components\Integrations\NetEnt\StatusCode;
 use App\Components\Transactions\Strategies\NetEnt\ProcessNetEnt;
 use App\Components\Transactions\TransactionRequest;
@@ -12,6 +11,8 @@ use App\Models\Transactions;
 use \NetEnt\TestData;
 use \NetEnt\TestUser;
 use Symfony\Component\HttpFoundation\Response;
+use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\GameSessionsMock;
 
 /**
  * Class BetGamesApiCest
@@ -35,6 +36,8 @@ class NetEntApiCest
     public function _before(\ApiTester $I)
     {
         $I->disableMiddleware();
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
     public function testMethodNotFound(\ApiTester $I)
