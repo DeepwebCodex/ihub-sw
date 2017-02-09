@@ -36,8 +36,8 @@ class BetGamesApiCest
         $I->disableMiddleware();
 
         if ($s->getFeature() != 'test token') {
-            $I->getApplication()->instance( GameSessionService::class, GameSessionsMock::getMock() );
-            $I->haveInstance( GameSessionService::class, GameSessionsMock::getMock() );
+            $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+            $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
         }
     }
 
