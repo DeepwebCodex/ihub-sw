@@ -204,6 +204,11 @@ class BetGamesController extends BaseApiController
             app('GameSession')->prolong($token);
         }
 
+        foreach ($params as $key => $param) {
+            $params[$key] = transliterate(str_slug($param, '_'));
+        }
+
+
         $error = CodeMapping::getByErrorCode(StatusCode::OK);
         $view = [
             'method' => $method,
