@@ -189,7 +189,7 @@ class BetGamesController extends BaseApiController
         return $this->responseOk($request->input('method'), $request->input('token'), [
             'balance_after' => $response->getBalanceInCents(),
             'already_processed' => $response->isDuplicate() ? 1 : 0
-        ]);
+        ], false);
     }
 
     /**
