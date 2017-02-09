@@ -27,9 +27,9 @@ class GameSessionService
      * @param $algorithm
      * @return string
      */
-    public function create(array $sessionData, $algorithm = 'sha256'):string
+    public function create(array $sessionData, $algorithm = 'sha512'):string
     {
-        $referenceId = $this->makeReferenceId($sessionData, $algorithm);
+        $referenceId = $this->makeReferenceId($sessionData);
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
         $referenceStoreItem->read();
         $sessionId = $referenceStoreItem->getSessionId();
@@ -39,7 +39,7 @@ class GameSessionService
             return $sessionId;
         }
 
-        $sessionId = $this->makeSessionId($sessionData);
+        $sessionId = $this->makeSessionId($sessionData, $algorithm);
 
         $this->sessionStoreItem = SessionStoreItem::create($sessionId, $sessionData, $referenceId);
         ReferenceStoreItem::create($referenceId, $sessionId);
@@ -51,13 +51,12 @@ class GameSessionService
 
     /**
      * @param array $data
-     * @param string $algorithm
      * @return string
      */
-    protected function makeReferenceId(array $data, $algorithm = 'sha512'):string
+    protected function makeReferenceId(array $data):string
     {
         $referenceKey = implode('', array_values($data));
-        return hash_hmac($algorithm, $referenceKey, $this->getConfigOption('storage_secret'));
+        return hash_hmac('sha512', $referenceKey, $this->getConfigOption('storage_secret'));
     }
 
     /**
@@ -90,13 +89,14 @@ class GameSessionService
      * Make session id
      *
      * @param array $data
+     * @param string $algorithm
      * @return string
      */
-    protected function makeSessionId(array $data):string
+    protected function makeSessionId(array $data, $algorithm = 'sha512'):string
     {
         $sessionKey = implode('', array_values($data));
         $time = microtime(true);
-        return hash_hmac('sha512', $sessionKey . $time, $this->getConfigOption('storage_secret'));
+        return hash_hmac($algorithm, $sessionKey . $time, $this->getConfigOption('storage_secret'));
     }
 
     /**
