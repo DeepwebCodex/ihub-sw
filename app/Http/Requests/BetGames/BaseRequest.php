@@ -27,7 +27,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-        if($request->input('method') == 'ping'){
+        if (in_array($request->input('method'), ['ping', 'transaction_bet_payout'])) {
             return true;
         }
         try {
