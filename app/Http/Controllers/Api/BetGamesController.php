@@ -56,10 +56,11 @@ class BetGamesController extends BaseApiController
      */
     public function index(BaseRequest $request)
     {
-        if($request->input('method') != 'ping') {
+        $apiMethod = new ApiMethod($request->input('method'));
+        if (!$apiMethod->isOffline()) {
             $this->userId = app('GameSession')->get('user_id') ?? 0;
         }
-        $apiMethod = new ApiMethod($request->input('method'));
+
         return app()->call([$this, $apiMethod->get()], $request->all());
     }
 

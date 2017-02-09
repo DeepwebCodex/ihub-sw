@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\BetGames;
 
+use App\Components\Integrations\BetGames\ApiMethod;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
@@ -27,7 +28,8 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-        if (in_array($request->input('method'), ['ping', 'transaction_bet_payout'])) {
+
+        if ((new ApiMethod($request->input('method')))->isOffline()) {
             return true;
         }
         try {
