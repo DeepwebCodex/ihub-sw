@@ -108,7 +108,7 @@ class BetGamesController extends BaseApiController
     public function newToken(BaseRequest $request)
     {
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
-        $newToken = app('GameSession')->regenerate($request->input('token'));
+        $newToken = app('GameSession')->regenerate($request->input('token'), 'md5');
         return $this->responseOk($request->input('method'), $request->input('token'), ['new_token' => $newToken], false);
     }
 

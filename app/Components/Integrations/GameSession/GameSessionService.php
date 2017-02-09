@@ -118,17 +118,18 @@ class GameSessionService
      * Regenerate session
      *
      * @param string $sessionId
+     * @param string $algorithm
      * @return string
      * @throws \RuntimeException
      */
-    public function regenerate(string $sessionId):string
+    public function regenerate(string $sessionId, $algorithm = 'sha512'):string
     {
         $sessionStoreItem = new SessionStoreItem($sessionId);
         $sessionStoreItem->read();
         $sessionData = $sessionStoreItem->getData();
         $referenceId = $sessionStoreItem->getReferenceId();
 
-        $newSessionId = $this->makeSessionId($sessionData);
+        $newSessionId = $this->makeSessionId($sessionData, $algorithm);
 
         $sessionStoreItem->delete();
 
