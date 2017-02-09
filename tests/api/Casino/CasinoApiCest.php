@@ -2,6 +2,9 @@
 
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\GameSessionsMock;
+
 
 class CasinoApiCest
 {
@@ -9,9 +12,10 @@ class CasinoApiCest
     private $objectId;
     private $user_balance;
 
-    public function _before()
+    public function _before(\ApiTester $I)
     {
-
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
     public function _after()

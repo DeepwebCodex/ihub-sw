@@ -3,6 +3,8 @@
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Models\Transactions;
+use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\GameSessionsMock;
 
 class CasinoBorderlineApiCest
 {
@@ -11,9 +13,11 @@ class CasinoBorderlineApiCest
     private $user_balance;
     private $options;
 
-    public function _before()
+    public function _before(\ApiTester $I)
     {
         $this->options = config('integrations.casino');
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
     public function _after()
