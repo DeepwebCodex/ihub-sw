@@ -158,4 +158,22 @@ class OrionResolverTest extends Unit {
         });
     }
 
+    public function testRollbackWithoutBet() {
+        $testData[] = [
+            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
+            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->data->generateUniqId(),
+            'transactionNumber' => $this->data->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->data->generateUniqId()
+        ];
+        $obj = $this->data->initRollbackWithoutBet($testData);
+
+        $this->specify("Test correct rollback", function() use($obj) {
+            $response = $this->data->operation($obj);
+            verify("Must be array", $response->finishedDataWin)->containsOnly('array');
+            verify("Must be  count two", $response->finishedDataWin)->count(1);
+            verify("Must be equls zero", $response->finishedDataWin[0]['isDuplicate'])->equals(0);
+            verify("Resposne must be array", $response->dataResponse)->containsOnly('array');
+        });
+    }
+
 }

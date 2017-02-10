@@ -205,6 +205,33 @@ class TestData extends Unit {
         $obj->operationsProcessor = new CommitRollbackProcessor('RollbackQueue', TransactionRequest::TRANS_REFUND);
         return $obj;
     }
+    
+    public function initRollbackWithoutBet($testData, $xmlMockB = '') {
+        if (is_array($testData)) {
+            $xmlMock = $this->generatedXml($testData, 'rollback', 1, true, false);
+        } else {
+            $xmlMock = $testData;
+        }
+        $clientMockQ = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
+
+        if (!$xmlMockB) {
+            $xmlMockB = $this->generatedXmlManualBet($xmlMock);
+        }
+        $clientManualVBMock = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
+
+
+
+        $obj = new stdClass();
+        $sourceProcessor = new SourceProcessor();
+        $obj->source = new GetRollbackQueueData($clientMockQ, $sourceProcessor);
+        $obj->validatorData = new RollbackValidation();
+        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
+        $obj->validationResolveData = new ManualValidation();
+        $obj->operationsProcessor = new CommitRollbackProcessor('RollbackQueue', TransactionRequest::TRANS_REFUND);
+        return $obj;
+    }
 
     public function createXmlEndGame() {
         $qEndGameData = [
