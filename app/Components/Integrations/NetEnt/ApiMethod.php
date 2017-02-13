@@ -39,6 +39,11 @@ class ApiMethod
         return $map[$this->method] ?? '';
     }
 
+    public function isOffline()
+    {
+        return in_array($this->method, ['ping', 'roundinfo']);
+    }
+
     /**
      * @return string
      */

@@ -8,6 +8,7 @@ use App\Components\Transactions\Strategies\NetEnt\ProcessNetEnt;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
+use Codeception\Scenario;
 use \NetEnt\TestData;
 use \NetEnt\TestUser;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,11 +34,13 @@ class NetEntApiCest
         $this->action = '/netent';
     }
 
-    public function _before(\ApiTester $I)
+    public function _before(\ApiTester $I, Scenario $s)
     {
         $I->disableMiddleware();
-        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
-        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
+        if ($s->getFeature() != 'test ping') {
+            $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+            $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
+        }
     }
 
     public function testMethodNotFound(\ApiTester $I)

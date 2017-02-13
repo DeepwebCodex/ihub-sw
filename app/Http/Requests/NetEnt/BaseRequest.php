@@ -30,6 +30,10 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
+        if ((new ApiMethod($request->input('type')))->isOffline()) {
+            return true;
+        }
+
         try {
             app('GameSession')->start($request->input('i_extparam', ''));
         } catch (SessionDoesNotExist $e) {

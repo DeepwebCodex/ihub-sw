@@ -56,7 +56,9 @@ class NetEntController extends BaseApiController
     public function index(BaseRequest $request)
     {
         $apiMethod = new ApiMethod($request->input('type'));
-        $this->userId = app('GameSession')->get('user_id') ?? 0;
+        if(!$apiMethod->isOffline()) {
+            $this->userId = app('GameSession')->get('user_id') ?? 0;
+        }
 
         return app()->call([$this, $apiMethod->get()], $request->all());
     }
