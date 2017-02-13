@@ -175,5 +175,22 @@ class OrionResolverTest extends Unit {
             verify("Resposne must be array", $response->dataResponse)->containsOnly('array');
         });
     }
+    
+    public function testCommitWithoutBet() {
+        $testData[] = [
+            'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
+            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->data->generateUniqId(),
+            'transactionNumber' => $this->data->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->data->generateUniqId()
+        ];
+        $obj = $this->data->initCommitWithoutBet($testData);
+
+        $this->specify("Test correct ccommit", function() use($obj) {
+            $response = $this->data->operation($obj);
+            verify("Must be array", $response->finishedDataWin)->containsOnly('array');
+            verify("Must be  empty", $response->finishedDataWin)->isEmpty();
+            verify("Resposne must be array", $response->dataResponse)->containsOnly('array');
+        });
+    }
 
 }

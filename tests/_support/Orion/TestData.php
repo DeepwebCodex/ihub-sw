@@ -350,5 +350,32 @@ class TestData extends Unit {
         $obj->validationResolveData->validateBaseStructure($response->dataResponse);
         return $response;
     }
+    
+    public function initCommitWithoutBet($testData, $xmlMockB = '') {
+        if (is_array($testData)) {
+            $xmlMock = $this->generatedXml($testData, 'commit', 1, true, false);
+        } else {
+            $xmlMock = $testData;
+        }
+        $clientMockQ = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
+
+        if (!$xmlMockB) {
+            $xmlMockB = $this->generatedXmlManualBet($xmlMock);
+        }
+        $clientManualVBMock = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
+
+
+
+        $obj = new stdClass();
+        $sourceProcessor = new SourceProcessor();
+        $obj->source = new GetCommitQueueData($clientMockQ, $sourceProcessor);
+        $obj->validatorData = new CommitValidation();
+        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
+        $obj->validationResolveData = new ManualValidation();
+        $obj->operationsProcessor = new CommitRollbackProcessor('CommitQueue', TransactionRequest::TRANS_WIN);
+        return $obj;
+    }
 
 }
