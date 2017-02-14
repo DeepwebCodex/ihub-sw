@@ -1,6 +1,6 @@
 <?php
 
-namespace api\BetGames;
+namespace api\NetEnt;
 
 use App\Components\Integrations\NetEnt\CodeMapping;
 use App\Components\Integrations\NetEnt\StatusCode;
@@ -8,7 +8,14 @@ use App\Components\Transactions\Strategies\NetEnt\ProcessNetEnt;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
+use Codeception\Event\StepEvent;
+use Codeception\Lib\ModuleContainer;
 use Codeception\Scenario;
+use Codeception\Step;
+use Codeception\SuiteManager;
+use Codeception\Test\Cest;
+use Codeception\Test\Metadata;
+use Codeception\TestCase;
 use \NetEnt\TestData;
 use \NetEnt\TestUser;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,11 +28,17 @@ use Testing\GameSessionsMock;
  */
 class NetEntApiCest
 {
+    /** @var  TestData */
     private $data;
     private $action;
 
     /** @var TestUser */
     private $testUser;
+
+    const OFFLINE = [
+        'test ping',
+        'test fail auth',
+    ];
 
     public function __construct()
     {
@@ -37,7 +50,7 @@ class NetEntApiCest
     public function _before(\ApiTester $I, Scenario $s)
     {
         $I->disableMiddleware();
-        if ($s->getFeature() != 'test ping') {
+        if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
         }
@@ -100,6 +113,37 @@ class NetEntApiCest
         $this->data->resetAmount();
 
         $this->noRecord($I, $request, 'bet');
+    }
+
+    public function testFailAuth(\ApiTester $I)
+    {
+        $I->sendPOST($this->action, $this->data->authFailed());
+        $this->getResponseFail($I, StatusCode::TOKEN);
+    }
+
+    public function testZeroBet(\ApiTester $I)
+    {
+        $this->data->setAmount(0.00);
+
+        $request = $this->data->bet();
+        $I->sendPOST($this->action, $request);
+        $this->getResponseFail($I);
+        $this->data->resetAmount();
+
+        $this->noRecord($I, $request, 'bet');
+    }
+
+    public function testZeroWin(\ApiTester $I)
+    {
+        $bet = $this->testBet($I);
+        $this->data->setAmount(0.00);
+
+        $request = $this->data->win($bet['i_gameid']);
+        $I->sendPOST($this->action, $request);
+        $this->getResponseOk($I, true);
+        $this->data->resetAmount();
+
+        $this->isRecord($I, $request, 'win');
     }
 
     public function testDuplicateBet(\ApiTester $I)

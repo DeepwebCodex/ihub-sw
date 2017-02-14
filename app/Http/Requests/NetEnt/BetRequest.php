@@ -19,7 +19,7 @@ class BetRequest extends BaseRequest
             'tid' => 'bail|required|min:1',
             'userid' => 'bail|required|integer|min:1',
             'currency' => 'bail|required|string|min:2',
-            'amount' => 'bail|required|min:1',
+            'amount' => 'bail|required|numeric|min:0.01',
         ]);
     }
 }

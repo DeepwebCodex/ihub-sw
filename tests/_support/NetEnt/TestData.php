@@ -35,12 +35,7 @@ class TestData
 
     public function ping()
     {
-        $params = [
-            'type' => 'ping',
-        ];
-        $params['hmac'] = (new Hmac($params))->get();
-
-        return $params;
+        return $this->basic('ping');
     }
 
 
@@ -130,15 +125,7 @@ class TestData
 
     public function authFailed()
     {
-        $data = [
-            'method' => 'ping',
-            'token' => 'authorization_must_fails',
-            'time' => time(),
-            'params' => [],
-        ];
-        $this->setSignature($data);
-
-        return $data;
+        return $this->getBalance();
     }
 
     public function account()
@@ -171,20 +158,6 @@ class TestData
         return $this->amount = self::AMOUNT;
     }
 
-    public function wrongTime($method, $params = null)
-    {
-        $token = Token::create($this->userId, $this->currency);
-        $data = [
-            'method' => $method,
-            'token' => $token->get(),
-            'time' => 12345,
-            'params' => $params,
-        ];
-        $this->setSignature($data);
-
-        return $data;
-    }
-
     private function basic($method)
     {
         $params = [
@@ -193,26 +166,5 @@ class TestData
         $params['hmac'] = (new Hmac($params))->get();
 
         return $params;
-    }
-
-    private function transaction($method, $bet_id = null, $trans_id = null, $player_id = null)
-    {
-        $params = [
-            'amount' => $this->amount,
-            'currency' => $this->currency,
-            'bet_id' => (empty($bet_id)) ? random_int(100000, 9900000) : (int)$bet_id,
-            'transaction_id' => $trans_id ?? random_int(1000, 5000), //md5(str_random()),
-            'retrying' => 0,
-        ];
-        if ($player_id) {
-            $params['player_id'] = $player_id;
-        }
-        return $this->basic($method, $params);
-    }
-
-    private function setSignature(&$data)
-    {
-        $sign = new Signature($data);
-        $data['signature'] = $sign->getHash();
     }
 }
