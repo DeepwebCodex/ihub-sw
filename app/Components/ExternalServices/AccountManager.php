@@ -223,7 +223,7 @@ class AccountManager
      * @return mixed
      */
     public function getOperations(int $user_id = null, int $direction = null, int $object_id = null, int $service_id = null){
-        return $this->sendPostRoh('accounts/operations/get', [
+        return $this->sendPostRoh($this->buildRohHost('accounts/operations/get'), [
             'user_id'       => $user_id,
             'move'          => $direction,
             'object_id'     => $object_id,
