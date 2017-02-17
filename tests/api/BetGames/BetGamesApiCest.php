@@ -28,11 +28,12 @@ class BetGamesApiCest
     public function __construct()
     {
         $this->testUser = new TestUser();
-        $this->data = new TestData($this->testUser);
+        $this->data = new TestData();
     }
 
     public function _before(\ApiTester $I, Scenario $s)
     {
+        $I->mockAccountManager($I, config('integrations.betGames.service_id'), TestData::AMOUNT);
         $I->disableMiddleware();
 
         if ($s->getFeature() != 'test token') {

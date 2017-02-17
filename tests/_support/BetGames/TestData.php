@@ -4,9 +4,11 @@ namespace BetGames;
 
 use App\Components\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
+use Testing\Params;
 
 class TestData
 {
+    const IS_MOCK = true;
     const AMOUNT = 10;
     /**
      * @var IntegrationUser
@@ -14,14 +16,15 @@ class TestData
     private $userId;
     private $currency;
     private $amount;
-    private $token;
+    private $amount_backup;
+    public $bigAmount;
 
-    public function __construct(TestUser $testUser)
+    public function __construct()
     {
-        $user = $testUser->getUser();
-        $this->userId = $user->id;
-        $this->currency = $user->getCurrency();
-        $this->token = Token::create($this->userId, $this->currency);
+//        $this->amount = self::AMOUNT;
+        $this->userId = (int)env('TEST_USER_ID');
+        $this->currency = Params::CURRENCY;
+        $this->amount_backup =
         $this->amount = self::AMOUNT;
     }
 
@@ -133,8 +136,8 @@ class TestData
         $params = [
             'amount' => $this->amount,
             'currency' => $this->currency,
-            'bet_id' => (empty($bet_id)) ? random_int(100000, 9900000) : (int)$bet_id,
-            'transaction_id' => $trans_id ?? random_int(1000, 5000), //md5(str_random()),
+            'bet_id' => $bet_id ?? $this->getObjectId(),
+            'transaction_id' => $trans_id ?? $this->getObjectId(), //md5(str_random()),
             'retrying' => 0,
         ];
         if ($player_id) {
@@ -147,5 +150,10 @@ class TestData
     {
         $sign = new Signature($data);
         $data['signature'] = $sign->getHash();
+    }
+
+    private function getObjectId()
+    {
+        return (self::IS_MOCK) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
     }
 }
