@@ -118,6 +118,10 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
     {
         if($this->request->transaction_type !== TransactionRequest::TRANS_REFUND) {
             parent::onHaveNotBet($e);
+        }else {
+            $this->responseData = array_merge($this->responseData, [
+                'operation_id' => app('AccountManager')->getFreeOperationId()
+            ]);
         }
     }
 

@@ -20,15 +20,18 @@ class CheckPartnerId
      */
     public function handle($request, \Closure $next)
     {
-        $partnerId = (int) $request->server('PARTNER_ID');
+        if (is_numeric($request->server('PARTNER_ID'))) {
+            return $next($request);
+        }
 
-        if ($partnerId && is_numeric($partnerId)) {
+        if ($pId = $request->input('partner_id')) {
+            $request->server->set('PARTNER_ID', (int)$pId);
             return $next($request);
         }
 
         /** @var \App\Components\AppLog $logger */
         $logger = app('AppLog');
-        $logger->critical('PartnerId not found');
+        $logger->critical('PARTNER_ID not found');
 
         throw new ApiHttpException(503, 'Service unavailable');
     }

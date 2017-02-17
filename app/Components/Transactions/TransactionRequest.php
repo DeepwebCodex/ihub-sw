@@ -80,8 +80,10 @@ class TransactionRequest
 
         $this->comment = json_encode($this->getComment());
 
+
         $this->partner_id = $partner_id ?? app('Request')::getFacadeRoot()->server('PARTNER_ID');
         $this->cashdesk_id = $cashdesk_id ?? app('Request')::getFacadeRoot()->server('FRONTEND_NUM');
+
     }
 
     public function getComment()
