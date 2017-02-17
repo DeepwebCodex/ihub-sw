@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Components\ExternalServices\AccountManager;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class AccountManagerServiceProvider extends ServiceProvider
@@ -23,8 +24,8 @@ class AccountManagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('AccountManager', function ($app) {
-            return new AccountManager();
+        $this->app->singleton('AccountManager', function (Application $app) {
+            return $app->make(AccountManager::class);
         });
     }
 

@@ -20,7 +20,7 @@ class NetEntTemplate implements IExceptionTemplate
 
         $error = ($errorCode === StatusCode::VALIDATION) ? $item : CodeMapping::getByErrorCode($errorCode);
         $view = [
-            'error' => $error['message']
+            'error' => $error['message'] ?? ''
         ];
         $view['hmac'] = (new Hmac($view))->get();
 

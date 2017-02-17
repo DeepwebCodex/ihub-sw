@@ -8,14 +8,7 @@ use App\Components\Transactions\Strategies\NetEnt\ProcessNetEnt;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
-use Codeception\Event\StepEvent;
-use Codeception\Lib\ModuleContainer;
 use Codeception\Scenario;
-use Codeception\Step;
-use Codeception\SuiteManager;
-use Codeception\Test\Cest;
-use Codeception\Test\Metadata;
-use Codeception\TestCase;
 use \NetEnt\TestData;
 use \NetEnt\TestUser;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,12 +36,13 @@ class NetEntApiCest
     public function __construct()
     {
         $this->testUser = new TestUser();
-        $this->data = new TestData($this->testUser);
+        $this->data = new TestData();
         $this->action = '/netent';
     }
 
     public function _before(\ApiTester $I, Scenario $s)
     {
+        $I->mockAccountManager($I, config('integrations.netEnt.service_id'));
         $I->disableMiddleware();
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
@@ -103,7 +97,7 @@ class NetEntApiCest
 
     public function testExBet(\ApiTester $I)
     {
-        $this->data->setAmount(1000000000000000);
+        $this->data->setAmount($this->data->bigAmount);
         $request = $this->data->bet();
         $balanceBefore = $this->testUser->getBalance();
 

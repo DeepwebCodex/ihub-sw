@@ -3,24 +3,25 @@
 namespace NetEnt;
 
 use App\Components\Integrations\NetEnt\Hmac;
-use App\Components\Users\IntegrationUser;
+use Testing\Params;
 
 class TestData
 {
-    const AMOUNT = 1;
-    /**
-     * @var IntegrationUser
-     */
+    const IS_MOCK = true;
+
     private $userId;
     private $currency;
     private $amount;
+    private $amount_backup;
+    public $bigAmount;
 
-    public function __construct(TestUser $testUser)
+    public function __construct()
     {
-        $user = $testUser->getUser();
-        $this->userId = $user->id;
-        $this->currency = $user->getCurrency();
-        $this->amount = self::AMOUNT;
+        $this->userId = (int)env('TEST_USER_ID');
+        $this->currency = Params::CURRENCY;
+        $this->amount_backup =
+        $this->amount = Params::AMOUNT;
+        $this->bigAmount = Params::BIG_AMOUNT;
     }
 
     public function notFound()
@@ -119,7 +120,8 @@ class TestData
 
     protected function getUniqueNumber()
     {
-        return time() + mt_rand(1, 10000);
+
+        return (self::IS_MOCK) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
     }
 
 
@@ -155,7 +157,7 @@ class TestData
 
     public function resetAmount()
     {
-        return $this->amount = self::AMOUNT;
+        return $this->amount = $this->amount_backup;
     }
 
     private function basic($method)
