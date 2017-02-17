@@ -25,7 +25,8 @@ class TestData
         $this->userId = (int)env('TEST_USER_ID');
         $this->currency = Params::CURRENCY;
         $this->amount_backup =
-        $this->amount = self::AMOUNT;
+        $this->amount = Params::AMOUNT * 100;
+        $this->bigAmount = Params::BIG_AMOUNT * 100;
     }
 
     public function notFound()
@@ -101,7 +102,7 @@ class TestData
 
     public function resetAmount()
     {
-        return $this->amount = self::AMOUNT;
+        return $this->amount = $this->amount_backup;
     }
 
     public function wrongTime($method, $params = null)
