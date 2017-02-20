@@ -48,8 +48,6 @@ class BetGamesController extends BaseApiController
         Validator::extend('check_time', 'App\Http\Requests\Validation\BetGamesValidation@checkTime');
         Validator::extend('check_token', 'App\Http\Requests\Validation\BetGamesValidation@checkToken');
         Validator::extend('check_method', 'App\Http\Requests\Validation\BetGamesValidation@checkMethod');
-
-        $this->userId = app('GameSession')->get('user_id') ?? 0;
     }
 
     /**
@@ -59,6 +57,10 @@ class BetGamesController extends BaseApiController
     public function index(BaseRequest $request)
     {
         $apiMethod = new ApiMethod($request->input('method'));
+        if (!$apiMethod->isOffline()) {
+            $this->userId = app('GameSession')->get('user_id') ?? 0;
+        }
+
         return app()->call([$this, $apiMethod->get()], $request->all());
     }
 
@@ -69,7 +71,7 @@ class BetGamesController extends BaseApiController
     public function ping(BaseRequest $request)
     {
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
-        return $this->responseOk('ping', $request->input('token'));
+        return $this->responseOk('ping', $request->input('token'), [], false);
     }
 
     /**
@@ -107,8 +109,8 @@ class BetGamesController extends BaseApiController
     public function newToken(BaseRequest $request)
     {
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
-        $newToken = app('GameSession')->regenerate($request->input('token'));
-        return $this->responseOk($request->input('method'), $newToken, [], false);
+        $newToken = app('GameSession')->regenerate($request->input('token'), 'md5');
+        return $this->responseOk($request->input('method'), $request->input('token'), ['new_token' => $newToken], false);
     }
 
     /**
@@ -187,7 +189,7 @@ class BetGamesController extends BaseApiController
         return $this->responseOk($request->input('method'), $request->input('token'), [
             'balance_after' => $response->getBalanceInCents(),
             'already_processed' => $response->isDuplicate() ? 1 : 0
-        ]);
+        ], false);
     }
 
     /**
@@ -202,6 +204,11 @@ class BetGamesController extends BaseApiController
         if($prolong) {
             app('GameSession')->prolong($token);
         }
+
+        foreach ($params as $key => $param) {
+            $params[$key] = transliterate(str_slug($param, '_'));
+        }
+
 
         $error = CodeMapping::getByErrorCode(StatusCode::OK);
         $view = [

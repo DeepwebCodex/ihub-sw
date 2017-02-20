@@ -49,12 +49,6 @@ class BetGamesApiCest
 
     }
 
-    public function testAuth(\ApiTester $I)
-    {
-        $I->sendPOST('/bg', $this->data->authFailed());
-        $this->getResponseFail($I, StatusCode::TOKEN);
-    }
-
     public function testPing(\ApiTester $I)
     {
         $I->sendPOST('/bg', $this->data->ping());
@@ -69,6 +63,12 @@ class BetGamesApiCest
         ;
         app()->instance($class, $mock);
         return $mock;
+    }
+
+    public function testFailAuth(\ApiTester $I)
+    {
+        $I->sendPOST('/bg', $this->data->authFailed());
+        $this->getResponseFail($I, StatusCode::TOKEN);
     }
 
     public function testFailPending(\ApiTester $I)
@@ -124,7 +124,8 @@ class BetGamesApiCest
         $I->sendPOST('/bg', $request);
         $response = $this->getResponseOk($I);
 
-        $I->assertNotEquals($request['token'], $response['token']);
+        $I->assertEquals($request['token'], $response['token']);
+        $I->assertNotEquals($request['token'], $response['params']['new_token']);
     }
 
     public function testGetBalance(\ApiTester $I)
@@ -287,6 +288,31 @@ class BetGamesApiCest
         unset($data['params']['amount']);
         $I->sendPOST('/bg', $data);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
+    }
+
+
+    public function testToken(\ApiTester $I)
+    {
+        $data = $this->data->token();
+        $I->sendPOST('/bg', $data);
+        $response = $this->getResponseOk($I);
+        $I->assertEquals($this->testUser->getUser()->id, $response['params']['user_id']);
+    }
+
+//    private function getToken(\ApiTester $I)
+//    {
+//        $data = $this->data->getToken();
+//        $I->sendPOST('/game_session/create', $data);
+//        $data = $this->responseToArray($I);
+//        return $data;
+//    }
+
+    private function execBet(\ApiTester $I)
+    {
+        $request = $this->data->bet();
+        $I->sendPOST('/bg', $request);
+
+        return $request;
     }
 
     private function getResponseOk(\ApiTester $I)
