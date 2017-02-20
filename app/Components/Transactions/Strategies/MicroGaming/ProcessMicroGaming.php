@@ -40,8 +40,6 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
 
         if($this->request->transaction_type != TransactionRequest::TRANS_BET)
         {
-            $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, request()->server('PARTNER_ID'));
-
             if(!$betTransaction){
                 $this->onHaveNotBet(new ApiHttpException(500, null, ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR)));
                 return $this->responseData;
