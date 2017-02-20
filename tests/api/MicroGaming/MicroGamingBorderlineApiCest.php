@@ -4,15 +4,19 @@ use App\Components\Transactions\TransactionRequest;
 use App\Models\MicroGamingObjectIdMap;
 use App\Models\Transactions;
 use Carbon\Carbon;
+use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\GameSessionsMock;
 
 class MicroGamingBorderlineApiCest
 {
     private $gameID;
     private $options;
 
-    public function _before()
+    public function _before(\ApiTester $I)
     {
         $this->options = config('integrations.microgaming');
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
     public function _after()
@@ -202,6 +206,55 @@ class MicroGamingBorderlineApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$testUser->getBalanceInCents().'\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
+    }
+    
+     public function testAccountDuplicateTransaction(ApiTester $I)
+    {
+        $this->gameID = random_int(9900000, 99000000);
+
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+
+        $request = [
+            'methodcall' => [
+                'name' => 'play',
+                'timestamp' => Carbon::now('UTC')->format('Y/m/d H:i:s.000'),
+                'system' => 'casino',
+                'auth' => [
+                    'login' => 'microgaming',
+                    'password' => 'hawai'
+                ],
+                'call' => [
+                    'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
+                    'playtype' => 'bet',
+                    'gameid' => $this->gameID,
+                    'actionid' => random_int(9900000, 99000000),
+                    'amount' => 10,
+                    'gamereference' => str_random(),
+                    'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
+                ]
+            ]
+        ];
+
+        $I->disableMiddleware();
+        $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
+        $I->sendPOST('/mg', $request);
+        $I->seeResponseCodeIs(200);
+        $I->canSeeResponseIsXml();
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'play\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
+        //$I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$testUser->getBalanceInCents().'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
+        $operationId = $I->grabTextContentFromXmlElement('//pkt/methodresponse/result/@exttransactionid');
+        $deletedRows = Transactions::where('operation_id', $operationId)->delete();
+        $I->assertNotEmpty($deletedRows);
+        
+        $I->sendPOST('/mg', $request);
+        $I->seeResponseCodeIs(200);
+        $I->canSeeResponseIsXml();
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
+        $operationId2 = $I->grabTextContentFromXmlElement('//pkt/methodresponse/result/@exttransactionid');
+        $I->assertEquals($operationId, $operationId2);
     }
 
     public function testZeroWin(ApiTester $I)
