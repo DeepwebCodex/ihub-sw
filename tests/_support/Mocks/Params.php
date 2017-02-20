@@ -10,7 +10,7 @@ final class Params
     const AMOUNT = 1;
     const CURRENCY = 'EUR';
     const BALANCE = 100;
-    const OBJECT_ID = 123;
+    const OBJECT_ID = 1234;
 
     private function __construct()
     {
