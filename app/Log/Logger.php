@@ -9,16 +9,14 @@
 namespace App\Log;
 
 
+use AMQPConnection;
 use App\Log\RabbitMq\Formatter\RabbitFormatter;
 use App\Log\RabbitMq\RabbitHandler;
 use App\Log\RabbitMq\RabbitQueueManager;
 use App\Log\File\FileLogger;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
-use Monolog\Handler\AmqpHandler;
 use Monolog\Handler\MongoDBHandler;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Exception\AMQPExceptionInterface;
 
 class Logger
 {
@@ -90,7 +88,13 @@ class Logger
         }
 
         $rabbitHandler = new RabbitHandler(
-            new AMQPStreamConnection($config['host'], $config['port'], $config['user'], $config['password']),
+            new AMQPConnection([
+                'host'  => $config['host'],
+                'port'  => $config['port'],
+                'vhost' => '/',
+                'login' => $config['user'],
+                'password' => $config['password']
+            ]),
             new RabbitQueueManager($config['queueList']),
             $config['prefix'],
             $config['default_exchange']
