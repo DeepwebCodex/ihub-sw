@@ -50,6 +50,7 @@ class AccountManagerMock
 
     public function getMock()
     {
+        /** @var Mockery\Mock $accountManager */
         $accountManager = Mockery::mock(AccountManager::class);
 
         $accountManager->shouldReceive('getUserInfo')
@@ -148,18 +149,16 @@ class AccountManagerMock
         $bigBetPendingParams = $this->getPendingParams(Params::BIG_AMOUNT, self::BET);
 
         $accountManager->shouldReceive('createTransaction')
-            ->withArgs($this->getPendingParams($this->amount, self::BET))
-            ->andReturn($this->returnPending(self::BET, $this->amount, $this->bet_operation_id));
+            ->withArgs(
+                $this->getPendingParams($this->amount, self::BET))
+            ->andReturn(
+                $this->returnPending(self::BET, $this->amount, $this->bet_operation_id));
+
         $accountManager->shouldReceive('commitTransaction')
-            ->withArgs([
-                $this->user_id,
-                $this->bet_operation_id,
-                self::BET,
-                $this->object_id,
-                $this->currency,
-                $this->getComment($this->amount, self::BET),
-            ])
-            ->andReturn($this->returnCompleted(self::BET, $this->amount, $this->balance - $this->amount));
+            ->withArgs(
+                $this->getCompletedParams(self::BET, $this->bet_operation_id, $this->amount))
+            ->andReturn(
+                $this->returnCompleted(self::BET, $this->amount, $this->balance - $this->amount));
 
         $accountManager->shouldReceive('createTransaction')
             ->withArgs($bigBetPendingParams)
@@ -173,49 +172,36 @@ class AccountManagerMock
             ->andReturn($this->returnPending(self::WIN, $this->amount, $this->win_operation_id));
 
         $accountManager->shouldReceive('commitTransaction')
-            ->withArgs([
-                $this->user_id,
-                $this->win_operation_id,
-                self::WIN,
-                $this->object_id,
-                $this->currency,
-                $this->getComment($this->amount, self::WIN),
-            ])
-            ->andReturn($this->returnCompleted(self::WIN, $this->amount, $this->balance + $this->amount));
+            ->withArgs(
+                $this->getCompletedParams(self::WIN, $this->win_operation_id, $this->amount))
+            ->andReturn(
+                $this->returnCompleted(self::WIN, $this->amount, $this->balance + $this->amount));
 
 
         /** bet and win */
         $accountManager->shouldReceive('createTransaction')
-            ->withArgs($this->getPendingParams($this->winAmount, self::WIN))
-            ->andReturn($this->returnPending(self::WIN, $this->balance - $this->amount + $this->winAmount, $this->win_operation_id));
+            ->withArgs(
+                $this->getPendingParams($this->winAmount, self::WIN))
+            ->andReturn(
+                $this->returnPending(self::WIN, $this->balance - $this->amount + $this->winAmount, $this->win_operation_id));
 
         $accountManager->shouldReceive('commitTransaction')
-            ->withArgs([
-                $this->user_id,
-                $this->win_operation_id,
-                self::WIN,
-                $this->object_id,
-                $this->currency,
-                $this->getComment($this->winAmount, self::WIN),
-            ])
-            ->andReturn($this->returnCompleted(self::WIN, $this->winAmount, $this->balance - $this->amount + $this->winAmount));
+            ->withArgs(
+                $this->getCompletedParams(self::WIN, $this->win_operation_id, $this->winAmount))
+            ->andReturn(
+                $this->returnCompleted(self::WIN, $this->winAmount, $this->balance - $this->amount + $this->winAmount));
 
 
         $accountManager->shouldReceive('createTransaction')
-            ->withArgs($this->getPendingParams($this->jackpot_amount, self::WIN))
-            ->andReturn($this->returnPending(self::WIN, $this->balance - $this->amount + $this->winAmount + $this->jackpot_amount, $this->jackpot_operation_id));
+            ->withArgs(
+                $this->getPendingParams($this->jackpot_amount, self::WIN))
+            ->andReturn(
+                $this->returnPending(self::WIN, $this->balance - $this->amount + $this->winAmount + $this->jackpot_amount, $this->jackpot_operation_id));
         $accountManager->shouldReceive('commitTransaction')
-            ->withArgs([
-                $this->user_id,
-                $this->jackpot_operation_id,
-                self::WIN,
-                $this->object_id,
-                $this->currency,
-                $this->getComment($this->jackpot_amount, self::WIN),
-            ])
-            ->andReturn($this->returnCompleted(self::WIN, $this->jackpot_amount, $this->balance - $this->amount + $this->winAmount + $this->jackpot_amount));
-
-
+            ->withArgs(
+                $this->getCompletedParams(self::WIN, $this->jackpot_operation_id, $this->jackpot_amount))
+            ->andReturn(
+                $this->returnCompleted(self::WIN, $this->jackpot_amount, $this->balance - $this->amount + $this->winAmount + $this->jackpot_amount));
 
         $accountManager->shouldReceive('getFreeOperationId')->withNoArgs()->andReturn($this->getUniqueId());
 
@@ -228,17 +214,17 @@ class AccountManagerMock
         return round(microtime(true)) + mt_rand(1, 10000);
     }
 
-//    private function getCommitParams()
-//    {
-//        return [
-//            $this->user_id,
-//            $this->bet_operation_id,
-//            1,
-//            $this->object_id,
-//            $this->currency,
-//            $this->getComment($this->amount, 0),
-//        ];
-//    }
+    private function getCompletedParams($direction, $operation_id, $amount)
+    {
+        return [
+            $this->user_id,
+            $operation_id,
+            $direction,
+            $this->object_id,
+            $this->currency,
+            $this->getComment($amount, $direction),
+        ];
+    }
 
     /**
      * status, service_id, cashdesk, user_id, amount,
