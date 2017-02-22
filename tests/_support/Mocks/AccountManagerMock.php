@@ -17,11 +17,15 @@ use Symfony\Component\HttpFoundation\Response;
 class AccountManagerMock
 {
     private $object_id;
+    private $balance;
     const SERVICE_IDS = [
         0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 21, 22, 23,
         24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
         41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 53, 54, 107, 301
     ];
+
+    const BET = 1;
+    const WIN = 0;
 
     public function __construct(
         $serviceId,
@@ -32,7 +36,10 @@ class AccountManagerMock
         $this->object_id = Params::OBJECT_ID;
         $this->bet_operation_id = $this->getUniqueId();
         $this->win_operation_id = $this->getUniqueId();
+        $this->jackpot_operation_id = $this->getUniqueId();
         $this->amount = $amount;
+        $this->jackpot_amount = Params::JACKPOT_AMOUNT;
+        $this->winAmount = Params::WIN_AMOUNT;
         $this->currency = $currency;
         $this->balance = Params::BALANCE;
         $this->service_id = $serviceId;
@@ -138,64 +145,21 @@ class AccountManagerMock
             ]
         );
 
-        $bigBetPendingParams = $this->getPendingParams(Params::BIG_AMOUNT, 1);
+        $bigBetPendingParams = $this->getPendingParams(Params::BIG_AMOUNT, self::BET);
 
         $accountManager->shouldReceive('createTransaction')
-            ->withArgs($this->getPendingParams($this->amount, 1))
-            ->andReturn([
-                "__record"              => "operation",
-                "operation_id"          => $this->bet_operation_id,
-                "service_id"            => $this->service_id,
-                "cashdesk"              => $this->cashdesk,
-                "user_id"               => $this->user_id,
-                "payment_instrument_id" => 3,
-                "wallet_id"             => "ziwidif@rootfest.net",
-                "wallet_account_id"     => $this->currency,
-                "partner_id"            => $this->partner_id,
-                "move"                  => 1,
-                "status"                => "pending",
-                "dt"                    => "2017-02-15 10:08:03",
-                "dt_done"               => null,
-                "object_id"             => $this->object_id,
-                "amount"                => -$this->amount,
-                "currency"              => $this->currency,
-                "client_ip"             => "127.0.0.1",
-                "comment"               => $this->getComment($this->amount, 1),
-                "deposit_rest"          => $this->balance,
-            ]);
+            ->withArgs($this->getPendingParams($this->amount, self::BET))
+            ->andReturn($this->returnPending(self::BET, $this->amount, $this->bet_operation_id));
         $accountManager->shouldReceive('commitTransaction')
-//        int $user_id, int $operation_id,
-//        int $direction, int $object_id,
-//        string $currency, string $comment){
             ->withArgs([
                 $this->user_id,
                 $this->bet_operation_id,
-                1,
+                self::BET,
                 $this->object_id,
                 $this->currency,
-                $this->getComment($this->amount, 1),
+                $this->getComment($this->amount, self::BET),
             ])
-            ->andReturn([
-                "__record"              => "operation",
-                "operation_id"          => $this->bet_operation_id,
-                "service_id"            => $this->service_id,
-                "cashdesk"              => $this->cashdesk,
-                "user_id"               => $this->user_id,
-                "payment_instrument_id" => 3,
-                "wallet_id"             => "ziwidif@rootfest.net",
-                "wallet_account_id"     => $this->currency,
-                "partner_id"            => $this->partner_id,
-                "move"                  => 1,
-                "status"                => "pending",
-                "dt"                    => "2017-02-15 10:08:03",
-                "dt_done"               => null,
-                "object_id"             => $this->object_id,
-                "amount"                => -$this->amount,
-                "currency"              => $this->currency,
-                "client_ip"             => "127.0.0.1",
-                "comment"               => $this->getComment($this->amount, 1),
-                "deposit_rest"          => $this->balance - $this->amount,
-            ]);
+            ->andReturn($this->returnCompleted(self::BET, $this->amount, $this->balance - $this->amount));
 
         $accountManager->shouldReceive('createTransaction')
             ->withArgs($bigBetPendingParams)
@@ -205,59 +169,54 @@ class AccountManagerMock
                 TransactionHelper::INSUFFICIENT_FUNDS_CODE));
 
         $accountManager->shouldReceive('createTransaction')
-            ->withArgs($this->getPendingParams($this->amount, 0))
-            ->andReturn([
-                "__record"              => "operation",
-                "operation_id"          => $this->win_operation_id,
-                "service_id"            => $this->service_id,
-                "cashdesk"              => $this->cashdesk,
-                "user_id"               => $this->user_id,
-                "payment_instrument_id" => 3,
-                "wallet_id"             => "ziwidif@rootfest.net",
-                "wallet_account_id"     => $this->currency,
-                "partner_id"            => $this->partner_id,
-                "move"                  => 0,
-                "status"                => "pending",
-                "dt"                    => "2017-02-15 10:08:03",
-                "dt_done"               => null,
-                "object_id"             => $this->object_id,
-                "amount"                => -$this->amount,
-                "currency"              => $this->currency,
-                "client_ip"             => "127.0.0.1",
-                "comment"               => $this->getComment($this->amount, 0),
-                "deposit_rest"          => $this->balance,
-            ]);
+            ->withArgs($this->getPendingParams($this->amount, self::WIN))
+            ->andReturn($this->returnPending(self::WIN, $this->amount, $this->win_operation_id));
 
         $accountManager->shouldReceive('commitTransaction')
             ->withArgs([
                 $this->user_id,
                 $this->win_operation_id,
-                0,
+                self::WIN,
                 $this->object_id,
                 $this->currency,
-                $this->getComment($this->amount, 0),
+                $this->getComment($this->amount, self::WIN),
             ])
-            ->andReturn([
-                "__record"              => "operation",
-                "operation_id"          => $this->win_operation_id,
-                "service_id"            => $this->service_id,
-                "cashdesk"              => $this->cashdesk,
-                "user_id"               => $this->user_id,
-                "payment_instrument_id" => 3,
-                "wallet_id"             => "ziwidif@rootfest.net",
-                "wallet_account_id"     => $this->currency,
-                "partner_id"            => $this->partner_id,
-                "move"                  => 0,
-                "status"                => "pending",
-                "dt"                    => "2017-02-15 10:08:03",
-                "dt_done"               => null,
-                "object_id"             => $this->object_id,
-                "amount"                => -$this->amount,
-                "currency"              => $this->currency,
-                "client_ip"             => "127.0.0.1",
-                "comment"               => $this->getComment($this->amount, 0),
-                "deposit_rest"          => $this->balance + $this->amount,
-            ]);
+            ->andReturn($this->returnCompleted(self::WIN, $this->amount, $this->balance + $this->amount));
+
+
+        /** bet and win */
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs($this->getPendingParams($this->winAmount, self::WIN))
+            ->andReturn($this->returnPending(self::WIN, $this->balance - $this->amount + $this->winAmount, $this->win_operation_id));
+
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs([
+                $this->user_id,
+                $this->win_operation_id,
+                self::WIN,
+                $this->object_id,
+                $this->currency,
+                $this->getComment($this->winAmount, self::WIN),
+            ])
+            ->andReturn($this->returnCompleted(self::WIN, $this->winAmount, $this->balance - $this->amount + $this->winAmount));
+
+
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs($this->getPendingParams($this->jackpot_amount, self::WIN))
+            ->andReturn($this->returnPending(self::WIN, $this->balance - $this->amount + $this->winAmount + $this->jackpot_amount, $this->jackpot_operation_id));
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs([
+                $this->user_id,
+                $this->jackpot_operation_id,
+                self::WIN,
+                $this->object_id,
+                $this->currency,
+                $this->getComment($this->jackpot_amount, self::WIN),
+            ])
+            ->andReturn($this->returnCompleted(self::WIN, $this->jackpot_amount, $this->balance - $this->amount + $this->winAmount + $this->jackpot_amount));
+
+
+
         $accountManager->shouldReceive('getFreeOperationId')->withNoArgs()->andReturn($this->getUniqueId());
 
 
@@ -298,6 +257,57 @@ class AccountManagerMock
             $this->object_id,
             $this->getComment($amount, $direction),
             $this->partner_id,
+        ];
+    }
+
+    private function returnPending($direction, $amount, $operation_id)
+    {
+        return [
+            "__record"              => "operation",
+            "operation_id"          => $operation_id,
+            "service_id"            => $this->service_id,
+            "cashdesk"              => $this->cashdesk,
+            "user_id"               => $this->user_id,
+            "payment_instrument_id" => 3,
+            "wallet_id"             => "ziwidif@rootfest.net",
+            "wallet_account_id"     => $this->currency,
+            "partner_id"            => $this->partner_id,
+            "move"                  => $direction,
+            "status"                => "pending",
+            "dt"                    => "2017-02-15 10:08:03",
+            "dt_done"               => null,
+            "object_id"             => $this->object_id,
+            "amount"                => -$amount,
+            "currency"              => $this->currency,
+            "client_ip"             => "127.0.0.1",
+            "comment"               => $this->getComment($amount, $direction),
+            "deposit_rest"          => $this->balance,
+        ];
+    }
+
+    private function returnCompleted($direction, $amount, $balance)
+    {
+        $operation_id = ($direction) ? $this->bet_operation_id : $this->win_operation_id;
+        return [
+            "__record"              => "operation",
+            "operation_id"          => $operation_id,
+            "service_id"            => $this->service_id,
+            "cashdesk"              => $this->cashdesk,
+            "user_id"               => $this->user_id,
+            "payment_instrument_id" => 3,
+            "wallet_id"             => "ziwidif@rootfest.net",
+            "wallet_account_id"     => $this->currency,
+            "partner_id"            => $this->partner_id,
+            "move"                  => $direction,
+            "status"                => "pending",
+            "dt"                    => "2017-02-15 10:08:03",
+            "dt_done"               => null,
+            "object_id"             => $this->object_id,
+            "amount"                => -$amount,
+            "currency"              => $this->currency,
+            "client_ip"             => "127.0.0.1",
+            "comment"               => $this->getComment($amount, $direction),
+            "deposit_rest"          => $balance,
         ];
     }
 
