@@ -1,32 +1,31 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: doom_sentinel
- * Date: 10/11/16
- * Time: 12:13 PM
- */
 
 namespace App\Log\RabbitMq;
 
+use AMQPConnection;
 use App\Log\RabbitMq\Formatter\RabbitFormatter;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
 
 class RabbitHandler extends BaseHandler
 {
     private $connection;
     private $channel;
+    private $exchange;
     private $prefix;
     private $default_exchange;
 
     private $queueManager;
 
-    public function __construct(AMQPStreamConnection $connection, RabbitQueueManager $queueManager, $prefix, $default_exchange, int $level = Logger::DEBUG)
+    public function __construct(AMQPConnection $connection, RabbitQueueManager $queueManager, $prefix, $default_exchange, int $level = Logger::DEBUG)
     {
         $this->connection = $connection;
-        $this->channel = $connection->channel();
+
+        if(!$this->connection->isConnected()) {
+            $this->connection->connect();
+        }
+
+        $this->channel = new \AMQPChannel($connection);
 
         $this->queueManager = $queueManager;
         $this->level = $level;
@@ -34,7 +33,7 @@ class RabbitHandler extends BaseHandler
         $this->prefix = $prefix;
         $this->default_exchange = $default_exchange;
 
-        $queueManager->setUpQueue($this->channel, $prefix, $default_exchange);
+        $this->exchange = $queueManager->setUpQueue($this->channel, $prefix, $default_exchange);
     }
 
     protected function sendRecord($record)
@@ -42,12 +41,10 @@ class RabbitHandler extends BaseHandler
         $level = strtolower(array_get($record, 'level_name'));
 
         if($level) {
-            $msg = new AMQPMessage(json_encode(array_get($record, 'formatted')), [
+            $this->exchange->publish(json_encode(array_get($record, 'formatted')), $level, AMQP_NOPARAM, [
                 'content_type' => 'application/json',
-                'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT
+                'delivery_mode' => 2
             ]);
-
-            $this->channel->basic_publish($msg, $this->prefix . $this->default_exchange, $level);
         }
     }
 
@@ -56,19 +53,8 @@ class RabbitHandler extends BaseHandler
         if($records) {
 
             foreach ($records as $record) {
-                $level = strtolower(array_get($record, 'level_name'));
-
-                if($level) {
-                    $msg = new AMQPMessage(json_encode(array_get($record, 'formatted')), [
-                        'content_type' => 'application/json',
-                        'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT
-                    ]);
-
-                    $this->channel->batch_basic_publish($msg, $this->prefix . $this->default_exchange, $record['level']);
-                }
+                $this->sendRecord($record);
             }
-
-            $this->channel->publish_batch();
         }
     }
 
@@ -96,7 +82,7 @@ class RabbitHandler extends BaseHandler
 
     protected function close(){
         if($this->connection->isConnected()){
-            $this->connection->close();
+            $this->connection->disconnect();
         }
     }
 
