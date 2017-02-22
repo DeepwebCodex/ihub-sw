@@ -2,12 +2,10 @@
 
 namespace App\Components\Transactions\Strategies\Casino;
 
-
-use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\Casino\CodeMapping;
+use App\Components\Integrations\CodeMappingBase;
 use App\Components\Transactions\BaseSeamlessWalletProcessor;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
-use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
 
@@ -71,8 +69,13 @@ class ProcessCasino extends BaseSeamlessWalletProcessor implements TransactionPr
         if(!$operation){
             $this->onInvalidResponse();
         }
+        else if (count($operation) > 1)
+        {
+            throw new ApiHttpException(409, "Finance error, duplicated duplication", $this->codeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
+        }
 
-        $this->responseData = $operation;
+        $this->responseData = $operation[0];
+
         $this->isDuplicate = true;
     }
 
