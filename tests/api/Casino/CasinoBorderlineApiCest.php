@@ -1,9 +1,12 @@
 <?php
+namespace api\Casino;
 
+use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Models\Transactions;
 use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\Casino\AccountManagerMock;
 use Testing\GameSessionsMock;
 
 class CasinoBorderlineApiCest
@@ -16,15 +19,16 @@ class CasinoBorderlineApiCest
     public function _before(\ApiTester $I)
     {
         $this->options = config('integrations.casino');
+
+//        $mock = (new AccountManagerMock())->getMock();
+//        $I->getApplication()->instance(AccountManager::class, $mock);
+//        $I->haveInstance(AccountManager::class, $mock);
+
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
-    public function _after()
-    {
-    }
-
-    public function testNoBetWin(ApiTester $I)
+    public function testNoBetWin(\ApiTester $I)
     {
         $this->objectId = random_int(100000, 9900000);
 
@@ -57,7 +61,7 @@ class CasinoBorderlineApiCest
         ]);
     }
 
-    public function testStoragePending(ApiTester $I)
+    public function testStoragePending(\ApiTester $I)
     {
         $this->objectId = random_int(100000, 9900000);
 
@@ -110,7 +114,7 @@ class CasinoBorderlineApiCest
         $I->assertEquals([$testUser->getBalanceInCents() - 10], $I->grabDataFromResponseByJsonPath('balance'), "Balance does not match");
     }
 
-    public function testZeroWin(ApiTester $I)
+    public function testZeroWin(\ApiTester $I)
     {
         $this->objectId = random_int(100000, 9900000);
 

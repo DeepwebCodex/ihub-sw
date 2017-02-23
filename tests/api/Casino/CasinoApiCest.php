@@ -1,9 +1,11 @@
 <?php
 namespace api\Casino;
 
+use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\Casino\AccountManagerMock;
 use Testing\GameSessionsMock;
 use Testing\Params;
 
@@ -16,7 +18,10 @@ class CasinoApiCest
 
     public function _before(\ApiTester $I)
     {
-        $I->mockAccountManager($I, config('integrations.casino.service_id'));
+        $mock = (new AccountManagerMock())->getMock();
+        $I->getApplication()->instance(AccountManager::class, $mock);
+        $I->haveInstance(AccountManager::class, $mock);
+
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
