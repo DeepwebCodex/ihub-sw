@@ -13,6 +13,7 @@ final class Params
     const CURRENCY = 'EUR';
     const BALANCE = 100;
     const OBJECT_ID = 1234;
+    const NO_BET_OBJECT_ID = 12345;
 
     private function __construct()
     {

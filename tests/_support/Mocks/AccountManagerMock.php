@@ -9,7 +9,10 @@
 namespace Testing;
 
 use App\Components\ExternalServices\AccountManager;
+use App\Components\Integrations\Casino\StatusCode;
 use App\Components\Transactions\TransactionHelper;
+use App\Components\Transactions\TransactionRequest;
+use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\GenericApiHttpException;
 use Mockery;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AccountManagerMock
 {
     private $object_id;
+    private $no_bet_object_id;
     private $balance;
     const SERVICE_IDS = [
         0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 21, 22, 23,
@@ -34,9 +38,12 @@ class AccountManagerMock
     )
     {
         $this->object_id = Params::OBJECT_ID;
+        $this->no_bet_object_id = Params::NO_BET_OBJECT_ID;
+
         $this->bet_operation_id = $this->getUniqueId();
         $this->win_operation_id = $this->getUniqueId();
         $this->jackpot_operation_id = $this->getUniqueId();
+
         $this->amount = $amount;
         $this->jackpot_amount = Params::JACKPOT_AMOUNT;
         $this->winAmount = Params::WIN_AMOUNT;
@@ -148,6 +155,7 @@ class AccountManagerMock
 
         $bigBetPendingParams = $this->getPendingParams(Params::BIG_AMOUNT, self::BET);
 
+        /** bet */
         $accountManager->shouldReceive('createTransaction')
             ->withArgs(
                 $this->getPendingParams($this->amount, self::BET))
@@ -160,6 +168,7 @@ class AccountManagerMock
             ->andReturn(
                 $this->returnCompleted(self::BET, $this->amount, $this->balance - $this->amount));
 
+        /** big bet */
         $accountManager->shouldReceive('createTransaction')
             ->withArgs($bigBetPendingParams)
             ->andThrow(new GenericApiHttpException(
@@ -167,6 +176,7 @@ class AccountManagerMock
                 '', [], null, [],
                 TransactionHelper::INSUFFICIENT_FUNDS_CODE));
 
+        /** win */
         $accountManager->shouldReceive('createTransaction')
             ->withArgs($this->getPendingParams($this->amount, self::WIN))
             ->andReturn($this->returnPending(self::WIN, $this->amount, $this->win_operation_id));
@@ -191,7 +201,7 @@ class AccountManagerMock
             ->andReturn(
                 $this->returnCompleted(self::WIN, $this->winAmount, $this->balance - $this->amount + $this->winAmount));
 
-
+        /** multi win */
         $accountManager->shouldReceive('createTransaction')
             ->withArgs(
                 $this->getPendingParams($this->jackpot_amount, self::WIN))
@@ -204,6 +214,63 @@ class AccountManagerMock
                 $this->returnCompleted(self::WIN, $this->jackpot_amount, $this->balance - $this->amount + $this->winAmount + $this->jackpot_amount));
 
         $accountManager->shouldReceive('getFreeOperationId')->withNoArgs()->andReturn($this->getUniqueId());
+
+
+        /************************ Casino solution *****************************/
+
+        /** bet */
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($this->amount, self::BET, TransactionRequest::STATUS_COMPLETED))
+            ->andReturn(
+                $this->returnPending(self::BET, $this->amount, $this->bet_operation_id));
+
+        /** win */
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($this->amount, self::WIN, TransactionRequest::STATUS_COMPLETED))
+            ->andReturn(
+                $this->returnCompleted(self::WIN, $this->amount, $this->balance + $this->amount));
+
+        /** no bet win */
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                [
+                    TransactionRequest::STATUS_COMPLETED,
+                    $this->service_id,
+                    $this->cashdesk,
+                    $this->user_id,
+                    $this->amount,
+                    $this->currency,
+                    self::WIN,
+                    $this->no_bet_object_id,
+                    $this->getComment($this->amount, self::WIN),
+                    $this->partner_id
+                ])
+            ->andThrow(new ApiHttpException(
+                Response::HTTP_BAD_REQUEST,
+                '', [], null, [],
+                TransactionHelper::INSUFFICIENT_FUNDS_CODE));
+
+        /** zero win */
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                [
+                    TransactionRequest::STATUS_COMPLETED,
+                    $this->service_id,
+                    $this->cashdesk,
+                    $this->user_id,
+                    0,
+                    $this->currency,
+                    self::WIN,
+                    $this->object_id,
+                    $this->getComment($this->amount, self::WIN),
+                    $this->partner_id
+                ])
+            ->andThrow(new ApiHttpException(
+                Response::HTTP_BAD_REQUEST,
+                '', [], null, [],
+                StatusCode::WRONG_AMOUNT));
 
 
         return $accountManager;
@@ -230,10 +297,10 @@ class AccountManagerMock
      * status, service_id, cashdesk, user_id, amount,
      * currency, direction, object_id, comment, partner_id
      */
-    private function getPendingParams($amount, $direction)
+    private function getPendingParams($amount, $direction, $status = TransactionRequest::STATUS_PENDING)
     {
         return [
-            'pending',
+            $status,
             $this->service_id,
             $this->cashdesk,
             $this->user_id,
@@ -285,7 +352,7 @@ class AccountManagerMock
             "wallet_account_id"     => $this->currency,
             "partner_id"            => $this->partner_id,
             "move"                  => $direction,
-            "status"                => "pending",
+            "status"                => "completed",
             "dt"                    => "2017-02-15 10:08:03",
             "dt_done"               => null,
             "object_id"             => $this->object_id,
