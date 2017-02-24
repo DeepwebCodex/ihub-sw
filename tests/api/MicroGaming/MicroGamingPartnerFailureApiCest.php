@@ -1,4 +1,5 @@
 <?php
+namespace api\MicroGaming;
 
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
@@ -14,7 +15,7 @@ class MicroGamingPartnerFailureApiCest
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
-    public function testLoginTokenFailure(ApiTester $I)
+    public function testLoginTokenFailure(\ApiTester $I)
     {
         $token = md5(uniqid('microgaming' . random_int(-99999, 999999)));
         $request = [
@@ -48,7 +49,7 @@ class MicroGamingPartnerFailureApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errordescription=\'The player token expired.\']');
     }
 
-    public function testGetBalanceFailure(ApiTester $I)
+    public function testGetBalanceFailure(\ApiTester $I)
     {
         $request = [
             'methodcall' => [
@@ -77,7 +78,7 @@ class MicroGamingPartnerFailureApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errordescription=\'The selected methodcall.system is invalid.\']');
     }
 
-    public function testRefreshTokenFailure(\ApiTester $I)
+    public function testRefreshTokenFailure(\ApiTester$I)
     {
         $request = [
             'methodcall' => [
@@ -106,7 +107,7 @@ class MicroGamingPartnerFailureApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errordescription=\'The methodcall.call.token field is required.\']');
     }
 
-    public function testPlayBetFailure(\ApiTester $I)
+    public function testPlayBetFailure(\ApiTester$I)
     {
         $request = [
             'methodcall' => [
@@ -140,7 +141,7 @@ class MicroGamingPartnerFailureApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errordescription=\'The methodcall.call.actionid field is required.\']');
     }
 
-    public function testPlayWinFailure(\ApiTester $I)
+    public function testPlayWinFailure(\ApiTester$I)
     {
         $request = [
             'methodcall' => [
@@ -174,7 +175,7 @@ class MicroGamingPartnerFailureApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errordescription=\'The methodcall.call.token field is required.\']');
     }
 
-    public function testEndGameFailure(\ApiTester $I)
+    public function testEndGameFailure(\ApiTester$I)
     {
         $request = [
             'methodcall' => [

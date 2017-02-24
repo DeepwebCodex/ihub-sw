@@ -1,6 +1,8 @@
 <?php
+namespace api\MicroGaming;
 
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\IntegrationUser;
 use App\Models\MicroGamingObjectIdMap;
 use App\Models\Transactions;
 use Carbon\Carbon;
@@ -23,11 +25,11 @@ class MicroGamingBorderlineApiCest
     {
     }
 
-    public function testNoBetWin(ApiTester $I)
+    public function testNoBetWin(\ApiTester $I)
     {
         $this->gameID = random_int(9900000, 99000000);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -69,11 +71,11 @@ class MicroGamingBorderlineApiCest
         ]);
     }
 
-    public function testStoragePending(ApiTester $I)
+    public function testStoragePending(\ApiTester $I)
     {
         $this->gameID = random_int(9900000, 99000000);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -142,11 +144,11 @@ class MicroGamingBorderlineApiCest
         ]);
     }
 
-    public function testDuplicateTransaction(ApiTester $I)
+    public function testDuplicateTransaction(\ApiTester $I)
     {
         $this->gameID = random_int(9900000, 99000000);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -208,11 +210,11 @@ class MicroGamingBorderlineApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
     }
     
-     public function testAccountDuplicateTransaction(ApiTester $I)
+     public function testAccountDuplicateTransaction(\ApiTester $I)
     {
         $this->gameID = random_int(9900000, 99000000);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -257,11 +259,11 @@ class MicroGamingBorderlineApiCest
         $I->assertEquals($operationId, $operationId2);
     }
 
-    public function testZeroWin(ApiTester $I)
+    public function testZeroWin(\ApiTester $I)
     {
         $this->gameID = random_int(9900000, 99000000);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -331,7 +333,7 @@ class MicroGamingBorderlineApiCest
         ]);
     }
 
-    public function testMultiWin(ApiTester $I)
+    public function testMultiWin(\ApiTester $I)
     {
         require_once "MicroGamingApiCest.php";
 

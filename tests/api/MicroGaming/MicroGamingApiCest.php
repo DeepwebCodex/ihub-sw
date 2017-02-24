@@ -1,13 +1,21 @@
 <?php
+namespace api\MicroGaming;
 
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\IntegrationUser;
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
+use Testing\MicroGaming\Params;
 
 class MicroGamingApiCest
 {
     private $gameID;
+
+    public function __construct()
+    {
+        $this->params = new Params();
+    }
 
     public function _before(\ApiTester $I)
     {
@@ -20,7 +28,7 @@ class MicroGamingApiCest
     }
 
     // tests
-    public function testMethodNotFound(ApiTester $I)
+    public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendGET('/mg');
         $I->seeResponseCodeIs(200);
@@ -29,9 +37,9 @@ class MicroGamingApiCest
         $I->seeXmlResponseIncludes(" <result seq=\"\" errorcode=\"6000\" errordescription=\"Empty source\"><extinfo/></result>");
     }
 
-    public function testMethodLogIn(ApiTester $I)
+    public function testMethodLogIn(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -60,9 +68,9 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
     }
 
-    public function testMethodGetBalance(ApiTester $I)
+    public function testMethodGetBalance(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -91,9 +99,9 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$testUser->getBalanceInCents().'\']');
     }
 
-    public function testMethodEndGame(ApiTester $I)
+    public function testMethodEndGame(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [
@@ -122,9 +130,9 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$testUser->getBalanceInCents().'\']');
     }
 
-    public function testMethodPlayIn(ApiTester $I)
+    public function testMethodPlayIn(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
         $this->gameID = random_int(9900000, 99000000);
 
         $request = [
@@ -168,11 +176,11 @@ class MicroGamingApiCest
         ]);
     }
 
-    public function testMethodPlayOut(ApiTester $I)
+    public function testMethodPlayOut(\ApiTester $I)
     {
         $this->testMethodPlayIn($I);
 
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'methodcall' => [

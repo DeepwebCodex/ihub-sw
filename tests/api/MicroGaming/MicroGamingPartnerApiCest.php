@@ -1,6 +1,8 @@
 <?php
+namespace api\MicroGaming;
 
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\IntegrationUser;
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
@@ -73,7 +75,7 @@ class MicroGamingPartnerApiCest
 
     public function testMultipleTokens(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $count = 3;
         $token = md5(uniqid('microgaming' . random_int(-99999, 999999)));
@@ -109,7 +111,7 @@ class MicroGamingPartnerApiCest
 
     public function testPlayRefund(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $gameId = random_int(9900000, 99000000);
 
@@ -217,7 +219,7 @@ class MicroGamingPartnerApiCest
 
     public function testPlayRefundForNonExistentBet(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $userBalance = $testUser->getBalanceInCents();
 
@@ -231,7 +233,7 @@ class MicroGamingPartnerApiCest
 
     public function testIdempotencyBet(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $gameId = random_int(9900000, 99000000);
         $request = $this->getBetRequestData($gameId);
@@ -264,7 +266,7 @@ class MicroGamingPartnerApiCest
 
     public function testIdempotencyWin(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $gameId = random_int(9900000, 99000000);
 
@@ -308,7 +310,7 @@ class MicroGamingPartnerApiCest
 
     public function testIdempotencyRefund(\ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $gameId = random_int(9900000, 99000000);
 
