@@ -4,10 +4,12 @@
 namespace Testing\MicroGaming;
 
 
+use App\Models\MicroGamingObjectIdMap;
+
 class Params
 {
     const BIG_AMOUNT = 1000000;
-    const AMOUNT = 1;
+    const AMOUNT = 10;
     const CURRENCY = 'EUR';
     const BALANCE = 100;
     const OBJECT_ID = 1234;
@@ -15,14 +17,29 @@ class Params
     const STORAGE_PENDING_OBJECT_ID = 123456;
     const ZERO_WIN_OBJECT_ID = 1234567;
 
-    public $enableMock = true;
+    public $enableMock = 1;
+    public $userId;
+
 
     public function getObjectId($case = null)
     {
-        if($this->enableMock){
+        if ($this->enableMock) {
             return $case ?? self::OBJECT_ID;
         }
 
         return random_int(100000, 9900000);
+    }
+
+    public function getAmount()
+    {
+        return self::AMOUNT * 100;
+    }
+
+    public function getPreparedObjectId($game_id)
+    {
+        return MicroGamingObjectIdMap::getObjectId(
+            env('TEST_USER_ID'),
+            self::CURRENCY,
+            $game_id);
     }
 }

@@ -1,11 +1,13 @@
 <?php
 namespace api\MicroGaming;
 
+use App\Components\ExternalServices\AccountManager;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
+use Testing\MicroGaming\AccountManagerMock;
 use Testing\MicroGaming\Params;
 
 class MicroGamingApiCest
@@ -19,12 +21,14 @@ class MicroGamingApiCest
 
     public function _before(\ApiTester $I)
     {
+        if($this->params->enableMock) {
+            $mock = (new AccountManagerMock())->getMock();
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
+
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
-    }
-
-    public function _after()
-    {
     }
 
     // tests
@@ -133,7 +137,7 @@ class MicroGamingApiCest
     public function testMethodPlayIn(\ApiTester $I)
     {
         $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-        $this->gameID = random_int(9900000, 99000000);
+        $this->gameID = $this->params->getObjectId();
 
         $request = [
             'methodcall' => [
@@ -149,7 +153,7 @@ class MicroGamingApiCest
                     'playtype' => 'bet',
                     'gameid' => $this->gameID,
                     'actionid' => random_int(9900000, 99000000),
-                    'amount' => 10,
+                    'amount' => $this->params->getAmount(),
                     'gamereference' => str_random(),
                     'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
@@ -165,7 +169,7 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()-10).'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()-$this->params->getAmount()).'\']');
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(\App\Models\Transactions::class, [
@@ -196,7 +200,7 @@ class MicroGamingApiCest
                     'playtype' => 'win',
                     'gameid' => $this->gameID,
                     'actionid' => random_int(9900000, 99000000),
-                    'amount' => 10,
+                    'amount' => $this->params->getAmount(),
                     'gamereference' => str_random(),
                     'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
@@ -212,7 +216,7 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()+10).'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()+$this->params->getAmount()).'\']');
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(\App\Models\Transactions::class, [
