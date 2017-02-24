@@ -9,7 +9,6 @@ use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
 use Mockery;
 use Symfony\Component\HttpFoundation\Response;
-use Testing\Params;
 
 class AccountManagerMock
 {
@@ -32,11 +31,10 @@ class AccountManagerMock
 
         $this->bet_operation_id = $this->getUniqueId();
         $this->win_operation_id = $this->getUniqueId();
-        $this->jackpot_operation_id = $this->getUniqueId();
+        $this->storage_pending_object_id = Params::STORAGE_PENDING_OBJECT_ID;
+        $this->zero_win_object_id = Params::ZERO_WIN_OBJECT_ID;
 
         $this->amount = Params::AMOUNT;
-        $this->jackpot_amount = Params::JACKPOT_AMOUNT;
-        $this->winAmount = Params::WIN_AMOUNT;
         $this->currency = Params::CURRENCY;
         $this->balance = Params::BALANCE;
         $this->service_id = config('integrations.casino.service_id');
@@ -73,14 +71,14 @@ class AccountManagerMock
             ->withArgs(
                 $this->getPendingParams($this->amount, self::BET, TransactionRequest::STATUS_COMPLETED))
             ->andReturn(
-                $this->returnPending(self::BET, $this->amount, $this->bet_operation_id));
+                $this->returnOk('completed', self::BET, $this->bet_operation_id, $this->balance));
 
         /** win */
         $accountManager->shouldReceive('createTransaction')
             ->withArgs(
                 $this->getPendingParams($this->amount, self::WIN, TransactionRequest::STATUS_COMPLETED))
             ->andReturn(
-                $this->returnCompleted(self::WIN, $this->balance + $this->amount));
+                $this->returnOk('completed', self::WIN, $this->win_operation_id, $this->balance + $this->amount));
 
         /** no bet win */
         $accountManager->shouldReceive('createTransaction')
@@ -94,13 +92,31 @@ class AccountManagerMock
                     $this->currency,
                     self::WIN,
                     $this->no_bet_object_id,
-                    $this->getComment($this->amount, self::WIN),
+                    $this->getComment($this->amount, self::WIN, $this->no_bet_object_id),
                     $this->partner_id
                 ])
             ->andThrow(new ApiHttpException(
                 Response::HTTP_BAD_REQUEST,
                 '', [], null, [],
-                TransactionHelper::INSUFFICIENT_FUNDS_CODE));
+                TransactionHelper::BAD_OPERATION_ORDER_CODE));
+
+        /** storage pending */
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                [
+                    TransactionRequest::STATUS_COMPLETED,
+                    $this->service_id,
+                    $this->cashdesk,
+                    $this->user_id,
+                    $this->amount,
+                    $this->currency,
+                    self::BET,
+                    $this->storage_pending_object_id,
+                    $this->getComment($this->amount, self::BET, $this->storage_pending_object_id),
+                    $this->partner_id
+                ])
+            ->andReturn($this->returnOk('completed', self::BET, $this->storage_pending_object_id, $this->balance - $this->amount));
+
 
         /** zero win */
         $accountManager->shouldReceive('createTransaction')
@@ -110,17 +126,17 @@ class AccountManagerMock
                     $this->service_id,
                     $this->cashdesk,
                     $this->user_id,
-                    0,
+                    $this->amount,
                     $this->currency,
                     self::WIN,
-                    $this->object_id,
-                    $this->getComment($this->amount, self::WIN),
+                    $this->zero_win_object_id,
+                    $this->getComment($this->amount, self::WIN, $this->zero_win_object_id),
                     $this->partner_id
                 ])
             ->andThrow(new ApiHttpException(
                 Response::HTTP_BAD_REQUEST,
                 '', [], null, [],
-                StatusCode::WRONG_AMOUNT));
+                StatusCode::SERVER_ERROR));
 
 
         return $accountManager;
@@ -147,12 +163,12 @@ class AccountManagerMock
             $this->currency,
             $direction,
             $this->object_id,
-            $this->getComment($amount, $direction),
+            $this->getComment($amount, $direction, $this->object_id),
             $this->partner_id,
         ];
     }
 
-    private function returnPending($direction, $amount, $operation_id)
+    private function returnOk($status, $direction, $operation_id, $balance)
     {
         return [
             "operation_id"          => $operation_id,
@@ -161,35 +177,17 @@ class AccountManagerMock
             "user_id"               => $this->user_id,
             "partner_id"            => $this->partner_id,
             "move"                  => $direction,
-            "status"                => "pending",
-            "object_id"             => $this->object_id,
-            "currency"              => $this->currency,
-            "deposit_rest"          => $this->balance,
-        ];
-    }
-
-    private function returnCompleted($direction, $balance)
-    {
-        $operation_id = ($direction) ? $this->bet_operation_id : $this->win_operation_id;
-        return [
-            "operation_id"          => $operation_id,
-            "service_id"            => $this->service_id,
-            "cashdesk"              => $this->cashdesk,
-            "user_id"               => $this->user_id,
-            "wallet_account_id"     => $this->currency,
-            "partner_id"            => $this->partner_id,
-            "move"                  => $direction,
-            "status"                => "completed",
+            "status"                => $status,
             "object_id"             => $this->object_id,
             "currency"              => $this->currency,
             "deposit_rest"          => $balance,
         ];
     }
 
-    private function getComment($amount, $direction)
+    private function getComment($amount, $direction, $object_id)
     {
         return json_encode([
-            "comment" => ($direction ? 'Withdrawal' : 'Deposit') . ' for object_id: ' . $this->object_id,
+            "comment" => ($direction ? 'Withdrawal' : 'Deposit') . ' for object_id: ' . $object_id,
             "amount" => $amount,
             "currency" => 'EUR'
         ]);

@@ -4,25 +4,32 @@ namespace api\Casino;
 use App\Components\ExternalServices\AccountManager;
 use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\IntegrationUser;
 use App\Models\Transactions;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\Casino\AccountManagerMock;
+use Testing\Casino\Params;
 use Testing\GameSessionsMock;
 
 class CasinoBorderlineApiCest
 {
-
-    private $objectId;
-    private $user_balance;
     private $options;
+    private $params;
+
+    public function __construct()
+    {
+        $this->params = new Params();
+    }
 
     public function _before(\ApiTester $I)
     {
         $this->options = config('integrations.casino');
 
-//        $mock = (new AccountManagerMock())->getMock();
-//        $I->getApplication()->instance(AccountManager::class, $mock);
-//        $I->haveInstance(AccountManager::class, $mock);
+        if($this->params->enableMock) {
+            $mock = (new AccountManagerMock())->getMock();
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
 
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
@@ -30,14 +37,14 @@ class CasinoBorderlineApiCest
 
     public function testNoBetWin(\ApiTester $I)
     {
-        $this->objectId = random_int(100000, 9900000);
+        $objectId = $this->params->getObjectId(Params::NO_BET_OBJECT_ID);
 
         $request = [
             'api_id' => 15,
             'token'  => 'HSKSOOJH9762tSDSDF',
-            'object_id' => $this->objectId,
+            'object_id' => $objectId,
             'transaction_id' => random_int(90000, 250000),
-            'amount' => 10,
+            'amount' => Params::AMOUNT * 100,
             'user_id' => env('TEST_USER_ID'),
             'time'   => time(),
             'type_operation' => 'rollback'
@@ -63,32 +70,32 @@ class CasinoBorderlineApiCest
 
     public function testStoragePending(\ApiTester $I)
     {
-        $this->objectId = random_int(100000, 9900000);
+        $objectId = $this->params->getObjectId(Params::STORAGE_PENDING_OBJECT_ID);
 
         $request = [
             'api_id' => 15,
             'token'  => 'HSKSOOJH9762tSDSDF',
-            'object_id' => $this->objectId,
+            'object_id' => $objectId,
             'transaction_id' => random_int(90000, 250000),
-            'amount' => 10,
+            'amount' => Params::AMOUNT * 100,
             'user_id' => env('TEST_USER_ID'),
             'time'   => time()
         ];
 
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         Transactions::create([
             'operation_id' => app('AccountManager')->getFreeOperationId(),
             'user_id' => env('TEST_USER_ID'),
             'service_id' => array_get($this->options, 'service_id'),
-            'amount' => 10/100,
+            'amount' => Params::AMOUNT,
             'move'  => TransactionRequest::D_WITHDRAWAL,
             'partner_id' => request()->server('PARTNER_ID'),
             'cashdesk' => request()->server('FRONTEND_NUM'),
             'status' => TransactionRequest::STATUS_PENDING,
             'currency' => $testUser->getCurrency(),
             'foreign_id' => array_get($request, 'transaction_id'),
-            'object_id' => $this->objectId,
+            'object_id' => $objectId,
             'transaction_type' => TransactionRequest::TRANS_BET,
             'game_id'   => 0
         ]);
@@ -111,19 +118,19 @@ class CasinoBorderlineApiCest
         $I->canSeeResponseContains("\"balance\"");
         $I->seeResponseContainsJson(['status' => true, 'message' => 'success']);
 
-        $I->assertEquals([$testUser->getBalanceInCents() - 10], $I->grabDataFromResponseByJsonPath('balance'), "Balance does not match");
+        $I->assertEquals([$testUser->getBalanceInCents() - Params::AMOUNT * 100], $I->grabDataFromResponseByJsonPath('balance'), "Balance does not match");
     }
 
     public function testZeroWin(\ApiTester $I)
     {
-        $this->objectId = random_int(100000, 9900000);
+        $objectId = $this->params->getObjectId(Params::ZERO_WIN_OBJECT_ID);
 
         $request = [
             'api_id' => 15,
             'token'  => 'HSKSOOJH9762tSDSDF',
-            'object_id' => $this->objectId,
+            'object_id' => $objectId,
             'transaction_id' => random_int(90000, 250000),
-            'amount' => 10,
+            'amount' => Params::AMOUNT * 100,
             'user_id' => env('TEST_USER_ID'),
             'time'   => time(),
             'type_operation' => 'win'

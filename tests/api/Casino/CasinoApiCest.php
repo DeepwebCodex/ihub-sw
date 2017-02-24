@@ -6,8 +6,8 @@ use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\Casino\AccountManagerMock;
+use Testing\Casino\Params;
 use Testing\GameSessionsMock;
-use Testing\Params;
 
 
 class CasinoApiCest
@@ -16,11 +16,18 @@ class CasinoApiCest
     private $objectId;
     private $user_balance;
 
+    public function __construct()
+    {
+        $this->params = new Params();
+    }
+
     public function _before(\ApiTester $I)
     {
-        $mock = (new AccountManagerMock())->getMock();
-        $I->getApplication()->instance(AccountManager::class, $mock);
-        $I->haveInstance(AccountManager::class, $mock);
+        if($this->params->enableMock) {
+            $mock = (new AccountManagerMock())->getMock();
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
 
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
@@ -89,7 +96,7 @@ class CasinoApiCest
 
     public function testMethodPayIn(\ApiTester $I)
     {
-        $this->objectId = Params::OBJECT_ID;
+        $this->objectId = $this->params->getObjectId();
 
         $request = [
             'api_id' => 15,
