@@ -5,7 +5,6 @@ namespace App\Queue\Jobs;
 use AMQPChannel;
 use AMQPEnvelope;
 use AMQPQueue;
-use App\Facades\AppLog;
 use App\Queue\RabbitMQQueue;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Job as JobContract;
@@ -89,8 +88,6 @@ class RabbitMQJob extends Job implements JobContract
         $this->setAttempts($this->attempts() + 1);
 
         $body = $this->payload();
-
-        AppLog::debug(print_r($body, true));
 
         /*
          * Some jobs don't have the command set, so fall back to just sending it the job name string
