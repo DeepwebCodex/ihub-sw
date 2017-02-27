@@ -1,16 +1,30 @@
 <?php
 namespace api\MicroGaming;
 
+use App\Components\ExternalServices\AccountManager;
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
+use Testing\MicroGaming\AccountManagerMock;
+use Testing\MicroGaming\Params;
 
 class MicroGamingPartnerFailureApiCest
 {
     const URI = '/mg';
 
+    public function __construct()
+    {
+        $this->params = new Params();
+    }
+
     public function _before(\ApiTester $I)
     {
+        if($this->params->enableMock) {
+            $mock = (new AccountManagerMock())->getMock();
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
+
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
