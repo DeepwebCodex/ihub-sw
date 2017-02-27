@@ -10,6 +10,7 @@ class Params
 {
     const BIG_AMOUNT = 1000000;
     const AMOUNT = 10;
+    const JACKPOT_AMOUNT = 30;
     const CURRENCY = 'EUR';
     const BALANCE = 100;
     const OBJECT_ID = 1234;
@@ -19,6 +20,7 @@ class Params
     const ZERO_BET_OBJECT_ID = 12345670;
     const ZERO_WIN_OBJECT_ID = 12345671;
     const ZERO_WIN_OPERATION_ID = 12345678;
+    const MULTI_WIN_OBJECT_ID = 12340;
 
     public $enableMock = 1;
     public $userId;
@@ -36,6 +38,11 @@ class Params
     public function getAmount()
     {
         return self::AMOUNT * 100;
+    }
+
+    public function getJackpotAmount()
+    {
+        return self::JACKPOT_AMOUNT * 100;
     }
 
     public function getPreparedObjectId($game_id)

@@ -328,11 +328,86 @@ class MicroGamingBorderlineApiCest
 
     public function testMultiWin(\ApiTester $I)
     {
-        require_once "MicroGamingApiCest.php";
+        $gameID = $this->params->getObjectId(Params::MULTI_WIN_OBJECT_ID);
+        $this->playIn($I, $gameID);
 
-        $baseFunc = new MicroGamingApiCest();
+        $balance = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests')->getBalanceInCents();
+        $amount = $this->params->getAmount();
+        $jackpot = $this->params->getJackpotAmount();
 
-        $baseFunc->testMethodPlayOut($I);
-//        $baseFunc->testMethodPlayOut($I);
+        $this->playOut($I, $gameID, $amount, $balance + $amount);
+        $this->playOut($I, $gameID, $jackpot, $balance + $amount + $jackpot);
+    }
+
+
+    private function playOut(\ApiTester $I, $gameID, $amount, $balance)
+    {
+        $request = [
+            'methodcall' => [
+                'name' => 'play',
+                'timestamp' => Carbon::now('UTC')->format('Y/m/d H:i:s.000'),
+                'system' => 'casino',
+                'auth' => [
+                    'login' => 'microgaming',
+                    'password' => 'hawai'
+                ],
+                'call' => [
+                    'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
+                    'playtype' => 'win',
+                    'gameid' => $gameID,
+                    'actionid' => random_int(9900000, 99000000),
+                    'amount' => $amount,
+                    'gamereference' => str_random(),
+                    'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
+                ]
+            ]
+        ];
+
+        $I->disableMiddleware();
+        $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
+        $I->sendPOST('/mg', $request);
+        $I->seeResponseCodeIs(200);
+        $I->canSeeResponseIsXml();
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'play\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$balance.'\']');
+
+        $I->expect('Can see record of transaction applied');
+        $I->canSeeRecord(Transactions::class, [
+            'foreign_id' => $request['methodcall']['call']['actionid'],
+            'transaction_type' => TransactionRequest::TRANS_WIN,
+            'status' => TransactionRequest::STATUS_COMPLETED,
+            'move' => TransactionRequest::D_DEPOSIT
+        ]);
+    }
+
+    private function playIn(\ApiTester $I, $gameID)
+    {
+        $request = [
+            'methodcall' => [
+                'name' => 'play',
+                'timestamp' => Carbon::now('UTC')->format('Y/m/d H:i:s.000'),
+                'system' => 'casino',
+                'auth' => [
+                    'login' => 'microgaming',
+                    'password' => 'hawai'
+                ],
+                'call' => [
+                    'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
+                    'playtype' => 'bet',
+                    'gameid' => $gameID,
+                    'actionid' => random_int(9900000, 99000000),
+                    'amount' => $this->params->getAmount(),
+                    'gamereference' => str_random(),
+                    'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
+                ]
+            ]
+        ];
+
+        $I->disableMiddleware();
+        $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
+        $I->sendPOST('/mg', $request);
     }
 }

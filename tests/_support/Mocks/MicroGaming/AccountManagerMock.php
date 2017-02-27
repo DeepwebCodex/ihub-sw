@@ -130,6 +130,54 @@ class AccountManagerMock
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $this->zero_win_operation_id, $this->balance + $this->amount));
 
 
+        /** multi win */
+        $multiWin_object_id = $this->params->getPreparedObjectId(Params::MULTI_WIN_OBJECT_ID);
+        $multiWin_bet_operation_id = $this->getUniqueId();
+        $win2_operation_id = $this->getUniqueId();
+
+                    /** bet */
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($this->amount, self::BET, $multiWin_object_id, Params::MULTI_WIN_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $multiWin_bet_operation_id, $this->balance));
+
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs(
+                $this->getCompletedParams(self::BET, $multiWin_bet_operation_id, $multiWin_object_id, $this->amount, Params::MULTI_WIN_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $multiWin_bet_operation_id, $this->balance - $this->amount));
+
+                    /** win1 */
+
+        $win1_operation_id = $this->getUniqueId();
+        $win1_amount = Params::AMOUNT;
+
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($win1_amount, self::WIN, $multiWin_object_id, Params::MULTI_WIN_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $win1_operation_id, $this->balance));
+
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs(
+                $this->getCompletedParams(self::WIN, $win1_operation_id, $multiWin_object_id, $win1_amount, Params::MULTI_WIN_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $win1_operation_id, $this->balance + $win1_amount));
+
+                    /** win2 */
+        $jackpot_amount = Params::JACKPOT_AMOUNT;
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($jackpot_amount, self::WIN, $multiWin_object_id, Params::MULTI_WIN_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $win2_operation_id, $this->balance));
+
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs(
+                $this->getCompletedParams(self::WIN, $win2_operation_id, $multiWin_object_id, $jackpot_amount, Params::MULTI_WIN_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $win2_operation_id, $this->balance + $win1_amount + $jackpot_amount));
 
         /** no bet win */
         $accountManager->shouldReceive('createTransaction')
