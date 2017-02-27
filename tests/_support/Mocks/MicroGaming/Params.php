@@ -14,8 +14,11 @@ class Params
     const BALANCE = 100;
     const OBJECT_ID = 1234;
     const NO_BET_OBJECT_ID = 12345;
+    const DUPLICATED_BET_OBJECT_ID = 123451;
     const STORAGE_PENDING_OBJECT_ID = 123456;
-    const ZERO_WIN_OBJECT_ID = 1234567;
+    const ZERO_BET_OBJECT_ID = 12345670;
+    const ZERO_WIN_OBJECT_ID = 12345671;
+    const ZERO_WIN_OPERATION_ID = 12345678;
 
     public $enableMock = 1;
     public $userId;

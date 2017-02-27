@@ -28,10 +28,16 @@ class AccountManagerMock
     {
         $this->params = new Params();
         $this->object_id = $this->params->getPreparedObjectId(Params::OBJECT_ID);
+        $this->duplicated_bet_object_id = $this->params->getPreparedObjectId(Params::DUPLICATED_BET_OBJECT_ID);
+        $this->zero_bet_object_id = $this->params->getPreparedObjectId(Params::ZERO_BET_OBJECT_ID);
         $this->no_bet_object_id = Params::NO_BET_OBJECT_ID;
 
         $this->bet_operation_id = $this->getUniqueId();
+        $this->duplicated_bet_operation_id = $this->getUniqueId();
         $this->win_operation_id = $this->getUniqueId();
+        $this->zero_bet_operation_id = $this->getUniqueId();
+        $this->zero_win_operation_id = $this->getUniqueId();
+
         $this->storage_pending_object_id = Params::STORAGE_PENDING_OBJECT_ID;
         $this->zero_win_object_id = Params::ZERO_WIN_OBJECT_ID;
 
@@ -71,29 +77,58 @@ class AccountManagerMock
         /** bet */
         $accountManager->shouldReceive('createTransaction')
             ->withArgs(
-                $this->getPendingParams($this->amount, self::BET, TransactionRequest::STATUS_PENDING))
+                $this->getPendingParams($this->amount, self::BET, $this->object_id, Params::OBJECT_ID))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $this->bet_operation_id, $this->balance));
 
         $accountManager->shouldReceive('commitTransaction')
             ->withArgs(
-                $this->getCompletedParams(self::BET, $this->bet_operation_id, $this->amount))
+                $this->getCompletedParams(self::BET, $this->bet_operation_id, $this->object_id, $this->amount, Params::OBJECT_ID))
             ->andReturn(
-                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $this->bet_operation_id, $this->balance - $this->amount));
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $this->bet_operation_id, $this->balance - $this->amount));
 
 
         /** win */
         $accountManager->shouldReceive('createTransaction')
             ->withArgs(
-                $this->getPendingParams($this->amount, self::WIN, TransactionRequest::STATUS_PENDING))
+                $this->getPendingParams($this->amount, self::WIN, $this->object_id, Params::OBJECT_ID))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $this->win_operation_id, $this->balance + $this->amount));
 
         $accountManager->shouldReceive('commitTransaction')
             ->withArgs(
-                $this->getCompletedParams(self::WIN, $this->win_operation_id, $this->amount))
+                $this->getCompletedParams(self::WIN, $this->win_operation_id, $this->object_id, $this->amount, Params::OBJECT_ID))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $this->win_operation_id, $this->balance + $this->amount));
+
+
+        /** duplicated bet */
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($this->amount, self::BET, $this->duplicated_bet_object_id, Params::DUPLICATED_BET_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $this->duplicated_bet_operation_id, $this->balance - $this->amount));
+
+
+        /** zero win */
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($this->amount, self::BET, $this->zero_bet_object_id, Params::ZERO_BET_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $this->zero_bet_operation_id, $this->balance));
+
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs(
+                $this->getCompletedParams(self::BET, $this->zero_bet_operation_id, $this->zero_bet_object_id, $this->amount, Params::ZERO_BET_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $this->zero_bet_operation_id, $this->balance - $this->amount));
+
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams(0, self::WIN, $this->zero_win_object_id, Params::ZERO_WIN_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $this->zero_win_operation_id, $this->balance + $this->amount));
+
 
 
         /** no bet win */
@@ -134,27 +169,6 @@ class AccountManagerMock
             ->andReturn($this->returnOk('completed', self::BET, $this->storage_pending_object_id, $this->balance - $this->amount));
 
 
-        /** zero win */
-        $accountManager->shouldReceive('createTransaction')
-            ->withArgs(
-                [
-                    TransactionRequest::STATUS_COMPLETED,
-                    $this->service_id,
-                    $this->cashdesk,
-                    $this->user_id,
-                    $this->amount,
-                    $this->currency,
-                    self::WIN,
-                    $this->zero_win_object_id,
-                    $this->getComment($this->amount, self::WIN, $this->zero_win_object_id),
-                    $this->partner_id
-                ])
-            ->andThrow(new ApiHttpException(
-                Response::HTTP_BAD_REQUEST,
-                '', [], null, [],
-                StatusCode::SERVER_ERROR));
-
-
         return $accountManager;
     }
 
@@ -164,35 +178,31 @@ class AccountManagerMock
     }
 
 
-    /**
-     * status, service_id, cashdesk, user_id, amount,
-     * currency, direction, object_id, comment, partner_id
-     */
-    private function getPendingParams($amount, $direction, $status = TransactionRequest::STATUS_PENDING)
+    private function getPendingParams($amount, $direction, $object_id, $comment_object_id)
     {
         return [
-            $status,
+            TransactionRequest::STATUS_PENDING,
             $this->service_id,
             $this->cashdesk,
             $this->user_id,
             $amount,
             $this->currency,
             $direction,
-            $this->object_id,
-            $this->getComment($amount, $direction, Params::OBJECT_ID),
+            $object_id,
+            $this->getComment($amount, $direction, $comment_object_id),
             $this->partner_id,
         ];
     }
 
-    private function getCompletedParams($direction, $operation_id, $amount)
+    private function getCompletedParams($direction, $operation_id, $object_id, $amount, $comment_object_id)
     {
         return [
             $this->user_id,
             $operation_id,
             $direction,
-            $this->object_id,
+            $object_id,
             $this->currency,
-            $this->getComment($amount, $direction, Params::OBJECT_ID),
+            $this->getComment($amount, $direction, $comment_object_id),
         ];
     }
 
