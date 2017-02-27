@@ -179,42 +179,71 @@ class AccountManagerMock
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $win2_operation_id, $this->balance + $win1_amount + $jackpot_amount));
 
-        /** no bet win */
-        $accountManager->shouldReceive('createTransaction')
-            ->withArgs(
-                [
-                    TransactionRequest::STATUS_COMPLETED,
-                    $this->service_id,
-                    $this->cashdesk,
-                    $this->user_id,
-                    $this->amount,
-                    $this->currency,
-                    self::WIN,
-                    $this->no_bet_object_id,
-                    $this->getComment($this->amount, self::WIN, $this->no_bet_object_id),
-                    $this->partner_id
-                ])
-            ->andThrow(new ApiHttpException(
-                Response::HTTP_BAD_REQUEST,
-                '', [], null, [],
-                TransactionHelper::BAD_OPERATION_ORDER_CODE));
 
-        /** storage pending */
+        /** play refund */
+
+                /** bet for refund */
+        $refund_object_id = $this->params->getPreparedObjectId(Params::REFUND_OBJECT_ID);
+        $refund_bet_operation_id = $this->getUniqueId();
         $accountManager->shouldReceive('createTransaction')
             ->withArgs(
-                [
-                    TransactionRequest::STATUS_COMPLETED,
-                    $this->service_id,
-                    $this->cashdesk,
-                    $this->user_id,
-                    $this->amount,
-                    $this->currency,
-                    self::BET,
-                    $this->storage_pending_object_id,
-                    $this->getComment($this->amount, self::BET, $this->storage_pending_object_id),
-                    $this->partner_id
-                ])
-            ->andReturn($this->returnOk('completed', self::BET, $this->storage_pending_object_id, $this->balance - $this->amount));
+                $this->getPendingParams($this->amount, self::BET, $refund_object_id, Params::REFUND_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $refund_bet_operation_id, $this->balance));
+
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs(
+                $this->getCompletedParams(self::BET, $refund_bet_operation_id, $refund_object_id, $this->amount, Params::REFUND_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $refund_bet_operation_id, $this->balance - $this->amount));
+
+                /** refund (win) */
+        $refund_win_operation_id = $this->getUniqueId();
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($this->amount, self::WIN, $refund_object_id, Params::REFUND_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $refund_win_operation_id, $this->balance));
+
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs(
+                $this->getCompletedParams(self::WIN, $refund_win_operation_id, $refund_object_id, $this->amount, Params::REFUND_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $refund_win_operation_id, $this->balance));
+
+
+        /** idempotency bet and win */
+
+                /** bet */
+        $idempotency_object_id = $this->params->getPreparedObjectId(Params::IDEMPOTENCY_OBJECT_ID);
+        $idempotency_bet_operation_id = $this->getUniqueId();
+        $amount1 = Params::AMOUNT;
+
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($amount1, self::BET, $idempotency_object_id, Params::IDEMPOTENCY_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $idempotency_bet_operation_id, $this->balance));
+
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs(
+                $this->getCompletedParams(self::BET, $idempotency_bet_operation_id, $idempotency_object_id, $amount1, Params::IDEMPOTENCY_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $idempotency_bet_operation_id, $this->balance - $amount1));
+
+                /** win */
+        $idempotency_win_operation_id = $this->getUniqueId();
+        $accountManager->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($amount1, self::WIN, $idempotency_object_id, Params::IDEMPOTENCY_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $idempotency_win_operation_id, $this->balance - $amount1));
+
+        $accountManager->shouldReceive('commitTransaction')
+            ->withArgs(
+                $this->getCompletedParams(self::WIN, $idempotency_win_operation_id, $idempotency_object_id, $amount1, Params::IDEMPOTENCY_OBJECT_ID))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $idempotency_win_operation_id, $this->balance));
 
 
         return $accountManager;

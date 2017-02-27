@@ -22,6 +22,10 @@ class Params
     const ZERO_WIN_OPERATION_ID = 12345678;
     const MULTI_WIN_OBJECT_ID = 12340;
 
+    const REFUND_OBJECT_ID = 2340;
+
+    const IDEMPOTENCY_OBJECT_ID = 2341;
+
     public $enableMock = 1;
     public $userId;
 

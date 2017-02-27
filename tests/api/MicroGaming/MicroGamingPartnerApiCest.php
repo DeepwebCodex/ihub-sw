@@ -1,18 +1,32 @@
 <?php
 namespace api\MicroGaming;
 
+use App\Components\ExternalServices\AccountManager;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
+use App\Models\Transactions;
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
+use Testing\MicroGaming\AccountManagerMock;
+use Testing\MicroGaming\Params;
 
 class MicroGamingPartnerApiCest
 {
     const URI = '/mg';
+    public function __construct()
+    {
+        $this->params = new Params();
+    }
 
     public function _before(\ApiTester $I)
     {
+        if($this->params->enableMock) {
+            $mock = (new AccountManagerMock())->getMock();
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
+
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
@@ -111,33 +125,31 @@ class MicroGamingPartnerApiCest
 
     public function testPlayRefund(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $gameId = $this->params->getObjectId(Params::REFUND_OBJECT_ID);
 
-        $gameId = random_int(9900000, 99000000);
-
-        $userBalance = $testUser->getBalanceInCents();
+        $userBalance = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests')->getBalanceInCents();
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
 
-        $request = $this->getBetRequestData($gameId);
+        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'bet');
 
-        $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance - 10);
+        $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance - $this->params->getAmount());
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['methodcall']['call']['actionid'],
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
 
-        $request = $this->getRefundRequestData($gameId);
-        $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance);
+        $request2 = $this->getRefundRequestData($gameId, $this->params->getAmount());
+        $this->sendPlayRequestAndCheckBalance($I, $request2, $userBalance);
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
-            'foreign_id' => $request['methodcall']['call']['actionid'],
+        $I->canSeeRecord(Transactions::class, [
+            'foreign_id' => $request2['methodcall']['call']['actionid'],
             'transaction_type' => TransactionRequest::TRANS_REFUND,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_DEPOSIT
@@ -146,9 +158,12 @@ class MicroGamingPartnerApiCest
 
     /**
      * @param $gameId
+     * @param $amount
+     * @param $playType
+     *
      * @return array
      */
-    protected function getBetRequestData($gameId): array
+    protected function getRequestData($gameId, $amount, $playType): array
     {
         return [
             'methodcall' => [
@@ -161,10 +176,10 @@ class MicroGamingPartnerApiCest
                 ],
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
-                    'playtype' => 'bet',
+                    'playtype' => $playType,
                     'gameid' => $gameId,
                     'actionid' => random_int(9900000, 99000000),
-                    'amount' => 10,
+                    'amount' => $amount,
                     'gamereference' => str_random(),
                     'token' => md5(uniqid('microgaming' . random_int(-99999, 999999)))
                 ]
@@ -193,7 +208,7 @@ class MicroGamingPartnerApiCest
      * @param $gameId
      * @return array
      */
-    protected function getRefundRequestData($gameId): array
+    protected function getRefundRequestData($gameId, $amount): array
     {
         return [
             'methodcall' => [
@@ -209,7 +224,7 @@ class MicroGamingPartnerApiCest
                     'playtype' => 'refund',
                     'gameid' => $gameId,
                     'actionid' => random_int(9900000, 99000000),
-                    'amount' => 10,
+                    'amount' => $amount,
                     'gamereference' => str_random(),
                     'token' => md5(uniqid('microgaming' . random_int(-99999, 999999)))
                 ]
@@ -224,7 +239,7 @@ class MicroGamingPartnerApiCest
         $userBalance = $testUser->getBalanceInCents();
 
         $gameId = random_int(9900000, 99000000);
-        $request = $this->getRefundRequestData($gameId);
+        $request = $this->getRefundRequestData($gameId, $this->params->getAmount());
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
@@ -233,18 +248,22 @@ class MicroGamingPartnerApiCest
 
     public function testIdempotencyBet(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        $gameId = random_int(9900000, 99000000);
-        $request = $this->getBetRequestData($gameId);
+        $gameId = $this->params->getObjectId(Params::IDEMPOTENCY_OBJECT_ID);
+        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'bet');
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
 
-        $this->sendAndCheckPlayRequestSeveralTimes($I, $request, $testUser->getBalanceInCents() - 10);
+        $userBalance = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests')->getBalanceInCents();
+
+        //$this->sendAndCheckPlayRequestSeveralTimes($I, $request, $userBalance - $this->params->getAmount());
+
+        // second time user balance must be the same, but it is no way to mock getBalance() twice in single mock object
+        $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance - $this->params->getAmount());
+        $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance);
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['methodcall']['call']['actionid'],
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_COMPLETED,
@@ -268,40 +287,21 @@ class MicroGamingPartnerApiCest
     {
         $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
-        $gameId = random_int(9900000, 99000000);
+        $gameId = $this->params->getObjectId(Params::IDEMPOTENCY_OBJECT_ID);
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
 
-        $request = $this->getBetRequestData($gameId);
-        $this->sendPlayRequestAndCheckBalance($I, $request, $testUser->getBalanceInCents() - 10);
+        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'bet');
+        $this->sendPlayRequestAndCheckBalance($I, $request, $testUser->getBalanceInCents() - $this->params->getAmount());
 
-        $request = [
-            'methodcall' => [
-                'name' => 'play',
-                'timestamp' => Carbon::now('UTC')->format('Y/m/d H:i:s.000'),
-                'system' => 'casino',
-                'auth' => [
-                    'login' => 'microgaming',
-                    'password' => 'hawai'
-                ],
-                'call' => [
-                    'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
-                    'playtype' => 'win',
-                    'gameid' => $gameId,
-                    'actionid' => random_int(9900000, 99000000),
-                    'amount' => 10,
-                    'gamereference' => str_random(),
-                    'token' => md5(uniqid('microgaming' . random_int(-99999, 999999)))
-                ]
-            ]
-        ];
+        $requestWin = $this->getRequestData($gameId, $this->params->getAmount(), 'win');
 
-        $this->sendAndCheckPlayRequestSeveralTimes($I, $request, $testUser->getBalanceInCents());
+        $this->sendAndCheckPlayRequestSeveralTimes($I, $requestWin, $testUser->getBalanceInCents());
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
-            'foreign_id' => $request['methodcall']['call']['actionid'],
+        $I->canSeeRecord(Transactions::class, [
+            'foreign_id' => $requestWin['methodcall']['call']['actionid'],
             'transaction_type' => TransactionRequest::TRANS_WIN,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_DEPOSIT
@@ -312,19 +312,19 @@ class MicroGamingPartnerApiCest
     {
         $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
-        $gameId = random_int(9900000, 99000000);
+        $gameId = $this->params->getObjectId(Params::IDEMPOTENCY_OBJECT_ID);
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
 
-        $request = $this->getBetRequestData($gameId);
-        $this->sendPlayRequestAndCheckBalance($I, $request, $testUser->getBalanceInCents() - 10);
+        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'bet');
+        $this->sendPlayRequestAndCheckBalance($I, $request, $testUser->getBalanceInCents() - $this->params->getAmount());
 
-        $request = $this->getRefundRequestData($gameId);
+        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'refund');
         $this->sendAndCheckPlayRequestSeveralTimes($I, $request, $testUser->getBalanceInCents());
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['methodcall']['call']['actionid'],
             'transaction_type' => TransactionRequest::TRANS_REFUND,
             'status' => TransactionRequest::STATUS_COMPLETED,
