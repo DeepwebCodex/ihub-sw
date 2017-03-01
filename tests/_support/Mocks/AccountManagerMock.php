@@ -216,63 +216,6 @@ class AccountManagerMock
         $accountManager->shouldReceive('getFreeOperationId')->withNoArgs()->andReturn($this->getUniqueId());
 
 
-        /************************ Casino solution *****************************/
-
-        /** bet */
-        $accountManager->shouldReceive('createTransaction')
-            ->withArgs(
-                $this->getPendingParams($this->amount, self::BET, TransactionRequest::STATUS_COMPLETED))
-            ->andReturn(
-                $this->returnPending(self::BET, $this->amount, $this->bet_operation_id));
-
-        /** win */
-        $accountManager->shouldReceive('createTransaction')
-            ->withArgs(
-                $this->getPendingParams($this->amount, self::WIN, TransactionRequest::STATUS_COMPLETED))
-            ->andReturn(
-                $this->returnCompleted(self::WIN, $this->amount, $this->balance + $this->amount));
-
-        /** no bet win */
-        $accountManager->shouldReceive('createTransaction')
-            ->withArgs(
-                [
-                    TransactionRequest::STATUS_COMPLETED,
-                    $this->service_id,
-                    $this->cashdesk,
-                    $this->user_id,
-                    $this->amount,
-                    $this->currency,
-                    self::WIN,
-                    $this->no_bet_object_id,
-                    $this->getComment($this->amount, self::WIN),
-                    $this->partner_id
-                ])
-            ->andThrow(new ApiHttpException(
-                Response::HTTP_BAD_REQUEST,
-                '', [], null, [],
-                TransactionHelper::INSUFFICIENT_FUNDS_CODE));
-
-        /** zero win */
-        $accountManager->shouldReceive('createTransaction')
-            ->withArgs(
-                [
-                    TransactionRequest::STATUS_COMPLETED,
-                    $this->service_id,
-                    $this->cashdesk,
-                    $this->user_id,
-                    0,
-                    $this->currency,
-                    self::WIN,
-                    $this->object_id,
-                    $this->getComment($this->amount, self::WIN),
-                    $this->partner_id
-                ])
-            ->andThrow(new ApiHttpException(
-                Response::HTTP_BAD_REQUEST,
-                '', [], null, [],
-                StatusCode::WRONG_AMOUNT));
-
-
         return $accountManager;
     }
 
