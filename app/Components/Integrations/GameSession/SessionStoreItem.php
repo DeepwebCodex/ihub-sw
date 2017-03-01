@@ -51,7 +51,7 @@ class SessionStoreItem
      * @param string $referenceId
      * @return self
      */
-    public static function create($sessionId, $sessionData, $referenceId):self
+    public static function create($sessionId, $sessionData, $referenceId): self
     {
         $sessionStoreItem = new self($sessionId);
         $sessionStoreItem->setData($sessionData);
@@ -75,8 +75,9 @@ class SessionStoreItem
     /**
      * @return self
      */
-    public function save():self
+    public function save(): self
     {
+        $this->prolong();
         Redis::hmset(
             $this->storageKey,
             [
@@ -84,14 +85,13 @@ class SessionStoreItem
                 'reference' => $this->referenceId
             ]
         );
-        $this->prolong();
         return $this;
     }
 
     /**
      * @return self
      */
-    public function prolong():self
+    public function prolong(): self
     {
         Redis::expire($this->storageKey, $this->getConfigOption('ttl'));
         return $this;
@@ -100,7 +100,7 @@ class SessionStoreItem
     /**
      * @return array
      */
-    public function getData():array
+    public function getData(): array
     {
         return $this->data;
     }
@@ -109,7 +109,7 @@ class SessionStoreItem
      * @param array $data
      * @return self
      */
-    public function setData(array $data):self
+    public function setData(array $data): self
     {
         $this->data = array_merge($data, ['created' => time()]);
         return $this;
@@ -118,7 +118,7 @@ class SessionStoreItem
     /**
      * @return string
      */
-    public function getReferenceId():string
+    public function getReferenceId(): string
     {
         return $this->referenceId;
     }
@@ -127,7 +127,7 @@ class SessionStoreItem
      * @param string $referenceId
      * @return self
      */
-    public function setReferenceId(string $referenceId):self
+    public function setReferenceId(string $referenceId): self
     {
         $this->referenceId = $referenceId;
         return $this;
@@ -156,21 +156,25 @@ class SessionStoreItem
     /**
      * @return bool
      */
-    public function exists():bool
+    public function exists(): bool
     {
         return (bool)Redis::exists($this->storageKey);
     }
 
     /**
      * @return self
-     * @throws \RuntimeException
+     * @throws SessionDoesNotExist
      */
-    public function read():self
+    public function read(): self
     {
         $this->checkExists();
         $this->prolong();
 
         $data = Redis::hgetall($this->storageKey);
+
+        if (!$data || !isset($data['data'])) {
+            throw new SessionDoesNotExist();
+        }
 
         $this->data = $this->unserialize($data['data']);
         $this->referenceId = $data['reference'];
@@ -181,9 +185,9 @@ class SessionStoreItem
      * Check session data exists in store
      *
      * @return self
-     * @throws \RuntimeException
+     * @throws SessionDoesNotExist
      */
-    public function checkExists():self
+    public function checkExists(): self
     {
         if (!$this->exists()) {
             throw new SessionDoesNotExist();
@@ -194,7 +198,7 @@ class SessionStoreItem
     /**
      * @return self
      */
-    public function delete():self
+    public function delete(): self
     {
         Redis::del($this->storageKey);
         return $this;
