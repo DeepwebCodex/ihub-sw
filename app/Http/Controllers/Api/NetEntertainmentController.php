@@ -41,7 +41,7 @@ class NetEntertainmentController extends BaseApiController
     {
         parent::__construct($formatter);
 
-        $this->options = config('integrations.netentertainment');
+        $this->options = config('integrations.netEntertainment');
 
         $this->middleware('input.json')->except(['error']);
 
@@ -76,9 +76,9 @@ class NetEntertainmentController extends BaseApiController
 
     public function getBalance(GetBalanceRequest $request)
     {
-        $service_id = $this->getOption('service_id') ?? config('integrations.netEnt.service_id');
+        $service_id = $this->getOption('service_id') ?? config('integrations.netEntertainment.service_id');
 
-        $user = IntegrationUser::get($this->userId, $service_id, 'netEnt');
+        $user = IntegrationUser::get($this->userId, $service_id, 'netEntertainment');
         return $this->responseOk([
             'balance' => $user->getBalance()
         ]);
@@ -86,8 +86,8 @@ class NetEntertainmentController extends BaseApiController
 
     public function bet(BetRequest $request)
     {
-        $service_id = $this->getOption('service_id') ?? config('integrations.netEnt.service_id');
-        $user = IntegrationUser::get($this->userId, $service_id, 'netEnt');
+        $service_id = $this->getOption('service_id') ?? config('integrations.netEntertainment.service_id');
+        $user = IntegrationUser::get($this->userId, $service_id, 'netEntertainment');
 
         (new ApiValidation($request))
             ->checkTransactionParams($service_id, TransactionRequest::TRANS_BET, request()->server('PARTNER_ID'))
@@ -117,8 +117,8 @@ class NetEntertainmentController extends BaseApiController
 
     public function win(WinRequest $request)
     {
-        $service_id = $this->getOption('service_id') ?? config('integrations.netEnt.service_id');
-        $user = IntegrationUser::get($this->userId, $service_id, 'netEnt');
+        $service_id = $this->getOption('service_id') ?? config('integrations.netEntertainment.service_id');
+        $user = IntegrationUser::get($this->userId, $service_id, 'netEntertainment');
 
         (new ApiValidation($request))
             ->checkTransactionParams($service_id, TransactionRequest::TRANS_WIN, request()->server('PARTNER_ID'))

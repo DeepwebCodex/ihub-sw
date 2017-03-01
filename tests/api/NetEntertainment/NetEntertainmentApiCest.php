@@ -42,7 +42,7 @@ class NetEntertainmentApiCest
 
     public function _before(\ApiTester $I, Scenario $s)
     {
-        $I->mockAccountManager($I, config('integrations.netEnt.service_id'));
+        $I->mockAccountManager($I, config('integrations.netEntertainment.service_id'));
         $I->disableMiddleware();
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());

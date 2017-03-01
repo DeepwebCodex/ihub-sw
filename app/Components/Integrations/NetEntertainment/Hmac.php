@@ -39,6 +39,6 @@ class Hmac
             }
         }
 
-        $this->hmac = hash_hmac('sha256', $str, hash('sha256', config('integrations.netEnt.secret_word'), true));
+        $this->hmac = hash_hmac('sha256', $str, hash('sha256', config('integrations.netEntertainment.secret_word'), true));
     }
 }
