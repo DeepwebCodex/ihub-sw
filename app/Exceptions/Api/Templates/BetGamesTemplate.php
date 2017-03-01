@@ -115,8 +115,6 @@ class BetGamesTemplate implements IExceptionTemplate
      */
     private function onDuplicateWin():array
     {
-        app('GameSession')->prolong($this->token);
-
         $error = CodeMapping::getByErrorCode(StatusCode::OK);
         $view = [
             'method' => $this->method,

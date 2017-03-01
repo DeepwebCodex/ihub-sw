@@ -24,6 +24,14 @@ class ApiMethod
     }
 
     /**
+     * @see App\Http\Controllers\Api\BetGamesController::ping,
+     * @see App\Http\Controllers\Api\BetGamesController::account,
+     * @see App\Http\Controllers\Api\BetGamesController::refreshToken,
+     * @see App\Http\Controllers\Api\BetGamesController::newToken,
+     * @see App\Http\Controllers\Api\BetGamesController::getBalance,
+     * @see App\Http\Controllers\Api\BetGamesController::bet,
+     * @see App\Http\Controllers\Api\BetGamesController::win,
+     *
      * @return string
      */
     public function get():string 
@@ -39,5 +47,10 @@ class ApiMethod
         ];
 
         return $map[$this->method] ?? '';
+    }
+
+    public function isOffline()
+    {
+        return in_array($this->method, ['ping', 'transaction_bet_payout']);
     }
 }

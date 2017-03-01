@@ -24,10 +24,10 @@ class GameSessionService
      * Create session
      *
      * @param array $sessionData
+     * @param $algorithm
      * @return string
-     * @throws \RuntimeException
      */
-    public function create(array $sessionData):string
+    public function create(array $sessionData, $algorithm = 'sha512'):string
     {
         $referenceId = $this->makeReferenceId($sessionData);
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
@@ -39,7 +39,7 @@ class GameSessionService
             return $sessionId;
         }
 
-        $sessionId = $this->makeSessionId($sessionData);
+        $sessionId = $this->makeSessionId($sessionData, $algorithm);
 
         $this->sessionStoreItem = SessionStoreItem::create($sessionId, $sessionData, $referenceId);
         ReferenceStoreItem::create($referenceId, $sessionId);
@@ -89,13 +89,14 @@ class GameSessionService
      * Make session id
      *
      * @param array $data
+     * @param string $algorithm
      * @return string
      */
-    protected function makeSessionId(array $data):string
+    protected function makeSessionId(array $data, $algorithm = 'sha512'):string
     {
         $sessionKey = implode('', array_values($data));
         $time = microtime(true);
-        return hash_hmac('sha512', $sessionKey . $time, $this->getConfigOption('storage_secret'));
+        return hash_hmac($algorithm, $sessionKey . $time, $this->getConfigOption('storage_secret'));
     }
 
     /**
@@ -117,17 +118,18 @@ class GameSessionService
      * Regenerate session
      *
      * @param string $sessionId
+     * @param string $algorithm
      * @return string
      * @throws \RuntimeException
      */
-    public function regenerate(string $sessionId):string
+    public function regenerate(string $sessionId, $algorithm = 'sha512'):string
     {
         $sessionStoreItem = new SessionStoreItem($sessionId);
         $sessionStoreItem->read();
         $sessionData = $sessionStoreItem->getData();
         $referenceId = $sessionStoreItem->getReferenceId();
 
-        $newSessionId = $this->makeSessionId($sessionData);
+        $newSessionId = $this->makeSessionId($sessionData, $algorithm);
 
         $sessionStoreItem->delete();
 

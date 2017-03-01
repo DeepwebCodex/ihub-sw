@@ -16,6 +16,7 @@ use Mockery;
 class GameSessionsMock
 {
     public static function getMock(){
+        /** @var Mockery\Mock $game_session */
         $game_session = Mockery::mock(GameSessionService::class);
 
         $game_session->shouldReceive('start')->once();

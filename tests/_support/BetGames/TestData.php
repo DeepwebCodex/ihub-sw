@@ -5,6 +5,7 @@ namespace BetGames;
 use App\Components\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
 use Testing\Params;
+use GuzzleHttp\Psr7\Response;
 
 class TestData
 {
@@ -47,10 +48,63 @@ class TestData
         return array_merge($data, ['signature' => $sign->getHash()]);
     }
 
+    public function token()
+    {
+        $data = [
+            'method' => 'get_account_details',
+            'token' => $this->getIcmsToken(),
+            'time' => time(),
+            'params' => null,
+        ];
+        $this->setSignature($data);
+
+        return $data;
+    }
+
+    public function tokenData()
+    {
+        return  [
+            "user_id" => $this->userId,
+            "partner_id" => 1,
+            "game_id" => 1,
+            "currency" => $this->currency,
+            "unique_id" => time(),
+            "cashdesk_id" => -5
+        ];
+    }
+
+    public function getIcmsToken()
+    {
+        $data = [
+            "partner_id" => 1,
+            "user_id" => $this->userId,
+            "cashdesk_id" => -5
+        ];
+
+        /**@var Response $response*/
+        $response = app('Guzzle')::post('http://' . $this->getIcmsServer() . '/internal/v2/bg/generateToken',
+            ['json' => $data]
+        );
+
+        return json_decode($response->getBody()->getContents(), true)['token'];
+    }
+
+    private function getIcmsServer()
+    {
+        switch (env('APP_URL')) {
+            case 'http://ihub.dev' :
+                return 'icms.dev:8181';
+            case 'http://ihub.favbet.dev' :
+                return 'ihub.favbet.dev:8180';
+            default :
+                throw new \Exception('APP_URL not found');
+        }
+    }
+
     public function authFailed()
     {
         $data = [
-            'method' => 'ping',
+            'method' => 'get_account_details',
             'token' => 'authorization_must_fails',
             'time' => time(),
             'params' => [],

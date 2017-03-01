@@ -3,6 +3,7 @@
 namespace api\EuroGamesTech;
 
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\IntegrationUser;
 use App\Models\Transactions;
 use \EuroGamesTech\TestData;
 use \EuroGamesTech\TestUser;
@@ -20,13 +21,15 @@ class EuroGamesTechBorderlineApiCest
 
     public function __construct()
     {
-        $this->testUser = new TestUser();
-        $this->data = new TestData($this->testUser);
+        $this->data = new TestData();
     }
 
-    public function _before()
+    public function _before(\ApiTester $I)
     {
         $this->options = config('integrations.egt');
+        $I->disableMiddleware();
+        $I->mockAccountManager($I, config('integrations.egt.service_id'));
+        $this->testUser = IntegrationUser::get(env('TEST_USER_ID'), config('integrations.egt.service_id'), 'egt');
     }
 
     public function _after()
@@ -38,7 +41,6 @@ class EuroGamesTechBorderlineApiCest
     {
         $request = $this->data->win();
 
-        $I->disableMiddleware();
         $I->sendPOST('/egt/Deposit', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -82,7 +84,6 @@ class EuroGamesTechBorderlineApiCest
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
 
-        $I->disableMiddleware();
         $I->sendPOST('/egt/Withdraw', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -125,7 +126,6 @@ class EuroGamesTechBorderlineApiCest
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
 
-        $I->disableMiddleware();
         $I->sendPOST('/egt/Withdraw', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -137,10 +137,13 @@ class EuroGamesTechBorderlineApiCest
 
     public function testZeroWin(\ApiTester $I)
     {
+        $bet = $this->data->bet();
+        $I->sendPOST('/egt/Withdraw', $bet);
+
         $request = $this->data->win();
         $request['Amount'] = 0;
 
-        Transactions::create([
+        /*Transactions::create([
             'operation_id' => $I->grabService('AccountManager')->getFreeOperationId(),
             'user_id' => env('TEST_USER_ID'),
             'service_id' => array_get($this->options, 'service_id'),
@@ -161,9 +164,8 @@ class EuroGamesTechBorderlineApiCest
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_WITHDRAWAL
-        ]);
+        ]);*/
 
-        $I->disableMiddleware();
         $I->sendPOST('/egt/Deposit', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -184,8 +186,9 @@ class EuroGamesTechBorderlineApiCest
     public function testMultiWin(\ApiTester $I)
     {
         $request = $this->data->betWin();
+        $balanceBefore = $this->testUser->getBalanceInCents();
 
-        $I->disableMiddleware();
+
         $I->sendPOST('/egt/WithdrawAndDeposit', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -193,7 +196,7 @@ class EuroGamesTechBorderlineApiCest
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $I->expect('unchanged balance after operation');
-        $expectedBalance = $this->testUser->getBalanceInCents();
+        $expectedBalance = $balanceBefore - $request['Amount'] + $request['WinAmount'];
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of both transactions applied');
@@ -211,6 +214,7 @@ class EuroGamesTechBorderlineApiCest
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
 
+        $this->data->setAmount($this->data->jackpotAmount);
         $request = $this->data->win($request['GameNumber']);
         $request['Reason'] = 'JACKPOT_END';
 
@@ -220,6 +224,7 @@ class EuroGamesTechBorderlineApiCest
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
+
         $expectedBalance += $this->data->getAmount();
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
