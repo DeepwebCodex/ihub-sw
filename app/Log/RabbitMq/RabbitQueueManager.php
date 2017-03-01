@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: doom_sentinel
- * Date: 10/11/16
- * Time: 2:23 PM
- */
 
 namespace App\Log\RabbitMq;
 
 
-use PhpAmqpLib\Channel\AMQPChannel;
+use AMQPChannel;
+use AMQPExchange;
+use AMQPQueue;
 
 class RabbitQueueManager
 {
@@ -28,8 +24,9 @@ class RabbitQueueManager
      *          'exclusive' => *bool*
      *      ]
      *  ]
-    */
+     */
     protected $queueList = [];
+    protected $exchange;
 
     public function __construct(array $queueList)
     {
@@ -40,24 +37,45 @@ class RabbitQueueManager
         }
     }
 
-    public function setUpQueue(AMQPChannel $channel, $prefix, $default_exchange)
+    public function setUpQueue(AMQPChannel $channel, $prefix, $default_exchange) : AMQPExchange
     {
+        $this->exchange = new AMQPExchange($channel);
+        $this->exchange->setName($prefix . $default_exchange);
+        $this->exchange->setType(AMQP_EX_TYPE_DIRECT);
+        $this->exchange->setFlags(AMQP_DURABLE);
+        $this->exchange->declareExchange();
+
         if(!empty($this->queueList)){
-
-            $channel->exchange_declare($prefix . $default_exchange, 'direct', false, true, false);
-
             foreach ($this->queueList as $queue)
             {
-                /**@var RabbitQueue $queue*/
+                $rQueue = new AMQPQueue($channel);
+                $rQueue->setName($prefix . $queue->queue);
 
-                $channel->queue_declare($prefix . $queue->queue, $queue->passive, $queue->durable, $queue->exclusive, false);
+                $flags = AMQP_NOPARAM;
+
+                if($queue->passive) {
+                    $flags = $flags | AMQP_PASSIVE;
+                }
+
+                if($queue->durable) {
+                    $flags = $flags | AMQP_DURABLE;
+                }
+
+                if($queue->exclusive) {
+                    $flags = $flags | AMQP_EXCLUSIVE;
+                }
+
+                $rQueue->setFlags($flags);
+                $rQueue->declareQueue();
 
                 if($queue->event_levels) {
                     foreach ($queue->event_levels as $event_level) {
-                        $channel->queue_bind($prefix . $queue->queue, $prefix . $default_exchange, $event_level);
+                        $rQueue->bind($prefix . $default_exchange, $event_level);
                     }
                 }
             }
         }
+
+        return $this->exchange;
     }
 }
