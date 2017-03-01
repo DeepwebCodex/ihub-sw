@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Components\Integrations\NetEnt;
+namespace App\Components\Integrations\NetEntertainment;
 
 
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\NetEnt\BaseRequest;
+use App\Http\Requests\NetEntertainment\BaseRequest;
 use App\Models\Transactions;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Components\Integrations\NetEnt;
+namespace App\Components\Integrations\NetEntertainment;
 
 abstract class StatusCode
 {
-    /** not implemented in NetEnt API */
+    /** not implemented in NetEntertainment API */
     const OK = 0;
     const HMAC = 1;
     const CURRENCY = 2;

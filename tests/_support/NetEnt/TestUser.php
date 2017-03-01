@@ -1,6 +1,6 @@
 <?php
 
-namespace NetEnt;
+namespace NetEntertainment;
 
 use \App\Components\Users\IntegrationUser;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace NetEnt;
+namespace NetEntertainment;
 
-use App\Components\Integrations\NetEnt\Hmac;
+use App\Components\Integrations\NetEntertainment\Hmac;
 use Testing\Params;
 
 class TestData

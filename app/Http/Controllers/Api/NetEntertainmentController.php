@@ -2,31 +2,31 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\Formatters\NetEntApiFormatter;
-use App\Components\Integrations\NetEnt\ApiMethod;
-use App\Components\Integrations\NetEnt\ApiValidation;
-use App\Components\Integrations\NetEnt\Balance;
-use App\Components\Integrations\NetEnt\Hmac;
-use App\Components\Integrations\NetEnt\StatusCode;
+use App\Components\Formatters\NetEntertainmentApiFormatter;
+use App\Components\Integrations\NetEntertainment\ApiMethod;
+use App\Components\Integrations\NetEntertainment\ApiValidation;
+use App\Components\Integrations\NetEntertainment\Balance;
+use App\Components\Integrations\NetEntertainment\Hmac;
+use App\Components\Integrations\NetEntertainment\StatusCode;
 use App\Components\Traits\MetaDataTrait;
-use App\Components\Transactions\Strategies\NetEnt\ProcessNetEnt;
+use App\Components\Transactions\Strategies\NetEntertainment\ProcessNetEntertainment;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
-use App\Exceptions\Api\Templates\NetEntTemplate;
-use App\Http\Requests\NetEnt\BaseRequest;
-use App\Http\Requests\NetEnt\BetRequest;
-use App\Http\Requests\NetEnt\GetBalanceRequest;
-use App\Http\Requests\NetEnt\WinRequest;
+use App\Exceptions\Api\Templates\NetEntertainmentTemplate;
+use App\Http\Requests\NetEntertainment\BaseRequest;
+use App\Http\Requests\NetEntertainment\BetRequest;
+use App\Http\Requests\NetEntertainment\GetBalanceRequest;
+use App\Http\Requests\NetEntertainment\WinRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
-class NetEntController extends BaseApiController
+class NetEntertainmentController extends BaseApiController
 {
     use MetaDataTrait;
 
-    public static $exceptionTemplate = NetEntTemplate::class;
+    public static $exceptionTemplate = NetEntertainmentTemplate::class;
 
     private $userId;
     private $partnerId;
@@ -34,22 +34,22 @@ class NetEntController extends BaseApiController
     private $gameId;
 
     /**
-     * NetEntController constructor.
-     * @param NetEntApiFormatter $formatter
+     * NetEntertainmentController constructor.
+     * @param NetEntertainmentApiFormatter $formatter
      */
-    public function __construct(NetEntApiFormatter $formatter)
+    public function __construct(NetEntertainmentApiFormatter $formatter)
     {
         parent::__construct($formatter);
 
-        $this->options = config('integrations.netent');
+        $this->options = config('integrations.netentertainment');
 
         $this->middleware('input.json')->except(['error']);
 
         /**
-         * @see NetEntValidation::checkHmac,NetEntValidation::checkMethod
+         * @see NetEntertainmentValidation::checkHmac,NetEntertainmentValidation::checkMethod
          */
-        Validator::extend('check_hmac', 'App\Http\Requests\Validation\NetEntValidation@checkHmac');
-        Validator::extend('check_method', 'App\Http\Requests\Validation\NetEntValidation@checkMethod');
+        Validator::extend('check_hmac', 'App\Http\Requests\Validation\NetEntertainmentValidation@checkHmac');
+        Validator::extend('check_method', 'App\Http\Requests\Validation\NetEntertainmentValidation@checkMethod');
     }
 
     /**
@@ -107,7 +107,7 @@ class NetEntController extends BaseApiController
             $this->cashdeskId
         );
         $transaction = new TransactionHandler($transactionRequest, $user);
-        $response = $transaction->handle(app(ProcessNetEnt::class));
+        $response = $transaction->handle(app(ProcessNetEntertainment::class));
 
         return $this->responseOk([
             'tid' => $request->input('tid'),
@@ -139,7 +139,7 @@ class NetEntController extends BaseApiController
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
-        $response = $transaction->handle(app(ProcessNetEnt::class));
+        $response = $transaction->handle(app(ProcessNetEntertainment::class));
 
         return $this->responseOk([
             'tid' => $request->input('tid'),

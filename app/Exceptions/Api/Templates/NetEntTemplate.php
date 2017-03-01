@@ -2,11 +2,11 @@
 
 namespace App\Exceptions\Api\Templates;
 
-use App\Components\Integrations\NetEnt\CodeMapping;
-use App\Components\Integrations\NetEnt\StatusCode;
-use App\Components\Integrations\NetEnt\Hmac;
+use App\Components\Integrations\NetEntertainment\CodeMapping;
+use App\Components\Integrations\NetEntertainment\StatusCode;
+use App\Components\Integrations\NetEntertainment\Hmac;
 
-class NetEntTemplate implements IExceptionTemplate
+class NetEntertainmentTemplate implements IExceptionTemplate
 {
     /**
      * @param array $item

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Components\Integrations\NetEnt;
+namespace App\Components\Integrations\NetEntertainment;
 
 
 class Hmac

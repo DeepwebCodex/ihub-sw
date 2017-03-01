@@ -1,16 +1,16 @@
 <?php
 
-namespace api\NetEnt;
+namespace api\NetEntertainment;
 
-use App\Components\Integrations\NetEnt\CodeMapping;
-use App\Components\Integrations\NetEnt\StatusCode;
-use App\Components\Transactions\Strategies\NetEnt\ProcessNetEnt;
+use App\Components\Integrations\NetEntertainment\CodeMapping;
+use App\Components\Integrations\NetEntertainment\StatusCode;
+use App\Components\Transactions\Strategies\NetEntertainment\ProcessNetEntertainment;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
 use Codeception\Scenario;
-use \NetEnt\TestData;
-use \NetEnt\TestUser;
+use \NetEntertainment\TestData;
+use \NetEntertainment\TestUser;
 use Symfony\Component\HttpFoundation\Response;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
@@ -19,7 +19,7 @@ use Testing\GameSessionsMock;
  * Class BetGamesApiCest
  * @package api\BetGames
  */
-class NetEntApiCest
+class NetEntertainmentApiCest
 {
     /** @var  TestData */
     private $data;
@@ -241,7 +241,7 @@ class NetEntApiCest
     /** fail in runtime */
     public function testFailPending(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessNetEnt::class);
+        $mock = $this->mock(ProcessNetEntertainment::class);
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
         $request = $this->data->bet();
@@ -252,7 +252,7 @@ class NetEntApiCest
 
     public function testFailDb(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessNetEnt::class);
+        $mock = $this->mock(ProcessNetEntertainment::class);
         $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
         $request = $this->data->bet();
         $I->sendPOST($this->action, $request);

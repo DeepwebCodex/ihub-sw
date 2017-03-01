@@ -1,3 +1,3 @@
 <?php
 
-Route::post('/', "NetEntController@index");
+Route::post('/', "NetEntertainmentController@index");

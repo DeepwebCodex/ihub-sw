@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\NetEnt;
+namespace App\Http\Requests\NetEntertainment;
 
 /**
  * Class BetRequest
- * @package App\Http\Requests\NetEnt
+ * @package App\Http\Requests\NetEntertainment
  */
 class GetBalanceRequest extends BaseRequest
 {
