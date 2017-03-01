@@ -21,6 +21,28 @@ trait ApiTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
+     *
+     * @see \Helper\Api::mockGameSession()
+     */
+    public function mockGameSession($I) {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('mockGameSession', func_get_args()));
+    }
+
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     *
+     * @see \Helper\Api::mockAccountManager()
+     */
+    public function mockAccountManager($I) {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('mockAccountManager', func_get_args()));
+    }
+
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
      * Checks that two variables are equal.
      *
      * @param        $expected

@@ -16,6 +16,7 @@ use Mockery;
 class GameSessionsMock
 {
     public static function getMock(){
+        /** @var Mockery\Mock $game_session */
         $game_session = Mockery::mock(GameSessionService::class);
 
         $game_session->shouldReceive('start')->once();
@@ -27,6 +28,7 @@ class GameSessionsMock
         $game_session->shouldReceive('get')->withArgs(['partner_id'])->andReturn(env('TEST_PARTNER_ID'));
 
         $game_session->shouldReceive('get')->withArgs(['cashdesk_id'])->andReturn(env('TEST_CASHEDESK'));
+        $game_session->shouldReceive('get')->withArgs(['game_id'])->andReturn(Params::GAME_ID);
         $game_session->shouldReceive('regenerate')->andReturn("e4fda8473f68894a11c99acc25ecca11");
         $game_session->shouldReceive('prolong');
 

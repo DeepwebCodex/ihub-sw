@@ -4,9 +4,12 @@ namespace BetGames;
 
 use App\Components\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
+use Testing\Params;
+use GuzzleHttp\Psr7\Response;
 
 class TestData
 {
+    const IS_MOCK = true;
     const AMOUNT = 10;
     /**
      * @var IntegrationUser
@@ -14,15 +17,17 @@ class TestData
     private $userId;
     private $currency;
     private $amount;
-    private $token;
+    private $amount_backup;
+    public $bigAmount;
 
-    public function __construct(TestUser $testUser)
+    public function __construct()
     {
-        $user = $testUser->getUser();
-        $this->userId = $user->id;
-        $this->currency = $user->getCurrency();
-        $this->token = Token::create($this->userId, $this->currency);
-        $this->amount = self::AMOUNT;
+//        $this->amount = self::AMOUNT;
+        $this->userId = (int)env('TEST_USER_ID');
+        $this->currency = Params::CURRENCY;
+        $this->amount_backup =
+        $this->amount = Params::AMOUNT * 100;
+        $this->bigAmount = Params::BIG_AMOUNT * 100;
     }
 
     public function notFound()
@@ -43,10 +48,63 @@ class TestData
         return array_merge($data, ['signature' => $sign->getHash()]);
     }
 
+    public function token()
+    {
+        $data = [
+            'method' => 'get_account_details',
+            'token' => $this->getIcmsToken(),
+            'time' => time(),
+            'params' => null,
+        ];
+        $this->setSignature($data);
+
+        return $data;
+    }
+
+    public function tokenData()
+    {
+        return  [
+            "user_id" => $this->userId,
+            "partner_id" => 1,
+            "game_id" => 1,
+            "currency" => $this->currency,
+            "unique_id" => time(),
+            "cashdesk_id" => -5
+        ];
+    }
+
+    public function getIcmsToken()
+    {
+        $data = [
+            "partner_id" => 1,
+            "user_id" => $this->userId,
+            "cashdesk_id" => -5
+        ];
+
+        /**@var Response $response*/
+        $response = app('Guzzle')::post('http://' . $this->getIcmsServer() . '/internal/v2/bg/generateToken',
+            ['json' => $data]
+        );
+
+        return json_decode($response->getBody()->getContents(), true)['token'];
+    }
+
+    private function getIcmsServer()
+    {
+        switch (env('APP_URL')) {
+            case 'http://ihub.dev' :
+                return 'icms.dev:8181';
+            case 'http://ihub.favbet.dev' :
+                return 'ihub.favbet.dev:8180';
+            default :
+                throw new \Exception('APP_URL not found');
+        }
+    }
+
     public function authFailed()
     {
         $data = [
-            'method' => 'ping',
+            'method' => 'get_account_details',
             'token' => 'authorization_must_fails',
             'time' => time(),
             'params' => [],
@@ -98,7 +156,7 @@ class TestData
 
     public function resetAmount()
     {
-        return $this->amount = self::AMOUNT;
+        return $this->amount = $this->amount_backup;
     }
 
     public function wrongTime($method, $params = null)
@@ -133,8 +191,8 @@ class TestData
         $params = [
             'amount' => $this->amount,
             'currency' => $this->currency,
-            'bet_id' => (empty($bet_id)) ? random_int(100000, 9900000) : (int)$bet_id,
-            'transaction_id' => $trans_id ?? random_int(1000, 5000), //md5(str_random()),
+            'bet_id' => $bet_id ?? $this->getObjectId(),
+            'transaction_id' => $trans_id ?? $this->getObjectId(), //md5(str_random()),
             'retrying' => 0,
         ];
         if ($player_id) {
@@ -147,5 +205,10 @@ class TestData
     {
         $sign = new Signature($data);
         $data['signature'] = $sign->getHash();
+    }
+
+    private function getObjectId()
+    {
+        return (self::IS_MOCK) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
     }
 }

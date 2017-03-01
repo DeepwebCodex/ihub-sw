@@ -34,7 +34,7 @@ class GameSessionController extends BaseApiController
     {
         $input = Input::only('user_id', 'partner_id', 'game_id', 'currency', 'unique_id', 'cashdesk_id');
 
-        $sessionId = app('GameSession')->create($input);
+        $sessionId = app('GameSession')->create($input, 'md5');
 
         return $this->respondOk(Response::HTTP_OK, 'success', ['token' => $sessionId]);
     }
