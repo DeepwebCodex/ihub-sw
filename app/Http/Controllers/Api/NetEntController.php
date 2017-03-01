@@ -29,6 +29,9 @@ class NetEntController extends BaseApiController
     public static $exceptionTemplate = NetEntTemplate::class;
 
     private $userId;
+    private $partnerId;
+    private $cashdeskId;
+    private $gameId;
 
     /**
      * NetEntController constructor.
@@ -57,7 +60,10 @@ class NetEntController extends BaseApiController
     {
         $apiMethod = new ApiMethod($request->input('type'));
         if(!$apiMethod->isOffline()) {
-            $this->userId = app('GameSession')->get('user_id') ?? 0;
+            $this->userId = app('GameSession')->get('user_id');
+            $this->partnerId = app('GameSession')->get('partner_id');
+            $this->cashdeskId = app('GameSession')->get('cashdesk_id');
+            $this->gameId = app('GameSession')->get('game_id');
         }
 
         return app()->call([$this, $apiMethod->get()], $request->all());
@@ -96,7 +102,9 @@ class NetEntController extends BaseApiController
             $request->input('amount'),
             TransactionRequest::TRANS_BET,
             $request->input('tid'),
-            0 // TODO:: filler - get actual game id from partner
+            $this->gameId,
+            $this->partnerId,
+            $this->cashdeskId
         );
         $transaction = new TransactionHandler($transactionRequest, $user);
         $response = $transaction->handle(app(ProcessNetEnt::class));
@@ -125,7 +133,9 @@ class NetEntController extends BaseApiController
             (float)$request->input('amount'),
             TransactionRequest::TRANS_WIN,
             $request->input('tid'),
-            0 // TODO:: filler - get actual game id from partner
+            $this->gameId,
+            $this->partnerId,
+            $this->cashdeskId
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
