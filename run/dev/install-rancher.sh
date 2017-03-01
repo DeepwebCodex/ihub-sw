@@ -63,6 +63,20 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^GAME_SESSION_STORAGE_KEY_PREFIX=game_session_storage_key_prefix/GAME_SESSION_STORAGE_KEY_PREFIX=game_sessions/g" \
        -e "s/^GAME_SESSION_STORAGE_TTL=900/GAME_SESSION_STORAGE_TTL=900/g" \
         \
+       -e "s/^RABBITMQ_HOST=example.com/RABBITMQ_HOST=rabbitmq-server/g" \
+       -e "s/^RABBITMQ_PORT=5672/RABBITMQ_PORT=5672/g" \
+       -e "s/^RABBITMQ_USER=user/RABBITMQ_USER=ihub/g" \
+       -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"8jm7JMBmCsqp\"/g" \
+       -e "s/^RABBITMQ_PREFIX=/RABBITMQ_PREFIX=\"\"/g" \
+       -e "s/^RABBITMQ_MYSTERION_QUEUE=mysterion_transactions/RABBITMQ_MYSTERION_QUEUE=mysterion_transactions/g" \
+        \
+       -e "s/^API_MYSTERION_IS_ENABLED=false/API_MYSTERION_IS_ENABLED=true/g" \
+       -e "s/^API_MYSTERION_HOST=example.com/API_MYSTERION_HOST=10.141.11.54/g" \
+       -e "s/^API_MYSTERION_PORT=6666/API_MYSTERION_PORT=5000/g" \
+       -e "s/^API_MYSTERION_ACTION=action/API_MYSTERION_ACTION=endpoint\//g" \
+       -e "s/^API_MYSTERION_SID=sid/API_MYSTERION_SID=ihub/g" \
+       -e "s/^API_MYSTERION_SKEY=skey/API_MYSTERION_SKEY=HeuHG0mjZTLkrdW9M2EjPy8O6GutHS7zgWy9Z6r4maJCombZNBh2AuK1tkwbjNih/g" \
+        \
        ./.env
 
 cp ./.env.example ./.env.testing

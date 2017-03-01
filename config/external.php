@@ -32,6 +32,15 @@ return [
         'cash_desk_roh' => [
             'host'  => env('API_CASH_DESK_ROH_HOST', 'de2ef01d.dev.favorit'),
             'port'  => env('API_CASH_DESK_ROH_PORT', 7763)
+        ],
+
+        'mysterion' => [
+            'is_enabled' => env('API_MYSTERION_IS_ENABLED', false),
+            'host' => env('API_MYSTERION_HOST'),
+            'port' => env('API_MYSTERION_PORT'),
+            'action' => env('API_MYSTERION_ACTION'),
+            'sid' => env('API_MYSTERION_SID'),
+            'skey' => env('API_MYSTERION_SKEY'),
         ]
     ],
 
