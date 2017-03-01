@@ -14,6 +14,7 @@ class TestData
     private $amount;
     private $amount_backup;
     public $bigAmount;
+    public $gameId;
 
     public function __construct()
     {
@@ -22,6 +23,7 @@ class TestData
         $this->amount_backup =
         $this->amount = Params::AMOUNT;
         $this->bigAmount = Params::BIG_AMOUNT;
+        $this->game_id = Params::GAME_ID;
     }
 
     public function notFound()
@@ -46,7 +48,7 @@ class TestData
             'type' => 'balance',
             'userid' => $this->userId,
             'currency' => $this->currency,
-            'i_gameid' => '123',
+            'i_gameid' => $this->game_id,
             'i_extparam' => '2323',
             'i_gamedesc' => '3434',
             'i_actionid' => '4545',
