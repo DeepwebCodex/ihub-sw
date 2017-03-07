@@ -114,7 +114,8 @@ class CasinoController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('amount')),
             TransactionRequest::TRANS_BET,
             $request->input('transaction_id'),
-            0 // TODO:: filler - get actual game id from partner
+            0, // TODO:: filler - get actual game id from partner
+            app('GameSession')->get('userIp')
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
@@ -147,7 +148,8 @@ class CasinoController extends BaseApiController
             $request->input('type_operation') === 'rollback'
                 ? TransactionRequest::TRANS_REFUND : TransactionRequest::TRANS_WIN,
             $request->input('transaction_id'),
-            0 // TODO:: filler - get actual game id from partner
+            0, // TODO:: filler - get actual game id from partner
+            app('GameSession')->get('userIp')
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);

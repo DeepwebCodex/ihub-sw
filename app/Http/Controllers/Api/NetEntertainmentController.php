@@ -104,7 +104,8 @@ class NetEntertainmentController extends BaseApiController
             $request->input('tid'),
             $this->gameId,
             $this->partnerId,
-            $this->cashdeskId
+            $this->cashdeskId,
+            app('GameSession')->get('userIp')
         );
         $transaction = new TransactionHandler($transactionRequest, $user);
         $response = $transaction->handle(app(ProcessNetEntertainment::class));
@@ -135,7 +136,8 @@ class NetEntertainmentController extends BaseApiController
             $request->input('tid'),
             $this->gameId,
             $this->partnerId,
-            $this->cashdeskId
+            $this->cashdeskId,
+            app('GameSession')->get('userIp')
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);

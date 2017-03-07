@@ -83,7 +83,8 @@ class EuroGamesTechController extends BaseApiController
             $request->input('TransferId'),
             $request->input('GameId'),
             $request->input('PartnerId'),
-            $request->input('CashdeskId')
+            $request->input('CashdeskId'),
+            $request->input('UserIp')
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -111,7 +112,8 @@ class EuroGamesTechController extends BaseApiController
             $request->input('TransferId'),
             $request->input('GameId'),
             $request->input('PartnerId'),
-            $request->input('CashdeskId')
+            $request->input('CashdeskId'),
+            $request->input('UserIp')
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -139,7 +141,8 @@ class EuroGamesTechController extends BaseApiController
             $request->input('TransferId'),
             $request->input('GameId'),
             $request->input('PartnerId'),
-            $request->input('CashdeskId')
+            $request->input('CashdeskId'),
+            $request->input('UserIp')
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -157,7 +160,8 @@ class EuroGamesTechController extends BaseApiController
             $request->input('TransferId'),
             $request->input('GameId'),
             $request->input('PartnerId'),
-            $request->input('CashdeskId')
+            $request->input('CashdeskId'),
+            $request->input('UserIp')
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);

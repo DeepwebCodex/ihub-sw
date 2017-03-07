@@ -113,7 +113,8 @@ class MicroGamingController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('methodcall.call.amount')),
             MicroGamingHelper::getTransactionType($request->input('methodcall.call.playtype')),
             $request->input('methodcall.call.actionid'),
-            $request->input('methodcall.call.gamereference')
+            $request->input('methodcall.call.gamereference'),
+            app('GameSession')->get('userIp')
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
