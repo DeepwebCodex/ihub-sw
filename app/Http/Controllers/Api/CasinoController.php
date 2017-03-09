@@ -115,6 +115,8 @@ class CasinoController extends BaseApiController
             TransactionRequest::TRANS_BET,
             $request->input('transaction_id'),
             0, // TODO:: filler - get actual game id from partner
+            app('GameSession')->get('partner_id'),
+            app('GameSession')->get('cashdesk_id'),
             app('GameSession')->get('userIp')
         );
 
@@ -149,6 +151,8 @@ class CasinoController extends BaseApiController
                 ? TransactionRequest::TRANS_REFUND : TransactionRequest::TRANS_WIN,
             $request->input('transaction_id'),
             0, // TODO:: filler - get actual game id from partner
+            app('GameSession')->get('partner_id'),
+            app('GameSession')->get('cashdesk_id'),
             app('GameSession')->get('userIp')
         );
 

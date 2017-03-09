@@ -33,7 +33,8 @@ class ProcessCasino extends BaseSeamlessWalletProcessor implements TransactionPr
                 $request->direction,
                 $request->object_id,
                 $request->comment,
-                $request->partner_id
+                $request->partner_id,
+                $request->client_ip
             );
 
             $this->writeTransaction();
@@ -71,7 +72,7 @@ class ProcessCasino extends BaseSeamlessWalletProcessor implements TransactionPr
         }
         else if (count($operation) > 1)
         {
-            throw new ApiHttpException(409, "Finance error, duplicated duplication", $this->codeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
+            throw new ApiHttpException(409, "Finance error, duplicated duplication", ($this->codeMapping)::getByMeaning(CodeMappingBase::SERVER_ERROR));
         }
 
         $this->responseData = $operation[0];

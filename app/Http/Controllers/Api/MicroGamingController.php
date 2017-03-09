@@ -114,6 +114,8 @@ class MicroGamingController extends BaseApiController
             MicroGamingHelper::getTransactionType($request->input('methodcall.call.playtype')),
             $request->input('methodcall.call.actionid'),
             $request->input('methodcall.call.gamereference'),
+            app('GameSession')->get('partner_id'),
+            app('GameSession')->get('cashdesk_id'),
             app('GameSession')->get('userIp')
         );
 

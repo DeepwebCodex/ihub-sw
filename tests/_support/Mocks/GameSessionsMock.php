@@ -24,6 +24,7 @@ class GameSessionsMock
         $game_session->shouldReceive('get')->withArgs(['user_id'])->andReturn(env('TEST_USER_ID'));
         $game_session->shouldReceive('get')->withArgs(['created'])->andReturn(time());
         $game_session->shouldReceive('get')->withArgs(['currency'])->andReturn("EUR");
+        $game_session->shouldReceive('get')->withArgs(['userIp'])->andReturn("127.0.0.1");
 
         $game_session->shouldReceive('get')->withArgs(['partner_id'])->andReturn(env('TEST_PARTNER_ID'));
 

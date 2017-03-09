@@ -145,8 +145,8 @@ abstract class BaseSeamlessWalletProcessor
      * @param string $newStatus
      * @return bool|Transactions
      */
-    protected function writeTransaction($model = null, string $newStatus = null){
-
+    protected function writeTransaction($model = null, string $newStatus = null)
+    {
         if($model && $newStatus && $newStatus != $model->status){
             $model->status = $newStatus;
 

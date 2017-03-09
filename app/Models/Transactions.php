@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property string $game_id
+ * @property string $client_ip
 */
 class Transactions extends Model
 {
@@ -48,7 +49,8 @@ class Transactions extends Model
         'foreign_id',
         'object_id',
         'transaction_type',
-        'game_id'
+        'game_id',
+        'client_ip'
     ];
 
     public function getAmountAttribute($value){
