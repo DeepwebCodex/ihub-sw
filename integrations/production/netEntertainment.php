@@ -2,5 +2,5 @@
 
 return [
     'service_id' => 37,
-    'secret_word' => 'uachahGhui4Ui8thogh9ahl8hiem9aedeK4xo7Xivohfeng9bai6IeQuu4nahvee',
+    'secret_word' => 'Sheesh5xo4pusaesaiRohv6aireiYu1aiyeT9asaujuxeirah7Aino8phivahsho',
 ];
