@@ -64,6 +64,11 @@ return [
             'retry_after' => 90,
         ],
 
+        'mysterion_transactions' => [
+            'driver' => 'rabbitmq',
+            'queue' => env('RABBITMQ_MYSTERION_QUEUE', 'mysterion_transactions'),
+        ]
+
     ],
 
     /*

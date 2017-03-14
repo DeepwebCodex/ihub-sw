@@ -3,36 +3,35 @@
 namespace api\EuroGamesTech;
 
 use App\Components\Transactions\TransactionRequest;
+use App\Components\Users\IntegrationUser;
 use \EuroGamesTech\TestData;
-use \EuroGamesTech\TestUser;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
 
 class EuroGamesTechApiCest
 {
-
-    private $gameNumber;
     private $defenceCode;
     private $data;
     /**
-     * @var TestUser
+     * @var IntegrationUser
      */
     private $testUser;
 
     public function __construct()
     {
-        $this->testUser = new TestUser();
-        $this->data = new TestData($this->testUser);
+        $this->data = new TestData();
     }
 
     public function _before(\ApiTester $I)
     {
-        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
-        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
-    }
+        $I->disableMiddleware();
+        $I->mockAccountManager($I, config('integrations.egt.service_id'));
 
-    public function _after()
-    {
+        $this->testUser = IntegrationUser::get(env('TEST_USER_ID'), config('integrations.egt.service_id'), 'egt');
+        $I->getApplication()
+            ->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class,
+            GameSessionsMock::getMock());
     }
 
     // tests
@@ -62,9 +61,9 @@ class EuroGamesTechApiCest
 
     protected function dataAuthenticate(\ApiTester $I, $request)
     {
-        $I->disableMiddleware();
-        $this->defenceCode = md5(uniqid('egt'.random_int(-99999,999999)));
-        $I->sendPOST('/egt/Authenticate', array_merge($request, ['DefenceCode' => $this->defenceCode]));
+        $this->defenceCode = md5(uniqid('egt' . random_int(-99999, 999999)));
+        $I->sendPOST('/egt/Authenticate',
+            array_merge($request, ['DefenceCode' => $this->defenceCode]));
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
@@ -89,7 +88,6 @@ class EuroGamesTechApiCest
 
     private function dataGetPlayerBalance(\ApiTester $I, $request)
     {
-        $I->disableMiddleware();
         $I->sendPOST('/egt/GetPlayerBalance', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -116,9 +114,7 @@ class EuroGamesTechApiCest
     private function dataWithdraw(\ApiTester $I, $request)
     {
         $balance = $this->testUser->getBalanceInCents();
-        $this->gameNumber = $request['GameNumber'];
 
-        $I->disableMiddleware();
         $I->sendPOST('/egt/Withdraw', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -130,25 +126,27 @@ class EuroGamesTechApiCest
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(\App\Models\Transactions::class, [
-            'foreign_id' => $request['TransferId'],
+            'foreign_id'       => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_BET,
-            'status' => TransactionRequest::STATUS_COMPLETED,
-            'move' => TransactionRequest::D_WITHDRAWAL
+            'status'           => TransactionRequest::STATUS_COMPLETED,
+            'move'             => TransactionRequest::D_WITHDRAWAL
         ]);
     }
 
     public function testMethodDeposit(\ApiTester $I)
     {
-        $this->testMethodWithdraw($I);
-        $request = $this->data->win($this->gameNumber);
+        $request = $this->data->bet();
+        $I->sendPOST('/egt/Withdraw', $request);
 
-        $this->dataDeposit($I, $request);
+        $request2 = $this->data->win($request['GameNumber']);
+        $this->dataDeposit($I, $request2);
     }
 
     public function testMethodDepositCompoundId(\ApiTester $I)
     {
-        $this->testMethodWithdrawCompoundId($I);
-        $request = $this->data->win($this->gameNumber, false);
+        $request = $this->data->bet(false);
+        $this->dataWithdraw($I, $request);
+        $request = $this->data->win($request['GameNumber'], false);
 
         $this->dataDeposit($I, $request);
     }
@@ -157,8 +155,8 @@ class EuroGamesTechApiCest
     {
         $balance = $this->testUser->getBalanceInCents();
 
-        $I->disableMiddleware();
         $I->sendPOST('/egt/Deposit', $request);
+
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
         $I->expect('min required items in response');
@@ -169,10 +167,10 @@ class EuroGamesTechApiCest
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(\App\Models\Transactions::class, [
-            'foreign_id' => $request['TransferId'],
+            'foreign_id'       => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_WIN,
-            'status' => TransactionRequest::STATUS_COMPLETED,
-            'move' => TransactionRequest::D_DEPOSIT
+            'status'           => TransactionRequest::STATUS_COMPLETED,
+            'move'             => TransactionRequest::D_DEPOSIT
         ]);
     }
 
@@ -192,7 +190,8 @@ class EuroGamesTechApiCest
 
     private function dataWithdrawAndDeposit(\ApiTester $I, $request)
     {
-        $I->disableMiddleware();
+        $balanceBefore = $this->testUser->getBalanceInCents();
+
         $I->sendPOST('/egt/WithdrawAndDeposit', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -200,22 +199,22 @@ class EuroGamesTechApiCest
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
         $I->expect('unchanged balance after operation');
-        $expectedBalance = $this->testUser->getBalanceInCents();
+        $expectedBalance = $balanceBefore - $request['Amount'] + $request['WinAmount'];
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of both transactions applied');
         $I->canSeeRecord(\App\Models\Transactions::class, [
-            'foreign_id' => $request['TransferId'],
+            'foreign_id'       => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_WIN,
-            'status' => TransactionRequest::STATUS_COMPLETED,
-            'move' => TransactionRequest::D_DEPOSIT
+            'status'           => TransactionRequest::STATUS_COMPLETED,
+            'move'             => TransactionRequest::D_DEPOSIT
         ]);
 
         $I->canSeeRecord(\App\Models\Transactions::class, [
-            'foreign_id' => $request['TransferId'],
+            'foreign_id'       => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_BET,
-            'status' => TransactionRequest::STATUS_COMPLETED,
-            'move' => TransactionRequest::D_WITHDRAWAL
+            'status'           => TransactionRequest::STATUS_COMPLETED,
+            'move'             => TransactionRequest::D_WITHDRAWAL
         ]);
     }
 
@@ -235,9 +234,9 @@ class EuroGamesTechApiCest
 
     private function dataWithdrawAndDepositLost(\ApiTester $I, $request)
     {
-        $expectedBalance = $this->testUser->getBalanceInCents() - $this->data->getAmount();
+        $expectedBalance = $this->testUser->getBalanceInCents()
+            - $this->data->getAmount();
 
-        $I->disableMiddleware();
         $I->sendPOST('/egt/WithdrawAndDeposit', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
@@ -249,17 +248,17 @@ class EuroGamesTechApiCest
 
         $I->expect('Can see record of both transactions applied');
         $I->canSeeRecord(\App\Models\Transactions::class, [
-            'foreign_id' => $request['TransferId'],
+            'foreign_id'       => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_WIN,
-            'status' => TransactionRequest::STATUS_COMPLETED,
-            'move' => TransactionRequest::D_DEPOSIT
+            'status'           => TransactionRequest::STATUS_COMPLETED,
+            'move'             => TransactionRequest::D_DEPOSIT
         ]);
 
         $I->canSeeRecord(\App\Models\Transactions::class, [
-            'foreign_id' => $request['TransferId'],
+            'foreign_id'       => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_BET,
-            'status' => TransactionRequest::STATUS_COMPLETED,
-            'move' => TransactionRequest::D_WITHDRAWAL
+            'status'           => TransactionRequest::STATUS_COMPLETED,
+            'move'             => TransactionRequest::D_WITHDRAWAL
         ]);
     }
 }

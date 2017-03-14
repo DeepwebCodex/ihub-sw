@@ -11,6 +11,13 @@ class TransactionHelper
     const ACCOUNT_DENIED        = 'account_denied';
     const UNKNOWN               = 'unknown';
 
+    const DUPLICATE_CODE             = 1402;
+    const BAD_OPERATION_ORDER_CODE   = 1403;
+    const INSUFFICIENT_FUNDS_CODE    = 1027;
+    const ACCOUNT_DENIED_CODE        = 1020;
+    const UNKNOWN_CODE               = -2;
+
+
     public static function getTransactionErrorState($errorCode)
     {
         switch ($errorCode){
