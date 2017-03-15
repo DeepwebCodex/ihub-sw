@@ -154,7 +154,7 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            $this->gameId,
+            str_slug(transliterate($request->input('params.'))),
             $this->partnerId,
             $this->cashdeskId
         );
