@@ -18,6 +18,7 @@ use App\Exceptions\Api\Templates\BetGamesTemplate;
 use App\Http\Requests\BetGames\BaseRequest;
 use App\Http\Requests\BetGames\BetRequest;
 use App\Http\Requests\BetGames\WinRequest;
+use App\Models\Transactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -174,6 +175,14 @@ class BetGamesController extends BaseApiController
     public function win(WinRequest $request)
     {
         $userId = $request->input('params.player_id');
+        $foreignId = $request->input('params.transaction_id');
+
+        $betTransaction = Transactions::getTransactionByForeignId(
+            $this->getOption('service_id'),
+            $userId,
+            $foreignId
+        );
+
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'betGames');
 
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token'), 'balance' => $user->getBalanceInCents()]);
@@ -188,9 +197,9 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            $this->gameId,
-            $this->partnerId,
-            $this->cashdeskId
+            !is_null($betTransaction) ? $betTransaction->game_id : 0,
+            !is_null($betTransaction) ? $betTransaction->partner_id : 0,
+            !is_null($betTransaction) ? $betTransaction->cashdesk : 0
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
