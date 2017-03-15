@@ -147,7 +147,7 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            0 // TODO:: filler - get actual game id from partner
+            transliterate($request->input('params.game'))
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
@@ -180,7 +180,7 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            0 // TODO:: filler - get actual game id from partner
+            transliterate($request->input('params.game'))
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
