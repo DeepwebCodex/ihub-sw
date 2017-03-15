@@ -43,6 +43,7 @@ class WithdrawAndDepositRequest extends BaseEgtRequest
             'WinAmount' => 'bail|required|numeric|min:0',
             'PartnerId' => 'bail|integer|nullable',
             'CashdeskId' => 'bail|integer|nullable',
+            'UserIp'    => 'bail|string|nullable'
         ];
     }
 }
