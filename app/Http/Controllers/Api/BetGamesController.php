@@ -28,6 +28,9 @@ class BetGamesController extends BaseApiController
     public static $exceptionTemplate = BetGamesTemplate::class;
 
     private $userId;
+    private $partnerId;
+    private $cashdeskId;
+    private $gameId;
 
     /**
      * BetGamesController constructor.
@@ -59,6 +62,9 @@ class BetGamesController extends BaseApiController
         $apiMethod = new ApiMethod($request->input('method'));
         if (!$apiMethod->isOffline()) {
             $this->userId = app('GameSession')->get('user_id') ?? 0;
+            $this->partnerId = app('GameSession')->get('partner_id');
+            $this->cashdeskId = app('GameSession')->get('cashdesk_id');
+            $this->gameId = app('GameSession')->get('game_id'); // Т.к. у BetGames нет идентификатора игры при запуске, мы из сессии будем получать 0
         }
 
         return app()->call([$this, $apiMethod->get()], $request->all());
@@ -147,7 +153,9 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            0 // TODO:: filler - get actual game id from partner
+            $this->gameId,
+            $this->partnerId,
+            $this->cashdeskId
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
@@ -180,7 +188,9 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            0 // TODO:: filler - get actual game id from partner
+            $this->gameId,
+            $this->partnerId,
+            $this->cashdeskId
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
