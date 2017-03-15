@@ -153,7 +153,7 @@ class BetGamesController extends BaseApiController
             TransactionRequest::D_WITHDRAWAL,
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
-            $request->input('params.transaction_id'),
+            $request->input('params.bet_id'),
             str_slug(transliterate($request->input('params.'))),
             $this->partnerId,
             $this->cashdeskId
@@ -175,7 +175,7 @@ class BetGamesController extends BaseApiController
     public function win(WinRequest $request)
     {
         $userId = $request->input('params.player_id');
-        $foreignId = $request->input('params.transaction_id');
+        $foreignId = $request->input('params.bet_id');
 
         $betTransaction = Transactions::getTransactionByForeignId(
             $this->getOption('service_id'),
