@@ -67,7 +67,7 @@ class BetGamesController extends BaseApiController
             $this->partnerId = app('GameSession')->get('partner_id');
             $this->cashdeskId = app('GameSession')->get('cashdesk_id');
             $this->gameId = app('GameSession')->get('game_id'); // Т.к. у BetGames нет идентификатора игры при запуске, мы из сессии будем получать 0
-            $this->userIP = app('GameSession')->get('user_ip');
+            $this->userIP = app('GameSession')->get('userIp');
         }
 
         return app()->call([$this, $apiMethod->get()], $request->all());
@@ -156,7 +156,7 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.bet_id'),
-            str_slug(transliterate($request->input('params.'))),
+            str_slug(transliterate($request->input('params.game'))),
             $this->partnerId,
             $this->cashdeskId,
             $this->userIP
