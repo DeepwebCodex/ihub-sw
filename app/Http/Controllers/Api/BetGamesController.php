@@ -18,6 +18,7 @@ use App\Exceptions\Api\Templates\BetGamesTemplate;
 use App\Http\Requests\BetGames\BaseRequest;
 use App\Http\Requests\BetGames\BetRequest;
 use App\Http\Requests\BetGames\WinRequest;
+use App\Models\Transactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,6 +29,10 @@ class BetGamesController extends BaseApiController
     public static $exceptionTemplate = BetGamesTemplate::class;
 
     private $userId;
+    private $partnerId;
+    private $cashdeskId;
+    private $gameId;
+    private $userIP;
 
     /**
      * BetGamesController constructor.
@@ -59,6 +64,10 @@ class BetGamesController extends BaseApiController
         $apiMethod = new ApiMethod($request->input('method'));
         if (!$apiMethod->isOffline()) {
             $this->userId = app('GameSession')->get('user_id') ?? 0;
+            $this->partnerId = app('GameSession')->get('partner_id');
+            $this->cashdeskId = app('GameSession')->get('cashdesk_id');
+            $this->gameId = app('GameSession')->get('game_id'); // Т.к. у BetGames нет идентификатора игры при запуске, мы из сессии будем получать 0
+            $this->userIP = app('GameSession')->get('userIp');
         }
 
         return app()->call([$this, $apiMethod->get()], $request->all());
@@ -147,10 +156,10 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            0, // TODO:: filler - get actual game id from partner
-            app('GameSession')->get('partner_id'),
-            app('GameSession')->get('cashdesk_id'),
-            app('GameSession')->get('userIp')
+            str_slug(transliterate($request->input('params.game'))),
+            $this->partnerId,
+            $this->cashdeskId,
+            $this->userIP
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
@@ -169,6 +178,14 @@ class BetGamesController extends BaseApiController
     public function win(WinRequest $request)
     {
         $userId = $request->input('params.player_id');
+        $objectId = $request->input('params.bet_id');
+
+        $betTransaction = Transactions::getBetTransaction(
+            $this->getOption('service_id'),
+            $userId,
+            $objectId
+        );
+
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'betGames');
 
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token'), 'balance' => $user->getBalanceInCents()]);
@@ -183,10 +200,10 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            0, // TODO:: filler - get actual game id from partner
-            app('GameSession')->get('partner_id'),
-            app('GameSession')->get('cashdesk_id'),
-            app('GameSession')->get('userIp')
+            !is_null($betTransaction) ? $betTransaction->game_id : 0,
+            !is_null($betTransaction) ? $betTransaction->partner_id : 0,
+            !is_null($betTransaction) ? $betTransaction->cashdesk : 0,
+            !is_null($betTransaction) ? $betTransaction->client_ip : ''
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
