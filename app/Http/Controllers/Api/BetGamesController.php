@@ -147,7 +147,10 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            transliterate($request->input('params.game'))
+            transliterate($request->input('params.game')),
+            app('GameSession')->get('partner_id'),
+            app('GameSession')->get('cashdesk_id'),
+            app('GameSession')->get('userIp')
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
@@ -180,7 +183,10 @@ class BetGamesController extends BaseApiController
             TransactionHelper::amountCentsToWhole($request->input('params.amount')),
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
-            transliterate($request->input('params.game'))
+            transliterate($request->input('params.game')),
+            app('GameSession')->get('partner_id'),
+            app('GameSession')->get('cashdesk_id'),
+            app('GameSession')->get('userIp')
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);

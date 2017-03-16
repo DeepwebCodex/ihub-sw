@@ -50,7 +50,8 @@ abstract class BaseSeamlessWalletProcessor
                 $this->request->direction,
                 $this->request->object_id,
                 $this->request->comment,
-                $this->request->partner_id
+                $this->request->partner_id,
+                $this->request->client_ip
             );
 
             if(!$this->responseData){
@@ -88,7 +89,8 @@ abstract class BaseSeamlessWalletProcessor
                     'foreign_id'        => $this->request->foreign_id,
                     'object_id'         => $this->request->object_id,
                     'transaction_type'  => $this->request->transaction_type,
-                    'game_id'           => $this->request->game_id
+                    'game_id'           => $this->request->game_id,
+                    'client_ip'         => $this->request->client_ip
                 ]);
                 if($model){
                     $this->responseData = $model->attributesToArray();
@@ -123,7 +125,8 @@ abstract class BaseSeamlessWalletProcessor
                 $this->request->direction,
                 $this->request->object_id,
                 $this->request->currency,
-                $this->request->comment
+                $this->request->comment,
+                $this->request->client_ip
             );
 
             if(!$this->responseData){
@@ -142,8 +145,8 @@ abstract class BaseSeamlessWalletProcessor
      * @param string $newStatus
      * @return bool|Transactions
      */
-    protected function writeTransaction($model = null, string $newStatus = null){
-
+    protected function writeTransaction($model = null, string $newStatus = null)
+    {
         if($model && $newStatus && $newStatus != $model->status){
             $model->status = $newStatus;
 
@@ -154,7 +157,8 @@ abstract class BaseSeamlessWalletProcessor
             'object_id'          => $this->request->object_id,
             'foreign_id'         => $this->request->foreign_id,
             'transaction_type'   => $this->request->transaction_type,
-            'game_id'            => $this->request->game_id
+            'game_id'            => $this->request->game_id,
+            'client_ip'          => $this->request->client_ip
         ]));
 
         if(!$model) {

@@ -142,6 +142,7 @@ class AccountManager
      * @param int $object_id //unique id of transaction integration side
      * @param string $comment //transaction comment
      * @param int $partner_id
+     * @param string $client_ip
      * @return mixed
      */
     public function createTransaction(
@@ -154,7 +155,8 @@ class AccountManager
         int $direction,
         int $object_id,
         string $comment,
-        int $partner_id
+        int $partner_id,
+        string $client_ip = null
     ) {
 
         return $this->postMessageRoh('accounts/operation/new', [
@@ -163,7 +165,7 @@ class AccountManager
             'user_id' => $user_id,
             'amount' => $amount,
             'currency' => $currency,
-            'client_ip' => get_client_ip() ?: '127.0.0.1',
+            'client_ip' => $client_ip ?: '127.0.0.1',
             'move' => $direction,
             'status' => $status,
             'object_id' => $object_id,
@@ -189,23 +191,26 @@ class AccountManager
     /**
      * Sets account manager transaction operation as completed - so commiting changes to user balance
      *
-     * @param int $user_id          //integration user_id
-     * @param int $operation_id     //roh internal operation id
-     * @param int $direction        //transaction direction 0 - deposit, 1 - withdrawal
-     * @param int $object_id        //unique id of transaction integration side
-     * @param string $currency      //currency EUR|GBP|RUB|UAH|USD
-     * @param string $comment       //transaction comment
+     * @param int $user_id //integration user_id
+     * @param int $operation_id //roh internal operation id
+     * @param int $direction //transaction direction 0 - deposit, 1 - withdrawal
+     * @param int $object_id //unique id of transaction integration side
+     * @param string $currency //currency EUR|GBP|RUB|UAH|USD
+     * @param string $comment //transaction comment
+     * @param string $client_ip
      * @return mixed
      */
     public function commitTransaction(
         int $user_id, int $operation_id,
         int $direction, int $object_id,
-        string $currency, string $comment){
+        string $currency, string $comment,
+        string $client_ip = null
+    ){
 
         return $this->postMessageRoh('accounts/operation/completed', [
             'user_id'       => $user_id,
             'operation_id'  => $operation_id,
-            'client_ip'     => get_client_ip() ?: '127.0.0.1',
+            'client_ip'     => $client_ip ?: '127.0.0.1',
             'move'          => $direction,
             'object_id'     => $object_id,
             'currency'      => $currency,

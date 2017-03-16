@@ -41,6 +41,7 @@ class DepositRequest extends BaseEgtRequest
             'PortalCode' => 'bail|required|string',
             'PartnerId' => 'bail|integer|nullable',
             'CashdeskId' => 'bail|integer|nullable',
+            'UserIp'    => 'bail|string|nullable'
         ];
     }
 }
