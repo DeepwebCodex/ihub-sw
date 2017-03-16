@@ -15,7 +15,6 @@ class Signature
      * @var \Illuminate\Cache\Repository
      */
     private $cache;
-    private $data;
     private $hash;
 
     /**
@@ -25,8 +24,7 @@ class Signature
     public function __construct(array $data)
     {
         $this->cache = app('cache')->store('redis_bet_games');
-        $this->data = $data;
-        $this->hash = $this->create();
+        $this->hash = $this->create($data);
     }
 
 
@@ -39,12 +37,13 @@ class Signature
     }
 
     /**
+     * @param $data
      * @return string
      */
-    private function create():string
+    private function create($data):string
     {
         $result = '';
-        foreach ($this->data as $key => $value) {
+        foreach ($data as $key => $value) {
             if ($key == 'params' && empty($value) || $key == $this->metaStorageKey) {
                 continue;
             } elseif ($key == 'params' && !empty($value)) {

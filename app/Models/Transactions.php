@@ -94,4 +94,20 @@ class Transactions extends Model
             ['status', TransactionRequest::STATUS_COMPLETED]
         ])->first();
     }
+
+    /**
+     * @param int $serviceId
+     * @param int $userId
+     * @param $foreignId
+     * @return Transactions
+     */
+    public static function getTransactionByForeignId(int $serviceId, int $userId, $foreignId){
+        return Transactions::where([
+            ['service_id', $serviceId],
+            ['user_id', $userId],
+            ['object_id', $foreignId],
+            ['transaction_type', TransactionRequest::TRANS_BET],
+            ['status', TransactionRequest::STATUS_COMPLETED]
+        ])->first();
+    }
 }
