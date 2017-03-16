@@ -99,4 +99,44 @@ class Transactions extends Model
 
         return Transactions::where($query)->first();
     }
+
+    /***
+     * @param int $serviceId
+     * @param int $userId
+     * @param int $partnerId
+     * @param int $gameId
+     * @return Transactions
+     */
+    public static function getLastBetByUser(int $serviceId, int $userId, int $partnerId, int $gameId)
+    {
+        return Transactions::where([
+            ['service_id', $serviceId],
+            ['user_id', $userId],
+            ['partner_id', $partnerId],
+            ['game_id', $gameId],
+            ['transaction_type', TransactionRequest::TRANS_BET],
+            ['status', TransactionRequest::STATUS_COMPLETED]
+        ])->orderBy('id', 'desc')->first();
+    }
+
+    /***
+     * @param int $serviceId
+     * @param int $userId
+     * @param int $partnerId
+     * @param int $gameId
+     * @param string $foreignIid
+     * @return Transactions
+     */
+    public static function getLastBetByUserWithForeightId(int $serviceId, int $userId, int $partnerId, int $gameId, string $foreignIid)
+    {
+        return Transactions::where([
+            ['service_id', $serviceId],
+            ['user_id', $userId],
+            ['partner_id', $partnerId],
+            ['game_id', $gameId],
+            ['foreign_id', $foreignIid],
+            ['transaction_type', TransactionRequest::TRANS_BET],
+            ['status', TransactionRequest::STATUS_COMPLETED]
+        ])->orderBy('id', 'desc')->first();
+    }
 }
