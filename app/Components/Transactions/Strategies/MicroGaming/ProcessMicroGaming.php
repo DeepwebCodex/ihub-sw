@@ -23,7 +23,7 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
 
     
     
-    protected function getBetRecords(): Transactions
+    protected function getBetRecords()
     {
         $originalObjectId = $this->request->object_id;
 

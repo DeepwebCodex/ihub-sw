@@ -9,7 +9,7 @@
 namespace App\Components\Integrations\MicroGaming\Orion;
 
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
-use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGaming;
+use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGamingOrion;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
@@ -75,7 +75,7 @@ class CommitRollbackProcessor implements IOperationsProcessor
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
 
-        return $transactionHandler->handle(new ProcessMicroGaming());
+        return $transactionHandler->handle(new ProcessMicroGamingOrion());
     }
 
 }
