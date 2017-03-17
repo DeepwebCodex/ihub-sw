@@ -80,7 +80,7 @@ class NetEntertainmentController extends BaseApiController
 
         $user = IntegrationUser::get($this->userId, $service_id, 'netEntertainment');
         return $this->responseOk([
-            'balance' => $user->getBalance()
+            'balance' => Balance::toFloat($user->getBalanceInCents())
         ]);
     }
 
