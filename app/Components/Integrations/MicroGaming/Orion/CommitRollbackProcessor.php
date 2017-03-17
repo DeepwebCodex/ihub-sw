@@ -25,19 +25,22 @@ use Illuminate\Support\Facades\Config;
  *
  * @author petroff
  */
-class CommitRollbackProcessor implements IOperationsProcessor {
+class CommitRollbackProcessor implements IOperationsProcessor
+{
 
     //RollbackQueue
 
     protected $unlockType;
     protected $transType;
 
-    function __construct(string $unlockType, string $transType) {
+    function __construct(string $unlockType, string $transType)
+    {
         $this->unlockType = $unlockType;
         $this->transType = $transType;
     }
 
-    public function make(array $data): array {
+    public function make(array $data): array
+    {
         $dataRes = array();
         foreach ($data as $key => $value) {
             $user_id = (int) $value['a:LoginName'];
@@ -56,9 +59,18 @@ class CommitRollbackProcessor implements IOperationsProcessor {
         return $dataRes;
     }
 
-    public function pushOperation(string $typeOperation, array $data, UserInterface $user): TransactionResponse {
+    public function pushOperation(string $typeOperation, array $data, UserInterface $user): TransactionResponse
+    {
+        
         $transactionRequest = new TransactionRequest(
-                Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName']
+                Config::get('integrations.microgaming.service_id'), 
+                $data['a:TransactionNumber'], 
+                $user->id, $user->getCurrency(), 
+                MicroGamingHelper::getTransactionDirection($typeOperation), 
+                TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), 
+                MicroGamingHelper::getTransactionType($typeOperation), 
+                $data['a:MgsReferenceNumber'], 
+                $data['a:GameName']
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);

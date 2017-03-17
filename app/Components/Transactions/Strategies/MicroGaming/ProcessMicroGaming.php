@@ -21,14 +21,10 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
 
     protected $codeMapping = CodeMapping::class;
 
-    /**
-     * @param TransactionRequest $request
-     * @return array
-     */
-    protected function process(TransactionRequest $request)
+    
+    
+    protected function getBetRecords(): Transactions
     {
-        $this->request = $request;
-
         $originalObjectId = $this->request->object_id;
 
         $this->request->object_id = $this->getObjectIdMap(
@@ -38,8 +34,18 @@ class ProcessMicroGaming extends BaseSeamlessWalletProcessor implements Transact
         );
 
         /**@var Transactions $betTransaction*/
-        $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, $this->request->partner_id);
-
+        return Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, $this->request->partner_id);
+    }
+    
+    /**
+     * @param TransactionRequest $request
+     * @return array
+     */
+    protected function process(TransactionRequest $request)
+    {
+        $this->request = $request;
+        $betTransaction = $this->getBetRecords();
+        
         if($this->request->transaction_type != TransactionRequest::TRANS_BET)
         {
             if(!$betTransaction){
