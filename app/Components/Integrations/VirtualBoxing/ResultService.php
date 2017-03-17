@@ -71,6 +71,7 @@ class ResultService
         if (Result::existsById($tid)) {
             throw new DuplicateException(compact($this->eventId, $this->eventVbId, $tid));
         }
+
         $mapResult = (new ResultMapper($this->config, $this->eventId))->map($rounds);
 
         \DB::connection('line')->transaction(function () use ($mapResult, $tid) {

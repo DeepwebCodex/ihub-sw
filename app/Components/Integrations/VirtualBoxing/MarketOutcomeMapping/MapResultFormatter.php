@@ -20,7 +20,7 @@ class MapResultFormatter implements IMapResultFormatter
             'event_market_id' => $marketId,
             'event_participant_id' => $participantId,
             'outcome_type_id' => $outcomeTypeId,
-            'coef' => (string)$selection['price']['dec'],
+            'coef' => (string)data_get($selection, 'price.dec'),
             'dparam1' => $dParam
         ];
     }

@@ -19,12 +19,12 @@ class MapperT65 implements IMapper
     {
         $outcomeTypeId = null;
         foreach ($outcomes as $outcome) {
-            if ((string)$selection['name'] === 'Under 6.5' && $outcome['name'] === 'Under') {
-                $outcomeTypeId = $outcome['id'];
+            if ((string)data_get($selection, 'name') === 'Under 6.5' && data_get($outcome, 'name') === 'Under') {
+                $outcomeTypeId = data_get($outcome, 'id');
                 break;
             }
-            if ((string)$selection['name'] === 'Over 6.5' && $outcome['name'] === 'Over') {
-                $outcomeTypeId = $outcome['id'];
+            if ((string)data_get($selection, 'name') === 'Over 6.5' && data_get($outcome, 'name') === 'Over') {
+                $outcomeTypeId = data_get($outcome, 'id');
                 break;
             }
         }

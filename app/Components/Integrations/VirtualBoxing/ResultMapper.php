@@ -46,20 +46,20 @@ class ResultMapper
         $answer = [];
         $eventParticipants = (new Event())->preGetParticipant($this->eventId);
         $this->participants = [
-            '1' => $eventParticipants[0]['event_participant_id'],
-            '2' => $eventParticipants[1]['event_participant_id'],
+            '1' => data_get($eventParticipants, '0.event_participant_id'),
+            '2' => data_get($eventParticipants, '1.event_participant_id'),
         ];
         $totalStr = 't1:t2 (rp11:rp12)(rp21:rp22)(rp31:rp32)(rp41:rp42)(rp51:rp52)(rp61:rp62)';
         $total = $roundPoint = [1 => 0, 2 => 0];
 
         foreach ($rounds as $round) {
-            $resultType = $this->mapResultType($round['round']);
+            $resultType = $this->mapResultType(data_get($round,'round'));
             $answer['score'][$resultType] = $this->prepareInsertEmpty($resultType);
-            foreach ($round['participant'] as $participant) {
-                $participantId = $participant['id'];
+            foreach (data_get($round,'participant') as $participant) {
+                $participantId = data_get($participant,'id');
                 $this->checkParticipantPoint($participant, $resultType, $participantId, $answer, $total, $roundPoint);
                 $this->checkParticipantKnockdown($participant, $resultType, $participantId, $answer);
-                $totalStr = str_replace('rp' . $round['round'] . $participantId, $roundPoint[$participantId], $totalStr);
+                $totalStr = str_replace('rp' . data_get($round,'round') . $participantId, $roundPoint[$participantId], $totalStr);
             }
             $roundPoint = [1 => 0, 2 => 0];
 
@@ -185,12 +185,12 @@ class ResultMapper
      */
     protected function checkParticipantWinner($round, $resultType, &$answer)
     {
-        if ($round['status'] !== 'Draw') {
+        if (data_get($round,'status') !== 'Draw') {
             $answer['score'][$resultType][] = [
                 'event_id' => $this->eventId,
                 'scope_data_id' => $this->mapScope('winner'),
                 'result_type_id' => $resultType,
-                'event_particpant_id' => $this->participants[(string)$round['status']],
+                'event_particpant_id' => $this->participants[(string)data_get($round,'status')],
                 'amount' => 1,
                 'staff_id' => $this->userId,
                 'result_time' => 0

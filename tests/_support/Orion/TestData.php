@@ -143,7 +143,17 @@ class TestData extends Unit {
             $user_id = (int) $value['a:LoginName'];
             $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
             $transactionRequest = new TransactionRequest(
-                    Config::get('integrations.microgaming.service_id'), $value['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection(TransactionRequest::TRANS_BET), TransactionHelper::amountCentsToWhole($value['a:ChangeAmount']), MicroGamingHelper::getTransactionType(TransactionRequest::TRANS_BET), MicroGamingObjectIdMap::generateHash($user_id, $value['a:TransactionCurrency'], $value['a:TransactionNumber']), $value['a:GameName']
+                Config::get('integrations.microgaming.service_id'),
+                $value['a:TransactionNumber'],
+                $user->id,
+                $user->getCurrency(),
+                MicroGamingHelper::getTransactionDirection(TransactionRequest::TRANS_BET),
+                TransactionHelper::amountCentsToWhole($value['a:ChangeAmount']),
+                MicroGamingHelper::getTransactionType(TransactionRequest::TRANS_BET),
+                MicroGamingObjectIdMap::generateHash($user_id, $value['a:TransactionCurrency'], $value['a:TransactionNumber']),
+                $value['a:GameName'],
+                env('TEST_PARTNER_ID'),
+                env('TEST_CASHEDESK')
             );
 
             $transactionHandler = new TransactionHandler($transactionRequest, $user);

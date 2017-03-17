@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Components\DetectEnvironment;
+use App\Components\LoadEnvironmentVariables;
 use App\Console\Commands\MicrogamingSequence;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -10,9 +10,8 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     protected $bootstrappers = [
-        DetectEnvironment::class,
+        LoadEnvironmentVariables::class,
         'Illuminate\Foundation\Bootstrap\LoadConfiguration',
-        'Illuminate\Foundation\Bootstrap\ConfigureLogging',
         'Illuminate\Foundation\Bootstrap\HandleExceptions',
         'Illuminate\Foundation\Bootstrap\RegisterFacades',
         'Illuminate\Foundation\Bootstrap\SetRequestForConsole',

@@ -19,9 +19,9 @@ class MapperCS implements IMapper
     {
         $outcomeTypeId = null;
         foreach ($outcomes as $outcome) {
-            $name = str_replace(':', '-', $outcome['name']);
-            if ($name === (string)$selection['name']) {
-                $outcomeTypeId = $outcome['id'];
+            $name = str_replace(':', '-', data_get($outcome, 'name'));
+            if ($name === (string)data_get($selection, 'name')) {
+                $outcomeTypeId = data_get($outcome, 'id');
                 break;
             }
         }

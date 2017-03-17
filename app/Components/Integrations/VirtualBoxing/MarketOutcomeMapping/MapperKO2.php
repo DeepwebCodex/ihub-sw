@@ -19,12 +19,12 @@ class MapperKO2 implements IMapper
     {
         $outcomeTypeId = null;
         foreach ($outcomes as $outcome) {
-            if ((string)$selection['name'] === 'Y' && $outcome['name'] === 'Yes') {
-                $outcomeTypeId = $outcome['id'];
+            if ((string)data_get($selection, 'name') === 'Y' && data_get($outcome, 'name') === 'Yes') {
+                $outcomeTypeId = data_get($outcome, 'id');
                 break;
             }
-            if ((string)$selection['name'] === 'N' && $outcome['name'] === 'No') {
-                $outcomeTypeId = $outcome['id'];
+            if ((string)data_get($selection, 'name') === 'N' && data_get($outcome, 'name') === 'No') {
+                $outcomeTypeId = data_get($outcome, 'id');
                 break;
             }
         }

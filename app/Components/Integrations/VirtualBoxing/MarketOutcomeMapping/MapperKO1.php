@@ -19,8 +19,8 @@ class MapperKO1 implements IMapper
     {
         $outcomeTypeId = null;
         foreach ($outcomes as $outcome) {
-            if ((string)$selection['name'] === $outcome['name']) {
-                $outcomeTypeId = $outcome['id'];
+            if ((string)data_get($selection, 'name') === data_get($outcome, 'name')) {
+                $outcomeTypeId = data_get($outcome, 'id');
                 break;
             }
         }

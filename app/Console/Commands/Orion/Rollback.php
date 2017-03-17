@@ -48,12 +48,11 @@ class Rollback extends Command {
     public function handle() {
         $sourceProcessor = app(SourceProcessor::class);
         $soapEmul = app(SoapEmul::class);
-        $requestQueueData = app(GetRollbackQueueData::class, [$soapEmul, $sourceProcessor]);
+        $requestQueueData = new GetRollbackQueueData($soapEmul, $sourceProcessor);
         $validatorQueueData = app(RollbackValidation::class);
-        $requestResolveData = app(ManuallyValidateBet::class, [$soapEmul, $sourceProcessor]);
+        $requestResolveData = new ManuallyValidateBet($soapEmul, $sourceProcessor);
         $validatorResolveData = app(ManualValidation::class);
-        $operationsProcessor = app(CommitRollbackProcessor::class, ['RollbackQueue',
-            TransactionRequest::TRANS_REFUND]);
+        $operationsProcessor = new CommitRollbackProcessor('RollbackQueue', TransactionRequest::TRANS_REFUND);
         $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $requestResolveData, $validatorResolveData);
     }
 

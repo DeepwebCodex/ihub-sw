@@ -42,7 +42,7 @@ class Result
         ResultGameTotal::insertResultGameTotal($eventId, [
             'result_total' => '',
             'result_total_json' => '',
-            'result_type_id' => $resultTypes[0]['id']
+            'result_type_id' => data_get($resultTypes, '0.id')
         ]);
     }
 }

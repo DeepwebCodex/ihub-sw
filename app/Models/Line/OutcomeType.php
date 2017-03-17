@@ -27,9 +27,8 @@ class OutcomeType extends BaseLineModel
     public function getOutcomeTypeByMarketTemplateId(int $marketTemplateId):array
     {
         $connection = \DB::connection($this->connection);
-        $connection->setFetchMode(\PDO::FETCH_ASSOC);
 
-        return $connection
+        return (array) $connection
             ->table('market_template AS mt')
             ->select('ot.*')
             ->join($this->table . ' AS ot', function ($join) {

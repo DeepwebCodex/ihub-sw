@@ -45,18 +45,18 @@ class MapperOW implements IMapper
         $outcomeTypeId = null;
         $participantId = null;
         foreach ($outcomes as $outcome) {
-            if ($selection['home'] === 'H' && $outcome['name'] === 'Home') {
-                $outcomeTypeId = $outcome['id'];
+            if ($selection['home'] === 'H' && data_get($outcome,'name') === 'Home') {
+                $outcomeTypeId = data_get($outcome, 'id');
                 $participantId = $this->participantHomeId;
                 break;
             }
-            if ($selection['home'] === 'A' && $outcome['name'] === 'Away') {
-                $outcomeTypeId = $outcome['id'];
+            if ($selection['home'] === 'A' && data_get($outcome,'name') === 'Away') {
+                $outcomeTypeId = data_get($outcome,'id');
                 $participantId = $this->participantAwayId;
                 break;
             }
-            if ($selection['home'] === 'D' && $outcome['name'] === 'Draw') {
-                $outcomeTypeId = $outcome['id'];
+            if ($selection['home'] === 'D' && data_get($outcome,'name') === 'Draw') {
+                $outcomeTypeId = data_get($outcome,'id');
                 break;
             }
         }

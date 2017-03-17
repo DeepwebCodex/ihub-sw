@@ -19,12 +19,12 @@ class MapperOE implements IMapper
     {
         $outcomeTypeId = null;
         foreach ($outcomes as $outcome) {
-            if ((string)$selection['name'] === 'Even' && $outcome['name'] === 'Even') {
-                $outcomeTypeId = $outcome['id'];
+            if ((string)data_get($selection, 'name') === 'Even' && data_get($outcome, 'name') === 'Even') {
+                $outcomeTypeId = data_get($outcome, 'id');
                 break;
             }
-            if ((string)$selection['name'] === 'Odd' && $outcome['name'] === 'Odd') {
-                $outcomeTypeId = $outcome['id'];
+            if ((string)data_get($selection, 'name') === 'Odd' && data_get($outcome, 'name') === 'Odd') {
+                $outcomeTypeId = data_get($outcome, 'id');
                 break;
             }
         }

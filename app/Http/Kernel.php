@@ -2,15 +2,14 @@
 
 namespace App\Http;
 
-use App\Components\DetectEnvironment;
+use App\Components\LoadEnvironmentVariables;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
     protected $bootstrappers = [
-        DetectEnvironment::class,
+        LoadEnvironmentVariables::class,
         'Illuminate\Foundation\Bootstrap\LoadConfiguration',
-        'Illuminate\Foundation\Bootstrap\ConfigureLogging',
         'Illuminate\Foundation\Bootstrap\HandleExceptions',
         'Illuminate\Foundation\Bootstrap\RegisterFacades',
         'Illuminate\Foundation\Bootstrap\RegisterProviders',

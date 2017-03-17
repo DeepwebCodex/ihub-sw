@@ -48,12 +48,11 @@ class Commit extends Command {
     public function handle() {
         $sourceProcessor = app(SourceProcessor::class);
         $soapEmul = app(SoapEmul::class);
-        $requestQueueData = app(GetCommitQueueData::class, [$soapEmul, $sourceProcessor]);
+        $requestQueueData = new GetCommitQueueData($soapEmul, $sourceProcessor);
         $validatorQueueData = app(CommitValidation::class);
-        $requestResolveData = app(ManuallyValidateBet::class, [$soapEmul, $sourceProcessor]);
+        $requestResolveData = new ManuallyValidateBet($soapEmul, $sourceProcessor);
         $validatorResolveData = app(ManualValidation::class);
-        $operationsProcessor = app(CommitRollbackProcessor::class, ['CommitQueue',
-            TransactionRequest::TRANS_WIN]);
+        $operationsProcessor = new CommitRollbackProcessor('CommitQueue', TransactionRequest::TRANS_WIN);
         $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $requestResolveData, $validatorResolveData);
     }
 
