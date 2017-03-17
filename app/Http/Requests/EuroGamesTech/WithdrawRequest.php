@@ -41,6 +41,7 @@ class WithdrawRequest extends BaseEgtRequest
             'SessionId' => 'bail|required|string',
             'PartnerId' => 'bail|integer|nullable',
             'CashdeskId' => 'bail|integer|nullable',
+            'UserIp'    => 'bail|string|nullable'
         ];
     }
 }

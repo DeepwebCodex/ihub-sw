@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property string $game_id
+ * @property string $client_ip
 */
 class Transactions extends Model
 {
@@ -48,7 +49,8 @@ class Transactions extends Model
         'foreign_id',
         'object_id',
         'transaction_type',
-        'game_id'
+        'game_id',
+        'client_ip'
     ];
 
     public function getAmountAttribute($value){
@@ -82,14 +84,19 @@ class Transactions extends Model
      * @param int $partner_id
      * @return Transactions
      */
-    public static function getBetTransaction(int $serviceId, int $userId, $objectId, int $partner_id){
-        return Transactions::where([
+    public static function getBetTransaction(int $serviceId, int $userId, $objectId, int $partner_id = null){
+        $query = [
             ['service_id', $serviceId],
             ['user_id', $userId],
             ['object_id', $objectId],
-            ['partner_id', $partner_id],
             ['transaction_type', TransactionRequest::TRANS_BET],
             ['status', TransactionRequest::STATUS_COMPLETED]
-        ])->first();
+        ];
+
+        if ($partner_id !== null) {
+            array_push($query, ['partner_id', $partner_id]);
+        }
+
+        return Transactions::where($query)->first();
     }
 }

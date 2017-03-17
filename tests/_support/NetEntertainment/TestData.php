@@ -18,7 +18,7 @@ class TestData
 
     public function __construct()
     {
-        $this->userId = (int)env('TEST_USER_ID');
+        $this->userId = (int)env('TEST_USER_ID') . '_' . Params::CURRENCY;
         $this->currency = Params::CURRENCY;
         $this->amount_backup =
         $this->amount = Params::AMOUNT;

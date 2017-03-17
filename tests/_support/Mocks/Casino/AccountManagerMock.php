@@ -41,6 +41,7 @@ class AccountManagerMock
         $this->user_id = (int)env('TEST_USER_ID');
         $this->cashdesk = (int)env('TEST_CASHEDESK');
         $this->partner_id = (int)env('TEST_PARTNER_ID');
+        $this->client_ip = "127.0.0.1";
     }
 
     public function getMock()
@@ -93,7 +94,8 @@ class AccountManagerMock
                     self::WIN,
                     $this->no_bet_object_id,
                     $this->getComment($this->amount, self::WIN, $this->no_bet_object_id),
-                    $this->partner_id
+                    $this->partner_id,
+                    $this->client_ip
                 ])
             ->andThrow(new ApiHttpException(
                 Response::HTTP_BAD_REQUEST,
@@ -113,7 +115,8 @@ class AccountManagerMock
                     self::BET,
                     $this->storage_pending_object_id,
                     $this->getComment($this->amount, self::BET, $this->storage_pending_object_id),
-                    $this->partner_id
+                    $this->partner_id,
+                    $this->client_ip
                 ])
             ->andReturn($this->returnOk('completed', self::BET, $this->storage_pending_object_id, $this->balance - $this->amount));
 
@@ -131,7 +134,8 @@ class AccountManagerMock
                     self::WIN,
                     $this->zero_win_object_id,
                     $this->getComment($this->amount, self::WIN, $this->zero_win_object_id),
-                    $this->partner_id
+                    $this->partner_id,
+                    $this->client_ip
                 ])
             ->andThrow(new ApiHttpException(
                 Response::HTTP_BAD_REQUEST,
@@ -165,6 +169,7 @@ class AccountManagerMock
             $this->object_id,
             $this->getComment($amount, $direction, $this->object_id),
             $this->partner_id,
+            $this->client_ip
         ];
     }
 

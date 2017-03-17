@@ -11,7 +11,7 @@ final class Params
     const WIN_AMOUNT = 2;
     const JACKPOT_AMOUNT = 3;
     const CURRENCY = 'EUR';
-    const BALANCE = 100;
+    const BALANCE = 100.34;
     const GAME_ID = 123;
     const OBJECT_ID = 1234;
     const NO_BET_OBJECT_ID = 12345;

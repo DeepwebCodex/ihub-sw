@@ -67,6 +67,8 @@ class NetEntertainmentApiCest
         $I->sendPOST($this->action, $this->data->getBalance());
         $data = $this->getResponseOk($I);
         $I->assertNotNull($data['balance']);
+        $I->assertTrue(is_array(explode('.', $data['balance'])));
+        $I->assertTrue(count(explode('.', $data['balance'])) == 2);
     }
 
     public function testBet(\ApiTester $I)
@@ -214,10 +216,20 @@ class NetEntertainmentApiCest
     public function testWrongParam(\ApiTester $I)
     {
         $request = $this->data->getBalance();
-        $request['userid'] = 'qwerty';
+        $request['userid'] = 12345;
         $request = $this->data->renewHmac($request);
         $I->sendPOST($this->action, $request);
         $this->getResponseFail($I);
+    }
+
+    public function testMismatch(\ApiTester $I)
+    {
+        $request = $this->data->bet();
+        $I->sendPOST($this->action, $request);
+
+        $this->transMismatch($I, $request, 'userid', '1' . $request['userid']); // Another user in credit
+        $this->transMismatch($I, $request, 'currency', 'QQ'); // Another currency in crefit
+        $this->transMismatch($I, $request, 'amount', $request['amount'] + 1); // Another amount in credit
     }
 
     private function transMismatch(\ApiTester $I, $request, $attr, $value)
@@ -226,16 +238,6 @@ class NetEntertainmentApiCest
         $request = $this->data->renewHmac($request);
         $I->sendPOST($this->action, $request);
         $this->getResponseFail($I, StatusCode::TRANSACTION_MISMATCH);
-    }
-
-    public function testMismatch(\ApiTester $I)
-    {
-        $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
-
-        $this->transMismatch($I, $request, 'userid', $request['userid'] + 1);
-        $this->transMismatch($I, $request, 'currency', 'QQ');
-        $this->transMismatch($I, $request, 'amount', $request['amount'] + 1);
     }
 
     /** fail in runtime */
@@ -273,7 +275,6 @@ class NetEntertainmentApiCest
         app()->instance($class, $mock);
         return $mock;
     }
-
 
     private function getResponseOk(\ApiTester $I, $isTransaction = false)
     {
