@@ -67,6 +67,8 @@ class NetEntertainmentApiCest
         $I->sendPOST($this->action, $this->data->getBalance());
         $data = $this->getResponseOk($I);
         $I->assertNotNull($data['balance']);
+        $I->assertTrue(is_array(explode('.', $data['balance'])));
+        $I->assertTrue(count(explode('.', $data['balance'])) == 2);
     }
 
     public function testBet(\ApiTester $I)
