@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'baseUrl' => 'http://41.223.121.106/Orion/VanguardAdmin/SOAP2',
+    'baseUrl' => 'https://orionapi3.gameassists.co.uk/orion/vanguardadmin/SOAP',
     'actionUrl' => 'http://mgsops.net/AdminAPI_Admin/IVanguardAdmin2/',
-    'username' => 5013,
-    'password' => 'test',
+    'username' => 'FAVBet',
+    'password' => 'F4vB3t',
     'ns' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures',
-    'serverId' => 5013
+    'serverId' => 1115
 ];
