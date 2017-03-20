@@ -25,7 +25,9 @@ class DriveMediaIgrosoftController extends BaseApiController
 
         $this->options = config('integrations.DriveMediaIgrosoft');
 
+        $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
+
         Validator::extend('validate_sign', 'App\Http\Requests\Validation\DriveMedia\IgrosoftValidation@validateSign');
     }
 

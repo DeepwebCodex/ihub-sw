@@ -15,7 +15,8 @@ use App\Http\Requests\DriveMediaNovomaticDeluxe\WriteBetRequest;
 use App\Http\Requests\Validation\DriveMedia\NovomaticDeluxeValidation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Validator;
+use Illuminate\Support\Facades\Validator;
+
 use function app;
 use function config;
 
@@ -30,8 +31,10 @@ class DriveMediaNovomaticDeluxeController extends BaseApiController {
     public function __construct(DriveMediaNovomaticDeluxeApiFormatter $formatter) {
         parent::__construct($formatter);
         $this->options = config('integrations.DriveMediaNovomaticDeluxe');
+
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
+
         Validator::extend('check_sign', 'App\Http\Requests\Validation\DriveMedia\NovomaticDeluxeValidation@checkSign');
     }
 
