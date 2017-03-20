@@ -25,7 +25,7 @@ class Deposit extends TransactionProcessor {
         $this->request = $request;
         $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
         if (!$this->request->object_id) {
-            $transaction = Transactions::getLastNovomaticBet($this->request->service_id, $this->request->user_id, $this->request->currency, $this->additional->input('gameId'), $this->request->partner_id);
+            $transaction = Transactions::getLastDriveMediaNovomaticDeluxeBet($this->request->service_id, $this->request->user_id, $this->request->currency, $this->additional->input('gameId'), $this->request->partner_id);
 
             if (!$transaction) {
                 throw new ApiHttpException(404, null, CodeMapping::getByMeaning(StatusCode::BAD_ORDER));

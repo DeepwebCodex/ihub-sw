@@ -128,7 +128,7 @@ class Transactions extends Model
      * @param string $foreignIid
      * @return Transactions
      */
-    public static function getLastBetByUserWithForeightId(int $serviceId, int $userId, int $partnerId, int $gameId, string $foreignIid)
+    public static function getLastBetByUserWithForeignId(int $serviceId, int $userId, int $partnerId, int $gameId, string $foreignIid)
     {
         return Transactions::where([
             ['service_id', $serviceId],
@@ -147,11 +147,9 @@ class Transactions extends Model
      * @param string $currency
      * @param int $gameId
      * @param int $partnerId
-     * @param int $transactionType
-     * @param int $status
      * @return Transactions
      */
-    public static function getLastNovomaticBet(int $serviceId, int $userId, string $currency, int $gameId, int $partnerId)
+    public static function getLastDriveMediaNovomaticDeluxeBet(int $serviceId, int $userId, string $currency, int $gameId, int $partnerId)
     {
         return Transactions::where([
             ['service_id', $serviceId],
