@@ -21,7 +21,7 @@ class DriveMediaNovomaticBorderlineApiCest
         ];
         $this->addSignatureToRequestData($requestData);
 
-        $I->disableMiddleware();
+        $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST(self::URI, $requestData);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
@@ -49,11 +49,11 @@ class DriveMediaNovomaticBorderlineApiCest
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id,
+            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'sign' => '123'
         ];
 
-        $I->disableMiddleware();
+        $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST(self::URI, $requestData);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
@@ -79,7 +79,7 @@ class DriveMediaNovomaticBorderlineApiCest
         ];
         $this->addSignatureToRequestData($requestData);
 
-        $I->disableMiddleware();
+        $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST(self::URI, $requestData);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
@@ -95,7 +95,7 @@ class DriveMediaNovomaticBorderlineApiCest
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id,
+            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'bet' => '0.00',
             'winLose' => '0.01',
             'tradeId' => md5(microtime()),
@@ -107,7 +107,7 @@ class DriveMediaNovomaticBorderlineApiCest
             'sign' => '123'
         ];
 
-        $I->disableMiddleware();
+        $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST(self::URI, $requestData);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
@@ -116,13 +116,13 @@ class DriveMediaNovomaticBorderlineApiCest
         ]);
     }
 
-    public function testMethodWinWithoutBet(ApiTester $I)
+    /*public function testMethodWinWithoutBet(ApiTester $I)
     {
         $testUser = $this->getTestUser();
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id,
+            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'bet' => '0.00',
             'winLose' => '0.01',
             'tradeId' => md5(microtime()),
@@ -141,5 +141,5 @@ class DriveMediaNovomaticBorderlineApiCest
             'status' => 'fail',
             'error' => 'internal_error'
         ]);
-    }
+    }*/
 }

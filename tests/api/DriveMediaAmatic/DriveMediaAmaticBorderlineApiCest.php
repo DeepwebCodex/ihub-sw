@@ -16,7 +16,7 @@ class DriveMediaAmaticBorderlineApiCest
 
         $request = [
             'space'     => $this->space,
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'cmd'       => 'writeBet',
             'bet'       => '0.0',
             'winLose'   => '0.1',
@@ -45,7 +45,7 @@ class DriveMediaAmaticBorderlineApiCest
 
         $request = [
             'space'     => $this->space,
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'cmd'       => 'writeBet',
             'bet'       => '0.1',
             'winLose'   => '0.1',
@@ -63,7 +63,7 @@ class DriveMediaAmaticBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'balance'   => money_format('%i', ($testUser->getBalance() - 0.1 + 0.1)),
             'status'    => 'success',
             'error'     => ''
@@ -76,7 +76,7 @@ class DriveMediaAmaticBorderlineApiCest
 
         $request = [
             'space' => $this->space,
-            'login' => (string)$testUser->id,
+            'login' => "{$testUser->id}--1--1--127-0-0-1",
             'cmd'   => 'getBalance',
         ];
 

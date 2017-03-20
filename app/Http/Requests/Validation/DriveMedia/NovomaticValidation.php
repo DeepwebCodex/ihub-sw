@@ -28,8 +28,15 @@ class NovomaticValidation
         }
         $all = $request->all();
         $sign = $all['sign'];
+
         unset($all['sign']);
+        unset($all['partnerId']);
+        unset($all['userIp']);
+        unset($all['cashdeskId']);
+        unset($all['userId']);
+
         $space = $all['space'];
+
         $signatureMaker = new SignatureMaker();
         $signature = $signatureMaker->make($space, $all);
         if ($sign !== $signature) {

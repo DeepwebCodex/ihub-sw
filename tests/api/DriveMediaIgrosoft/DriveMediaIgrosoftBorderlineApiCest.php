@@ -18,7 +18,7 @@ class DriveMediaIgrosoftBorderlineApiCest
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'bet'       => '0.00',
             'winLose'   => '0.30',
             'tradeId'   => md5(microtime()),
@@ -48,7 +48,7 @@ class DriveMediaIgrosoftBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => (string)$testUser->id,
+            'login' => "{$testUser->id}--1--1--127-0-0-1",
         ];
 
         $request = array_merge($request, ['sign'  => strtoupper(md5(http_build_query($request)))]);

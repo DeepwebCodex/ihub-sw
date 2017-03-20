@@ -15,7 +15,8 @@ class SignatureMaker
      */
     public function make(string $space, array $requestData): string
     {
-        $secretKey = config('integrations.DriveMediaNovomatic.spaces')[$space]['key'];
+        $secretKey = config("integrations.DriveMediaNovomatic.spaces.{$space}.key");
+
         return strtoupper(md5($secretKey . http_build_query($requestData)));
     }
 }

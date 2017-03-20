@@ -31,14 +31,13 @@ class DriveMediaNovomaticDeluxeController extends BaseApiController {
         parent::__construct($formatter);
         $this->options = config('integrations.DriveMediaNovomaticDeluxe');
         $this->middleware('input.json')->except(['error']);
-        //$this->middleware('input.nvmd.parselogin')->except(['error']);
+        $this->middleware('input.dm.parselogin')->except(['error']);
         Validator::extend('check_sign', 'App\Http\Requests\Validation\DriveMedia\NovomaticDeluxeValidation@checkSign');
-        //Validator::extend('check_currency', 'App\Http\Requests\Validation\NovomaticDeluxeValidation@checkCurrency');
     }
 
     public function index(Request $request) {
         $method = $request->input('cmd');
-        $this->userId = $request->input('login');
+        $this->userId = $request->get('userId');
         $this->setMetaData([
             'imprint' => $request->all()
         ]);

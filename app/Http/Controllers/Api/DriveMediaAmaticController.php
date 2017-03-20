@@ -26,6 +26,7 @@ class DriveMediaAmaticController extends BaseApiController
 
         $this->options = config('integrations.DriveMediaAmatic');
 
+        $this->middleware('input.dm.parselogin')->except(['error']);
         Validator::extend('validate_sign', 'App\Http\Requests\Validation\DriveMedia\AmaticValidation@validateSign');
     }
 
@@ -42,7 +43,7 @@ class DriveMediaAmaticController extends BaseApiController
 
     public function balance(BalanceRequest $request)
     {
-        $user = IntegrationUser::get($request->input('login'), $this->getOption('service_id'), 'DriveMediaAmatic');
+        $user = IntegrationUser::get($request->get('userId'), $this->getOption('service_id'), 'DriveMediaAmatic');
 
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
@@ -52,7 +53,7 @@ class DriveMediaAmaticController extends BaseApiController
 
     public function bet(PlayRequest $request)
     {
-        $user = IntegrationUser::get($request->input('login'), $this->getOption('service_id'), 'DriveMediaAmatic');
+        $user = IntegrationUser::get($request->get('userId'), $this->getOption('service_id'), 'DriveMediaAmatic');
 
         if(app()->environment() == 'production') {
             if ($user->getActiveWallet()->currency != $this->getOption($request->input('space'))['currency']) {
@@ -73,7 +74,10 @@ class DriveMediaAmaticController extends BaseApiController
                 $transaction['amount'],
                 $transaction['type'],
                 $request->input('tradeId'),
-                $request->input('gameId')
+                $request->input('gameId'),
+                $request->get('partnerId'),
+                $request->get('cashdeskId'),
+                $request->get('userIp')
             );
 
             $transactionHandler = new TransactionHandler($transactionRequest, $user);

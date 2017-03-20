@@ -25,9 +25,9 @@ class DriveMediaNovomaticTemplate implements IExceptionTemplate
         $code = (int)$this->useElement('code', StatusCode::INTERNAL_SERVER_ERROR);
         $message = $this->useElement('message', 'Unknown');
         $codeMap = CodeMapping::getByErrorCode($code);
+
         if ($codeMap) {
-            $code = $codeMap['code'];
-            $message = ($code == 6000 && $isApiException === true) ? $message : $codeMap['message'];
+            $message = $codeMap['message'];
         }
         return [
             'status' => 'fail',

@@ -19,8 +19,7 @@ class DriveMediaTemplate implements IExceptionTemplate
         $codeMap = CodeMapping::getByErrorCode($code);
 
         if($codeMap){
-            $code = $codeMap['code'];
-            $message = ($code == 6000 && $isApiException === true) ? $message : $codeMap['message'];
+            $message = $codeMap['message'];
         }
 
         $view = [

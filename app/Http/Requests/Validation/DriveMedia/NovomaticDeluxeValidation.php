@@ -20,8 +20,12 @@ class NovomaticDeluxeValidation {
             return false;
         }
 
-
         $all = $this->pullMetaField('imprint');
+        unset($all['userId']);
+        unset($all['userIp']);
+        unset($all['partnerId']);
+        unset($all['cashdeskId']);
+
         if ($value != Sign::generate($all)) {
             throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::INVALID_SIGNATURE));
         }
@@ -30,14 +34,13 @@ class NovomaticDeluxeValidation {
     }
 
     public static function checkCurrency(string $userCurrency, string $space): bool {
-        if (!App::environment('production')) {
-            $userCurrency = 'FUN';
-        }
-        $spaces = Config::get("integrations.DriveMediaNovomaticDeluxe.spaces");
-        $currency = array_get($spaces, $space . ".currency");
+        if (App::environment('production')) {
+            $spaces = Config::get("integrations.DriveMediaNovomaticDeluxe.spaces");
+            $currency = array_get($spaces, $space . ".currency");
 
-        if ($userCurrency != $currency) {
-            throw new ApiHttpException(400, CodeMapping::INVALID_CURRENCY);
+            if ($userCurrency != $currency) {
+                throw new ApiHttpException(400, CodeMapping::INVALID_CURRENCY);
+            }
         }
 
         return true;

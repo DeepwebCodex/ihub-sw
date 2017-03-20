@@ -16,7 +16,13 @@ class PlaytechValidation
 
         $all = $request->all();
         $sign = $all['sign'];
+
         unset($all['sign']);
+        unset($all['userId']);
+        unset($all['userIp']);
+        unset($all['partnerId']);
+        unset($all['cashdeskId']);
+
         if($sign != strtoupper(hash('md5', config('integrations.DriveMediaPlaytech')[$all['space']]['key'] . http_build_query($all))))
         {
             throw new ApiHttpException(500, null, ['code' => StatusCode::INVALID_SIGNATURE]);

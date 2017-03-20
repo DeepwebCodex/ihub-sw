@@ -15,7 +15,7 @@ class DriveMediaPlaytechBorderlineApiCest
         $request = [
             'cmd'       => 'writeBet',
             'space'     => '1805',
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'bet'       => '0.10',
             'winLose'   => '0.10',
             'tradeId'   => md5(microtime()),
@@ -33,7 +33,7 @@ class DriveMediaPlaytechBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'balance'   => money_format('%i', ($testUser->getBalance() - 0.10 + 0.10)),
             'status'    => 'success',
             'error'     => ''
@@ -47,7 +47,7 @@ class DriveMediaPlaytechBorderlineApiCest
         $request = [
             'cmd'       => 'writeBet',
             'space'     => '1805',
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'bet'       => '0.00',
             'winLose'   => '0.10',
             'tradeId'   => md5(microtime()),
@@ -76,7 +76,7 @@ class DriveMediaPlaytechBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1805',
-            'login' => (string)$testUser->id,
+            'login' => "{$testUser->id}--1--1--127-0-0-1",
         ];
 
         $request = array_merge($request, ['sign'  => strtoupper(md5(http_build_query($request)))]);

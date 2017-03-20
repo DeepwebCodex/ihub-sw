@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Components\Transactions\TransactionRequest;
+use GuzzleHttp\Transaction;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -138,5 +139,28 @@ class Transactions extends Model
             ['transaction_type', TransactionRequest::TRANS_BET],
             ['status', TransactionRequest::STATUS_COMPLETED]
         ])->orderBy('id', 'desc')->first();
+    }
+
+    /***
+     * @param int $serviceId
+     * @param int $userId
+     * @param string $currency
+     * @param int $gameId
+     * @param int $partnerId
+     * @param int $transactionType
+     * @param int $status
+     * @return Transactions
+     */
+    public static function getLastNovomaticBet(int $serviceId, int $userId, string $currency, int $gameId, int $partnerId)
+    {
+        return Transactions::where([
+            ['service_id', $serviceId],
+            ['user_id', $userId],
+            ['currency', $currency],
+            ['game_id', $gameId],
+            ['partner_id', $partnerId],
+            ['transaction_type', TransactionRequest::TRANS_BET],
+            ['status', TransactionRequest::STATUS_COMPLETED]
+        ])->first();
     }
 }

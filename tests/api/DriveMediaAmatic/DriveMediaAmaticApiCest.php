@@ -16,7 +16,7 @@ class DriveMediaAmaticApiCest
 
         $request = [
             'space' => $this->space,
-            'login' => (string)$testUser->id,
+            'login' => "{$testUser->id}--1--1--127-0-0-1",
             'cmd'   => 'getBalance',
         ];
 
@@ -27,7 +27,7 @@ class DriveMediaAmaticApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'balance'   => money_format('%i', $testUser->getBalance()),
             'status'    => 'success',
             'error'     => ''
@@ -40,7 +40,7 @@ class DriveMediaAmaticApiCest
 
         $request = [
             'space'     => $this->space,
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'cmd'       => 'writeBet',
             'bet'       => '0.1',
             'winLose'   => '-0.1',
@@ -58,7 +58,7 @@ class DriveMediaAmaticApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'balance'   => money_format('%i', ($testUser->getBalance() - 0.1)),
             'status'    => 'success',
             'error'     => ''

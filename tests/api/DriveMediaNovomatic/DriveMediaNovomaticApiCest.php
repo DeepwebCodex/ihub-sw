@@ -19,16 +19,16 @@ class DriveMediaNovomaticApiCest
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id,
+            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
         ];
         $this->addSignatureToRequestData($requestData);
 
-        $I->disableMiddleware();
+        $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST(self::URI, $requestData);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login' => (string)$testUser->id,
+            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'balance' => (string)round($testUser->getBalance(), 2),
             'status' => 'success',
             'error' => ''
@@ -54,7 +54,7 @@ class DriveMediaNovomaticApiCest
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id,
+            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'bet' => self::BET_AMOUNT,
             'winLose' => '-' . self::BET_AMOUNT,
             'tradeId' => md5(microtime()),
@@ -63,12 +63,12 @@ class DriveMediaNovomaticApiCest
         ];
         $this->addSignatureToRequestData($requestData);
 
-        $I->disableMiddleware();
+        $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST(self::URI, $requestData);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login' => (string)$testUser->id,
+            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'balance' => (string)round($testUser->getBalance() - self::BET_AMOUNT, 2),
             'status' => 'success',
             'error' => ''
@@ -82,7 +82,7 @@ class DriveMediaNovomaticApiCest
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id,
+            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'bet' => self::BET_AMOUNT,
             'winLose' => self::BET_AMOUNT,
             'tradeId' => md5(microtime()),
@@ -98,7 +98,7 @@ class DriveMediaNovomaticApiCest
         $I->sendPOST(self::URI, $requestData);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
-            'login' => (string)$testUser->id,
+            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'balance' => (string)round($testUser->getBalance() - (float)self::BET_AMOUNT + (float)self::BET_AMOUNT, 2),
             'status' => 'success',
             'error' => ''

@@ -48,7 +48,7 @@ class TestData {
     }
 
     private function getLogin() {
-        return (string) $this->user->id;
+        return (string) $this->user->id . "--" . "1--1--127-0-0-1";
     }
 
     public function getData() {

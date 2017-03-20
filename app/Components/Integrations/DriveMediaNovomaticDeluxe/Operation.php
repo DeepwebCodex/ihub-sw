@@ -40,49 +40,75 @@ class Operation {
         $betAmount = (float) $request->input('bet');
         $winLose = (float) $request->input('winLose');
 
-        if (!$betAmount && $winLose) {
-            return $this->win($user, $request, $service_id, $winLose);
-        } else if (!$betAmount && !$winLose) {
+        if (!$betAmount && !$winLose) {
             $this->operationId = round(microtime(true) * 1000);
             $this->balance = $user->getBalance();
+
             return true;
+        }
+
+        $transactions = $this->getTransactions($betAmount, $winLose);
+        $object_id = 0;
+
+        foreach ($transactions as $key => $item) {
+
+            $transactionRequest = new TransactionRequest(
+                $service_id,
+                ($item['type'] == "win" ? $object_id : $request->input('gameId')),
+                $user->id, $user->getCurrency(),
+                ($item['type'] == "bet" ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT),
+                $item['amount'],
+                $item['type'],
+                $request->input('tradeId'),
+                $request->input('gameId'),
+                $request->get('partnerId'),
+                $request->get('cashdeskId'),
+                $request->get('userIp')
+            );
+
+            $transactionHandler = new TransactionHandler($transactionRequest, $user);
+
+            if($item['type'] == 'bet') {
+                $transaction = $transactionHandler->handle(new Withdrawal($request));
+                $object_id = $transaction->object_id;
+            }
+
+            if($item['type'] == 'win') {
+                $transaction = $transactionHandler->handle(new Deposit($request));
+            }
+
+            $this->operationId = $transaction->operation_id;
+            $this->balance = $transaction->getBalance();
+        }
+
+        return $transaction;
+    }
+
+    private function getTransactions(float $betAmount, float $winLose, array $transactions = [])
+    {
+        if (!$betAmount && $winLose) {
+            array_push($transactions, [
+                'type'      => 'win',
+                'amount'    => $winLose
+            ]);
         } else if ($betAmount) {
-            $responseBet = $this->bet($user, $request, $service_id, $betAmount);
+            array_push($transactions, [
+                'type'      => 'bet',
+                'amount'    => $betAmount
+            ]);
             $winAmount = $winLose + $betAmount;
             if ($winAmount) {
-                return $this->win($user, $request, $service_id, $winAmount, $responseBet->object_id);
+                array_push($transactions, [
+                    'type' => 'win',
+                    'amount' => $winAmount
+                ]);
             } else if ((int) $winAmount === 0) {
-                return $responseBet;
             } else {
                 throw new ApiHttpException(404, null, CodeMapping::getByErrorCode(StatusCode::BAD_CODITION));
             }
         }
-    }
 
-    private function bet(IntegrationUser $user, Request $request, int $service_id, float $amount) {
-        $transactionRequest = new TransactionRequest(
-                $service_id, $request->input('gameId'), $user->id, $user->getCurrency(), TransactionRequest::D_WITHDRAWAL, $amount, TransactionRequest::TRANS_BET, $request->input('tradeId'), $request->input('gameId')
-        );
-
-        $transactionHandler = new TransactionHandler($transactionRequest, $user);
-
-        $transaction = $transactionHandler->handle(new Withdrawal($request));
-        $this->operationId = $transaction->operation_id;
-        $this->balance = $transaction->getBalance();
-        return $transaction;
-    }
-
-    private function win(IntegrationUser $user, Request $request, int $service_id, float $amount, int $object_id = 0) {
-        $transactionRequest = new TransactionRequest(
-                $service_id, $object_id, $user->id, $user->getCurrency(), TransactionRequest::D_DEPOSIT, $amount, TransactionRequest::TRANS_WIN, $request->input('tradeId'), $request->input('gameId')
-        );
-
-        $transactionHandler = new TransactionHandler($transactionRequest, $user);
-
-        $transaction = $transactionHandler->handle(new Deposit($request));
-        $this->operationId = $transaction->operation_id;
-        $this->balance = $transaction->getBalance();
-        return $transaction;
+        return $transactions;
     }
 
 }

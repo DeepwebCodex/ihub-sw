@@ -18,7 +18,7 @@ class DriveCasinoApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => (string)$testUser->id,
+            'login' => "{$testUser->id}--1--1--127-0-0-1",
         ];
 
         $request = array_merge($request, ['sign'  => strtoupper(md5($this->options[$this->space]['key'].http_build_query($request)))]);
@@ -28,7 +28,7 @@ class DriveCasinoApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'balance'   => money_format('%i', $testUser->getBalance()),
             'status'    => 'success',
             'error'     => ''
@@ -42,7 +42,7 @@ class DriveCasinoApiCest
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'bet'       => 1,
             'winLose'   => -1,
             'tradeId'   => md5(microtime()),
@@ -60,7 +60,7 @@ class DriveCasinoApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => (string)$testUser->id,
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'balance'   => money_format('%i', ($testUser->getBalance() - 1)),
             'status'    => 'success',
             'error'     => ''

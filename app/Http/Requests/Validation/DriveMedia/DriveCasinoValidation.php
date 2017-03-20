@@ -15,7 +15,13 @@ class DriveCasinoValidation
         }
         $all = $request->all();
         $sign = $all['sign'];
+
         unset($all['sign']);
+        unset($all['partnerId']);
+        unset($all['cashdeskId']);
+        unset($all['userId']);
+        unset($all['userIp']);
+
         if($sign != strtoupper(hash('md5', config('integrations.drivecasino')[$all['space']]['key'] . http_build_query($all))))
         {
             throw new ApiHttpException(500, null, ['code' => StatusCode::INVALID_SIGNATURE]);
