@@ -31,6 +31,10 @@ class GetBalanceRequest extends BaseNovomaticRequest
             'space' => 'bail|required|numeric',
             'login' => 'bail|required|string',
             'sign' => 'bail|required|string|validate_sign',
+            'userId'    => 'bail|required|integer',
+            'partnerId' => 'bail|required|integer',
+            'cashdeskId'=> 'bail|required|integer',
+            'userIp'    => 'bail|required|string',
         ];
     }
 }

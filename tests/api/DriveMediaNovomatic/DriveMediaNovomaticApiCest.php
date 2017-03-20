@@ -1,6 +1,7 @@
 <?php
 
 use App\Components\Users\IntegrationUser;
+use DriveMedia\TestUser;
 
 class DriveMediaNovomaticApiCest
 {
@@ -12,14 +13,19 @@ class DriveMediaNovomaticApiCest
 
     const BET_AMOUNT = '0.01';
 
+    /** @var  TestUser $testUser */
+    private $testUser;
+
+    public function _before() {
+        $this->testUser = new TestUser();
+    }
+
     public function testGetBalance(ApiTester $I)
     {
-        $testUser = $this->getTestUser();
-
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
+            'login' => $this->testUser->getUserId(),
         ];
         $this->addSignatureToRequestData($requestData);
 
@@ -28,16 +34,11 @@ class DriveMediaNovomaticApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
-            'balance' => (string)round($testUser->getBalance(), 2),
+            'login' => $this->testUser->getUserId(),
+            'balance' => (string)round($this->testUser->getBalance(), 2),
             'status' => 'success',
             'error' => ''
         ]);
-    }
-
-    protected function getTestUser()
-    {
-        return IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
     }
 
     protected function addSignatureToRequestData(&$requestData)
@@ -49,12 +50,10 @@ class DriveMediaNovomaticApiCest
 
     public function testBet(ApiTester $I)
     {
-        $testUser = $this->getTestUser();
-
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
+            'login' => $this->testUser->getUserId(),
             'bet' => self::BET_AMOUNT,
             'winLose' => '-' . self::BET_AMOUNT,
             'tradeId' => md5(microtime()),
@@ -68,8 +67,8 @@ class DriveMediaNovomaticApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
-            'balance' => (string)round($testUser->getBalance() - self::BET_AMOUNT, 2),
+            'login' => $this->testUser->getUserId(),
+            'balance' => (string)round($this->testUser->getBalance() - self::BET_AMOUNT, 2),
             'status' => 'success',
             'error' => ''
         ]);
@@ -77,12 +76,10 @@ class DriveMediaNovomaticApiCest
 
     public function testMethodBetWin(ApiTester $I)
     {
-        $testUser = $this->getTestUser();
-
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
+            'login' => $this->testUser->getUserId(),
             'bet' => self::BET_AMOUNT,
             'winLose' => self::BET_AMOUNT,
             'tradeId' => md5(microtime()),
@@ -98,8 +95,8 @@ class DriveMediaNovomaticApiCest
         $I->sendPOST(self::URI, $requestData);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
-            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
-            'balance' => (string)round($testUser->getBalance() - (float)self::BET_AMOUNT + (float)self::BET_AMOUNT, 2),
+            'login' => $this->testUser->getUserId(),
+            'balance' => (string)round($this->testUser->getBalance() - (float)self::BET_AMOUNT + (float)self::BET_AMOUNT, 2),
             'status' => 'success',
             'error' => ''
         ]);

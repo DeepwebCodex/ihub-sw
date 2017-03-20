@@ -1,11 +1,12 @@
 <?php
 
-namespace DriveMediaNovomaticDeluxe;
+namespace DriveMedia\NovomaticDeluxe;
 
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\BetInfo;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\Sign;
 use App\Components\Users\IntegrationUser;
 use Carbon\Carbon;
+use DriveMedia\TestUser;
 use function GuzzleHttp\json_encode;
 
 class TestData {
@@ -48,7 +49,7 @@ class TestData {
     }
 
     private function getLogin() {
-        return (string) $this->user->id . "--" . "1--1--127-0-0-1";
+        return (string) $this->user->id . "--" . "1---5--127-0-0-1";
     }
 
     public function getData() {

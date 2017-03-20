@@ -5,8 +5,8 @@ namespace api\NovomaticDeluxe;
 use ApiTester;
 use App\Components\Transactions\TransactionRequest;
 use App\Models\Transactions;
-use DriveMediaNovomaticDeluxe\TestData;
-use DriveMediaNovomaticDeluxe\TestUser;
+use DriveMedia\NovomaticDeluxe\TestData;
+use DriveMedia\TestUser;
 use function GuzzleHttp\json_decode;
 
 class DriveMediaNovomaticDeluxeCest {

@@ -1,24 +1,29 @@
 <?php
 
+use DriveMedia\TestUser;
+
 class DriveCasinoApiCest
 {
 
     private $options;
     private $space;
 
+    /** @var  TestUser $testUser */
+    private $testUser;
+
     public function _before() {
         $this->options = config('integrations.drivecasino');
         $this->space = "1812";
+
+        $this->testUser = new TestUser();
     }
 
     public function testMethodBalance(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => "{$testUser->id}--1--1--127-0-0-1",
+            'login' => $this->testUser->getUserId(),
         ];
 
         $request = array_merge($request, ['sign'  => strtoupper(md5($this->options[$this->space]['key'].http_build_query($request)))]);
@@ -28,8 +33,8 @@ class DriveCasinoApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'balance'   => money_format('%i', $testUser->getBalance()),
+            'login'     => $this->testUser->getUserId(),
+            'balance'   => money_format('%i', $this->testUser->getBalance()),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -37,12 +42,10 @@ class DriveCasinoApiCest
 
     public function testMethodBet(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
+            'login'     => $this->testUser->getUserId(),
             'bet'       => 1,
             'winLose'   => -1,
             'tradeId'   => md5(microtime()),
@@ -60,8 +63,8 @@ class DriveCasinoApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'balance'   => money_format('%i', ($testUser->getBalance() - 1)),
+            'login'     => $this->testUser->getUserId(),
+            'balance'   => money_format('%i', ($this->testUser->getBalance() - 1)),
             'status'    => 'success',
             'error'     => ''
         ]);

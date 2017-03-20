@@ -26,7 +26,11 @@ class PlayRequest extends BaseDriveMediaRequest
             'matrix'    => 'bail|required|integer',
             'WinLines'  => 'bail|required|integer',
             'date'      => 'bail|required|integer',
-            'sign'      => 'bail|required|validate_sign'
+            'sign'      => 'bail|required|validate_sign',
+            'userId'    => 'bail|required|integer',
+            'partnerId' => 'bail|required|integer',
+            'cashdeskId'=> 'bail|required|integer',
+            'userIp'    => 'bail|required|string',
         ];
     }
 

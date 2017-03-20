@@ -17,7 +17,11 @@ class BalanceRequest extends BaseDriveMediaRequest
             'space'     => 'bail|required|string',
             'login'     => 'bail|required|string',
             'cmd'       => 'bail|required|string',
-            'sign'      => 'bail|required|validate_sign'
+            'sign'      => 'bail|required|validate_sign',
+            'userId'    => 'bail|required|integer',
+            'partnerId' => 'bail|required|integer',
+            'cashdeskId'=> 'bail|required|integer',
+            'userIp'    => 'bail|required|string',
         ];
     }
 }

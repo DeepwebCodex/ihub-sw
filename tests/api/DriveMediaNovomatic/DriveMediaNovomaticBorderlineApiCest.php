@@ -1,6 +1,7 @@
 <?php
 
 use App\Components\Users\IntegrationUser;
+use DriveMedia\TestUser;
 
 class DriveMediaNovomaticBorderlineApiCest
 {
@@ -12,12 +13,19 @@ class DriveMediaNovomaticBorderlineApiCest
 
     const BET_AMOUNT = '0.01';
 
+    /** @var  TestUser $testUser */
+    private $testUser;
+
+    public function _before() {
+        $this->testUser = new TestUser();
+    }
+
     public function testGetBalanceUserNotFound(ApiTester $I)
     {
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
-            'login' => '41234123412343434',
+            'login' => '41234123412343434--1---5--127-0-0-1',
         ];
         $this->addSignatureToRequestData($requestData);
 
@@ -30,11 +38,6 @@ class DriveMediaNovomaticBorderlineApiCest
         ]);
     }
 
-    protected function getTestUser()
-    {
-        return IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-    }
-
     protected function addSignatureToRequestData(&$requestData)
     {
         $signatureMaker = new \App\Components\Integrations\DriveMediaNovomatic\SignatureMaker();
@@ -44,12 +47,10 @@ class DriveMediaNovomaticBorderlineApiCest
 
     public function testGetBalanceErrorSign(ApiTester $I)
     {
-        $testUser = $this->getTestUser();
-
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
+            'login' => $this->testUser->getUserId(),
             'sign' => '123'
         ];
 
@@ -67,7 +68,7 @@ class DriveMediaNovomaticBorderlineApiCest
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => '41234123412343434',
+            'login' => '41234123412343434--1---5--127-0-0-1',
             'bet' => '0.00',
             'winLose' => '0.01',
             'tradeId' => md5(microtime()),
@@ -90,12 +91,10 @@ class DriveMediaNovomaticBorderlineApiCest
 
     public function testWriteBetErrorSign(ApiTester $I)
     {
-        $testUser = $this->getTestUser();
-
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => (string)$testUser->id . "--1--1--127-0-0-1",
+            'login' => $this->testUser->getUserId(),
             'bet' => '0.00',
             'winLose' => '0.01',
             'tradeId' => md5(microtime()),
