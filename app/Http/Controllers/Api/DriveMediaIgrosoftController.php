@@ -42,7 +42,7 @@ class DriveMediaIgrosoftController extends BaseApiController
 
     public function balance(BalanceRequest $request)
     {
-        $user = IntegrationUser::get($request->get('userId'), $this->getOption('service_id'), 'DriveMediaIgrosoft');
+        $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaIgrosoft');
 
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
@@ -52,7 +52,7 @@ class DriveMediaIgrosoftController extends BaseApiController
 
     public function bet(PlayRequest $request)
     {
-        $user = IntegrationUser::get($request->get('userId'), $this->getOption('service_id'), 'DriveMediaIgrosoft');
+        $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaIgrosoft');
 
         if(app()->environment() == 'production') {
             if ($user->getActiveWallet()->currency != $this->getOption($request->input('space'))['currency']) {
@@ -74,9 +74,9 @@ class DriveMediaIgrosoftController extends BaseApiController
                 $transaction['type'],
                 $request->input('tradeId'),
                 $request->input('gameId'),
-                $request->get('partnerId'),
-                $request->get('cashdeskId'),
-                $request->get('userIp')
+                $request->input('partnerId'),
+                $request->input('cashdeskId'),
+                $request->input('userIp')
             );
 
             $transactionHandler = new TransactionHandler($transactionRequest, $user);

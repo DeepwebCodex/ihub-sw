@@ -42,7 +42,7 @@ class DriveCasinoController extends BaseApiController
 
     public function balance(BalanceRequest $request)
     {
-        $user = IntegrationUser::get($request->get('userId'), $this->getOption('service_id'), 'DriveCasino');
+        $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveCasino');
 
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
@@ -52,7 +52,7 @@ class DriveCasinoController extends BaseApiController
 
     public function bet(PlayRequest $request)
     {
-        $user = IntegrationUser::get($request->get('userId'), $this->getOption('service_id'), 'DriveCasino');
+        $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveCasino');
 
         if(app()->environment() == 'production')
         {
@@ -76,9 +76,9 @@ class DriveCasinoController extends BaseApiController
                 $transaction['type'],
                 $request->input('tradeId'),
                 ($request->input('gameId') > 5000 ? $request->input('gameId') - 5000 : $request->input('gameId')),
-                $request->get('partnerId'),
-                $request->get('cashdeskId'),
-                $request->get('userIp')
+                $request->input('partnerId'),
+                $request->input('cashdeskId'),
+                $request->input('userIp')
             );
 
             $transactionHandler = new TransactionHandler($transactionRequest, $user);

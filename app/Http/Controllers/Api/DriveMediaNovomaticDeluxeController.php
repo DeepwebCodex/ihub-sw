@@ -37,7 +37,7 @@ class DriveMediaNovomaticDeluxeController extends BaseApiController {
 
     public function index(Request $request) {
         $method = $request->input('cmd');
-        $this->userId = $request->get('userId');
+        $this->userId = $request->input('userId');
         $this->setMetaData([
             'imprint' => $request->all()
         ]);

@@ -84,13 +84,13 @@ class DriveMediaNovomaticController extends BaseApiController
      */
     public function getBalance(GetBalanceRequest $request)
     {
-        $userId = $request->get('userId');
+        $userId = $request->input('userId');
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), self::NODE);
 
         $this->validateCurrentCurrency($user, $request->input('space'));
 
         return $this->respondOk(200, '', [
-            'login' => (string)$request->get('login'),
+            'login' => (string)$request->input('login'),
             'balance' => (string)$user->getBalance(),
         ]);
     }
@@ -102,7 +102,7 @@ class DriveMediaNovomaticController extends BaseApiController
      */
     public function writeBet(WriteBetRequest $request)
     {
-        $userId = $request->get('userId');
+        $userId = $request->input('userId');
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), self::NODE);
 
         $this->validateCurrentCurrency($user, $request->input('space'));
@@ -122,9 +122,9 @@ class DriveMediaNovomaticController extends BaseApiController
                 $transaction['type'],
                 $request->input('tradeId'),
                 $request->input('gameId'),
-                $request->get('partnerId'),
-                $request->get('cashdeskId'),
-                $request->get('userIp')
+                $request->input('partnerId'),
+                $request->input('cashdeskId'),
+                $request->input('userIp')
             );
             $transactionHandler = new TransactionHandler($transactionRequest, $user);
             $transactionResponse = $transactionHandler->handle(new ProcessNovomatic());
