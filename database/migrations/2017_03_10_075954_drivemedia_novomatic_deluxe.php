@@ -23,7 +23,7 @@ class DrivemediaNovomaticDeluxe extends Migration
                 $table->float('winLose');
                 $table->bigInteger('parent_id')->unsigned();
 
-                DB::connection()->getPdo()->exec('CREATE SEQUENCE IF NOT EXISTS common_integration_serial START ' . round(microtime(true) * 1000));
+                DB::connection()->getPdo()->exec('CREATE SEQUENCE IF NOT EXISTS common_integration_serial START 1');
             });
     }
 
