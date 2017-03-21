@@ -77,4 +77,9 @@ class ApiRequest extends FormRequest
             }
         }
     }
+
+    public function isJson()
+    {
+        return false;
+    }
 }
