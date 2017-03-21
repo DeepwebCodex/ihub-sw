@@ -16,7 +16,7 @@ class CancelPendingOperations extends Command
      *
      * @var string
      */
-    protected $signature = 'accounting:cancel-pending {batch=80 : One time operations batch size} {expire=1 : expiration date limit in days}';
+    protected $signature = 'accounting:cancel-pending {batch=80 : One time operations batch size} {expire=2 : expiration date limit in days}';
 
     /**
      * The console command description.
@@ -26,7 +26,7 @@ class CancelPendingOperations extends Command
     protected $description = 'Cancels account manager pending operations by timeout';
 
     protected $batchSize = 80;
-    protected $expirationDays = 1; //set in days
+    protected $expirationDays = 2; //set in days
 
     /**
      * Create a new command instance.
@@ -45,22 +45,22 @@ class CancelPendingOperations extends Command
      */
     public function handle()
     {
-        $this->batchSize = (int) $this->argument('batch');
-        $this->expirationDays = (int) $this->argument('expire');
+        $this->batchSize = (int)$this->argument('batch');
+        $this->expirationDays = (int)$this->argument('expire');
 
         $expirationDate = Carbon::now()->subDay($this->expirationDays)->format('Y-m-d');
 
         //Service ids for deep integration are excluded from query to prevent uncorrectable results
-        $services = $this->getServices([ 23, 2 ]);
+        $services = $this->getServices([config('integrations.inspired.service_id'), config('integrations.virtualBoxing.service_id')]);
 
-        if(!$services) {
+        if (!$services) {
             $this->error("There is no services found in config \n");
             return -1;
         }
 
         $operations = app('AccountManager')->getOperationByQuery([
             'select' => ['id', 'object_id', 'service_id'],
-            'where'  => [
+            'where' => [
                 ['status', 'pending'],
                 ['service_id', array_keys($services)],
                 ['dt', "<{$expirationDate}"],
@@ -71,14 +71,14 @@ class CancelPendingOperations extends Command
 
         $operations = collect($operations);
 
-        if($operations->isEmpty()) {
+        if ($operations->isEmpty()) {
             $this->info("There is no pending operations \n");
             return;
         }
 
         $operations = $operations->groupBy('service_id');
 
-        $operations->each(function(Collection $groupOperations, $serviceId) use ($services, $expirationDate) {
+        $operations->each(function (Collection $groupOperations, $serviceId) use ($services, $expirationDate) {
             $this->info("\n Canceling BET operations for service {$services[$serviceId]} ({$serviceId}) \n");
             $bar = $this->output->createProgressBar($groupOperations->count());
 
@@ -107,13 +107,13 @@ class CancelPendingOperations extends Command
         $this->info("\n Done \n");
     }
 
-    protected function getServices(array $exclude = []) : array
+    protected function getServices(array $exclude = []): array
     {
         $services = config('integrations');
 
-        foreach ($services as $service => $data){
-            if(isset($data['service_id']) && !in_array($data['service_id'], $exclude)){
-                $services[$data['service_id']] = (string) StaticStringy::humanize($service);
+        foreach ($services as $service => $data) {
+            if (isset($data['service_id']) && !in_array($data['service_id'], $exclude)) {
+                $services[$data['service_id']] = (string)StaticStringy::humanize($service);
             }
 
             unset($services[$service]);
