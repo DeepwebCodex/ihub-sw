@@ -25,17 +25,10 @@ use function GuzzleHttp\Psr7\str;
 trait Operation
 {
 
-    public function handleError(string $message, $level, string $module,
+    public function handleError(array $message, $level, string $module,
             string $line)
     {
-        if (is_array($message)) {
-            $json = json_encode($message);
-        } else {
-            $json = [
-                'message' => $message
-            ];
-        }
-        app('AppLog')->warning(json_encode($json), 'ORION', $module, $line);
+        app('AppLog')->warning(json_encode($message), '', '', '', 'MicroGaming-Orion');
         $this->error('Something went wrong!');
     }
 
@@ -45,7 +38,7 @@ trait Operation
             'data' => var_export($dataSuccess, true),
             'elements' => var_export($elements, true)
         ];
-        app('AppLog')->info(json_encode($logRecords), 'ORION-SUCCESS', __CLASS__, __LINE__);
+        app('AppLog')->info(json_encode($logRecords), '', '', '', 'MicroGaming-Orion');
         $this->info('Success.');
     }
 

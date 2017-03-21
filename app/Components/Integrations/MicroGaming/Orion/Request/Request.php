@@ -41,7 +41,9 @@ abstract class Request {
         $logRecord = [
             'data' => var_export($result, true)
         ];
-        app('AppLog')->info(json_encode($logRecord), 'ORION', __CLASS__, __LINE__);
+
+        app('AppLog')->info(json_encode($logRecord), '', '', '', 'MicroGaming-Orion');
+
         return $this->parse($result);
     }
 

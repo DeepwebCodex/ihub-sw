@@ -56,7 +56,7 @@ class CommitRollbackProcessor implements IOperationsProcessor
                     'data' => var_export($value, true),
                     'message' => var_export($e->getMessage(), true)
                 ];
-                app('AppLog')->warning(json_encode($logRecords));
+                app('AppLog')->warning(json_encode($logRecords), '', '', '', 'MicroGaming-Orion');
             }
         }
 

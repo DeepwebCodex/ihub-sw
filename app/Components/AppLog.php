@@ -27,7 +27,7 @@ class AppLog
      * @param string $line
      * @return array
      */
-    private function composeContext($node, $module, $line)
+    private function composeContext($node, $module, $line, $group = '')
     {
         if (!$node || !$module || !$line) {
             $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10);
@@ -62,7 +62,7 @@ class AppLog
             $requestId = $this->requestId;
         }
 
-        return compact('node', 'module', 'line', 'requestId');
+        return compact('node', 'module', 'line', 'requestId', 'group');
     }
 
     /**
@@ -73,9 +73,9 @@ class AppLog
      * @param string $module
      * @param string $line
      */
-    public function alert($message, $node = '', $module = '', $line = '')
+    public function alert($message, $node = '', $module = '', $line = '', $group = '')
     {
-        return $this->write(__FUNCTION__, $message, $node, $module, $line);
+        return $this->write(__FUNCTION__, $message, $node, $module, $line, $group);
     }
 
     /**
@@ -86,9 +86,9 @@ class AppLog
      * @param string $module
      * @param string $line
      */
-    public function critical($message, $node = '', $module = '', $line = '')
+    public function critical($message, $node = '', $module = '', $line = '', $group = '')
     {
-        return $this->write(__FUNCTION__, $message, $node, $module, $line);
+        return $this->write(__FUNCTION__, $message, $node, $module, $line, $group);
     }
 
     /**
@@ -99,9 +99,9 @@ class AppLog
      * @param string $module
      * @param string $line
      */
-    public function error($message, $node = '', $module = '', $line = '')
+    public function error($message, $node = '', $module = '', $line = '', $group = '')
     {
-        return $this->write(__FUNCTION__, $message, $node, $module, $line);
+        return $this->write(__FUNCTION__, $message, $node, $module, $line, $group);
     }
 
     /**
@@ -112,9 +112,9 @@ class AppLog
      * @param string $module
      * @param string $line
      */
-    public function warning($message, $node = '', $module = '', $line = '')
+    public function warning($message, $node = '', $module = '', $line = '', $group = '')
     {
-        return $this->write(__FUNCTION__, $message, $node, $module, $line);
+        return $this->write(__FUNCTION__, $message, $node, $module, $line, $group);
     }
 
     /**
@@ -125,9 +125,9 @@ class AppLog
      * @param string $module
      * @param string $line
      */
-    public function notice($message, $node = '', $module = '', $line = '')
+    public function notice($message, $node = '', $module = '', $line = '', $group = '')
     {
-        return $this->write(__FUNCTION__, $message, $node, $module, $line);
+        return $this->write(__FUNCTION__, $message, $node, $module, $line, $group);
     }
 
     /**
@@ -138,9 +138,9 @@ class AppLog
      * @param string $module
      * @param string $line
      */
-    public function info($message, $node = '', $module = '', $line = '')
+    public function info($message, $node = '', $module = '', $line = '', $group = '')
     {
-        return $this->write(__FUNCTION__, $message, $node, $module, $line);
+        return $this->write(__FUNCTION__, $message, $node, $module, $line, $group);
     }
 
     /**
@@ -151,9 +151,9 @@ class AppLog
      * @param string $module
      * @param string $line
      */
-    public function debug($message, $node = '', $module = '', $line = '')
+    public function debug($message, $node = '', $module = '', $line = '', $group = '')
     {
-        return $this->write(__FUNCTION__, $message, $node, $module, $line);
+        return $this->write(__FUNCTION__, $message, $node, $module, $line, $group);
     }
 
     /**
@@ -165,9 +165,9 @@ class AppLog
      * @param string $module
      * @param string $line
      */
-    public function log($level, $message, $node = '', $module = '', $line = '')
+    public function log($level, $message, $node = '', $module = '', $line = '', $group = '')
     {
-        return $this->write($level, $message, $node, $module, $line);
+        return $this->write($level, $message, $node, $module, $line, $group);
     }
 
     /**
@@ -179,9 +179,9 @@ class AppLog
      * @param string $module
      * @param string $line
      */
-    private function write($level, $message, $node = '', $module = '', $line = '')
+    private function write($level, $message, $node = '', $module = '', $line = '', $group = '')
     {
-        $context = $this->composeContext($node, $module, $line);
+        $context = $this->composeContext($node, $module, $line, $group);
 
         if(is_array($message)){
             $message = collect($message);
