@@ -100,8 +100,8 @@ class CancelPendingOperations extends Command
 
                 $bar->advance();
             }
-
             $bar->finish();
+            $this->info("\n");
         });
 
         $this->info("\n Done \n");
