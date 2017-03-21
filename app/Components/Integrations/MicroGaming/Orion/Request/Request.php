@@ -15,8 +15,9 @@
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
-use AppLog;
 use GuzzleHttp\ClientInterface;
+use function app;
+use function GuzzleHttp\json_encode;
 
 abstract class Request {
 
@@ -37,7 +38,10 @@ abstract class Request {
     public function getData(array $data = []): array {
         $this->prepare($data);
         $result = $this->client->sendRequest($this);
-        AppLog::info(' Data: ' . print_r($result, true), 'orion', __CLASS__, __LINE__);
+        $logRecord = [
+            'data' => var_export($result, true)
+        ];
+        app('AppLog')->info(json_encode($logRecord), 'ORION', __CLASS__, __LINE__);
         return $this->parse($result);
     }
 

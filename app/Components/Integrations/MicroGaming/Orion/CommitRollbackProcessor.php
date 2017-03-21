@@ -52,25 +52,23 @@ class CommitRollbackProcessor implements IOperationsProcessor
                 $value['isDuplicate'] = $response->isDuplicate;
                 $dataRes[] = $value;
             } catch (Exception $e) {
-                AppLog::warning("One records was canceled. Cause: " . print_r($e->getMessage(), true) . " Data: " . print_r($value, true));
+                $logRecords = [
+                    'data' => var_export($value, true),
+                    'cause' => var_export($e->getMessage(), true)
+                ];
+                app('AppLog')->warning(json_encode($logRecords));
             }
         }
 
         return $dataRes;
     }
 
-    public function pushOperation(string $typeOperation, array $data, UserInterface $user): TransactionResponse
+    public function pushOperation(string $typeOperation, array $data,
+            UserInterface $user): TransactionResponse
     {
-        
+
         $transactionRequest = new TransactionRequest(
-                Config::get('integrations.microgaming.service_id'), 
-                $data['a:TransactionNumber'], 
-                $user->id, $user->getCurrency(), 
-                MicroGamingHelper::getTransactionDirection($typeOperation), 
-                TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), 
-                MicroGamingHelper::getTransactionType($typeOperation), 
-                $data['a:MgsReferenceNumber'], 
-                $data['a:GameName']
+                Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName']
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
