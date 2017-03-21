@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Config;
 
 
 
-class SoapEmul extends Client{
+class SoapEmulator extends Client{
 
     public function sendRequest(Request $request): string {
         try {

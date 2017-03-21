@@ -10,7 +10,7 @@ use App\Components\Integrations\MicroGaming\Orion\Request\GetFailedEndGameQueue;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetRollbackQueueData;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyCompleteGame;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
-use App\Components\Integrations\MicroGaming\Orion\SoapEmul;
+use App\Components\Integrations\MicroGaming\Orion\SoapEmulator;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use App\Components\ThirdParty\Array2Xml;
 use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGaming;
@@ -158,13 +158,13 @@ class TestData extends Unit {
         } else {
             $xmlMock = $testData;
         }
-        $clientMockQ = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
 
         if (!$xmlMockB) {
             $xmlMockB = $this->generatedXmlManualBet($xmlMock);
         }
-        $clientManualVBMock = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
 
 
@@ -185,13 +185,13 @@ class TestData extends Unit {
         } else {
             $xmlMock = $testData;
         }
-        $clientMockQ = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
 
         if (!$xmlMockB) {
             $xmlMockB = $this->generatedXmlManualBet($xmlMock);
         }
-        $clientManualVBMock = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
 
 
@@ -212,13 +212,13 @@ class TestData extends Unit {
         } else {
             $xmlMock = $testData;
         }
-        $clientMockQ = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
 
         if (!$xmlMockB) {
             $xmlMockB = $this->generatedXmlManualBet($xmlMock);
         }
-        $clientManualVBMock = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
 
 
@@ -322,10 +322,10 @@ class TestData extends Unit {
         $xml = $this->createXmlEndGame();
 
 
-        $clientMockQ = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientMockQ->method('sendRequest')->will($this->returnValue($xml->qEndGameData));
 
-        $clientManualVBMock = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientManualVBMock->method('sendRequest')->will($this->returnValue($xml->qManualCompleteData));
 
 
@@ -357,13 +357,13 @@ class TestData extends Unit {
         } else {
             $xmlMock = $testData;
         }
-        $clientMockQ = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
 
         if (!$xmlMockB) {
             $xmlMockB = $this->generatedXmlManualBet($xmlMock);
         }
-        $clientManualVBMock = $this->createMock(SoapEmul::class, ['sendRequest']);
+        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
         $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
 
 
