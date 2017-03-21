@@ -189,6 +189,22 @@ class AccountManager
     }
 
     /**
+     * Cancels Account manager transaction operation for created transactions
+     *
+     * @param int $operation_id - roh internal operation id
+     * @param int $object_id - operation object_id
+     * @param string $comment - cancel comment
+     * @return mixed
+     */
+    public function cancelTransactionHard(int $operation_id, int $object_id , string $comment){
+        return $this->postMessageRoh('accounts/operation/canceled', [
+            'operation_id'  => $operation_id,
+            'object_id'     => $object_id,
+            'comment'       => $comment
+        ], 3);
+    }
+
+    /**
      * Sets account manager transaction operation as completed - so commiting changes to user balance
      *
      * @param int $user_id //integration user_id
@@ -234,6 +250,18 @@ class AccountManager
             'object_id'     => $object_id,
             'service_id'    => $service_id
         ], 3);
+    }
+
+    /**
+     * Retrieves operations history from account manager system by query
+     *
+     * @param array $query
+     * @return mixed
+     */
+    public function getOperationByQuery(array $query){
+        return $this->sendPostRoh($this->buildRohHost('accounts/accounts_db/operations_get'),
+            $query
+        , 3);
     }
 
     /**
