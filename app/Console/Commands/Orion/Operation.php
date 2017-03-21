@@ -55,11 +55,12 @@ trait Operation
             $validatorResolveData->validateBaseStructure($dataResponse);
             return $this->handleSuccess($dataResponse, $handleCommitRes);
         } catch (RequestException $re) {
-            $message = 'Request has error.  Request: ' . str($re->getRequest());
+            $logRecords = [
+                'message' => str($re->getRequest())
+            ];
+
             if ($re->hasResponse()) {
-                $logRecords = [
-                    'message' => str($re->getResponse())
-                ];
+                $logRecords['data'] = str($re->getResponse());
             }
             $this->handleError($logRecords, 'warning', '', $re->getLine());
         } catch (CheckEmptyValidation $ve) {
