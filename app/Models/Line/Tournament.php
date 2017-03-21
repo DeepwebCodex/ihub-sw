@@ -5,6 +5,9 @@ namespace App\Models\Line;
 /**
  * Class Tournament
  * @package App\Models\Line
+ *
+ * @property integer $id
+ * @property string $name
  */
 class Tournament extends BaseLineModel
 {

@@ -37,6 +37,10 @@ class TextApiFormatter extends BaseApiFormatter
     {
         list($payload, $statusCode) = array_values($this->transformException($exception));
 
+        if($statusCode !== 200) {
+            $statusCode = 400;
+        }
+
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'text/plain'
         ]);
