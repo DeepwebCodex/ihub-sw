@@ -12,7 +12,7 @@
  * @author petroff
  */
 
-namespace App\Components\Integrations\MicroGaming\Orion;
+namespace App\Components\ExternalServices\MicroGaming\Orion;
 
 use App\Components\Integrations\MicroGaming\Orion\Request\Request;
 use GuzzleHttp\Client;

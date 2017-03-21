@@ -5,7 +5,7 @@ namespace App\Console\Commands\Orion;
 use App\Components\Integrations\MicroGaming\Orion\CompleteGameProcessor;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetFailedEndGameQueue;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyCompleteGame;
-use App\Components\Integrations\MicroGaming\Orion\SoapEmulator;
+use App\Components\ExternalServices\MicroGaming\Orion\SoapEmulator;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use App\Http\Requests\Validation\Orion\EndGameValidation;
 use App\Http\Requests\Validation\Orion\ManualCompleteValidation;

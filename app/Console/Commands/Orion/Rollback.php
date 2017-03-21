@@ -5,7 +5,7 @@ namespace App\Console\Commands\Orion;
 use App\Components\Integrations\MicroGaming\Orion\CommitRollbackProcessor;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetRollbackQueueData;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
-use App\Components\Integrations\MicroGaming\Orion\SoapEmulator;
+use App\Components\ExternalServices\MicroGaming\Orion\SoapEmulator;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use App\Components\Transactions\TransactionRequest;
 use App\Http\Requests\Validation\Orion\ManualValidation;

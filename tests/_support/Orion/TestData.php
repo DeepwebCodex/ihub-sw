@@ -10,7 +10,7 @@ use App\Components\Integrations\MicroGaming\Orion\Request\GetFailedEndGameQueue;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetRollbackQueueData;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyCompleteGame;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
-use App\Components\Integrations\MicroGaming\Orion\SoapEmulator;
+use App\Components\ExternalServices\MicroGaming\Orion\SoapEmulator;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use App\Components\ThirdParty\Array2Xml;
 use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGaming;
