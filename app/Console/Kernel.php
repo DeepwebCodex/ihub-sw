@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Components\DetectEnvironment;
+use App\Console\Commands\CancelPendingOperations;
 use App\Console\Commands\MicrogamingSequence;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -30,13 +31,14 @@ class Kernel extends ConsoleKernel
         Commands\Orion\Commit::class,
         Commands\Orion\Rollback::class,
         Commands\Orion\EndGame::class,
-        MicrogamingSequence::class
+        MicrogamingSequence::class,
+        CancelPendingOperations::class,
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
