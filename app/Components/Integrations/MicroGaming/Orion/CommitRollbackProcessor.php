@@ -54,7 +54,7 @@ class CommitRollbackProcessor implements IOperationsProcessor
             } catch (Exception $e) {
                 $logRecords = [
                     'data' => var_export($value, true),
-                    'cause' => var_export($e->getMessage(), true)
+                    'message' => var_export($e->getMessage(), true)
                 ];
                 app('AppLog')->warning(json_encode($logRecords));
             }

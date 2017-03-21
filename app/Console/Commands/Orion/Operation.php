@@ -28,7 +28,14 @@ trait Operation
     public function handleError(string $message, $level, string $module,
             string $line)
     {
-        app('AppLog')->warning($message, 'ORION', $module, $line);
+        if (is_array($message)) {
+            $json = json_encode($message);
+        } else {
+            $json = [
+                'message' => $message
+            ];
+        }
+        app('AppLog')->warning(json_encode($json), 'ORION', $module, $line);
         $this->error('Something went wrong!');
     }
 
@@ -57,13 +64,18 @@ trait Operation
         } catch (RequestException $re) {
             $message = 'Request has error.  Request: ' . str($re->getRequest());
             if ($re->hasResponse()) {
-                $message .= " Response" . str($re->getResponse());
+                $logRecords = [
+                    'message' => str($re->getResponse())
+                ];
             }
-            $this->handleError($message, 'warning', '', $re->getLine());
+            $this->handleError($logRecords, 'warning', '', $re->getLine());
         } catch (CheckEmptyValidation $ve) {
             $this->handleSuccess(['message' => 'Source is empty']);
         } catch (Exception $ex) {
-            $this->handleError($ex->getMessage(), 'errors', '', $ex->getLine());
+            $logRecords = [
+                'message' => $ex->getMessage()
+            ];
+            $this->handleError($logRecords, 'errors', '', $ex->getLine());
         }
     }
 
