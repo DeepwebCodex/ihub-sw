@@ -194,6 +194,7 @@ class TestData
             'bet_id' => $bet_id ?? $this->getObjectId(),
             'transaction_id' => $trans_id ?? $this->getObjectId(), //md5(str_random()),
             'retrying' => 0,
+            'game' => gen_uid(),
         ];
         if ($player_id) {
             $params['player_id'] = $player_id;

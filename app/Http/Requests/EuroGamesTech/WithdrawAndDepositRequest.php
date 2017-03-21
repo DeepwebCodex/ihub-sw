@@ -41,8 +41,9 @@ class WithdrawAndDepositRequest extends BaseEgtRequest
             'Reason' => 'bail|required|string|validate_deposit',
             'PortalCode' => 'bail|required|string',
             'WinAmount' => 'bail|required|numeric|min:0',
-            'PartnerId' => 'bail|integer|nullable',
-            'CashdeskId' => 'bail|integer|nullable',
+            'PartnerId' => 'bail|required|integer|nullable',
+            'CashdeskId' => 'bail|required|integer|nullable',
+            'UserIp'    => 'bail|required|string|nullable'
         ];
     }
 }

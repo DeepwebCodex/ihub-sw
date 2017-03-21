@@ -19,9 +19,10 @@ class ParsePlayerId
 
         // parse format "playerId_partnerId_cashdeskId"
         $playerData = [
-            'PlayerId' => array_get($playerDataRaw, 0, null),
-            'PartnerId' => array_get($playerDataRaw, 1, null),
+            'PlayerId'   => array_get($playerDataRaw, 0, null),
+            'PartnerId'  => array_get($playerDataRaw, 1, null),
             'CashdeskId' => array_get($playerDataRaw, 2, null),
+            'UserIp'     => array_get($playerDataRaw, 3, null)
         ];
 
         $request->merge($playerData);

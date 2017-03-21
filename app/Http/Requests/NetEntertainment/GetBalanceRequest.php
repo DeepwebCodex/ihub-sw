@@ -16,7 +16,7 @@ class GetBalanceRequest extends BaseRequest
     public function rules()
     {
         return array_merge(parent::rules(), [
-            'userid' => 'bail|required|integer|min:1',
+            'userid' => 'bail|required|string|min:1',
             'currency' => 'bail|required|string|min:2',
         ]);
     }

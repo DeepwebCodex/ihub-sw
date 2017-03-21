@@ -34,6 +34,7 @@ class TransactionRequest
     public $object_id;
     public $comment;
     public $game_id;
+    public $client_ip;
 
     public $transaction_type;
     public $foreign_id;
@@ -51,6 +52,7 @@ class TransactionRequest
      * @param $game_id
      * @param int $partner_id
      * @param int $cashdesk_id
+     * @param string $userIp
      */
     public function __construct(
         int $service_id,
@@ -63,7 +65,8 @@ class TransactionRequest
         $foreign_id,
         $game_id,
         int $partner_id = null,
-        int $cashdesk_id = null
+        int $cashdesk_id = null,
+        string $userIp = null
     ) {
         $this->service_id = $service_id;
         $this->object_id = $object_id;
@@ -84,6 +87,7 @@ class TransactionRequest
         $this->partner_id = $partner_id ?? app('Request')::getFacadeRoot()->server('PARTNER_ID');
         $this->cashdesk_id = $cashdesk_id ?? app('Request')::getFacadeRoot()->server('FRONTEND_NUM');
 
+        $this->client_ip = $userIp ?? get_client_ip();
     }
 
     public function getComment()

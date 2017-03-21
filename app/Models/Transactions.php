@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Components\Transactions\TransactionRequest;
+use GuzzleHttp\Transaction;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property string $game_id
+ * @property string $client_ip
 */
 class Transactions extends Model
 {
@@ -48,7 +50,8 @@ class Transactions extends Model
         'foreign_id',
         'object_id',
         'transaction_type',
-        'game_id'
+        'game_id',
+        'client_ip'
     ];
 
     public function getAmountAttribute($value){
@@ -82,12 +85,78 @@ class Transactions extends Model
      * @param int $partner_id
      * @return Transactions
      */
-    public static function getBetTransaction(int $serviceId, int $userId, $objectId, int $partner_id){
-        return Transactions::where([
+    public static function getBetTransaction(int $serviceId, int $userId, $objectId, int $partner_id = null){
+        $query = [
             ['service_id', $serviceId],
             ['user_id', $userId],
             ['object_id', $objectId],
-            ['partner_id', $partner_id],
+            ['transaction_type', TransactionRequest::TRANS_BET],
+            ['status', TransactionRequest::STATUS_COMPLETED]
+        ];
+
+        if ($partner_id !== null) {
+            array_push($query, ['partner_id', $partner_id]);
+        }
+
+        return Transactions::where($query)->first();
+    }
+
+    /***
+     * @param int $serviceId
+     * @param int $userId
+     * @param int $partnerId
+     * @param int $gameId
+     * @return Transactions
+     */
+    public static function getLastBetByUser(int $serviceId, int $userId, int $partnerId, int $gameId)
+    {
+        return Transactions::where([
+            ['service_id', $serviceId],
+            ['user_id', $userId],
+            ['partner_id', $partnerId],
+            ['game_id', $gameId],
+            ['transaction_type', TransactionRequest::TRANS_BET],
+            ['status', TransactionRequest::STATUS_COMPLETED]
+        ])->orderBy('id', 'desc')->first();
+    }
+
+    /***
+     * @param int $serviceId
+     * @param int $userId
+     * @param int $partnerId
+     * @param int $gameId
+     * @param string $foreignIid
+     * @return Transactions
+     */
+    public static function getLastBetByUserWithForeignId(int $serviceId, int $userId, int $partnerId, int $gameId, string $foreignIid)
+    {
+        return Transactions::where([
+            ['service_id', $serviceId],
+            ['user_id', $userId],
+            ['partner_id', $partnerId],
+            ['game_id', $gameId],
+            ['foreign_id', $foreignIid],
+            ['transaction_type', TransactionRequest::TRANS_BET],
+            ['status', TransactionRequest::STATUS_COMPLETED]
+        ])->orderBy('id', 'desc')->first();
+    }
+
+    /***
+     * @param int $serviceId
+     * @param int $userId
+     * @param string $currency
+     * @param int $gameId
+     * @param int $partnerId
+     * @return Transactions
+     */
+    public static function getLastDriveMediaNovomaticDeluxeBet(int $serviceId, int $userId, string $currency, int $gameId, int $partnerId)
+    {
+        return Transactions::where([
+            ['service_id', $serviceId],
+            ['user_id', $userId],
+            ['currency', $currency],
+            ['game_id', $gameId],
+            ['partner_id', $partnerId],
             ['transaction_type', TransactionRequest::TRANS_BET],
             ['status', TransactionRequest::STATUS_COMPLETED]
         ])->first();

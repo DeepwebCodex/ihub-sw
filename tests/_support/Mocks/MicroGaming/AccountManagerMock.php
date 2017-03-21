@@ -48,6 +48,7 @@ class AccountManagerMock
         $this->user_id = (int)env('TEST_USER_ID');
         $this->cashdesk = (int)env('TEST_CASHEDESK');
         $this->partner_id = (int)env('TEST_PARTNER_ID');
+        $this->client_ip = "127.0.0.1";
     }
 
     public function getMock()
@@ -268,6 +269,7 @@ class AccountManagerMock
             $object_id,
             $this->getComment($amount, $direction, $comment_object_id),
             $this->partner_id,
+            $this->client_ip
         ];
     }
 
@@ -280,6 +282,7 @@ class AccountManagerMock
             $object_id,
             $this->currency,
             $this->getComment($amount, $direction, $comment_object_id),
+            $this->client_ip
         ];
     }
 
