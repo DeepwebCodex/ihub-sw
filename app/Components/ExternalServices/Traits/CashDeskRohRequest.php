@@ -32,11 +32,8 @@ trait CashDeskRohRequest
 
             if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < Response::HTTP_NOT_EXTENDED) {
                 if ($data = $response->getBody()) {
-
-                    return $this->processError($data->getContents());
-
+                    return $this->processError((string)$data);
                 }
-
                 throw new BadRequestHttpException();
             }
 

@@ -158,7 +158,6 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        \Kozz\Laravel\Providers\Guzzle::class,
         \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
         \App\Providers\AccountManagerServiceProvider::class,
         \App\Providers\AppLogServiceProvider::class,
@@ -166,6 +165,7 @@ return [
         \App\Providers\AmqpServiceProvider::class,
         \App\Providers\GameSessionServiceProvider::class,
         \App\Providers\QueueRabbitMQServiceProvider::class,
+        \App\Providers\GuzzleServiceProvider::class
     ],
 
     /*

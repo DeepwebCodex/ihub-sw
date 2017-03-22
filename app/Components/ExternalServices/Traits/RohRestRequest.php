@@ -26,17 +26,15 @@ trait RohRestRequest
 
             if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < Response::HTTP_NOT_EXTENDED) {
                 if ($data = $response->getBody()) {
-                    if ($data = json_decode($data->getContents(), true)) {
-                        if(isset($data['status']) && $data['status'] == "error"){
+                    if ($data = json_decode((string)$data, true)) {
+                        if (isset($data['status']) && $data['status'] == "error") {
                             throw new GenericApiHttpException(500, '');
                         }
-
-                        if(isset($data['operations'])){
+                        if (isset($data['operations'])) {
                             return $this->sanitize($data['operations']);
                         }
                     }
                 }
-
                 throw new BadRequestHttpException();
             }
 

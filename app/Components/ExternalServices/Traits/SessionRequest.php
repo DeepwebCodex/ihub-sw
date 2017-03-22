@@ -26,17 +26,15 @@ trait SessionRequest
 
             if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < Response::HTTP_NOT_EXTENDED) {
                 if ($data = $response->getBody()) {
-                    if ($data = json_decode($data->getContents(), true)) {
-                        if(isset($data['error'])){
+                    if ($data = json_decode((string)$data, true)) {
+                        if (isset($data['error'])) {
                             throw new GenericApiHttpException(500, '', $data['error']);
                         }
-
-                        if(isset($data['exists']) && !empty($data['exists'])){
+                        if (isset($data['exists']) && !empty($data['exists'])) {
                             return $data['exists'];
                         }
                     }
                 }
-
                 throw new BadRequestHttpException();
             }
 
