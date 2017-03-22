@@ -24,27 +24,15 @@ class PlaytechHelper
                     'amount' => $bet,
                     'type' => TransactionRequest::TRANS_BET
                 ]);
-
                 array_push($transactions, [
-                    'amount' => $win_lose,
+                    'amount' => $win_lose + $bet,
                     'type' => TransactionRequest::TRANS_WIN
                 ]);
             } else {
-                if ($bet == ($win_lose * -1)) {
-                    array_push($transactions, [
-                        'amount' => $bet,
-                        'type' => TransactionRequest::TRANS_BET
-                    ]);
-                } else {
-                    array_push($transactions, [
-                        'amount' => $bet,
-                        'type' => TransactionRequest::TRANS_BET
-                    ]);
-                    array_push($transactions, [
-                        'amount' => $win_lose + $bet,
-                        'type' => TransactionRequest::TRANS_WIN
-                    ]);
-                }
+                array_push($transactions, [
+                    'amount' => $bet,
+                    'type' => TransactionRequest::TRANS_BET
+                ]);
             }
         } else {
             $type = TransactionRequest::TRANS_WIN;
