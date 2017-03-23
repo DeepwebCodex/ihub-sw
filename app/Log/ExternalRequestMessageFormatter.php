@@ -12,6 +12,8 @@ use Psr\Http\Message\ResponseInterface;
  */
 class ExternalRequestMessageFormatter extends MessageFormatter
 {
+    const RESPONSE_BODY_MAX_CHARS = 255;
+
     /**
      * @param RequestInterface $request
      * @param ResponseInterface|null $response
@@ -23,12 +25,6 @@ class ExternalRequestMessageFormatter extends MessageFormatter
         ResponseInterface $response = null,
         \Exception $error = null
     ) {
-        $responseBody = $response ? $response->getBody() : '';
-        if ($responseBody) {
-            $charsCount = 255;
-            \preg_match('/^.{0,' . $charsCount. '}(?:.*?)\b/iu', $responseBody, $matches);
-            $responseBody = $matches[0];
-        }
         return [
             'request' => [
                 'url' => (string)$request->getUri(),
@@ -36,8 +32,36 @@ class ExternalRequestMessageFormatter extends MessageFormatter
             ],
             'response' => [
                 'code' => $response ? $response->getStatusCode() : 'NULL',
-                'body' => $responseBody
+                'body' => $this->getResponseBody($response, $error)
             ]
         ];
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param \Exception $error
+     * @return string
+     */
+    protected function getResponseBody(ResponseInterface $response, \Exception $error): string
+    {
+        if ($error !== null) {
+            return $error->getMessage();
+        }
+        $responseBody = $response ? (string)$response->getBody() : '';
+        return $this->truncateBody($responseBody);
+    }
+
+    /**
+     * @param string $responseBody
+     * @return string
+     */
+    protected function truncateBody(string $responseBody): string
+    {
+        if ($responseBody === '') {
+            return $responseBody;
+        }
+        \preg_match('/^.{0,' . self::RESPONSE_BODY_MAX_CHARS . '}(?:.*?)\b/iu', $responseBody, $matches);
+        $responseBody = $matches[0] ?? '';
+        return $responseBody;
     }
 }

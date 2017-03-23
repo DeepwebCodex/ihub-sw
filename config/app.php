@@ -212,7 +212,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class,
         'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
         'AppLog' => \App\Facades\AppLog::class,
         'Fractal' => Spatie\Fractal\FractalFacade::class,

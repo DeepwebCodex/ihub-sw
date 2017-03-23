@@ -31,7 +31,7 @@ class AmqpService
         $url = 'http://' . $this->config['host'] . ':' . $this->config['port'] . '/api/mqsend';
 
         try {
-            $response = app('Guzzle')::request(
+            $response = app('Guzzle')->request(
                 'POST',
                 $url,
                 [

@@ -19,7 +19,7 @@ trait CashDeskRohRequest
 {
     protected function sendPostCashDesk(string $url, array $params, int $retry = 0){
         try {
-            $response = app('Guzzle')::request(
+            $response = app('Guzzle')->request(
                 'POST',
                 $url,
                 [
