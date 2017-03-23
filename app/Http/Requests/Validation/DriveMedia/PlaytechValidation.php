@@ -31,4 +31,17 @@ class PlaytechValidation
         return true;
     }
 
+    public function validateSpace($attribute, $value, $parameters, $validator):bool
+    {
+        if (!($request = Request::getFacadeRoot())) {
+            return false;
+        }
+
+        if (!(bool)config("integrations.DriveMediaPlaytech.{$request->input('space')}", false)) {
+            throw new ApiHttpException(500, null, ['code' => StatusCode::SPACE_NOT_FOUND]);
+        };
+
+        return true;
+    }
+
 }

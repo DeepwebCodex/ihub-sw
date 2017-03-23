@@ -3,10 +3,6 @@
 return [
     'service_id' => 38,
     'spaces' => [
-        '436' => [
-            'currency' => 'EUR',
-            'key' => 'fbfbv',
-        ],
         '1837' => [
             'currency' => 'UAH',
             'key' => '2f58Cu371V5x',

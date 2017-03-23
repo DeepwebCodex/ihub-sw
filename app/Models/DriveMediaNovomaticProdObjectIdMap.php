@@ -4,10 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class NovomaticProdObjectIdMap
- * @package App\Models
- */
 class DriveMediaNovomaticProdObjectIdMap extends Model
 {
     protected $connection = 'integration';
@@ -21,20 +17,25 @@ class DriveMediaNovomaticProdObjectIdMap extends Model
         'trade_id'
     ];
 
-    /**
-     * @param string $tradeId
-     * @return int
-     */
     public static function getObjectId(string $tradeId): int
     {
-        $model = static::where([
-            ['trade_id', $tradeId]
-        ])->first();
+        $object_id = static::generateHash($tradeId);
+
+        $model = static::find($object_id);
+
         if (!$model) {
             $model = static::create([
-                'trade_id' => $tradeId
+                'id' => $object_id,
+                'trade_id' => $tradeId,
             ]);
         }
-        return $model->id ?? 0;
+
+        return isset($model->id) ? $model->id : 0;
     }
+
+    public static function generateHash(string $tradeId): int
+    {
+        return hexdec(substr(md5($tradeId), 0, 15));
+    }
+
 }

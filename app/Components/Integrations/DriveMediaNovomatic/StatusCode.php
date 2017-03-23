@@ -12,4 +12,5 @@ abstract class StatusCode
     const USER_NOT_FOUND = 4004;
     const INVALID_SIGNATURE = 4001;
     const INTERNAL_SERVER_ERROR = 5000;
+    const SPACE_NOT_FOUND = 5001;
 }
