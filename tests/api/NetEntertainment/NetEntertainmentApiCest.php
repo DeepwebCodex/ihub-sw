@@ -2,15 +2,15 @@
 
 namespace api\NetEntertainment;
 
-use App\Components\Integrations\NetEntertainment\CodeMapping;
-use App\Components\Integrations\NetEntertainment\StatusCode;
-use App\Components\Transactions\Strategies\NetEntertainment\ProcessNetEntertainment;
+use App\Components\Integrations\Fundist\CodeMapping;
+use App\Components\Integrations\Fundist\StatusCode;
+use App\Components\Transactions\Strategies\Fundist\ProcessFundist;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
 use Codeception\Scenario;
-use \NetEntertainment\TestData;
-use \NetEntertainment\TestUser;
+use \Fundist\TestData;
+use \Fundist\TestUser;
 use Symfony\Component\HttpFoundation\Response;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
@@ -36,7 +36,7 @@ class NetEntertainmentApiCest
     public function __construct()
     {
         $this->testUser = new TestUser();
-        $this->data = new TestData();
+        $this->data = new TestData('netEntertainment');
         $this->action = '/netent';
     }
 
@@ -216,7 +216,7 @@ class NetEntertainmentApiCest
     public function testWrongParam(\ApiTester $I)
     {
         $request = $this->data->getBalance();
-        $request['userid'] = 12345;
+        $request['currency'] = 'q';
         $request = $this->data->renewHmac($request);
         $I->sendPOST($this->action, $request);
         $this->getResponseFail($I);
@@ -243,7 +243,7 @@ class NetEntertainmentApiCest
     /** fail in runtime */
     public function testFailPending(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessNetEntertainment::class);
+        $mock = $this->mock(ProcessFundist::class);
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
         $request = $this->data->bet();
@@ -254,7 +254,7 @@ class NetEntertainmentApiCest
 
     public function testFailDb(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessNetEntertainment::class);
+        $mock = $this->mock(ProcessFundist::class);
         $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
         $request = $this->data->bet();
         $I->sendPOST($this->action, $request);
