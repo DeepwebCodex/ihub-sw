@@ -22,9 +22,9 @@ trait ConfigTrait
      */
     protected function getConfigOption(string $name)
     {
-        if (!array_has($this->config, $name)) {
+        if (!($val = array_get($this->config, $name)) && $val === null) {
             throw new ConfigOptionNotFoundException();
         }
-        return array_get($this->config, $name);
+        return $val;
     }
 }

@@ -21,5 +21,5 @@ class Outcome extends BaseLineModel
     /**
      * {@inheritdoc}
      */
-    public $fillable = ['event_market_id', 'event_participant_id', 'outcome_type_id', 'coef', 'dparam1'];
+    public $fillable = ['event_market_id', 'event_participant_id', 'outcome_type_id', 'coef', 'dparam1', 'iparam1', 'iparam2'];
 }

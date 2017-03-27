@@ -20,12 +20,14 @@ class AccountManagerServiceProvider extends ServiceProvider
     /**
      * Register the service provider.
      *
-     * @return void
+     * @return AccountManager
      */
     public function register()
     {
         $this->app->singleton('AccountManager', function (Application $app) {
-            return $app->make(AccountManager::class);
+            /** @var AccountManager $accounting */
+            $accounting = $app->make(AccountManager::class);
+            return $accounting;
         });
     }
 

@@ -2,11 +2,19 @@
 
 namespace App\Models\Line;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\JoinClause;
 
 /**
- * Class OutcomeType
- * @package App\Models\Line
+ * @property integer $participant_num
+ * @property string $name
+ * @property string $del
+ * @property integer $weigh
+ * @property string $name_format
+ * @property integer $status_t
+ * @property string  $last_update
+ * @property integer $id
+ *
  */
 class OutcomeType extends BaseLineModel
 {
@@ -20,23 +28,11 @@ class OutcomeType extends BaseLineModel
      */
     public $timestamps = false;
 
-    /**
-     * @param int $marketTemplateId
-     * @return array
-     */
-    public function getOutcomeTypeByMarketTemplateId(int $marketTemplateId):array
+    public static function getOutcomeTypes(array $outcomeTypesIds)
     {
-        $connection = \DB::connection($this->connection);
+        /**@var Collection $templates*/
+        $templates = static::whereIn('id', $outcomeTypesIds)->get();
 
-        return (array) $connection
-            ->table('market_template AS mt')
-            ->select('ot.*')
-            ->join($this->table . ' AS ot', function ($join) {
-                /** @var JoinClause $join */
-                $join->whereRaw('ot.id = ANY (mt.outcome_types)');
-            })
-            ->where('mt.id', $marketTemplateId)
-            ->get()
-            ->all();
+        return  $templates->isNotEmpty() ? $templates : null;
     }
 }

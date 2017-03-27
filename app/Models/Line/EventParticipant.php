@@ -5,6 +5,9 @@ namespace App\Models\Line;
 /**
  * Class EventParticipant
  * @package App\Models\Line
+ *
+ * @property integer $id
+ * @property integer $number
  */
 class EventParticipant extends BaseLineModel
 {
@@ -21,5 +24,5 @@ class EventParticipant extends BaseLineModel
     /**
      * {@inheritdoc}
      */
-    public $fillable = ['number', 'participant_id', 'event_id'];
+    public $fillable = ['number', 'participant_id', 'event_id', 'name'];
 }

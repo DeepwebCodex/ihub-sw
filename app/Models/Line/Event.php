@@ -7,6 +7,8 @@ use Illuminate\Database\Query\JoinClause;
 /**
  * Class Event
  * @package App\Models\Line
+ *
+ * @property integer $id
  */
 class Event extends BaseLineModel
 {

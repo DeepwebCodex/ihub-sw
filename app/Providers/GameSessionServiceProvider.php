@@ -23,7 +23,9 @@ class GameSessionServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('GameSession', function (Application $app) {
-            return $app->make(GameSessionService::class);
+            /** @var GameSessionService $accounting */
+            $gameSessions = $app->make(GameSessionService::class);
+            return $gameSessions;
         });
     }
 

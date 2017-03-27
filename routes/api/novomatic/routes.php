@@ -1,4 +1,4 @@
 <?php
 
-Route::post('/', "NovomaticController@index");
-Route::any('{any}', "NovomaticController@error");
+Route::post('/', "DriveMediaNovomaticController@index");
+Route::any('{any}', "DriveMediaNovomaticController@error");

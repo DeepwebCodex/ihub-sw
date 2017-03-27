@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'check.partner_id' => \App\Http\Middleware\CheckPartnerId::class,
         'input.xml' => \App\Http\Middleware\InputXml::class,
         'input.egt.parsePlayerId' => \App\Http\Middleware\EuroGamesTech\ParsePlayerId::class,
+        'input.dm.parselogin' => \App\Http\Middleware\DriveMedia\ParseLogin::class,
         'log.request.response' => \App\Http\Middleware\LogRequestResponse::class,
     ];
 }

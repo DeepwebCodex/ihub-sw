@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Exceptions\Api\ApiHttpException;
 use Nathanmac\Utilities\Parser\Facades\Parser;
+use Stringy\StaticStringy as S;
 
 /**
  * Class InputJson
@@ -31,6 +32,7 @@ class InputXml
             $bodyContentDecoded = Parser::xml($bodyContent);
 
             $bodyContentDecoded = $this->collapseAttributes($bodyContentDecoded);
+
         } catch (\Exception $e) {
             throw new ApiHttpException(400, trans('Can\'t parse source'));
         }
@@ -51,6 +53,11 @@ class InputXml
                 if ($parentName && $name === '#text') {
                     $data[$parentName] = $item;
                 } else {
+
+                    if(S::startsWith($name, '@') && isset($data[$name])) {
+                        unset($data[$name]);
+                    }
+
                     $name = ltrim($name, '@');
                     if (is_array($item)) {
                         $data[$name] = $this->collapseAttributes($item, $name);

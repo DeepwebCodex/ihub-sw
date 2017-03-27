@@ -23,7 +23,7 @@ class Market extends BaseLineModel
      */
     public $fillable = [
         'event_id', 'market_template_id', 'result_type_id', 'max_bet', 'max_payout', 'stop_loss', 'service_id',
-        'user_id'
+        'user_id', 'weight'
     ];
 
     /**
