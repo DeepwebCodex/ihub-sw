@@ -33,7 +33,7 @@ class OrionResolverTest extends Unit {
     // tests Commit
 
 
-    public function testCommit() {
+    public function testCommitOne() {
         $testData[] = [
             'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
             'amount' => 111,
