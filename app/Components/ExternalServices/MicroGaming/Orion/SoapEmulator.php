@@ -20,7 +20,7 @@ use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Config;
 
 
-class SoapEmulator extends Client
+class SoapEmulator
 {
 
     public function sendRequest(Request $request): string
@@ -28,7 +28,7 @@ class SoapEmulator extends Client
         try {
 
 
-            $response = $this->request(
+            $response = app('Guzzle')->request(
                 'POST',
                 Config::get('integrations.microgamingOrion.baseUrl'),
                 [

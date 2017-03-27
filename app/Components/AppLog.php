@@ -25,6 +25,7 @@ class AppLog
      * @param string $node
      * @param string $module
      * @param string $line
+     * @param string $group
      * @return array
      */
     private function composeContext($node, $module, $line, $group = '')
@@ -178,6 +179,8 @@ class AppLog
      * @param string $node
      * @param string $module
      * @param string $line
+     * @param string $group
+     * @return
      */
     private function write($level, $message, $node = '', $module = '', $line = '', $group = '')
     {

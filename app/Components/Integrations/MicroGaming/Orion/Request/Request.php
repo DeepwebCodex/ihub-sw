@@ -14,8 +14,8 @@
 
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
+use App\Components\ExternalServices\MicroGaming\Orion\SoapEmulator;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
-use GuzzleHttp\ClientInterface;
 use function app;
 use function GuzzleHttp\json_encode;
 
@@ -30,7 +30,7 @@ abstract class Request {
 
     abstract function prepare(array $data = []);
 
-    function __construct(ClientInterface $client, SourceProcessor $source) {
+    function __construct(SoapEmulator $client, SourceProcessor $source) {
         $this->client = $client;
         $this->source = $source;
     }
