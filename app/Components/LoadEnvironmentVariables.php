@@ -4,10 +4,9 @@ namespace App\Components;
 
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
-use Symfony\Component\Console\Input\ArgvInput;
 use Illuminate\Contracts\Foundation\Application;
 
-class DetectEnvironment extends \Illuminate\Foundation\Bootstrap\DetectEnvironment
+class LoadEnvironmentVariables extends \Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables
 {
     /**
      * Bootstrap the given application.

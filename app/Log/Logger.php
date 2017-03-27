@@ -112,6 +112,8 @@ class Logger
     }
 
     public function runFile(array $config, \Monolog\Logger $monolog, $app){
-        return (new FileLogger())->bootLogger($app, $monolog);
+        $fileWriter = (new FileLogger())->bootLogger($app, $monolog);
+
+        $monolog->pushHandler($fileWriter->getMonolog()->getHandlers()[0]);
     }
 }
