@@ -42,7 +42,7 @@ class ExternalRequestMessageFormatter extends MessageFormatter
      * @param \Exception $error
      * @return string
      */
-    protected function getResponseBody(ResponseInterface $response, \Exception $error): string
+    protected function getResponseBody(ResponseInterface $response, \Exception $error = null): string
     {
         if ($error !== null) {
             return $error->getMessage();
