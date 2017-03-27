@@ -30,7 +30,7 @@ class SendService
     {
         $url = 'http://' . $this->config['host'] . ':' . $this->config['port'] . '/' . $this->config['action'];
         try {
-            $response = app('Guzzle')::request(
+            $response = app('Guzzle')->request(
                 'POST',
                 $url,
                 [

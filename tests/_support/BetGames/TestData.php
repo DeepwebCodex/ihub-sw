@@ -86,7 +86,7 @@ class TestData
             ['json' => $data]
         );
 
-        return json_decode($response->getBody()->getContents(), true)['token'];
+        return json_decode((string)$response->getBody(), true)['token'];
     }
 
     private function getIcmsServer()
