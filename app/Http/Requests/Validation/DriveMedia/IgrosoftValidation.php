@@ -2,13 +2,8 @@
 
 namespace App\Http\Requests\Validation\DriveMedia;
 
-/**
- * Created by PhpStorm.
- * User: rnd
- * Date: 27.03.17
- * Time: 12:58
- */
 use App\Components\Integrations\DriveMedia\StatusCode;
+use Illuminate\Support\Facades\Request;
 use App\Exceptions\Api\ApiHttpException;
 
 class IgrosoftValidation
