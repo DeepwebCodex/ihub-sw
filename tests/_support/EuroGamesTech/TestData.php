@@ -99,6 +99,7 @@ class TestData
             $data['PlayerId'] = $this->userId;
             $data['PartnerId'] = env('TEST_PARTNER_ID');
             $data['CashdeskId'] = env('TEST_CASHEDESK');
+            $data['UserIp']     = '127.0.0.1';
         }
 
         return $data;

@@ -174,13 +174,6 @@ class EuroGamesTechApiCest
         ]);
     }
 
-    public function testWithdrawAndDeposit(\ApiTester $I)
-    {
-        $request = $this->data->betWin();
-
-        $this->dataWithdrawAndDeposit($I, $request);
-    }
-
     public function testWithdrawAndDepositCompoundId(\ApiTester $I)
     {
         $request = $this->data->betWin(false);
@@ -220,7 +213,7 @@ class EuroGamesTechApiCest
 
     public function testWithdrawAndDepositLost(\ApiTester $I)
     {
-        $request = $this->data->betLost();
+        $request = $this->data->betLost(false);
 
         $this->dataWithdrawAndDepositLost($I, $request);
     }
