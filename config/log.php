@@ -53,4 +53,8 @@ return [
             ]
         ]
     ],
+    'external-services-requests' => [
+        'is_enabled' => env('LOG_EXTERNAL_REQUESTS', false),
+        'exclude_filter' => ['Mysterion'],
+    ]
 ];

@@ -45,7 +45,7 @@ trait RohRequest
     protected function sendPostRoh(string $url, array $params, int $retry = 0)
     {
         try {
-            $response = app('Guzzle')::request(
+            $response = app('Guzzle')->request(
                 'POST',
                 $url,
                 [
@@ -58,7 +58,7 @@ trait RohRequest
 
             if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < Response::HTTP_NOT_EXTENDED) {
                 if ($data = $response->getBody()) {
-                    if ($data = json_decode($data->getContents(), true)) {
+                    if ($data = json_decode((string)$data, true)) {
                         //validate response data
                         if (isset($data['status']) && $data['status'] == 'error') {
                             throw new \Exception(json_encode($data['error']),
