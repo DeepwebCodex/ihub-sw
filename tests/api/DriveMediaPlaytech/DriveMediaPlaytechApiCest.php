@@ -40,8 +40,8 @@ class DriveMediaPlaytechApiCest
             'cmd'       => 'writeBet',
             'space'     => '1805',
             'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'bet'       => '0.10',
-            'winLose'   => '-0.10',
+            'bet'       => '1.0',
+            'winLose'   => '-1.0',
             'tradeId'   => md5(microtime()),
             'betInfo'   => 'spin',
             'gameId'    => '183',
@@ -58,7 +58,7 @@ class DriveMediaPlaytechApiCest
 
         $I->seeResponseContainsJson([
             'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'balance'   => money_format('%i', ($testUser->getBalance() - 0.10)),
+            'balance'   => money_format('%i', ($testUser->getBalance() - 1.0)),
             'status'    => 'success',
             'error'     => ''
         ]);

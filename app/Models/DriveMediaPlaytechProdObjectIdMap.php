@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use App\Components\Transactions\TransactionRequest;
 use Illuminate\Database\Eloquent\Model;
 
 class DriveMediaPlaytechProdObjectIdMap extends Model
 {
-
     protected $connection = 'integration';
 
     protected $table = 'drivemedia_playtech_prod_object_id_map';
@@ -19,26 +17,25 @@ class DriveMediaPlaytechProdObjectIdMap extends Model
         'trade_id'
     ];
 
-    public static function getObjectId(string $trade_id) : int
+    public static function getObjectId(string $tradeId): int
     {
-        $object_id = static::generateHash($trade_id);
+        $object_id = static::generateHash($tradeId);
 
         $model = static::find($object_id);
 
-        if(!$model)
-        {
+        if (!$model) {
             $model = static::create([
                 'id' => $object_id,
-                'trade_id' => $trade_id,
+                'trade_id' => $tradeId,
             ]);
         }
 
         return isset($model->id) ? $model->id : 0;
     }
 
-    public static function generateHash(string $trade_id):int
+    public static function generateHash(string $tradeId): int
     {
-        return hexdec(substr(md5($trade_id), 0, 15));
+        return hexdec(substr(md5($tradeId), 0, 15));
     }
 
 }

@@ -28,7 +28,7 @@ class WriteBetRequest extends BaseNovomaticRequest
     public function rules()
     {
         return [
-            'space' => 'bail|required|numeric',
+            'space' => 'bail|required|numeric|validate_space',
             'login' => 'bail|required|string',
             'bet' => 'bail|required|numeric',
             'winLose' => 'bail|required|numeric',

@@ -1,6 +1,5 @@
 <?php
 
-use App\Components\Integrations\VirtualBoxing\ProgressService;
 use App\Models\VirtualBoxing\EventLink;
 
 class VirtualBoxingApiCest
@@ -31,12 +30,12 @@ class VirtualBoxingApiCest
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
         $I->seeResponseCodeIs(200);
 
-        $this->methodMatchProgress($I, ProgressService::STATUS_CODE_NO_MORE_BETS);
+        $this->methodMatchProgress($I, 'N');
 
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
         $I->seeResponseCodeIs(200);
 
-        $this->methodMatchProgress($I, ProgressService::STATUS_CODE_FINISHED_EVENT);
+        $this->methodMatchProgress($I, 'Z');
 
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
         $I->seeResponseCodeIs(200);
@@ -76,13 +75,15 @@ class VirtualBoxingApiCest
                 'scheduleId' => $this->eventId,
                 'competition' => 'ihub: Test competition',
                 'bet' => [
-                    'code' => 'R5',
-                    'selection' => [
-                        [
-                            'home' => 'H',
-                            'name' => 'ihub: Boxer 1',
-                            'price' => [
-                                'dec' => 2.97
+                    0 => [
+                        'code' => 'R5',
+                        'selection' => [
+                            [
+                                'home' => 'H',
+                                'name' => 'ihub: Boxer 1',
+                                'price' => [
+                                    'dec' => 2.97
+                                ]
                             ]
                         ]
                     ]
@@ -210,12 +211,12 @@ class VirtualBoxingApiCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
 
-        $this->methodMatchProgress($I, ProgressService::STATUS_CODE_NO_MORE_BETS);
+        $this->methodMatchProgress($I, 'N');
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
 
-        $this->methodMatchProgress($I, ProgressService::STATUS_CODE_FINISHED_EVENT);
+        $this->methodMatchProgress($I, 'Z');
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
@@ -242,7 +243,7 @@ class VirtualBoxingApiCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);
 
-        $this->methodMatchProgress($I, ProgressService::STATUS_CODE_CANCELLED_EVENT);
+        $this->methodMatchProgress($I, 'V');
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains(self::SUCCESS_RESPONSE_TEXT);

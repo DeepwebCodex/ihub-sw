@@ -8,4 +8,5 @@ abstract class StatusCode
     const USER_NOT_FOUND = 2;
     const INVALID_SIGNATURE = 3;
     const INTERNAL_SERVER_ERROR = 4;
+    const SPACE_NOT_FOUND = 5;
 }

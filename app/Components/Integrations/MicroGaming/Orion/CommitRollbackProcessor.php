@@ -68,7 +68,17 @@ class CommitRollbackProcessor implements IOperationsProcessor
     {
 
         $transactionRequest = new TransactionRequest(
-                Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName']
+                Config::get('integrations.microgaming.service_id'),
+                $data['a:TransactionNumber'],
+                $user->id,
+                $user->getCurrency(),
+                MicroGamingHelper::getTransactionDirection($typeOperation),
+                TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']),
+                MicroGamingHelper::getTransactionType($typeOperation),
+                $data['a:MgsReferenceNumber'],
+                $data['a:GameName'],
+                request()->server('PARTNER_ID', env('TEST_PARTNER_ID')),
+                request()->server('FRONTEND_NUM', env('TEST_CASHEDESK'))
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);

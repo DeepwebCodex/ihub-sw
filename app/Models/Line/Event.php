@@ -7,6 +7,8 @@ use Illuminate\Database\Query\JoinClause;
 /**
  * Class Event
  * @package App\Models\Line
+ *
+ * @property integer $id
  */
 class Event extends BaseLineModel
 {
@@ -44,7 +46,6 @@ class Event extends BaseLineModel
     protected function initConnection()
     {
         $connection = \DB::connection($this->connection);
-        $connection->setFetchMode(\PDO::FETCH_ASSOC);
         return $connection;
     }
 
@@ -57,7 +58,7 @@ class Event extends BaseLineModel
     {
         $sportform = $type === 'live' ? 'live_sportform_id' : 'sportform_id';
 
-        return $this->initConnection()
+        return (array) $this->initConnection()
             ->table($this->table)
             ->select('scope_data.id', 'scope_data.name', 'scope_data.description', 'scope_data.weigh', 'scope_data.auto')
             ->join('tournament', 'event.tournament_id', 'tournament.id')
@@ -81,7 +82,7 @@ class Event extends BaseLineModel
      */
     public function preGetParticipant(int $eventId):array
     {
-        return $this->initConnection()
+        return (array) $this->initConnection()
             ->table($this->table)
             ->select('event_participant.*', 'participant.name', 'event_participant.id AS event_participant_id')
             ->join('event_participant', 'event_participant.event_id', 'event.id')
@@ -108,7 +109,7 @@ class Event extends BaseLineModel
     {
         $sportform = $type === 'live' ? 'live_sportform_id' : 'sportform_id';
 
-        return $this->initConnection()
+        return (array) $this->initConnection()
             ->table($this->table)
             ->select('result_type.weigh', 'result_type.name', 'result_type.id')
             ->join('tournament', 'event.tournament_id', 'tournament.id')

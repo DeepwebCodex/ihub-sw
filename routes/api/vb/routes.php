@@ -1,4 +1,4 @@
 <?php
 
-Route::any('{any}', "VirtualBoxingController@error");
-Route::post('/', "VirtualBoxingController@index");
+Route::any('{any}', "VirtualBoxController@error");
+Route::post('/', "VirtualBoxController@index");

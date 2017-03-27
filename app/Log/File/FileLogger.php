@@ -1,27 +1,39 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: doom_sentinel
- * Date: 10/12/16
- * Time: 10:45 AM
- */
 
 namespace App\Log\File;
 
-
-use Illuminate\Foundation\Bootstrap\ConfigureLogging;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Log\Writer;
 use Monolog\Logger as Monolog;
-use Illuminate\Contracts\Foundation\Application;
 
-class FileLogger extends ConfigureLogging
+class FileLogger
 {
     public function bootLogger(Application $app, Monolog $monolog)
     {
         $log = $this->registerLogger($app);
 
-        return $this->configureHandlers($app, $log);
+        $this->configureHandlers($app, $log);
+
+        return $log;
     }
+
+    protected function registerLogger(Application $app)
+    {
+        return new Writer(
+            new Monolog($this->channel($app)), $app['events']
+        );
+    }
+
+    /**
+     * Get the name of the log "channel".
+     *
+     * @return string
+     */
+    protected function channel(Application $app)
+    {
+        return $app->bound('env') ? $app->environment() : 'production';
+    }
+
     /**
      * Configure the Monolog handlers for the application.
      *

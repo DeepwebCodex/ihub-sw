@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: doom_sentinel
- * Date: 10/5/16
- * Time: 2:56 PM
- */
-
 namespace App\Components\Codeception\Module;
 
 use Codeception\Lib\Connector\Laravel5\ExceptionHandlerDecorator;
@@ -126,6 +119,10 @@ class LaravelExtendedConnector extends Client
         }
         $this->firstRequest = false;
 
+        $this->applyBindings();
+        $this->applyContextualBindings();
+        $this->applyInstances();
+
         $request = Request::createFromBase($request);
         $response = $this->kernel->handle($request);
         $this->app->make('Illuminate\Contracts\Http\Kernel')->terminate($request, $response);
@@ -191,15 +188,13 @@ class LaravelExtendedConnector extends Client
         // Set the request instance for the application,
         if (is_null($request)) {
             $appConfig = require $this->module->config['project_dir'] . 'config/app.php';
-            $request = SymfonyRequest::create($appConfig['url'], 'GET',[], [], [], $this->module->config['server']);
+            $request = SymfonyRequest::create($appConfig['url']);
         }
         $this->app->instance('request', Request::createFromBase($request));
 
-        // Reset the old database after the DatabaseServiceProvider ran.
-        // This way other service providers that rely on the $app['db'] entry
-        // have the correct instance available.
+        // Reset the old database after all the service providers are registered.
         if ($this->oldDb) {
-            $this->app['events']->listen('Illuminate\Database\DatabaseServiceProvider', function () {
+            $this->app['events']->listen('bootstrapped: Illuminate\Foundation\Bootstrap\RegisterProviders', function () {
                 $this->app->singleton('db', function () {
                     return $this->oldDb;
                 });
@@ -209,9 +204,19 @@ class LaravelExtendedConnector extends Client
         $this->app->make('Illuminate\Contracts\Http\Kernel')->bootstrap();
 
         // Record all triggered events by adding a wildcard event listener
-        $this->app['events']->listen('*', function () {
-            $this->triggeredEvents[] = $this->normalizeEvent($this->app['events']->firing());
-        });
+        // Since Laravel 5.4 wildcard event handlers receive the event name as the first argument,
+        // but for earlier Laravel versions the firing() method of the event dispatcher should be used
+        // to determine the event name.
+        if (method_exists($this->app['events'], 'firing')) {
+            $listener = function () {
+                $this->triggeredEvents[] = $this->normalizeEvent($this->app['events']->firing());
+            };
+        } else {
+            $listener = function ($event) {
+                $this->triggeredEvents[] = $this->normalizeEvent($event);
+            };
+        }
+        $this->app['events']->listen('*', $listener);
 
         // Replace the Laravel exception handler with our decorated exception handler,
         // so exceptions can be intercepted for the disable_exception_handling functionality.
@@ -230,10 +235,6 @@ class LaravelExtendedConnector extends Client
         if ($this->module->config['disable_model_events'] || $this->modelEventsDisabled) {
             Model::unsetEventDispatcher();
         }
-
-        $this->applyBindings();
-        $this->applyContextualBindings();
-        $this->applyInstances();
 
         $this->module->setApplication($this->app);
     }
@@ -268,8 +269,13 @@ class LaravelExtendedConnector extends Client
 
             return [];
         };
+
+        // In Laravel 5.4 the Illuminate\Contracts\Events\Dispatcher interface was changed,
+        // the 'fire' method was renamed to 'dispatch'. This code determines the correct method to mock.
+        $method = method_exists($this->app['events'], 'dispatch') ? 'dispatch' : 'fire';
+
         $mock->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount)
-            ->method('fire')
+            ->method($method)
             ->will(new \PHPUnit_Framework_MockObject_Stub_ReturnCallback($callback));
 
         $this->app->instance('events', $mock);

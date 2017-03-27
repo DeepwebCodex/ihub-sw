@@ -2,6 +2,7 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
+use App\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Event as EventModel;
 use App\Models\Line\ResultGame;
 use App\Models\Line\ResultGameTotal;
@@ -24,7 +25,7 @@ class Result
 
         $validateValue = function ($value) {
             if (!$value) {
-                throw new \RuntimeException('init_result');
+                throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::FAILED_INIT_RESULT));
             }
         };
 
@@ -42,7 +43,7 @@ class Result
         ResultGameTotal::insertResultGameTotal($eventId, [
             'result_total' => '',
             'result_total_json' => '',
-            'result_type_id' => $resultTypes[0]['id']
+            'result_type_id' => data_get($resultTypes, '0.id')
         ]);
     }
 }

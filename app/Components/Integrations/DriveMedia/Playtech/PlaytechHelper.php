@@ -24,9 +24,8 @@ class PlaytechHelper
                     'amount' => $bet,
                     'type' => TransactionRequest::TRANS_BET
                 ]);
-
                 array_push($transactions, [
-                    'amount' => $win_lose,
+                    'amount' => $win_lose + $bet,
                     'type' => TransactionRequest::TRANS_WIN
                 ]);
             } else {

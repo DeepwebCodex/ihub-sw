@@ -44,6 +44,7 @@ class DriveMediaNovomaticController extends BaseApiController
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 
+        Validator::extend('validate_space', 'App\Http\Requests\Validation\DriveMedia\NovomaticValidation@validateSpace');
         Validator::extend('validate_sign', 'App\Http\Requests\Validation\DriveMedia\NovomaticValidation@validateSign');
     }
 

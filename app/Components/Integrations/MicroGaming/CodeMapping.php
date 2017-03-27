@@ -59,7 +59,7 @@ class CodeMapping extends CodeMappingBase
             ],
             StatusCode::ACCOUNT_NOT_FOUND => [
                 'message'   => 'Такого аккаунта не существует.',
-                'map'       => [],
+                'map'       => [1024, 1410],
                 'attribute' => null,
                 'meanings'  => [self::USER_NOT_FOUND]
             ],

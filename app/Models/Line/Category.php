@@ -5,6 +5,9 @@ namespace App\Models\Line;
 /**
  * Class Category
  * @package App\Models\Line
+ *
+ * @property integer $id
+ *
  */
 class Category extends BaseLineModel
 {

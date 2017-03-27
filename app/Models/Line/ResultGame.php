@@ -37,6 +37,14 @@ class ResultGame extends BaseLineModel
         ])->update(['approve' => 'yes']);
     }
 
+    public static function isResultsApproved(int $eventId) : bool
+    {
+        return ! ((bool) static::where([
+            'event_id' => $eventId,
+            'approve'  => 'no'
+        ])->count());
+    }
+
     /**
      * @param int $eventId
      * @param array $resultTypes
@@ -60,13 +68,13 @@ class ResultGame extends BaseLineModel
         $data = [];
         foreach ($resultTypes as $resultType) {
             foreach ($participants as $participant) {
-                if ($participant['name'] !== 'Blank') {
+                if (data_get($participant, 'name') !== 'Blank') {
                     foreach ($scopes as $scope) {
                         $data[] = [
                             'event_id' => $eventId,
-                            'scope_data_id' => $scope['id'],
-                            'result_type_id' => $resultType['id'],
-                            'event_particpant_id' => $participant['event_participant_id'],
+                            'scope_data_id' => data_get($scope,'id'),
+                            'result_type_id' => data_get($resultType, 'id'),
+                            'event_particpant_id' => data_get($participant, 'event_participant_id'),
                             'amount' => 0,
                             'result_time' => $time,
                         ];
@@ -74,6 +82,11 @@ class ResultGame extends BaseLineModel
                 }
             }
         }
+
         static::insert($data);
+    }
+
+    public static function getResult(int $event_id) {
+        return static::where('event_id', $event_id)->where('amount', 0, '>')->first();
     }
 }
