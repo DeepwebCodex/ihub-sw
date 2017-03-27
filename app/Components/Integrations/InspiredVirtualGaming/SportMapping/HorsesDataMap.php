@@ -48,7 +48,7 @@ class HorsesDataMap extends BaseSportDataMap implements SportDataMapInterface
 
         foreach (array_get($this->eventData, 'racer') as $racer) {
             $data[] = [
-                'num'    => array_get($racer, 'Num'),
+                'num'    => array_get($racer, 'Num')-1,
                 'amount' => array_get($racer, 'Position')
             ];
         }
@@ -62,7 +62,7 @@ class HorsesDataMap extends BaseSportDataMap implements SportDataMapInterface
         $participants = collect($participants);
 
         foreach ($results as $result) {
-            $name = array_get($participants->where('number', $result['num'])->first() , 'name');
+            $name = array_get($participants->where('number', $result['num'] +1)->first() , 'name');
             $output .= "{$result['amount']}pst - " . substr($name, 0, 5) . ".({$result['num']}), ";
         }
 

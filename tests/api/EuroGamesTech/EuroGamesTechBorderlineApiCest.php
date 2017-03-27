@@ -185,7 +185,7 @@ class EuroGamesTechBorderlineApiCest
 
     public function testMultiWin(\ApiTester $I)
     {
-        $request = $this->data->betWin();
+        $request = $this->data->betWin(false);
         $balanceBefore = $this->testUser->getBalanceInCents();
 
 

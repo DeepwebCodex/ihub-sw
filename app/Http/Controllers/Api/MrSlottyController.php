@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Integrations\MrSlotty\CodeMapping;
 use App\Components\Integrations\MrSlotty\MrSlottyHelper;
+use App\Components\Integrations\MrSlotty\StatusCode;
 use App\Components\Transactions\Strategies\MrSlotty\ProcessMrSlotty;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionRequest;
@@ -162,7 +163,7 @@ class MrSlottyController extends BaseApiController
 
     public function error()
     {
-        throw new ApiHttpException(500, null, []);
+        throw new ApiHttpException(500, null, CodeMapping::getByMeaning(StatusCode::INTERNAL_SERVER_ERROR));
     }
 
     public function respondOk($statusCode = Response::HTTP_OK, string $message = null, array $payload = [])

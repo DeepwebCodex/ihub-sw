@@ -31,7 +31,7 @@ class AmqpService
         $url = 'http://' . $this->config['host'] . ':' . $this->config['port'] . '/api/mqsend';
 
         try {
-            $response = app('Guzzle')::request(
+            $response = app('Guzzle')->request(
                 'POST',
                 $url,
                 [
@@ -58,7 +58,7 @@ class AmqpService
             throw new \RuntimeException('Empty body response');
         }
 
-        $decodedData = json_decode($data->getContents(), true);
+        $decodedData = json_decode((string)$data, true);
         return (isset($decodedData['result']) && $decodedData['result'] === 'ok');
     }
 }

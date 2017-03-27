@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands\Orion;
 
+use App\Components\ExternalServices\MicroGaming\Orion\SoapEmulator;
 use App\Components\Integrations\MicroGaming\Orion\CommitRollbackProcessor;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetRollbackQueueData;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
-use App\Components\Integrations\MicroGaming\Orion\SoapEmul;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use App\Components\Transactions\TransactionRequest;
 use App\Http\Requests\Validation\Orion\ManualValidation;
@@ -47,13 +47,12 @@ class Rollback extends Command {
      */
     public function handle() {
         $sourceProcessor = app(SourceProcessor::class);
-        $soapEmul = app(SoapEmul::class);
-        $requestQueueData = app(GetRollbackQueueData::class, [$soapEmul, $sourceProcessor]);
+        $soapEmul = app(SoapEmulator::class);
+        $requestQueueData = new GetRollbackQueueData($soapEmul, $sourceProcessor);
         $validatorQueueData = app(RollbackValidation::class);
-        $requestResolveData = app(ManuallyValidateBet::class, [$soapEmul, $sourceProcessor]);
+        $requestResolveData = new ManuallyValidateBet($soapEmul, $sourceProcessor);
         $validatorResolveData = app(ManualValidation::class);
-        $operationsProcessor = app(CommitRollbackProcessor::class, ['RollbackQueue',
-            TransactionRequest::TRANS_REFUND]);
+        $operationsProcessor = new CommitRollbackProcessor('RollbackQueue', TransactionRequest::TRANS_REFUND);
         $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $requestResolveData, $validatorResolveData);
     }
 

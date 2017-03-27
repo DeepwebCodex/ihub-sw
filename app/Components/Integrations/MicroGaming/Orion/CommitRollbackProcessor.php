@@ -9,7 +9,7 @@
 namespace App\Components\Integrations\MicroGaming\Orion;
 
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
-use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGaming;
+use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGamingOrion;
 use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
@@ -25,19 +25,22 @@ use Illuminate\Support\Facades\Config;
  *
  * @author petroff
  */
-class CommitRollbackProcessor implements IOperationsProcessor {
+class CommitRollbackProcessor implements IOperationsProcessor
+{
 
     //RollbackQueue
 
     protected $unlockType;
     protected $transType;
 
-    function __construct(string $unlockType, string $transType) {
+    function __construct(string $unlockType, string $transType)
+    {
         $this->unlockType = $unlockType;
         $this->transType = $transType;
     }
 
-    public function make(array $data): array {
+    public function make(array $data): array
+    {
         $dataRes = array();
         foreach ($data as $key => $value) {
             $user_id = (int) $value['a:LoginName'];
@@ -49,21 +52,38 @@ class CommitRollbackProcessor implements IOperationsProcessor {
                 $value['isDuplicate'] = $response->isDuplicate;
                 $dataRes[] = $value;
             } catch (Exception $e) {
-                AppLog::warning("One records was canceled. Cause: " . print_r($e->getMessage(), true) . " Data: " . print_r($value, true));
+                $logRecords = [
+                    'data' => var_export($value, true),
+                    'message' => var_export($e->getMessage(), true)
+                ];
+                app('AppLog')->warning(json_encode($logRecords), '', '', '', 'MicroGaming-Orion');
             }
         }
 
         return $dataRes;
     }
 
-    public function pushOperation(string $typeOperation, array $data, UserInterface $user): TransactionResponse {
+    public function pushOperation(string $typeOperation, array $data,
+            UserInterface $user): TransactionResponse
+    {
+
         $transactionRequest = new TransactionRequest(
-                Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName']
+                Config::get('integrations.microgaming.service_id'),
+                $data['a:TransactionNumber'],
+                $user->id,
+                $user->getCurrency(),
+                MicroGamingHelper::getTransactionDirection($typeOperation),
+                TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']),
+                MicroGamingHelper::getTransactionType($typeOperation),
+                $data['a:MgsReferenceNumber'],
+                $data['a:GameName'],
+                request()->server('PARTNER_ID', env('TEST_PARTNER_ID')),
+                request()->server('FRONTEND_NUM', env('TEST_CASHEDESK'))
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
 
-        return $transactionHandler->handle(new ProcessMicroGaming());
+        return $transactionHandler->handle(new ProcessMicroGamingOrion());
     }
 
 }

@@ -33,11 +33,14 @@ class OrionResolverTest extends Unit {
     // tests Commit
 
 
-    public function testCommit() {
+    public function testCommitOne() {
         $testData[] = [
             'loginName' => $this->testUser->getUser()->id . $this->testUser->getCurrency(),
-            'amount' => 111, 'currency' => $this->testUser->getCurrency(), 'rowId' => $this->data->generateUniqId(),
-            'transactionNumber' => $this->data->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'amount' => 111,
+            'currency' => $this->testUser->getCurrency(),
+            'rowId' => $this->data->generateUniqId(),
+            'transactionNumber' => $this->data->generateUniqId(),
+            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
             'referenceNumber' => $this->data->generateUniqId()
         ];
         $obj = $this->data->init($testData);

@@ -158,7 +158,6 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        \Kozz\Laravel\Providers\Guzzle::class,
         \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
         \App\Providers\AccountManagerServiceProvider::class,
         \App\Providers\AppLogServiceProvider::class,
@@ -166,6 +165,7 @@ return [
         \App\Providers\AmqpServiceProvider::class,
         \App\Providers\GameSessionServiceProvider::class,
         \App\Providers\QueueRabbitMQServiceProvider::class,
+        \App\Providers\GuzzleServiceProvider::class
     ],
 
     /*
@@ -212,7 +212,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Guzzle'    => \Kozz\Laravel\Facades\Guzzle::class,
         'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
         'AppLog' => \App\Facades\AppLog::class,
         'Fractal' => Spatie\Fractal\FractalFacade::class,
