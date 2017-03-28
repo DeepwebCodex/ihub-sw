@@ -32,7 +32,7 @@ class GetFailedEndGameQueue extends Request {
             'soapenv:Body' => [
                 'adm:GetFailedEndGameQueue' => [
                     'adm:serverIds' => [
-                        'arr:int' => Config::get('integrations.microgamingOrion.username')
+                        'arr:int' => Config::get('integrations.microgamingOrion.serverId')
                     ]
                 ]
             ]

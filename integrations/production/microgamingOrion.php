@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'baseUrl' => 'https://orionapi3.gameassists.co.uk/orion/vanguardadmin/SOAP',
+    'baseUrl' => 'https://orionapi3.gameassists.co.uk/Orion/VanguardAdmin/SOAP2',
     'actionUrl' => 'http://mgsops.net/AdminAPI_Admin/IVanguardAdmin2/',
     'username' => 'FAVBet',
     'password' => 'F4vB3t',
