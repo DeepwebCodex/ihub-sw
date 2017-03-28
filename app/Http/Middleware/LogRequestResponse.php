@@ -33,7 +33,8 @@ class LogRequestResponse
         if (env('APP_REQUEST_DEBUG', false) && $controller = $this->isApiCall($request)) {
             app('AppLog')->info([
                 'request' => $request->getContent(),
-                'response' => $response->getContent()
+                'response' => $response->getContent(),
+                'query' => $request->getQueryString()
             ], $this->getNodeName(), 'request-response-log');
         }
     }
