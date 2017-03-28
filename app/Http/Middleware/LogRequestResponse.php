@@ -34,7 +34,7 @@ class LogRequestResponse
             app('AppLog')->info([
                 'request' => $request->getContent(),
                 'response' => $response->getContent(),
-                'query' => $request->getQueryString()
+                'query' => $request->getUri()
             ], $this->getNodeName(), 'request-response-log');
         }
     }
