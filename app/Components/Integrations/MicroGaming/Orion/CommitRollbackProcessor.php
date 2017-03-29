@@ -26,11 +26,17 @@ class CommitRollbackProcessor implements IOperationsProcessor
 
     protected $unlockType;
     protected $transType;
+    protected $bar;
 
     function __construct(string $unlockType, string $transType)
     {
         $this->unlockType = $unlockType;
         $this->transType = $transType;
+    }
+
+    function setBar($bar)
+    {
+        $this->bar = $bar;
     }
 
     public function make(array $data): array
@@ -45,6 +51,9 @@ class CommitRollbackProcessor implements IOperationsProcessor
                 $value['operationId'] = $response->operation_id;
                 $value['isDuplicate'] = $response->isDuplicate;
                 $dataRes[] = $value;
+                if ($this->bar) {
+                    $this->bar->advance();
+                }
             } catch (Exception $e) {
                 $logRecords = [
                     'data' => var_export($value, true),
