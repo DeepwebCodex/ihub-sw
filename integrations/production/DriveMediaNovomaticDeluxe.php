@@ -99,5 +99,6 @@ return [
             'currency' => 'AMD',
             'key' => '1fHn41177KZk',
         ],
-    ]
+    ],
+    'allowed_ips' => [],
 ];

@@ -43,6 +43,7 @@ class NetEntertainmentController extends BaseApiController
 
         $this->options = config('integrations.netEntertainment');
 
+        $this->middleware('check.ip:netEntertainment');
         $this->middleware('input.json')->except(['error']);
 
         /**

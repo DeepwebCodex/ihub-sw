@@ -5,5 +5,6 @@ return [
     '391' => [
         'currency' => 'FUN',
         'key' => 'sda55df'
-    ]
+    ],
+    'allowed_ips' => [],
 ];

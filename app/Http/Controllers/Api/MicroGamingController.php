@@ -40,6 +40,7 @@ class MicroGamingController extends BaseApiController
 
         $this->options = config('integrations.microgaming');
 
+        $this->middleware('check.ip:microgaming');
         $this->middleware('input.xml');
 
         Validator::extend('validate_token', 'App\Http\Requests\Validation\MicroGamingValidation@validateToken');
