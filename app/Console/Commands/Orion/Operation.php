@@ -47,12 +47,21 @@ trait Operation
             Request $requestResolveData, Validation $validatorResolveData)
     {
         try {
+            $bar = $this->output->createProgressBar(7);
+            $bar->advance();
             $data = $requestQueueData->getData();
+            $bar->advance();
             $validatorQueueData->validateBaseStructure($data);
+            $bar->advance();
             $elements = $validatorQueueData->getData($data);
+            $bar->advance();
             $handleCommitRes = $operationsProcessor->make($elements);
+            $bar->advance();
             $dataResponse = $requestResolveData->getData($handleCommitRes);
+            $bar->advance();
             $validatorResolveData->validateBaseStructure($dataResponse);
+            $bar->advance();
+            $bar->finish(); $this->info("\n");
             return $this->handleSuccess($dataResponse, $handleCommitRes);
         } catch (RequestException $re) {
             $logRecords = [

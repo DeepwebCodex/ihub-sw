@@ -47,11 +47,13 @@ class EndGame extends Command {
     public function handle() {
         $sourceProcessor = app(SourceProcessor::class);
         $soapEmul = app(SoapEmulator::class);
+
         $requestQueueData = new GetFailedEndGameQueue($soapEmul, $sourceProcessor);
         $validatorQueueData = app(EndGameValidation::class);
+        $operationsProcessor = app(CompleteGameProcessor::class);
         $requestResolveData = new ManuallyCompleteGame($soapEmul, $sourceProcessor);
         $validatorResolveData = app(ManualCompleteValidation::class);
-        $operationsProcessor = app(CompleteGameProcessor::class);
+
         $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $requestResolveData, $validatorResolveData);
     }
 
