@@ -47,6 +47,8 @@ class MrSlottyController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('player_id'), $this->getOption('service_id'), 'MrSlotty');
 
+        $this->checkCurrency($user->getCurrency(), $request->input('currency'));
+
         return $this->respondOk(200, null, [
             "balance"   => $user->getBalanceInCents(),
             "currency"  => $user->getCurrency()
@@ -56,6 +58,8 @@ class MrSlottyController extends BaseApiController
     public function bet(BetRequest $request)
     {
         $user = IntegrationUser::get($request->input('player_id'), $this->getOption('service_id'), 'MrSlotty');
+
+        $this->checkCurrency($user->getCurrency(), $request->input('currency'));
 
         parse_str($request->input('extra'), $userParams);
 
@@ -88,6 +92,8 @@ class MrSlottyController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('player_id'), $this->getOption('service_id'), 'MrSlotty');
 
+        $this->checkCurrency($user->getCurrency(), $request->input('currency'));
+
         parse_str($request->input('extra'), $userParams);
 
         $transactionRequest = new TransactionRequest(
@@ -118,6 +124,8 @@ class MrSlottyController extends BaseApiController
     public function betWin(BetWinRequest $request)
     {
         $user = IntegrationUser::get($request->input('player_id'), $this->getOption('service_id'), 'MrSlotty');
+
+        $this->checkCurrency($user->getCurrency(), $request->input('currency'));
 
         parse_str($request->input('extra'), $userParams);
 
@@ -173,6 +181,14 @@ class MrSlottyController extends BaseApiController
         ]);
 
         return parent::respondOk($statusCode, '', $payload);
+    }
+
+    protected function checkCurrency($userCurrency, $reqCurrency)
+    {
+        if($userCurrency != $reqCurrency)
+        {
+            $this->error();
+        }
     }
 
 }
