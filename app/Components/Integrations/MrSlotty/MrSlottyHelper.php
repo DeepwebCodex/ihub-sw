@@ -42,7 +42,7 @@ class MrSlottyHelper
      * @param array $transactions
      * @return array
      */
-    public static function getTransactions(int $bet, int $win, int $bet_transaction, int $win_transaction, array $transactions = []):array
+    public static function getTransactions(int $bet, int $win, string $bet_transaction, string $win_transaction, array $transactions = []):array
     {
         array_push($transactions, [
             'amount' => $bet,
@@ -61,5 +61,14 @@ class MrSlottyHelper
         }
 
         return $transactions;
+    }
+
+    /**
+     * @param $roundId
+     * @return int
+     */
+    public static function getObjectId($roundId):int
+    {
+        return hexdec(substr($roundId, 0, 15));
     }
 }

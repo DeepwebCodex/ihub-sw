@@ -65,7 +65,7 @@ class MrSlottyController extends BaseApiController
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
-            $request->input('round_id'),
+            MrSlottyHelper::getObjectId($request->input('round_id')),
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
@@ -98,7 +98,7 @@ class MrSlottyController extends BaseApiController
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
-            $request->input('round_id'),
+            MrSlottyHelper::getObjectId($request->input('round_id')),
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
@@ -140,7 +140,7 @@ class MrSlottyController extends BaseApiController
         {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
-                $request->input('round_id'),
+                MrSlottyHelper::getObjectId($request->input('round_id')),
                 $user->id,
                 $user->getCurrency(),
                 $transaction['direction'],
