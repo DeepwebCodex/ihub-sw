@@ -25,12 +25,20 @@ class IPList
         throw new ApiHttpException(400, $ip .' '. trans('IP address is not permitted'));
     }
 
-    private function isValidIP($ip, $integration)
+    public function isValidIP($ip, $integration)
     {
         $whitelist = config("integrations.{$integration}.allowed_ips");
 
-        if (empty($whitelist) || in_array($ip, $whitelist)) {
+        if (empty($whitelist)) {
             return true;
+        }
+
+        if(is_string($whitelist)){
+            return $ip == $whitelist;
+        }
+
+        if (is_array($whitelist)){
+            return in_array($ip, $whitelist);
         }
 
         return false;
