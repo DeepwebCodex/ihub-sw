@@ -6,4 +6,5 @@ return [
         'currency' => 'UAH',
         'key' => 'gvfdg'
     ],
+    'allowed_ips' => [],
 ];

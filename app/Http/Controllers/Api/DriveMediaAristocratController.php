@@ -26,6 +26,7 @@ class DriveMediaAristocratController extends BaseApiController
 
         $this->options = config('integrations.DriveMediaAristocrat');
 
+        $this->middleware('check.ip:DriveMediaAristocrat');
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 
