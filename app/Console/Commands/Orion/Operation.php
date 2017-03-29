@@ -61,7 +61,8 @@ trait Operation
             $bar->advance();
             $validatorResolveData->validateBaseStructure($dataResponse);
             $bar->advance();
-            $bar->finish(); $this->info("\n");
+            $bar->finish(); 
+            $this->info("\n");
             return $this->handleSuccess($dataResponse, $handleCommitRes);
         } catch (RequestException $re) {
             $logRecords = [
