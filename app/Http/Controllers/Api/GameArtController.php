@@ -43,6 +43,10 @@ class GameArtController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('remote_id'), $this->getOption('service_id'), 'gameart');
 
+        $remoteData = \GuzzleHttp\json_decode($request->input('remote_data'), true);
+
+        $this->checkCurrency($user->getCurrency(), $remoteData['currency']);
+
         return $this->respondOk(Response::HTTP_OK, '', [
             'balance' => self::toFloat($user->getBalanceInCents())
         ]);
@@ -53,6 +57,8 @@ class GameArtController extends BaseApiController
         $user = IntegrationUser::get($request->input('remote_id'), $this->getOption('service_id'), 'gameart');
 
         $remoteData = \GuzzleHttp\json_decode($request->input('remote_data'), true);
+
+        $this->checkCurrency($user->getCurrency(), $remoteData['currency']);
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -81,6 +87,8 @@ class GameArtController extends BaseApiController
         $user = IntegrationUser::get($request->input('remote_id'), $this->getOption('service_id'), 'gameart');
 
         $remoteData = \GuzzleHttp\json_decode($request->input('remote_data'), true);
+
+        $this->checkCurrency($user->getCurrency(), $remoteData['currency']);
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -116,6 +124,14 @@ class GameArtController extends BaseApiController
         ]);
 
         return parent::respondOk($statusCode, $message, $payload);
+    }
+
+    protected function checkCurrency($userCurrency, $reqCurrency)
+    {
+        if($userCurrency != $reqCurrency)
+        {
+            $this->error();
+        }
     }
 
     protected function toFloat(int $balance)
