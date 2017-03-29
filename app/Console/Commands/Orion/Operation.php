@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Console\Commands\Orion;
 
 use App\Components\Integrations\MicroGaming\Orion\Request\Request;
@@ -18,11 +12,6 @@ use function app;
 use function GuzzleHttp\json_encode;
 use function GuzzleHttp\Psr7\str;
 
-/**
- * Description of Operation
- *
- * @author petroff
- */
 trait Operation
 {
 

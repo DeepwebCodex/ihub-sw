@@ -14,11 +14,6 @@ use App\Facades\AppLog;
 use Exception;
 use Illuminate\Support\Facades\Config;
 
-/**
- * Description of Process
- *
- * @author petroff
- */
 class CommitRollbackProcessor implements IOperationsProcessor
 {
 

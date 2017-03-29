@@ -58,16 +58,26 @@ class CancelPendingOperations extends Command
             return -1;
         }
 
-        $operations = app('AccountManager')->getOperationByQuery([
-            'select' => ['id', 'object_id', 'service_id'],
-            'where' => [
-                ['status', 'pending'],
-                ['service_id', array_keys($services)],
-                ['dt', "<{$expirationDate}"],
-                ['move', TransactionRequest::D_WITHDRAWAL]
-            ],
-            'limit' => $this->batchSize
-        ]);
+        try {
+
+            $operations = app('AccountManager')->getOperationByQuery([
+                'select' => ['id', 'object_id', 'service_id'],
+                'where' => [
+                    ['status', 'pending'],
+                    ['service_id', array_keys($services)],
+                    ['dt', "<{$expirationDate}"],
+                    ['move', TransactionRequest::D_WITHDRAWAL]
+                ],
+                'limit' => $this->batchSize
+            ]);
+        } catch (GenericApiHttpException $e) {
+            if(!empty($e->getMessage())) {
+                throw $e;
+            } else {
+                $this->info("There is no pending operations \n");
+                return;
+            }
+        }
 
         $operations = collect($operations);
 
