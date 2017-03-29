@@ -20,37 +20,45 @@ class OrionResolverCest
     {
         Artisan::call('orion:commit');
         $output = Artisan::output();
-        $I->assertEquals('Success.', trim($output));
+        $I->assertContains('Success.', trim($output));
     }
 
     public function testCommandRollback(ApiTester $I)
     {
         Artisan::call('orion:rollback');
         $output = Artisan::output();
-        $I->assertEquals('Success.', trim($output));
+        $I->assertContains('Success.', trim($output));
     }
 
     public function testCommandEndGame(ApiTester $I)
     {
         Artisan::call('orion:endgame');
         $output = Artisan::output();
-        $I->assertEquals('Success.', trim($output));
+        $I->assertContains('Success.', trim($output));
     }
 
     public function testCommandFailedEndGame(ApiTester $I)
     {
-        $this->testData->initMock($I);
+        $this->testData->initMockCommandFailedEndGame($I);
         Artisan::call('orion:endgame');
         $output = Artisan::output();
-        $I->assertEquals('Something went wrong!', trim($output));
+        $I->assertContains('Something went wrong!', trim($output));
     }
 
     public function testEndGameThrownException(ApiTester $I)
     {
-        $this->testData->initMock2($I);
+        $this->testData->initMockEndGameThrownException($I);
         Artisan::call('orion:endgame');
         $output = Artisan::output();
-        $I->assertEquals('Something went wrong!', trim($output));
+        $I->assertContains('Something went wrong!', trim($output));
+    }
+
+    public function testCommitWhenLostRowId(ApiTester $I)
+    {
+        $this->testData->initMockWhenLostRowId($I);
+        Artisan::call('orion:commit');
+        $output = Artisan::output();
+        $I->assertContains('Success.', trim($output));
     }
 
 }

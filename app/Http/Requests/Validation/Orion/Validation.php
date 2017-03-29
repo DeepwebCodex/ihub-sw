@@ -66,7 +66,7 @@ abstract class Validation {
                     throw new CheckEmptyValidation();
                 }
             }
-            $this->errors = $v->errors();
+            $this->errors = $v->errors();            
             throw new ValidationException($v);
         }
         return true;

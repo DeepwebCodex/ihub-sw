@@ -28,6 +28,7 @@ use App\Models\MicroGamingObjectIdMap;
 use Carbon\Carbon;
 use Codeception\Test\Unit;
 use Exception;
+use Helper\TestUser;
 use Illuminate\Support\Facades\Config;
 use Mockery;
 use stdClass;
@@ -88,7 +89,7 @@ class TestData extends Unit
                         'a:TournamentId' => 0,
                         'a:Description' => '',
                         'a:ExtInfo' => '',
-                        'a:RowIdLong' => $rowId,
+                        'a:RowIdLong' => ($rowIdLong) ?? $rowId,
                     ];
                 }
             }
@@ -395,7 +396,7 @@ class TestData extends Unit
         return $obj;
     }
 
-    public function initMock(ApiTester $I)
+    public function initMockCommandFailedEndGame(ApiTester $I)
     {
         $className = SoapEmulator::class;
         $mock = Mockery::mock($className);
@@ -413,11 +414,34 @@ the same binding (including security requirements, e.g. Message, Transport, None
         $I->haveInstance($className, $mock);
     }
 
-    public function initMock2(ApiTester $I)
+    public function initMockEndGameThrownException(ApiTester $I)
     {
         $className = SoapEmulator::class;
         $mock = Mockery::mock($className);
         $mock->shouldReceive('sendRequest')->andThrow(new Exception('Ecxeption unknown'), 'Thrown exception');
+        $I->getApplication()->instance($className, $mock);
+        $I->haveInstance($className, $mock);
+    }
+
+    public function initMockWhenLostRowId(ApiTester $I)
+    {
+        $testUser = new TestUser(10);
+        $testData[] = [
+            'loginName' => $testUser->getUser()->id . $testUser->getCurrency(),
+            'amount' => 111,
+            'currency' => $testUser->getCurrency(),
+            'rowId' => 0,
+            'rowIdLong' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(),
+            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $xml = $this->generatedXml($testData, 'commit');
+        $xmlMockB = $this->generatedXmlManualBet($xml);
+        $className = SoapEmulator::class;
+        $mock = Mockery::mock($className);
+        $mock->shouldReceive('sendRequest')->withArgs([GetCommitQueueData::class])->andReturn($xml);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
         $I->getApplication()->instance($className, $mock);
         $I->haveInstance($className, $mock);
     }
