@@ -181,4 +181,4 @@ class MrSlottyBorderlineApiCest
             'currency' => $testUser->getCurrency()
         ]);
     }
-}
+}
