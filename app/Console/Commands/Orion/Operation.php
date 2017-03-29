@@ -67,6 +67,7 @@ trait Operation
             
             return $this->handleSuccess($dataResponse, $handleCommitRes);
         } catch (RequestException $re) {
+            $this->info("\n");
             $bar->finish();
             $logRecords = [
                 'message' => str($re->getRequest())
@@ -77,9 +78,11 @@ trait Operation
             }
             $this->handleError($logRecords, 'warning', '', $re->getLine());
         } catch (CheckEmptyValidation $ve) {
+            $this->info("\n");
             $bar->finish();
             $this->handleSuccess(['message' => 'Source is empty']);
         } catch (Exception $ex) {
+            $this->info("\n");
             $bar->finish();
             $logRecords = [
                 'message' => $ex->getMessage()
