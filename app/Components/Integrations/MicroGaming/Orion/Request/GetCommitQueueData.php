@@ -32,7 +32,7 @@ class GetCommitQueueData extends Request {
             'soapenv:Body' => [
                 'adm:GetCommitQueueData' => [
                     'adm:serverIds' => [
-                        'arr:int' => Config::get('integrations.microgamingOrion.username')
+                        'arr:int' => Config::get('integrations.microgamingOrion.serverId')
                     ]
                 ]
             ]

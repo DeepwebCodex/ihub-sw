@@ -32,7 +32,7 @@ class GetRollbackQueueData extends Request {
             'soapenv:Body' => [
                 'adm:GetRollbackQueueData' => [
                     'adm:serverIds' => [
-                        'arr:int' => Config::get('integrations.microgamingOrion.username')
+                        'arr:int' => Config::get('integrations.microgamingOrion.serverId')
                     ]
                 ]
             ]
