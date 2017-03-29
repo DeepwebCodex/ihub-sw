@@ -18,10 +18,10 @@ class MrSlottyValidation
         $all = $request->all();
         $hash = $all['hash'];
         unset($all['hash']);
+        ksort($all);
 
-        if($hash != hash_hmac("sha256", http_build_query($all), config('integrations.mrslotty.secret')))
-        {
-            throw new ApiHttpException(401, null, CodeMapping::getByMeaning(CodeMapping::INVALID_SIGNATURE));
+        if($hash != hash_hmac("sha256", http_build_query($all), config('integrations.mrslotty.secret'))) {
+            throw new ApiHttpException(401, "", CodeMapping::getByMeaning(CodeMapping::INVALID_SIGNATURE));
         }
 
         return true;
