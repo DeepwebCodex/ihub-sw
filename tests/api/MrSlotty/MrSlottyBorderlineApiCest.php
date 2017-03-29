@@ -22,6 +22,7 @@ class MrSlottyBorderlineApiCest
             'player_id' => (string)$testUser->id,
             'currency' => $testUser->getCurrency(),
         ];
+        ksort($request);
 
         $request = array_merge($request, [
             'hash' => hash_hmac("sha256", http_build_query($request), "dfghdfj")
@@ -58,6 +59,7 @@ class MrSlottyBorderlineApiCest
                 'user_ip' => $this->userIp
             ])
         ];
+        ksort($request);
 
         $request = array_merge($request, [
             'hash' => hash_hmac("sha256", http_build_query($request), $this->options['secret'])
@@ -96,6 +98,7 @@ class MrSlottyBorderlineApiCest
                 'user_ip' => $this->userIp
             ])
         ];
+        ksort($request);
 
         $request = array_merge($request, [
             'hash' => hash_hmac("sha256", http_build_query($request), $this->options['secret'])
@@ -132,6 +135,7 @@ class MrSlottyBorderlineApiCest
                 'user_ip' => $this->userIp
             ])
         ];
+        ksort($request);
 
         $request = array_merge($request, [
             'hash' => hash_hmac("sha256", http_build_query($request), $this->options['secret'])
@@ -162,6 +166,7 @@ class MrSlottyBorderlineApiCest
                 'user_ip' => $this->userIp
             ])
         ];
+        ksort($request);
 
         $request = array_merge($request, [
             'hash' => hash_hmac("sha256", http_build_query($request), $this->options['secret'])
