@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Components\Integrations\MicroGaming\Orion;
 
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
@@ -63,22 +57,11 @@ class CommitRollbackProcessor implements IOperationsProcessor
         return $dataRes;
     }
 
-    public function pushOperation(string $typeOperation, array $data,
-            UserInterface $user): TransactionResponse
+    public function pushOperation(string $typeOperation, array $data, UserInterface $user): TransactionResponse
     {
 
         $transactionRequest = new TransactionRequest(
-                Config::get('integrations.microgaming.service_id'),
-                $data['a:TransactionNumber'],
-                $user->id,
-                $user->getCurrency(),
-                MicroGamingHelper::getTransactionDirection($typeOperation),
-                TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']),
-                MicroGamingHelper::getTransactionType($typeOperation),
-                $data['a:MgsReferenceNumber'],
-                $data['a:GameName'],
-                request()->server('PARTNER_ID', env('TEST_PARTNER_ID')),
-                request()->server('FRONTEND_NUM', env('TEST_CASHEDESK'))
+                Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName'], request()->server('PARTNER_ID', env('TEST_PARTNER_ID')), request()->server('FRONTEND_NUM', env('TEST_CASHEDESK'))
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);

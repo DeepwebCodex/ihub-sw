@@ -25,8 +25,7 @@ use function GuzzleHttp\Psr7\str;
 trait Operation
 {
 
-    public function handleError(array $message, $level, string $module,
-            string $line)
+    public function handleError(array $message, $level, string $module, string $line)
     {
         app('AppLog')->warning(json_encode($message), '', '', '', 'MicroGaming-Orion');
         $this->error('Something went wrong!');
@@ -42,8 +41,7 @@ trait Operation
         $this->info('Success.');
     }
 
-    public function make(Request $requestQueueData,
-            Validation $validatorQueueData, $operationsProcessor,
+    public function make(Request $requestQueueData, Validation $validatorQueueData, $operationsProcessor,
             Request $requestResolveData, Validation $validatorResolveData)
     {
         try {
@@ -61,7 +59,7 @@ trait Operation
             $bar->advance();
             $validatorResolveData->validateBaseStructure($dataResponse);
             $bar->advance();
-            $bar->finish(); 
+            $bar->finish();
             $this->info("\n");
             return $this->handleSuccess($dataResponse, $handleCommitRes);
         } catch (RequestException $re) {

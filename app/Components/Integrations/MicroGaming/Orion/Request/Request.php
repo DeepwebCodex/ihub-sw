@@ -1,17 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of RequestBase
- *
- * @author petroff
- */
-
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use App\Components\ExternalServices\MicroGaming\Orion\SoapEmulator;
@@ -19,7 +7,8 @@ use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
 use function app;
 use function GuzzleHttp\json_encode;
 
-abstract class Request {
+abstract class Request
+{
 
     protected $method;
     protected $uuid;
@@ -30,12 +19,14 @@ abstract class Request {
 
     abstract function prepare(array $data = []);
 
-    function __construct(SoapEmulator $client, SourceProcessor $source) {
+    function __construct(SoapEmulator $client, SourceProcessor $source)
+    {
         $this->client = $client;
         $this->source = $source;
     }
 
-    public function getData(array $data = []): array {
+    public function getData(array $data = []): array
+    {
         $this->prepare($data);
         $result = $this->client->sendRequest($this);
         $logRecord = [
@@ -47,19 +38,23 @@ abstract class Request {
         return $this->parse($result);
     }
 
-    public function getMethod(): string {
+    public function getMethod(): string
+    {
         return $this->method;
     }
 
-    public function getUuid(): string {
+    public function getUuid(): string
+    {
         return $this->uuid;
     }
 
-    public function getBody(): string {
+    public function getBody(): string
+    {
         return $this->body;
     }
 
-    public function parse(string $result): array {
+    public function parse(string $result): array
+    {
         $resultArray = $this->source->parser($result);
         return $resultArray;
     }
