@@ -12,6 +12,7 @@ use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\DriveMediaTemplate;
 use App\Http\Requests\DriveMedia\Amatic\BalanceRequest;
 use App\Http\Requests\DriveMedia\Amatic\PlayRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Components\Formatters\JsonApiFormatter;
@@ -48,6 +49,8 @@ class DriveMediaAmaticController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaAmatic');
 
+        AmaticHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
+
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
             'balance' => money_format('%i', $user->getBalance())
@@ -58,16 +61,11 @@ class DriveMediaAmaticController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaAmatic');
 
-        if(app()->environment() == 'production') {
-            if ($user->getActiveWallet()->currency != $this->getOption($request->input('space'))['currency']) {
-                $this->error();
-            }
-        }
+        AmaticHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         $transactions = AmaticHelper::getTransactions($request->input('bet'), $request->input('winLose'));
 
-        foreach ($transactions as $key => $transaction)
-        {
+        foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
                 0,
@@ -87,8 +85,7 @@ class DriveMediaAmaticController extends BaseApiController
 
             $transactionResponse = $transactionHandler->handle(new ProcessAmatic());
 
-            if($key == 0 && sizeof($transactions) == 2)
-            {
+            if($key == 0 && sizeof($transactions) == 2) {
                 $user->updateBalance($transactionResponse->getBalanceInCents());
             }
         }

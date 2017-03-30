@@ -12,6 +12,7 @@ use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\DriveMediaTemplate;
 use App\Http\Requests\DriveMedia\Aristocrat\BalanceRequest;
 use App\Http\Requests\DriveMedia\Aristocrat\PlayRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Components\Formatters\JsonApiFormatter;
@@ -36,6 +37,7 @@ class DriveMediaAristocratController extends BaseApiController
     public function index(Request $request)
     {
         $method = AristocratHelper::mapMethod($request->input('cmd'));
+
         if (method_exists($this, $method)) {
             return app()->call([$this, $method], $request->all());
         }
@@ -47,6 +49,8 @@ class DriveMediaAristocratController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaAristocrat');
 
+        AristocratHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
+
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
             'balance' => money_format('%i', $user->getBalance())
@@ -57,18 +61,11 @@ class DriveMediaAristocratController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaAristocrat');
 
-        if(app()->environment() == 'production')
-        {
-            if($user->getActiveWallet()->currency != $this->getOption($request->input('space'))['currency'])
-            {
-                $this->error();
-            }
-        }
+        AristocratHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         $transactions = AristocratHelper::getTransactions($request->input('bet'), $request->input('winLose'));
 
-        foreach ($transactions as $key => $transaction)
-        {
+        foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
                 0,
@@ -88,8 +85,7 @@ class DriveMediaAristocratController extends BaseApiController
 
             $transactionResponse = $transactionHandler->handle(new ProcessAristocrat());
 
-            if($key == 0 && sizeof($transactions) == 2)
-            {
+            if($key == 0 && sizeof($transactions) == 2) {
                 $user->updateBalance($transactionResponse->getBalanceInCents());
             }
         }

@@ -18,8 +18,7 @@ class DriveCasinoValidation
         $sign = $request->input('sign');
         $all = DriveCasinoHelper::clearRequest($request->request->all());
 
-        if($sign != strtoupper(hash('md5', DriveCasinoHelper::getKey($all['space']) . http_build_query($all))))
-        {
+        if($sign != strtoupper(hash('md5', DriveCasinoHelper::getKey($all['space']) . http_build_query($all)))) {
             throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::INVALID_SIGNATURE));
         }
 

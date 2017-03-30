@@ -12,6 +12,7 @@ use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\DriveMediaTemplate;
 use App\Http\Requests\DriveMedia\DriveCasino\BalanceRequest;
 use App\Http\Requests\DriveMedia\DriveCasino\PlayRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Components\Formatters\JsonApiFormatter;
@@ -36,6 +37,7 @@ class DriveCasinoController extends BaseApiController
     public function index(Request $request)
     {
         $method = DriveCasinoHelper::mapMethod($request->input('cmd'));
+
         if (method_exists($this, $method)) {
             return app()->call([$this, $method], $request->all());
         }
@@ -63,8 +65,7 @@ class DriveCasinoController extends BaseApiController
 
         $transactions = DriveCasinoHelper::getTransactions($request->input('bet'), $request->input('winLose'));
 
-        foreach ($transactions as $key => $transaction)
-        {
+        foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
                 0,
