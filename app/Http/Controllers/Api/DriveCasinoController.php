@@ -47,6 +47,8 @@ class DriveCasinoController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveCasino');
 
+        DriveCasinoHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
+
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
             'balance' => money_format('%i', $user->getBalance())
@@ -57,13 +59,7 @@ class DriveCasinoController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveCasino');
 
-        if(app()->environment() == 'production')
-        {
-            if($user->getActiveWallet()->currency != $this->getOption($request->input('space'))['currency'])
-            {
-                $this->error();
-            }
-        }
+        DriveCasinoHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         $transactions = DriveCasinoHelper::getTransactions($request->input('bet'), $request->input('winLose'));
 
