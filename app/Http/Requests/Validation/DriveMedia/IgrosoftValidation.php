@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Validation\DriveMedia;
 
+use App\Components\Integrations\DriveMedia\CodeMapping;
+use App\Components\Integrations\DriveMedia\Igrosoft\IgrosoftHelper;
 use Illuminate\Support\Facades\Request;
-use App\Components\Integrations\DriveMedia\StatusCode;
 use App\Exceptions\Api\ApiHttpException;
 
 class IgrosoftValidation
@@ -13,18 +14,12 @@ class IgrosoftValidation
         if (!($request = Request::getFacadeRoot())) {
             return false;
         }
-        $all = $request->all();
-        $sign = $all['sign'];
 
-        unset($all['sign']);
-        unset($all['partnerId']);
-        unset($all['cashdeskId']);
-        unset($all['userId']);
-        unset($all['userIp']);
+        $sign = $request->input('sign');
+        $all = IgrosoftHelper::clearRequest($request->request->all());
 
-        if($sign != strtoupper(hash('md5', config('integrations.DriveMediaIgrosoft')[$all['space']]['key'] . http_build_query($all))))
-        {
-            throw new ApiHttpException(500, null, ['code' => StatusCode::INVALID_SIGNATURE]);
+        if($sign != strtoupper(hash('md5', IgrosoftHelper::getKey($all['space']) . http_build_query($all)))) {
+            throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::INVALID_SIGNATURE));
         }
 
         return true;

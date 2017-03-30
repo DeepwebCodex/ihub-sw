@@ -11,6 +11,7 @@ use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\DriveMediaTemplate;
 use App\Http\Requests\DriveMedia\Igrosoft\BalanceRequest;
 use App\Http\Requests\DriveMedia\Igrosoft\PlayRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Components\Formatters\JsonApiFormatter;
@@ -47,6 +48,8 @@ class DriveMediaIgrosoftController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaIgrosoft');
 
+        IgrosoftHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
+
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
             'balance' => money_format('%i', $user->getBalance())
@@ -57,16 +60,11 @@ class DriveMediaIgrosoftController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaIgrosoft');
 
-        if(app()->environment() == 'production') {
-            if ($user->getActiveWallet()->currency != $this->getOption($request->input('space'))['currency']) {
-                $this->error();
-            }
-        }
+        IgrosoftHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         $transactions = IgrosoftHelper::getTransactions($request->input('bet'), $request->input('winLose'), $request->input('betInfo'));
 
-        foreach ($transactions as $key => $transaction)
-        {
+        foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
                 0,
@@ -86,8 +84,7 @@ class DriveMediaIgrosoftController extends BaseApiController
 
             $transactionResponse = $transactionHandler->handle(new ProcessIgrosoft());
 
-            if($key == 0 && sizeof($transactions) == 2)
-            {
+            if($key == 0 && sizeof($transactions) == 2) {
                 $user->updateBalance($transactionResponse->getBalanceInCents());
             }
         }

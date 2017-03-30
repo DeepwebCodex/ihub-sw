@@ -2,7 +2,10 @@
 
 namespace App\Components\Integrations\DriveMedia\Igrosoft;
 
+use App\Components\Integrations\DriveMedia\CodeMapping;
 use App\Components\Transactions\TransactionRequest;
+use App\Exceptions\Api\ApiHttpException;
+use Illuminate\Support\Facades\Config;
 
 class IgrosoftHelper
 {
@@ -66,5 +69,55 @@ class IgrosoftHelper
         }
 
         return $transactions;
+    }
+
+    /**
+     * @param array $query
+     * @return array
+     */
+    public static function clearRequest(array $query):array
+    {
+        $params = [
+            'sign',
+            'partnerId',
+            'cashdeskId',
+            'userIp',
+            'userId'
+        ];
+
+        foreach ($params as $key) {
+            unset($query[$key]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param $space
+     * @return mixed
+     */
+    public static function getKey($space)
+    {
+        $spaces = Config::get("integrations.DriveMediaIgrosoft.spaces");
+        foreach ($spaces as $k => $v) {
+            if($v['space'] === $space) {
+                return $v['key'];
+            }
+        }
+
+        throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
+    }
+
+    /**
+     * @param $userCurrency
+     * @param $reqSpace
+     */
+    public static function checkCurrency($userCurrency, $reqSpace)
+    {
+        $space = Config::get("integrations.DriveMediaIgrosoft.spaces.{$userCurrency}.space");
+
+        if($reqSpace != $space) {
+            throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
+        }
     }
 }
