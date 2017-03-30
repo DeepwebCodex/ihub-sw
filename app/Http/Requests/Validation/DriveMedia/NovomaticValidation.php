@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Validation\DriveMedia;
 
+use App\Components\Integrations\DriveMediaNovomatic\NovomaticHelper;
 use App\Components\Integrations\DriveMediaNovomatic\SignatureMaker;
 use App\Components\Integrations\DriveMediaNovomatic\StatusCode;
 use App\Exceptions\Api\ApiHttpException;
@@ -51,7 +52,7 @@ class NovomaticValidation
             return false;
         }
 
-        if (!(bool)config("integrations.DriveMediaNovomatic.spaces.{$request->input('space')}", false)) {
+        if (!(bool)NovomaticHelper::getSpace($request->input('space'))) {
             throw new ApiHttpException(500, null, ['code' => StatusCode::SPACE_NOT_FOUND]);
         };
 
