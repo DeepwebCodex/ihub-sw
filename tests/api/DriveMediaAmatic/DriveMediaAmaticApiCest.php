@@ -13,7 +13,7 @@ class DriveMediaAmaticApiCest
     public function _before()
     {
         $this->key = config('integrations.DriveMediaAmatic.spaces.FUN.key');
-        $this->space = config('integrations.DriveMediaAmatic.spaces.FUN.space');
+        $this->space = config('integrations.DriveMediaAmatic.spaces.FUN.id');
 
         $this->testUser = new TestUser();
     }

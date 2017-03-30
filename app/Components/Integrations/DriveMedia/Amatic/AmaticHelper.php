@@ -88,7 +88,7 @@ class AmaticHelper
     {
         $spaces = Config::get("integrations.DriveMediaAmatic.spaces");
         foreach ($spaces as $k => $v) {
-            if($v['space'] === $space) {
+            if($v['id'] === $space) {
                 return $v['key'];
             }
         }
@@ -97,12 +97,28 @@ class AmaticHelper
     }
 
     /**
+     * @param $space
+     * @return bool
+     */
+    public static function getSpace($space):bool
+    {
+        $spaces = Config::get("integrations.DriveMediaAmatic.spaces");
+        foreach ($spaces as $k => $v) {
+            if($v['id'] === $space) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param $userCurrency
      * @param $reqSpace
      */
     public static function checkCurrency($userCurrency, $reqSpace)
     {
-        $space = Config::get("integrations.DriveMediaAmatic.spaces.{$userCurrency}.space");
+        $space = Config::get("integrations.DriveMediaAmatic.spaces.{$userCurrency}.id");
 
         if($reqSpace != $space) {
             throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));

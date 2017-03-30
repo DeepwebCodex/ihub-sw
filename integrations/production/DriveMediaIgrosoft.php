@@ -4,7 +4,7 @@ return [
     'service_id' => 40,
     'spaces' => [
         'FUN' => [
-            'space' => '1809',
+            'id' => '1809',
             'key'   => 'k274n7743'
         ],
     ],

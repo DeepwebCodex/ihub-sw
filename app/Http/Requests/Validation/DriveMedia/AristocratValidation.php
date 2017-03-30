@@ -26,4 +26,17 @@ class AristocratValidation
         return true;
     }
 
+    public function validateSpace($attribute, $value, $parameters, $validator):bool
+    {
+        if (!($request = Request::getFacadeRoot())) {
+            return false;
+        }
+
+        if (!(bool)AristocratHelper::getSpace($request->input('space'))) {
+            throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
+        };
+
+        return true;
+    }
+
 }

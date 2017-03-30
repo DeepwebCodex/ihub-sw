@@ -12,7 +12,7 @@ class DriveMediaAristocratApiCest
 
     public function _before() {
         $this->key = config('integrations.DriveMediaAristocrat.spaces.FUN.key');
-        $this->space = config('integrations.DriveMediaAristocrat.spaces.FUN.space');
+        $this->space = config('integrations.DriveMediaAristocrat.spaces.FUN.id');
 
         $this->testUser = new TestUser();
     }

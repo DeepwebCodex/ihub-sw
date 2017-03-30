@@ -12,7 +12,7 @@ class DriveMediaIgrosoftApiCest
 
     public function _before() {
         $this->key = config('integrations.DriveMediaIgrosoft.spaces.FUN.key');
-        $this->space = config('integrations.DriveMediaIgrosoft.spaces.FUN.space');
+        $this->space = config('integrations.DriveMediaIgrosoft.spaces.FUN.id');
 
         $this->testUser = new TestUser();
     }

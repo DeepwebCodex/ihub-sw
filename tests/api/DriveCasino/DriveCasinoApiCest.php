@@ -11,7 +11,7 @@ class DriveCasinoApiCest
 
     public function _before()
     {
-        $this->space = config('integrations.drivecasino.spaces.FUN.space');
+        $this->space = config('integrations.drivecasino.spaces.FUN.id');
         $this->key = config('integrations.drivecasino.spaces.FUN.key');
 
         $this->testUser = new TestUser();
