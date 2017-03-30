@@ -41,6 +41,7 @@ class DriveMediaNovomaticController extends BaseApiController
 
         $this->options = config('integrations.DriveMediaNovomatic');
 
+        $this->middleware('check.ip:DriveMediaNovomatic');
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 

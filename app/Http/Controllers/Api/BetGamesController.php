@@ -44,6 +44,7 @@ class BetGamesController extends BaseApiController
 
         $this->options = config('integrations.betGames');
 
+        $this->middleware('check.ip:betGames');
         $this->middleware('input.xml')->except(['error']);
 
         /**
