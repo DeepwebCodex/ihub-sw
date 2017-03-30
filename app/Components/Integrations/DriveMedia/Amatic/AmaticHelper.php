@@ -7,6 +7,10 @@ use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * Class AmaticHelper
+ * @package App\Components\Integrations\DriveMedia\Amatic
+ */
 class AmaticHelper
 {
     private static $map = [
@@ -14,11 +18,21 @@ class AmaticHelper
         'writeBet' => 'bet',
     ];
 
+    /**
+     * @param string $methodName
+     * @return mixed
+     */
     public static function mapMethod(string $methodName)
     {
         return array_get(self::$map, $methodName, $methodName);
     }
 
+    /**
+     * @param float $bet
+     * @param float $win_lose
+     * @param array $transactions
+     * @return array
+     */
     public static function getTransactions(float $bet, float $win_lose, $transactions = []):array
     {
         if ($bet != 0) {

@@ -17,10 +17,18 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Components\Formatters\JsonApiFormatter;
 
+/**
+ * Class DriveCasinoController
+ * @package App\Http\Controllers\Api
+ */
 class DriveCasinoController extends BaseApiController
 {
     public static $exceptionTemplate = DriveMediaTemplate::class;
 
+    /**
+     * DriveCasinoController constructor.
+     * @param JsonApiFormatter $formatter
+     */
     public function __construct(JsonApiFormatter $formatter)
     {
         parent::__construct($formatter);
@@ -35,6 +43,10 @@ class DriveCasinoController extends BaseApiController
         Validator::extend('validate_sign', 'App\Http\Requests\Validation\DriveMedia\DriveCasinoValidation@validateSign');
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
         $method = DriveCasinoHelper::mapMethod($request->input('cmd'));
@@ -46,6 +58,10 @@ class DriveCasinoController extends BaseApiController
         return app()->call([$this, 'error'], $request->all());
     }
 
+    /**
+     * @param BalanceRequest $request
+     * @return Response
+     */
     public function balance(BalanceRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveCasino');
@@ -58,6 +74,10 @@ class DriveCasinoController extends BaseApiController
         ]);
     }
 
+    /**
+     * @param PlayRequest $request
+     * @return Response
+     */
     public function bet(PlayRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveCasino');
@@ -103,6 +123,12 @@ class DriveCasinoController extends BaseApiController
         throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
     }
 
+    /**
+     * @param int $statusCode
+     * @param string|null $message
+     * @param array $payload
+     * @return Response
+     */
     public function respondOk($statusCode = Response::HTTP_OK, string $message = null, array $payload = [])
     {
         $payload = array_merge($payload, [

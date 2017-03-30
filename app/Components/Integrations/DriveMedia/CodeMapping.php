@@ -5,8 +5,15 @@ namespace App\Components\Integrations\DriveMedia;
 use App\Components\Integrations\DriveMedia\StatusCode;
 use App\Components\Integrations\CodeMappingBase;
 
+/**
+ * Class CodeMapping
+ * @package App\Components\Integrations\DriveMedia
+ */
 class CodeMapping extends CodeMappingBase
 {
+    /**
+     * @return array
+     */
     public static function getMapping()
     {
         return [

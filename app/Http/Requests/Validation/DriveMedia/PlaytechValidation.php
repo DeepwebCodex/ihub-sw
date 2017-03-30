@@ -8,8 +8,19 @@ use App\Components\Integrations\DriveMedia\StatusCode;
 use Illuminate\Support\Facades\Request;
 use App\Exceptions\Api\ApiHttpException;
 
+/**
+ * Class PlaytechValidation
+ * @package App\Http\Requests\Validation\DriveMedia
+ */
 class PlaytechValidation
 {
+    /**
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     */
     public function validateSign($attribute, $value, $parameters, $validator):bool
     {
         if (!($request = Request::getFacadeRoot())) {
@@ -27,6 +38,13 @@ class PlaytechValidation
         return true;
     }
 
+    /**
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     */
     public function validateSpace($attribute, $value, $parameters, $validator):bool
     {
         if (!($request = Request::getFacadeRoot())) {

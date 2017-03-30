@@ -98,4 +98,26 @@ class DriveMediaAmaticBorderlineApiCest
         ]);
     }
 
+    public function testMethodSpaceNotFound(ApiTester $I)
+    {
+        $request = [
+            'cmd'   => 'getBalance',
+            'space' => '1',
+            'login' => $this->testUser->getUserId(),
+        ];
+
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/amatic', $request);
+        $I->seeResponseCodeIs(500);
+        $I->canSeeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'status'    => 'fail',
+            'error'     => 'internal_error'
+        ]);
+    }
+
 }

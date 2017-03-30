@@ -7,6 +7,10 @@ use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * Class IgrosoftHelper
+ * @package App\Components\Integrations\DriveMedia\Igrosoft
+ */
 class IgrosoftHelper
 {
     private static $map = [
@@ -21,11 +25,22 @@ class IgrosoftHelper
         'Super_Bonus'
     ];
 
+    /**
+     * @param string $methodName
+     * @return mixed
+     */
     public static function mapMethod(string $methodName)
     {
         return array_get(self::$map, $methodName, $methodName);
     }
 
+    /**
+     * @param float $bet
+     * @param float $win_lose
+     * @param string $bet_info
+     * @param array $transactions
+     * @return array
+     */
     public static function getTransactions(float $bet, float $win_lose, string $bet_info, $transactions = []):array
     {
         if ($bet != 0) {

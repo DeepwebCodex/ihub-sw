@@ -17,10 +17,18 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Components\Formatters\JsonApiFormatter;
 
+/**
+ * Class DriveMediaAristocratController
+ * @package App\Http\Controllers\Api
+ */
 class DriveMediaAristocratController extends BaseApiController
 {
     public static $exceptionTemplate = DriveMediaTemplate::class;
 
+    /**
+     * DriveMediaAristocratController constructor.
+     * @param JsonApiFormatter $formatter
+     */
     public function __construct(JsonApiFormatter $formatter)
     {
         parent::__construct($formatter);
@@ -35,6 +43,10 @@ class DriveMediaAristocratController extends BaseApiController
         Validator::extend('validate_sign', 'App\Http\Requests\Validation\DriveMedia\AristocratValidation@validateSign');
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
         $method = AristocratHelper::mapMethod($request->input('cmd'));
@@ -46,6 +58,10 @@ class DriveMediaAristocratController extends BaseApiController
         return app()->call([$this, 'error'], $request->all());
     }
 
+    /**
+     * @param BalanceRequest $request
+     * @return Response
+     */
     public function balance(BalanceRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaAristocrat');
@@ -58,6 +74,10 @@ class DriveMediaAristocratController extends BaseApiController
         ]);
     }
 
+    /**
+     * @param PlayRequest $request
+     * @return Response
+     */
     public function bet(PlayRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaAristocrat');
@@ -102,6 +122,12 @@ class DriveMediaAristocratController extends BaseApiController
         throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
     }
 
+    /**
+     * @param int $statusCode
+     * @param string|null $message
+     * @param array $payload
+     * @return Response
+     */
     public function respondOk($statusCode = Response::HTTP_OK, string $message = null, array $payload = [])
     {
         $payload = array_merge($payload, [

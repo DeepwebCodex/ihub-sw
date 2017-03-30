@@ -7,9 +7,20 @@ use App\Components\Integrations\DriveMedia\CodeMapping;
 use Illuminate\Support\Facades\Request;
 use App\Exceptions\Api\ApiHttpException;
 
+/**
+ * Class AristocratValidation
+ * @package App\Http\Requests\Validation\DriveMedia
+ */
 class AristocratValidation
 {
 
+    /**
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     */
     public function validateSign($attribute, $value, $parameters, $validator):bool
     {
         if (!($request = Request::getFacadeRoot())) {
@@ -26,6 +37,13 @@ class AristocratValidation
         return true;
     }
 
+    /**
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     */
     public function validateSpace($attribute, $value, $parameters, $validator):bool
     {
         if (!($request = Request::getFacadeRoot())) {

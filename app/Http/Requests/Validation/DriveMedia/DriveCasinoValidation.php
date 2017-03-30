@@ -7,8 +7,19 @@ use App\Components\Integrations\DriveMedia\DriveCasino\DriveCasinoHelper;
 use Illuminate\Support\Facades\Request;
 use App\Exceptions\Api\ApiHttpException;
 
+/**
+ * Class DriveCasinoValidation
+ * @package App\Http\Requests\Validation\DriveMedia
+ */
 class DriveCasinoValidation
 {
+    /**
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     */
     public function validateSign($attribute, $value, $parameters, $validator):bool
     {
         if (!($request = Request::getFacadeRoot())) {
@@ -25,6 +36,13 @@ class DriveCasinoValidation
         return true;
     }
 
+    /**
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     */
     public function validateSpace($attribute, $value, $parameters, $validator):bool
     {
         if (!($request = Request::getFacadeRoot())) {
