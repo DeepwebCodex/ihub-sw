@@ -36,27 +36,29 @@ trait Operation
     {
         $bar = new ProgressBar($this->output);
         try {
-            $this->info('Geting data.\n');
+            $this->info("Geting data.");
             $data = $requestQueueData->getData();
-            
-            $this->info('Validating data.\n');
+
+            $this->info("Validating data.");
             $validatorQueueData->validateBaseStructure($data);
             $elements = $validatorQueueData->getData($data);
-            
-            $this->info('Processing data.\n');
-            $bar->start(count($elements));
+
+            $this->info("Processing data.");
+            $count = count($elements);
+            if ($count) {
+                $bar->start($count);
+            }
             $operationsProcessor->setBar($bar);
             $handleCommitRes = $operationsProcessor->make($elements);
             $bar->finish();
             $this->info("\n");
-            
-            $this->info('Sending data.\n');
+
+            $this->info("Sending data.");
             $dataResponse = $requestResolveData->getData($handleCommitRes);
             $validatorResolveData->validateBaseStructure($dataResponse);
-            
+
             return $this->handleSuccess($dataResponse, $handleCommitRes);
         } catch (RequestException $re) {
-            $this->info("\n");
             $bar->finish();
             $logRecords = [
                 'message' => str($re->getRequest())
@@ -67,12 +69,10 @@ trait Operation
             }
             $this->handleError($logRecords, 'warning', '', $re->getLine());
         } catch (CheckEmptyValidation $ve) {
-            $this->info("\n");
-            $bar->finish();
+            $this->info('Zero of elements was prosseced.');
             $this->handleSuccess(['message' => 'Source is empty']);
         } catch (Exception $ex) {
-            $this->info("\n");
-            $bar->finish();
+
             $logRecords = [
                 'message' => $ex->getMessage()
             ];
