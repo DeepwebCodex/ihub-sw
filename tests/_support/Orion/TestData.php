@@ -57,8 +57,7 @@ class TestData extends Unit
         return Array2Xml::createXML('s:Envelope', $data)->saveXML();
     }
 
-    public function generatedXml($userArray, $type, $count = 1, $modify = false,
-            $makeBet = false)
+    public function generatedXml($userArray, $type, $count = 1, $modify = false, $makeBet = false)
     {
         $tmpArray = array();
         foreach ($userArray as $key => $value) {
@@ -445,7 +444,7 @@ the same binding (including security requirements, e.g. Message, Transport, None
         $I->getApplication()->instance($className, $mock);
         $I->haveInstance($className, $mock);
     }
-    
+
     public function initMockEndGameWhenRowIdWithMinus(ApiTester $I)
     {
         $testUser = new TestUser(10);
@@ -466,6 +465,29 @@ the same binding (including security requirements, e.g. Message, Transport, None
         $mock = Mockery::mock($className);
         $mock->shouldReceive('sendRequest')->withArgs([GetFailedEndGameQueue::class])->andReturn($xml_GF);
         $mock->shouldReceive('sendRequest')->withArgs([ManuallyCompleteGame::class])->andReturn($xml->qManualCompleteData);
+        $I->getApplication()->instance($className, $mock);
+        $I->haveInstance($className, $mock);
+    }
+
+    public function initMockCommitWithoutBet(ApiTester $I)
+    {
+        $testUser = new TestUser(10);
+        $testData[] = [
+            'loginName' => $testUser->getUser()->id . $testUser->getCurrency(),
+            'amount' => 111,
+            'currency' => $testUser->getCurrency(),
+            'rowId' => $this->generateUniqId(),
+            'rowIdLong' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(),
+            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $xml = $this->generatedXml($testData, 'commit', 10);
+        $xmlMockB = $this->generatedXmlManualBet($xml);
+        $className = SoapEmulator::class;
+        $mock = Mockery::mock($className);
+        $mock->shouldReceive('sendRequest')->withArgs([GetCommitQueueData::class])->andReturn($xml);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
         $I->getApplication()->instance($className, $mock);
         $I->haveInstance($className, $mock);
     }

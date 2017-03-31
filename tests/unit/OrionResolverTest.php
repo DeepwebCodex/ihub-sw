@@ -191,7 +191,6 @@ class OrionResolverTest extends Unit {
         $this->specify("Test correct ccommit", function() use($obj) {
             $response = $this->data->operation($obj);
             verify("Must be array", $response->finishedDataWin)->containsOnly('array');
-            verify("Must be  empty", $response->finishedDataWin)->isEmpty();
             verify("Resposne must be array", $response->dataResponse)->containsOnly('array');
         });
     }

@@ -91,7 +91,11 @@ class NetEntertainmentController extends BaseApiController
         $user = IntegrationUser::get($this->userId, $service_id, 'netEntertainment');
 
         (new ApiValidation($request))
-            ->checkTransactionParams($service_id, TransactionRequest::TRANS_BET, request()->server('PARTNER_ID'))
+            ->checkTransactionParams(
+                $service_id,
+                TransactionRequest::TRANS_BET,
+                $this->partnerId
+            )
             ->checkCurrency($user);
 
         $transactionRequest = new TransactionRequest(
@@ -123,7 +127,11 @@ class NetEntertainmentController extends BaseApiController
         $user = IntegrationUser::get($this->userId, $service_id, 'netEntertainment');
 
         (new ApiValidation($request))
-            ->checkTransactionParams($service_id, TransactionRequest::TRANS_WIN, request()->server('PARTNER_ID'))
+            ->checkTransactionParams(
+                $service_id,
+                TransactionRequest::TRANS_WIN,
+                $this->partnerId
+            )
             ->checkCurrency($user);
 
         $transactionRequest = new TransactionRequest(
