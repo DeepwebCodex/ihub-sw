@@ -20,6 +20,13 @@ use Testing\GameSessionsMock;
  */
 class BetGamesApiCest
 {
+    const OFFLINE = [
+        'test token',
+        'test method not found',
+        'test ping',
+        'test win',
+    ];
+
     private $data;
 
     /** @var TestUser */
@@ -36,7 +43,7 @@ class BetGamesApiCest
         $I->mockAccountManager($I, config('integrations.betGames.service_id'));
         $I->disableMiddleware();
 
-        if ($s->getFeature() != 'test token') {
+        if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
         }
@@ -152,9 +159,14 @@ class BetGamesApiCest
 
     public function testWin(\ApiTester $I)
     {
-        $bet = $this->testBet($I);
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
+        $bet = $this->execBet($I);
         $balanceBefore = $this->testUser->getBalanceInCents();
         $request = $this->data->win($bet['params']['bet_id']);
+
+//         $I->getApplication()->forgetInstances();
+
         $I->sendPOST('/bg', $request);
         $response = $this->getResponseOk($I);
         $I->assertEquals($balanceBefore + $this->data->getAmount(), $response['params']['balance_after']);
@@ -290,13 +302,22 @@ class BetGamesApiCest
         $this->getResponseFail($I, StatusCode::SIGNATURE);
     }
 
+    public function testWrongToken(\ApiTester $I)
+    {
+        $data = $this->data->getBalance();
+        $data['token'] = '123';
+        $request = $this->data->updateSignature($data);
 
-    /* public function testToken(\ApiTester $I)
+        $I->sendPOST('/bg', $request);
+        $this->getResponseFail($I, StatusCode::TOKEN);
+    }
+
+    /*public function testToken(\ApiTester $I)
     {
         $data = $this->data->token();
         $I->sendPOST('/bg', $data);
         $response = $this->getResponseOk($I);
-        $I->assertEquals($this->testUser->getUser()->id, $response['params']['user_id']);
+        $I->assertNotNull($response['params']['new_token']);
     }*/
 
     private function execBet(\ApiTester $I)
