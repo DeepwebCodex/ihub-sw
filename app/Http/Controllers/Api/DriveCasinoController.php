@@ -23,6 +23,7 @@ use App\Components\Formatters\JsonApiFormatter;
  */
 class DriveCasinoController extends BaseApiController
 {
+    /** @var string  */
     public static $exceptionTemplate = DriveMediaTemplate::class;
 
     /**
@@ -106,8 +107,7 @@ class DriveCasinoController extends BaseApiController
 
             $transactionResponse = $transactionHandler->handle(new ProcessDriveCasino());
 
-            if($key == 0 && sizeof($transactions) == 2)
-            {
+            if($key == 0 && sizeof($transactions) == 2) {
                 $user->updateBalance($transactionResponse->getBalanceInCents());
             }
         }

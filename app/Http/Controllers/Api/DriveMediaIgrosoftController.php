@@ -22,6 +22,7 @@ use App\Components\Formatters\JsonApiFormatter;
  */
 class DriveMediaIgrosoftController extends BaseApiController
 {
+    /** @var string  */
     public static $exceptionTemplate = DriveMediaTemplate::class;
 
     /**

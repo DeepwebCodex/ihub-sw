@@ -105,8 +105,7 @@ class DriveMediaPlaytechController extends BaseApiController
 
             $transactionResponse = $transactionHandler->handle(new ProcessPlaytech());
 
-            if($key == 0 && sizeof($transactions) == 2)
-            {
+            if($key == 0 && sizeof($transactions) == 2) {
                 $user->updateBalance($transactionResponse->getBalanceInCents());
             }
         }

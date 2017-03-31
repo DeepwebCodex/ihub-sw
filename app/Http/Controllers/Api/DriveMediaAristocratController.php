@@ -23,6 +23,7 @@ use App\Components\Formatters\JsonApiFormatter;
  */
 class DriveMediaAristocratController extends BaseApiController
 {
+    /** @var string  */
     public static $exceptionTemplate = DriveMediaTemplate::class;
 
     /**
