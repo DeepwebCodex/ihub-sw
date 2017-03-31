@@ -14,6 +14,7 @@ use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
+use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\BetGamesTemplate;
 use App\Http\Requests\BetGames\BaseRequest;
 use App\Http\Requests\BetGames\BetRequest;
@@ -48,9 +49,8 @@ class BetGamesController extends BaseApiController
         $this->middleware('input.xml')->except(['error']);
 
         /**
-         * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkMethod
+         * @see BetGamesValidation::checkTime, BetGamesValidation::checkMethod
          */
-        Validator::extend('check_signature', 'App\Http\Requests\Validation\BetGamesValidation@checkSignature');
         Validator::extend('check_time', 'App\Http\Requests\Validation\BetGamesValidation@checkTime');
         Validator::extend('check_token', 'App\Http\Requests\Validation\BetGamesValidation@checkToken');
         Validator::extend('check_method', 'App\Http\Requests\Validation\BetGamesValidation@checkMethod');
@@ -69,9 +69,28 @@ class BetGamesController extends BaseApiController
             $this->cashdeskId = app('GameSession')->get('cashdesk_id');
             $this->gameId = app('GameSession')->get('game_id'); // Т.к. у BetGames нет идентификатора игры при запуске, мы из сессии будем получать 0
             $this->userIP = app('GameSession')->get('userIp');
+
+            $this->checkSignature($request);
         }
 
         return app()->call([$this, $apiMethod->get()], $request->all());
+    }
+
+    private function checkSignature(BaseRequest $request):bool
+    {
+        $all = $request->all();
+        unset($all['signature']);
+
+        $signature = new Signature($all, $this->partnerId, $this->cashdeskId);
+        if ($signature->isWrong($request->input('signature'))) {
+            throw new ApiHttpException(400, null, [
+                'code' => StatusCode::SIGNATURE,
+                'method' => $request->input('method'),
+                'token' => $request->input('token'),
+            ]);
+        }
+
+        return true;
     }
 
     /**

@@ -16,13 +16,20 @@ class Signature
      */
     private $cache;
     private $hash;
+    private $partnerId;
+    private $cashdeskId;
 
     /**
      * Signature constructor.
      * @param array $data
+     * @param $partnerId
+     * @param $cashdeskId
      */
-    public function __construct(array $data)
+    public function __construct(array $data, $partnerId = null, $cashdeskId = null)
     {
+        $this->partnerId = $partnerId;
+        $this->cashdeskId = $cashdeskId;
+
         $this->cache = app('cache')->store('redis_bet_games');
         $this->hash = $this->create($data);
     }
@@ -54,7 +61,10 @@ class Signature
                 $result .= $key . $value;
             }
         }
-        $result .= config('integrations.betGames.secret');
+        $result .= config(
+            "integrations.betGames.secret_separated.{$this->partnerId}.{$this->cashdeskId}",
+            config('integrations.betGames.secret')
+        );
 
         return md5($result);
     }
