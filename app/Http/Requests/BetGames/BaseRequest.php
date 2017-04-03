@@ -28,7 +28,6 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-
         if ((new ApiMethod($request->input('method')))->isOffline()) {
             return true;
         }

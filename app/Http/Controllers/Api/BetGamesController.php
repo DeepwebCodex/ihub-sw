@@ -77,6 +77,9 @@ class BetGamesController extends BaseApiController
             $this->userIP = app('GameSession')->get('userIp');
 
             $this->checkSignature($request);
+
+            $this->addMetaField('partnerId', $this->partnerId);
+            $this->addMetaField('cashdeskId', $this->cashdeskId);
         }
 
         return app()->call([$this, $apiMethod->get()], $request->all());
@@ -264,7 +267,7 @@ class BetGamesController extends BaseApiController
             'time' => time(),
             'params' => $params
         ];
-        $view['signature'] = (new Signature($view))->getHash();
+        $view['signature'] = (new Signature($view, $this->partnerId, $this->cashdeskId))->getHash();
 
         return $view;
     }
@@ -277,7 +280,7 @@ class BetGamesController extends BaseApiController
      * @param bool $prolong
      * @return Response
      */
-    public function responseOk(string $method, string $token, array $params = [], $prolong = true)
+    private function responseOk(string $method, string $token, array $params = [], $prolong = true)
     {
         if($prolong) {
             app('GameSession')->prolong($token);
