@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Request;
 class BetGamesValidation
 {
     private $time_limit = 60;
+    private $token_length = 10;
 
     public function checkTime($attribute, $value, $parameters, $validator):bool
     {
@@ -37,5 +38,22 @@ class BetGamesValidation
         }
 
         return true;
+    }
+
+    public function checkToken($attribute, $value, $parameters, $validator):bool
+    {
+        $hasLetters = (bool)preg_match('/[A-Za-z]/', $value);
+        $hasDigits = (bool)preg_match('/[0-9]/', $value);
+        $hasEnoughLength = strlen($value) >= $this->token_length;
+
+        if($hasLetters && $hasDigits && $hasEnoughLength){
+            return true;
+        }
+
+        throw new ApiHttpException(400, null, [
+            'code' => StatusCode::TOKEN,
+            'method' => Request::getFacadeRoot()->method,
+            'token' => Request::getFacadeRoot()->token,
+        ]);
     }
 }
