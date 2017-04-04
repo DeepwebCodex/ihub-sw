@@ -35,7 +35,7 @@ class ProcessBetGames extends BaseSeamlessWalletProcessor implements Transaction
 
             $winTransaction = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
             if ($winTransaction && $winTransaction->getAttribute('status') == 'completed'){
-                throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::DUPLICATED_WIN));
+                $this->onTransactionDuplicate(new ApiHttpException(500));
             }
         }
 
@@ -43,10 +43,6 @@ class ProcessBetGames extends BaseSeamlessWalletProcessor implements Transaction
             $this->processZeroAmountTransaction();
         } else {
             $this->processTransaction();
-        }
-
-        if ($this->responseData['operation_id'] === null) {
-            throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
         }
 
         return $this->responseData;

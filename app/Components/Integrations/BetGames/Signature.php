@@ -45,7 +45,6 @@ class Signature
     {
         $result = '';
         foreach ($data as $key => $value) {
-
             if (($key === 'params' && empty($value)) || $key === 'signature' || $key === $this->metaStorageKey) {
                 continue;
             } elseif ($key === 'params' && !empty($value)) {
