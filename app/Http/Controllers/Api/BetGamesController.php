@@ -217,7 +217,13 @@ class BetGamesController extends BaseApiController
 
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'betGames');
 
-        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token'), 'balance' => $user->getBalanceInCents()]);
+        $this->setMetaData([
+            'method' => $request->input('method'),
+            'token' => $request->input('token'),
+            'balance' => $user->getBalanceInCents(),
+            'partnerId' => !is_null($betTransaction) ? $betTransaction->partner_id : 0,
+            'cashdeskId' => !is_null($betTransaction) ? $betTransaction->cashdesk : 0,
+        ]);
 
         $transactionMap = new TransactionMap($request->input('method'));
         $transactionRequest = new TransactionRequest(
