@@ -45,8 +45,8 @@ class NetEntertainmentController extends BaseApiController
         $this->options = config('integrations.netEntertainment');
 
         $this->middleware('check.ip:netEntertainment');
-        $this->middleware('input.json')->except(['error']);
-        $this->middleware('input.netEntertainment.parsePlayerIdOnWin');
+//        $this->middleware('input.json')->except(['error']);
+        $this->middleware('input.netEntertainment.parsePlayerIdOnOffline');
 
         /**
          * @see NetEntertainmentValidation::checkHmac,NetEntertainmentValidation::checkMethod
@@ -126,7 +126,7 @@ class NetEntertainmentController extends BaseApiController
     public function win(WinRequest $request)
     {
         $service_id = $this->getOption('service_id') ?? config('integrations.netEntertainment.service_id');
-        $user = IntegrationUser::get($request->input('userid'), $service_id, 'netEntertainment');
+        $user = IntegrationUser::get($request->input('userId'), $service_id, 'netEntertainment');
 
         $betTransaction = Transactions::getBetTransaction(
             $this->getOption('service_id'),
@@ -136,11 +136,11 @@ class NetEntertainmentController extends BaseApiController
 
         if (is_null($betTransaction)) {
             throw new ApiHttpException(Response::HTTP_OK, null, [
-                'code' => StatusCode::TRANSACTION_MISMATCH,
+                'code' => StatusCode::BAD_OPERATION_ORDER,
             ]);
         }
 
-        if ($betTransaction->user_id != $request->input('userid')
+        if ($betTransaction->user_id != $user->id
             || $betTransaction->currency != $request->input('currency')
         ) {
             throw new ApiHttpException(Response::HTTP_OK, null, [

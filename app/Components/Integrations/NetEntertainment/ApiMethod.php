@@ -41,7 +41,7 @@ class ApiMethod
 
     public function isOffline()
     {
-        return in_array($this->method, ['ping', 'roundinfo', 'win']);
+        return in_array($this->method, ['ping', 'roundinfo', 'credit']);
     }
 
     /**
