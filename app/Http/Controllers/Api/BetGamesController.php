@@ -222,7 +222,7 @@ class BetGamesController extends BaseApiController
 
             try {
                 $betTransactions = app('AccountManager')->getOperations($userId, 1, $objectId, $this->getOption('service_id'));
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
             }
 
             if (is_array($betTransactions)) {
