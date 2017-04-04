@@ -53,6 +53,7 @@ class BetGamesController extends BaseApiController
 
         $this->middleware('check.ip:betGames');
         $this->middleware('input.xml')->except(['error']);
+        $this->middleware('input.bg.parsePlayerIdOnWin');
 
         /**
          * @see BetGamesValidation::checkTime, BetGamesValidation::checkMethod
