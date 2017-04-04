@@ -227,7 +227,7 @@ class BetGamesController extends BaseApiController
 
             if (is_array($betTransactions)) {
                 $betTransaction = new \stdClass();
-                $betTransaction->game_id = '-';
+                $betTransaction->game_id = 'from-ferapont';
                 $betTransaction->partner_id = ($betTransactions[0]['partner_id'] != 'null') ? $betTransactions[0]['partner_id'] : ($betTransactions[0]['cashdesk'] == -8 ? 18 : 1);
                 $betTransaction->cashdesk = $betTransactions[0]['cashdesk'];
                 $betTransaction->client_ip = $betTransactions[0]['client_ip'];
