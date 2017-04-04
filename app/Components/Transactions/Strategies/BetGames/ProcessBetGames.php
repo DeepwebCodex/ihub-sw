@@ -26,7 +26,7 @@ class ProcessBetGames extends BaseSeamlessWalletProcessor implements Transaction
         $this->request = $request;
 
         if ($this->request->transaction_type == TransactionRequest::TRANS_WIN) {
-            if ($this->request->game_id != 'from-ferapont'){
+            if ($this->request->game_id !== 'from-ferapont'){
                 $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, $this->request->partner_id);
                 if (!$betTransaction) {
                     throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER));
