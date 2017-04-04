@@ -19,6 +19,7 @@ use App\Http\Requests\NetEntertainment\BaseRequest;
 use App\Http\Requests\NetEntertainment\BetRequest;
 use App\Http\Requests\NetEntertainment\GetBalanceRequest;
 use App\Http\Requests\NetEntertainment\WinRequest;
+use App\Models\Transactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,6 +46,7 @@ class NetEntertainmentController extends BaseApiController
 
         $this->middleware('check.ip:netEntertainment');
         $this->middleware('input.json')->except(['error']);
+        $this->middleware('input.netEntertainment.parsePlayerIdOnWin');
 
         /**
          * @see NetEntertainmentValidation::checkHmac,NetEntertainmentValidation::checkMethod
@@ -60,7 +62,7 @@ class NetEntertainmentController extends BaseApiController
     public function index(BaseRequest $request)
     {
         $apiMethod = new ApiMethod($request->input('type'));
-        if(!$apiMethod->isOffline()) {
+        if (!$apiMethod->isOffline()) {
             $this->userId = app('GameSession')->get('user_id');
             $this->partnerId = app('GameSession')->get('partner_id');
             $this->cashdeskId = app('GameSession')->get('cashdesk_id');
@@ -124,15 +126,27 @@ class NetEntertainmentController extends BaseApiController
     public function win(WinRequest $request)
     {
         $service_id = $this->getOption('service_id') ?? config('integrations.netEntertainment.service_id');
-        $user = IntegrationUser::get($this->userId, $service_id, 'netEntertainment');
+        $user = IntegrationUser::get($request->input('userid'), $service_id, 'netEntertainment');
 
-        (new ApiValidation($request))
-            ->checkTransactionParams(
-                $service_id,
-                TransactionRequest::TRANS_WIN,
-                $this->partnerId
-            )
-            ->checkCurrency($user);
+        $betTransaction = Transactions::getBetTransaction(
+            $this->getOption('service_id'),
+            $user->id,
+            $request->input('i_gameid')
+        );
+
+        if (is_null($betTransaction)) {
+            throw new ApiHttpException(Response::HTTP_OK, null, [
+                'code' => StatusCode::TRANSACTION_MISMATCH,
+            ]);
+        }
+
+        if ($betTransaction->user_id != $request->input('userid')
+            || $betTransaction->currency != $request->input('currency')
+        ) {
+            throw new ApiHttpException(Response::HTTP_OK, null, [
+                'code' => StatusCode::TRANSACTION_MISMATCH,
+            ]);
+        }
 
         $transactionRequest = new TransactionRequest(
             $service_id,
@@ -143,10 +157,10 @@ class NetEntertainmentController extends BaseApiController
             (float)$request->input('amount'),
             TransactionRequest::TRANS_WIN,
             $request->input('tid'),
-            $this->gameId,
-            $this->partnerId,
-            $this->cashdeskId,
-            app('GameSession')->get('userIp')
+            $betTransaction->game_id,
+            $betTransaction->partner_id,
+            $betTransaction->cashdesk,
+            $betTransaction->client_ip
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
