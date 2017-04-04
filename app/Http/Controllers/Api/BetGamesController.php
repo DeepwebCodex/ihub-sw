@@ -215,6 +215,19 @@ class BetGamesController extends BaseApiController
             $objectId
         );
 
+        // Убер костыль для допроводки выигрышей, ставки по которым были сделаны в ферапонте
+        if (is_null($betTransaction)) {
+            $betTransactions = app('AccountManager')->getOperations($userId, 1, $objectId, $this->getOption('service_id'));
+            if (is_array($betTransactions)) {
+                $betTransaction = new \stdClass();
+                $betTransaction->game_id = '-';
+                $betTransaction->partner_id = $betTransactions[0]['partner_id'] ?? ($betTransactions[0]['cashdesk'] == -8 ? 18 : 1);
+                $betTransaction->cashdesk = $betTransactions[0]['cashdesk'];
+                $betTransaction->client_ip = $betTransactions[0]['client_ip'];
+            }
+        }
+        // Конец убер костыля
+
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'betGames');
 
         $this->setMetaData([
