@@ -16,9 +16,6 @@ class BetGamesApiFormatter extends XmlApiFormatter
     {
         $payload = array_merge($message ? compact('message') : [], $this->getMetaData()?:[], $payload);
 
-        unset($payload['partnerId']);
-        unset($payload['cashdeskId']);
-
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'application/xml'
         ]);

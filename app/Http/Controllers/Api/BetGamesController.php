@@ -293,7 +293,11 @@ class BetGamesController extends BaseApiController
             'time' => time(),
             'params' => $params
         ];
-        $view['signature'] = (new Signature($view, $this->partnerId, $this->cashdeskId))->getHash();
+        $view['signature'] = (new Signature(
+                $view,
+                $this->partnerId ?? $this->pullMetaField('partnerId'),
+                $this->cashdeskId ?? $this->pullMetaField('cashdeskId')
+            ))->getHash();
 
         return $view;
     }
