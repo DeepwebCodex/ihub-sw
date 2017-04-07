@@ -43,7 +43,6 @@ class NetEntertainmentApiCest
     public function _before(\ApiTester $I, Scenario $s)
     {
         $I->mockAccountManager($I, config('integrations.netEntertainment.service_id'));
-        $I->disableMiddleware();
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
@@ -280,6 +279,7 @@ class NetEntertainmentApiCest
     {
         $I->seeResponseCodeIs(200);
         $data = $this->responseToArray($I);
+        $I->assertArrayNotHasKey('error', $data);
         $I->assertEquals('OK', $data['status']);
         $I->assertNotNull($data['hmac']);
         if ($isTransaction) {

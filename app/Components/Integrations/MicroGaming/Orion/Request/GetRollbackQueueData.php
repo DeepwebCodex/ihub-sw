@@ -1,25 +1,15 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of GetCommitQueueData
- *
- * @author petroff
- */
-
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use Illuminate\Support\Facades\Config;
 use Ramsey\Uuid\Uuid;
 
-class GetRollbackQueueData extends Request {
+class GetRollbackQueueData extends Request
+{
 
-    public function prepare(array $data = []) {
+    public function prepare(array $data = [])
+    {
         $this->uuid = Uuid::uuid1()->toString();
         $this->method = "GetRollbackQueueData";
         $dataTmp = [
@@ -32,7 +22,7 @@ class GetRollbackQueueData extends Request {
             'soapenv:Body' => [
                 'adm:GetRollbackQueueData' => [
                     'adm:serverIds' => [
-                        'arr:int' => Config::get('integrations.microgamingOrion.username')
+                        'arr:int' => Config::get('integrations.microgamingOrion.serverId')
                     ]
                 ]
             ]

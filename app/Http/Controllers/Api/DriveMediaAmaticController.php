@@ -26,6 +26,7 @@ class DriveMediaAmaticController extends BaseApiController
 
         $this->options = config('integrations.DriveMediaAmatic');
 
+        $this->middleware('check.ip:DriveMediaAmatic');
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 

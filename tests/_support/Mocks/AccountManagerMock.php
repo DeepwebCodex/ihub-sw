@@ -215,6 +215,7 @@ class AccountManagerMock
                 $this->returnCompleted(self::WIN, $this->jackpot_amount, $this->balance - $this->amount + $this->winAmount + $this->jackpot_amount));
 
         $accountManager->shouldReceive('getFreeOperationId')->withNoArgs()->andReturn($this->getUniqueId());
+        $accountManager->shouldReceive('getOperations')->withAnyArgs()->andReturn(null);
 
 
         return $accountManager;

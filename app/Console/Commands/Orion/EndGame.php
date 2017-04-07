@@ -53,7 +53,7 @@ class EndGame extends Command {
         $operationsProcessor = app(CompleteGameProcessor::class);
         $requestResolveData = new ManuallyCompleteGame($soapEmul, $sourceProcessor);
         $validatorResolveData = app(ManualCompleteValidation::class);
-
+        
         $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $requestResolveData, $validatorResolveData);
     }
 

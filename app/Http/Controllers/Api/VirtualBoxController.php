@@ -39,6 +39,7 @@ class VirtualBoxController extends BaseApiController
 
         $this->options = config('integrations.virtualBoxing');
 
+        $this->middleware('check.ip:virtualBoxing');
         $this->middleware('input.xml')->except(['error']);
     }
 

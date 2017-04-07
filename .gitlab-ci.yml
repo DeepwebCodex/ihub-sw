@@ -87,8 +87,9 @@ test_features:
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
-test_on_dev_env_prod:
+test_on_dev_conf_prod_env_prod:
   <<: *template_compile_n_test
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-master
   script:
     - bash ./run/prod/tests.sh
   only:

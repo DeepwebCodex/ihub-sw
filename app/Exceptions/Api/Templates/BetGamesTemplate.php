@@ -19,6 +19,8 @@ class BetGamesTemplate implements IExceptionTemplate
     private $errorCode;
     private $errorMessage;
     private $time_to_disconnect;
+    private $partnerId;
+    private $cashdeskId;
 
     /**
      * @param array $item
@@ -40,7 +42,7 @@ class BetGamesTemplate implements IExceptionTemplate
             return $this->onUnknownError();
         }
 
-        $view = [
+        $payload = [
             'method' => $this->method,
             'token' => $this->token,
             'success' => 0,
@@ -48,9 +50,9 @@ class BetGamesTemplate implements IExceptionTemplate
             'error_text' => $this->errorMessage,
             'time' => time(),
         ];
-        $view['signature'] = (new Signature($view))->getHash();
+        $payload['signature'] = (new Signature($payload))->getHash();
 
-        return $view;
+        return $payload;
     }
 
     private function initialize(array $item, $statusCode, bool $isApiException = false)
@@ -60,6 +62,9 @@ class BetGamesTemplate implements IExceptionTemplate
         $this->method = $item['method'] ?? '';
         $this->balance = $item['balance'] ?? null;
         $this->statusCode = $statusCode ?? 500;
+
+        $this->partnerId = $item['partnerId'] ?? null;
+        $this->cashdeskId = $item['cashdeskId'] ?? null;
 
         $error = CodeMapping::getByErrorCode($this->code);
         $this->errorCode = $error['code'] ?? null;
@@ -89,7 +94,7 @@ class BetGamesTemplate implements IExceptionTemplate
     {
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         sleep($this->time_to_disconnect);
-        $view = [
+        $payload = [
             'method' => $this->method,
             'token' => $this->token,
             'success' => 0,
@@ -97,9 +102,9 @@ class BetGamesTemplate implements IExceptionTemplate
             'error_text' => $error['message'],
             'time' => time(),
         ];
-        $view['signature'] = (new Signature($view))->getHash();
+        $payload['signature'] = (new Signature($payload, $this->partnerId, $this->cashdeskId))->getHash();
 
-        return $view;
+        return $payload;
     }
 
     /**
@@ -116,7 +121,7 @@ class BetGamesTemplate implements IExceptionTemplate
     private function onDuplicateWin():array
     {
         $error = CodeMapping::getByErrorCode(StatusCode::OK);
-        $view = [
+        $payload = [
             'method' => $this->method,
             'token' => $this->token,
             'success' => 1,
@@ -128,8 +133,8 @@ class BetGamesTemplate implements IExceptionTemplate
                 'already_processed' => 1
             ]
         ];
-        $view['signature'] = (new Signature($view))->getHash();
+        $payload['signature'] = (new Signature($payload, $this->partnerId, $this->cashdeskId))->getHash();
 
-        return $view;
+        return $payload;
     }
 }

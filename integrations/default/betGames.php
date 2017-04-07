@@ -2,6 +2,6 @@
 
 return [
     'service_id' => 13,
-    'token_expiration_time' => 1,
-    'secret' => 'dfFWgbF3r4efr',
+    'secret' => 'DU4OP-W01WB-9M6WS-X2KAJ',
+    'allowed_ips' => [],
 ];

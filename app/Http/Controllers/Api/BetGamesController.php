@@ -14,14 +14,21 @@ use App\Components\Transactions\TransactionHandler;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
+use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\BetGamesTemplate;
 use App\Http\Requests\BetGames\BaseRequest;
 use App\Http\Requests\BetGames\BetRequest;
+use App\Http\Requests\BetGames\OnlineRequest;
 use App\Http\Requests\BetGames\WinRequest;
 use App\Models\Transactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * Class BetGamesController
+ *
+ * @package App\Http\Controllers\Api
+ */
 class BetGamesController extends BaseApiController
 {
     use MetaDataTrait;
@@ -44,12 +51,13 @@ class BetGamesController extends BaseApiController
 
         $this->options = config('integrations.betGames');
 
+        $this->middleware('check.ip:betGames');
         $this->middleware('input.xml')->except(['error']);
+        $this->middleware('input.bg.parsePlayerIdOnWin');
 
         /**
-         * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkMethod
+         * @see BetGamesValidation::checkTime, BetGamesValidation::checkMethod
          */
-        Validator::extend('check_signature', 'App\Http\Requests\Validation\BetGamesValidation@checkSignature');
         Validator::extend('check_time', 'App\Http\Requests\Validation\BetGamesValidation@checkTime');
         Validator::extend('check_token', 'App\Http\Requests\Validation\BetGamesValidation@checkToken');
         Validator::extend('check_method', 'App\Http\Requests\Validation\BetGamesValidation@checkMethod');
@@ -68,9 +76,31 @@ class BetGamesController extends BaseApiController
             $this->cashdeskId = app('GameSession')->get('cashdesk_id');
             $this->gameId = app('GameSession')->get('game_id'); // Т.к. у BetGames нет идентификатора игры при запуске, мы из сессии будем получать 0
             $this->userIP = app('GameSession')->get('userIp');
+
+            $this->checkSignature($request);
+
+            $this->addMetaField('partnerId', $this->partnerId);
+            $this->addMetaField('cashdeskId', $this->cashdeskId);
         }
 
         return app()->call([$this, $apiMethod->get()], $request->all());
+    }
+
+    private function checkSignature(BaseRequest $request):bool
+    {
+        $all = $request->all();
+        unset($all['signature']);
+
+        $signature = new Signature($all, $this->partnerId, $this->cashdeskId);
+        if ($signature->isWrong($request->input('signature'))) {
+            throw new ApiHttpException(400, null, [
+                'code' => StatusCode::SIGNATURE,
+                'method' => $request->input('method'),
+                'token' => $request->input('token'),
+            ]);
+        }
+
+        return true;
     }
 
     /**
@@ -84,10 +114,10 @@ class BetGamesController extends BaseApiController
     }
 
     /**
-     * @param BaseRequest $request
+     * @param OnlineRequest $request
      * @return Response
      */
-    public function account(BaseRequest $request)
+    public function account(OnlineRequest $request)
     {
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
         $user = IntegrationUser::get($this->userId, $this->getOption('service_id'), 'betGames');
@@ -102,20 +132,20 @@ class BetGamesController extends BaseApiController
     }
 
     /**
-     * @param BaseRequest $request
+     * @param OnlineRequest $request
      * @return Response
      */
-    public function refreshToken(BaseRequest $request)
+    public function refreshToken(OnlineRequest $request)
     {
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
         return $this->responseOk($request->input('method'), $request->input('token'));
     }
 
     /**
-     * @param BaseRequest $request
+     * @param OnlineRequest $request
      * @return Response
      */
-    public function newToken(BaseRequest $request)
+    public function newToken(OnlineRequest $request)
     {
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
         $newToken = app('GameSession')->regenerate($request->input('token'), 'md5');
@@ -123,10 +153,10 @@ class BetGamesController extends BaseApiController
     }
 
     /**
-     * @param BaseRequest $request
+     * @param OnlineRequest $request
      * @return Response
      */
-    public function getBalance(BaseRequest $request)
+    public function getBalance(OnlineRequest $request)
     {
         $user = IntegrationUser::get($this->userId, $this->getOption('service_id'), 'betGames');
         $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
@@ -186,9 +216,34 @@ class BetGamesController extends BaseApiController
             $objectId
         );
 
+        // Убер костыль для допроводки выигрышей, ставки по которым были сделаны в ферапонте
+        if (is_null($betTransaction)) {
+            $betTransactions = null;
+
+            try {
+                $betTransactions = app('AccountManager')->getOperations($userId, 1, $objectId, $this->getOption('service_id'));
+            } catch (\Exception $e) {
+            }
+
+            if (is_array($betTransactions)) {
+                $betTransaction = new \stdClass();
+                $betTransaction->game_id = 'from-ferapont';
+                $betTransaction->partner_id = ($betTransactions[0]['partner_id'] != 'null') ? $betTransactions[0]['partner_id'] : ($betTransactions[0]['cashdesk'] == -5 ? 1 : 18);
+                $betTransaction->cashdesk = $betTransactions[0]['cashdesk'];
+                $betTransaction->client_ip = $betTransactions[0]['client_ip'];
+            }
+        }
+        // Конец убер костыля
+
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'betGames');
 
-        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token'), 'balance' => $user->getBalanceInCents()]);
+        $this->setMetaData([
+            'method' => $request->input('method'),
+            'token' => $request->input('token'),
+            'balance' => $user->getBalanceInCents(),
+            'partnerId' => !is_null($betTransaction) ? $betTransaction->partner_id : 0,
+            'cashdeskId' => !is_null($betTransaction) ? $betTransaction->cashdesk : 0,
+        ]);
 
         $transactionMap = new TransactionMap($request->input('method'));
         $transactionRequest = new TransactionRequest(
@@ -216,34 +271,52 @@ class BetGamesController extends BaseApiController
     }
 
     /**
-     * @param $method
-     * @param $token
+     * @param       $method
+     * @param       $token
      * @param array $params
-     * @param bool $prolong
-     * @return Response
+     *
+     * @return array
      */
-    public function responseOk($method, $token, array $params = [], $prolong = true)
+    public function prepareResponse(string $method, string $token, array $params)
     {
-        if($prolong) {
-            app('GameSession')->prolong($token);
-        }
-
         foreach ($params as $key => $param) {
             $params[$key] = transliterate(str_slug($param, '_'));
         }
-
 
         $error = CodeMapping::getByErrorCode(StatusCode::OK);
         $view = [
             'method' => $method,
             'token' => $token,
             'success' => 1,
-            'error_code' => $error['code'],
-            'error_text' => $error['message'],
+            'error_code' => (int)$error['code'],
+            'error_text' => (string)$error['message'],
             'time' => time(),
             'params' => $params
         ];
-        $view['signature'] = (new Signature($view))->getHash();
+        $view['signature'] = (new Signature(
+                $view,
+                $this->partnerId ?? $this->pullMetaField('partnerId'),
+                $this->cashdeskId ?? $this->pullMetaField('cashdeskId')
+            ))->getHash();
+
+        return $view;
+    }
+
+
+    /**
+     * @param $method
+     * @param $token
+     * @param array $params
+     * @param bool $prolong
+     * @return Response
+     */
+    private function responseOk(string $method, string $token, array $params = [], $prolong = true)
+    {
+        if($prolong) {
+            app('GameSession')->prolong($token);
+        }
+
+        $view = $this->prepareResponse($method, $token, $params);
 
         return $this->respond(Response::HTTP_OK, '', $view);
     }

@@ -1,33 +1,22 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of GetCommitQueueData
- *
- * @author petroff
- */
-
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use Illuminate\Support\Facades\Config;
 use Ramsey\Uuid\Uuid;
 
-class ManuallyCompleteGame extends Request {
+class ManuallyCompleteGame extends Request
+{
 
-    public function prepare(array $data = []) {
+    public function prepare(array $data = [])
+    {
         $this->uuid = Uuid::uuid1()->toString();
         $this->method = "ManuallyCompleteGame";
         $dataValidateComplete = array();
         foreach ($data as $key => $value) {
             $dataValidateComplete['ori:CompleteGameRequest'] [] = [
-                'ori:RowId' => $value['a:RowId'],
-                'ori:RowIdLong' => $value['a:RowId'],
-                'ori:ServerId' => Config::get('integrations.microgamingOrion.username'),
+                'ori:RowIdLong' => ($value['a:RowId']) ?? $value['a:RowIdLong'],
+                'ori:ServerId' => Config::get('integrations.microgamingOrion.serverId'),
             ];
         }
 

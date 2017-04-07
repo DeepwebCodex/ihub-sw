@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Console\Commands\Orion;
 
 use App\Components\Integrations\MicroGaming\Orion\Request\Request;
@@ -13,20 +7,15 @@ use App\Exceptions\Internal\Orion\CheckEmptyValidation;
 use App\Http\Requests\Validation\Orion\Validation;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\Console\Helper\ProgressBar;
 use function app;
 use function GuzzleHttp\json_encode;
 use function GuzzleHttp\Psr7\str;
 
-/**
- * Description of Operation
- *
- * @author petroff
- */
 trait Operation
 {
 
-    public function handleError(array $message, $level, string $module,
-            string $line)
+    public function handleError(array $message, $level, string $module, string $line)
     {
         app('AppLog')->warning(json_encode($message), '', '', '', 'MicroGaming-Orion');
         $this->error('Something went wrong!');
@@ -42,28 +31,35 @@ trait Operation
         $this->info('Success.');
     }
 
-    public function make(Request $requestQueueData,
-            Validation $validatorQueueData, $operationsProcessor,
+    public function make(Request $requestQueueData, Validation $validatorQueueData, $operationsProcessor,
             Request $requestResolveData, Validation $validatorResolveData)
     {
+        $bar = new ProgressBar($this->output);
         try {
-            $bar = $this->output->createProgressBar(7);
-            $bar->advance();
+            $this->info("Geting data.");
             $data = $requestQueueData->getData();
-            $bar->advance();
+
+            $this->info("Validating data.");
             $validatorQueueData->validateBaseStructure($data);
-            $bar->advance();
             $elements = $validatorQueueData->getData($data);
-            $bar->advance();
+
+            $this->info("Processing data.");
+            $count = count($elements);
+            if ($count) {
+                $bar->start($count);
+            }
+            $operationsProcessor->setBar($bar);
             $handleCommitRes = $operationsProcessor->make($elements);
-            $bar->advance();
+            $bar->finish();
+            $this->info("\n");
+
+            $this->info("Sending data.");
             $dataResponse = $requestResolveData->getData($handleCommitRes);
-            $bar->advance();
             $validatorResolveData->validateBaseStructure($dataResponse);
-            $bar->advance();
-            $bar->finish(); $this->info("\n");
+
             return $this->handleSuccess($dataResponse, $handleCommitRes);
         } catch (RequestException $re) {
+            $bar->finish();
             $logRecords = [
                 'message' => str($re->getRequest())
             ];
@@ -73,8 +69,10 @@ trait Operation
             }
             $this->handleError($logRecords, 'warning', '', $re->getLine());
         } catch (CheckEmptyValidation $ve) {
+            $this->info('Zero of elements was prosseced.');
             $this->handleSuccess(['message' => 'Source is empty']);
         } catch (Exception $ex) {
+
             $logRecords = [
                 'message' => $ex->getMessage()
             ];

@@ -28,7 +28,6 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-
         if ((new ApiMethod($request->input('method')))->isOffline()) {
             return true;
         }
@@ -60,13 +59,12 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     }
 
     /**
-     * @see BetGamesValidation::checkSignature, BetGamesValidation::checkTime, BetGamesValidation::checkMethod
+     * @see BetGamesValidation::checkTime, BetGamesValidation::checkMethod
      */
     public function rules()
     {
         return [
             'method' => 'bail|required|string|check_method',
-            'signature' => 'bail|required|string|check_signature',
             'time' => 'bail|required|integer|check_time',
             'token' => 'bail|required|string',
             'params' => 'bail|present'

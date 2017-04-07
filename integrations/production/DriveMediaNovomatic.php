@@ -95,5 +95,6 @@ return [
             'currency' => 'DKK',
             'key' => 'lK40Ud00e9M1',
         ],
-    ]
+    ],
+    'allowed_ips' => [],
 ];

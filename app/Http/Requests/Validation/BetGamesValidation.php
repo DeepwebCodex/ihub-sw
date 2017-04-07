@@ -10,28 +10,8 @@ use Illuminate\Support\Facades\Request;
 
 class BetGamesValidation
 {
-    private $signature;
     private $time_limit = 60;
-
-    public function checkSignature($attribute, $value, $parameters, $validator):bool
-    {
-        if (!($request = Request::getFacadeRoot())) {
-            return false;
-        }
-
-        $all = $request->all();
-        unset($all['signature']);
-        $this->signature = new Signature($all);
-        if ($this->signature->isWrong($value)) {
-            throw new ApiHttpException(400, null, [
-                'code' => StatusCode::SIGNATURE,
-                'method' => Request::getFacadeRoot()->method,
-                'token' => Request::getFacadeRoot()->token,
-            ]);
-        }
-
-        return true;
-    }
+    private $token_length = 10;
 
     public function checkTime($attribute, $value, $parameters, $validator):bool
     {
@@ -58,5 +38,22 @@ class BetGamesValidation
         }
 
         return true;
+    }
+
+    public function checkToken($attribute, $value, $parameters, $validator):bool
+    {
+        $hasLetters = (bool)preg_match('/[A-Za-z]/', $value);
+        $hasDigits = (bool)preg_match('/[0-9]/', $value);
+        $hasEnoughLength = strlen($value) >= $this->token_length;
+
+        if($hasLetters && $hasDigits && $hasEnoughLength){
+            return true;
+        }
+
+        throw new ApiHttpException(400, null, [
+            'code' => StatusCode::TOKEN,
+            'method' => Request::getFacadeRoot()->method,
+            'token' => Request::getFacadeRoot()->token,
+        ]);
     }
 }

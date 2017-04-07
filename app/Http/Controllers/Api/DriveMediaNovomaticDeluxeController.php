@@ -32,6 +32,7 @@ class DriveMediaNovomaticDeluxeController extends BaseApiController {
         parent::__construct($formatter);
         $this->options = config('integrations.DriveMediaNovomaticDeluxe');
 
+        $this->middleware('check.ip:DriveMediaNovomaticDeluxe');
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 

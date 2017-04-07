@@ -26,6 +26,7 @@ class DriveCasinoController extends BaseApiController
 
         $this->options = config('integrations.drivecasino');
 
+        $this->middleware('check.ip:drivecasino');
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 

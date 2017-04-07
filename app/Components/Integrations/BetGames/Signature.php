@@ -8,45 +8,46 @@ class Signature
 {
     use MetaDataTrait;
 
-    const EXPIRATION_TIME = 1;
-    const CACHE_KEY = 'signature:';
-
-    /**
-     * @var \Illuminate\Cache\Repository
-     */
-    private $cache;
     private $hash;
+    private $partnerId;
+    private $cashdeskId;
 
     /**
      * Signature constructor.
+     *
      * @param array $data
+     * @param $partnerId
+     * @param $cashdeskId
      */
-    public function __construct(array $data)
+    public function __construct(array $data, $partnerId = null, $cashdeskId = null)
     {
-        $this->cache = app('cache')->store('redis_bet_games');
+        $this->partnerId = $partnerId;
+        $this->cashdeskId = $cashdeskId;
+
         $this->hash = $this->create($data);
     }
-
 
     /**
      * @return string
      */
-    public function getHash():string 
+    public function getHash(): string
     {
         return $this->hash;
     }
 
     /**
      * @param $data
+     *
      * @return string
+     * @throws \Exception
      */
-    private function create($data):string
+    private function create($data): string
     {
         $result = '';
         foreach ($data as $key => $value) {
-            if ($key == 'params' && empty($value) || $key == $this->metaStorageKey) {
+            if (($key === 'params' && empty($value)) || $key === 'signature' || $key === $this->metaStorageKey) {
                 continue;
-            } elseif ($key == 'params' && !empty($value)) {
+            } elseif ($key === 'params' && !empty($value)) {
                 foreach ($value as $keyParam => $param) {
                     $result .= $keyParam . $param;
                 }
@@ -54,53 +55,21 @@ class Signature
                 $result .= $key . $value;
             }
         }
-        $result .= config('integrations.betGames.secret');
+        $result .= config(
+            "integrations.betGames.secret_separated.{$this->partnerId}.{$this->cashdeskId}",
+            config('integrations.betGames.secret')
+        );
 
         return md5($result);
     }
 
     /**
-     * @param string $code
-     * @return bool
-     */
-    public function isUsed(string $code):bool
-    {
-        return !is_null($this->cache->get(self::CACHE_KEY . $code));
-    }
-
-    /**
-     * @param string $code
-     */
-    public function set(string $code)
-    {
-        $this->cache->add(self::CACHE_KEY . $code, true, self::EXPIRATION_TIME);
-    }
-
-    /**
      * @param string $value
+     *
      * @return bool
      */
-    public function isWrong(string $value):bool
+    public function isWrong(string $value): bool
     {
         return $value != $this->hash;
-    }
-
-    /**
-     * @param string $code
-     * @return bool
-     */
-    public function isExpired(string $code):bool
-    {
-        return (time() - $this->getTime($code)) > self::EXPIRATION_TIME;
-    }
-
-    /**
-     * @param $value
-     * @return int
-     */
-    private function getTime($value):int 
-    {
-        list(, $time) = explode('-', $value);
-        return $time;
     }
 }

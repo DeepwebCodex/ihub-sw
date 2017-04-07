@@ -36,6 +36,7 @@ class EuroGamesTechController extends BaseApiController
 
         $this->options = config('integrations.egt');
 
+        $this->middleware('check.ip:egt');
         $this->middleware('input.xml')->except(['error']);
         $this->middleware('input.egt.parsePlayerId')->except(['error']);
 
