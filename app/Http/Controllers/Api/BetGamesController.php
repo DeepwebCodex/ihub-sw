@@ -53,6 +53,9 @@ class BetGamesController extends BaseApiController
 
         $this->middleware('check.ip:betGames');
         $this->middleware('input.xml')->except(['error']);
+
+        /** @see SetPartnerCashdesk, parsePlayerIdOnWin  */
+        $this->middleware('input.bg.SetPartnerCashdesk');
         $this->middleware('input.bg.parsePlayerIdOnWin');
 
         /**
@@ -72,8 +75,8 @@ class BetGamesController extends BaseApiController
         $apiMethod = new ApiMethod($request->input('method'));
         if (!$apiMethod->isOffline()) {
             $this->userId = app('GameSession')->get('user_id') ?? 0;
-            $this->partnerId = app('GameSession')->get('partner_id');
-            $this->cashdeskId = app('GameSession')->get('cashdesk_id');
+            $this->partnerId = $request->input('partner_id') ?? app('GameSession')->get('partner_id');
+            $this->cashdeskId = $request->input('cashdesk_id') ?? app('GameSession')->get('cashdesk_id');
             $this->gameId = app('GameSession')->get('game_id'); // Т.к. у BetGames нет идентификатора игры при запуске, мы из сессии будем получать 0
             $this->userIP = app('GameSession')->get('userIp');
 
