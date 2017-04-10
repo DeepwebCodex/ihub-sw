@@ -60,8 +60,9 @@ class AppLog
             $module = $module ?: $traceClassInfo['function'];
             $line = $line ?: array_get($traceLineInfo, 'line');
 
-            $requestId = $this->requestId;
         }
+
+        $requestId = $this->requestId;
 
         return compact('node', 'module', 'line', 'requestId', 'group');
     }
