@@ -1,21 +1,28 @@
 <?php
 
+use DriveMedia\TestUser;
+
 class DriveMediaPlaytechBorderlineApiCest
 {
-    private $options;
+    private $key;
+    private $space;
+
+    /** @var  TestUser $testUser */
+    private $testUser;
 
     public function _before() {
-        $this->options = config('integrations.DriveMediaPlaytech');
+        $this->key = config('integrations.DriveMediaPlaytech.spaces.FUN.key');
+        $this->space = config('integrations.DriveMediaPlaytech.spaces.FUN.id');
+
+        $this->testUser = new TestUser();
     }
 
     public function testMethodBetWin(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
         $request = [
             'cmd'       => 'writeBet',
-            'space'     => '1805',
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
+            'space'     => $this->space,
+            'login'     => $this->testUser->getUserId(),
             'bet'       => '2.00',
             'winLose'   => '5.8',
             'tradeId'   => md5(microtime()),
@@ -26,15 +33,17 @@ class DriveMediaPlaytechBorderlineApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options['1805']['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'balance'   => money_format('%i', ($testUser->getBalance() - 2.0 + 7.8)),
+            'login'     => $this->testUser->getUserId(),
+            'balance'   => money_format('%i', ($this->testUser->getBalance() - 2.0 + 7.8)),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -42,12 +51,10 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodBetWin2(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
         $request = [
             'cmd'       => 'writeBet',
-            'space'     => '1805',
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
+            'space'     => $this->space,
+            'login'     => $this->testUser->getUserId(),
             'bet'       => '240.0',
             'winLose'   => '-180.0',
             'tradeId'   => md5(microtime()),
@@ -58,15 +65,17 @@ class DriveMediaPlaytechBorderlineApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options['1805']['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'balance'   => money_format('%i', ($testUser->getBalance() - 240.0 + 60.0)),
+            'login'     => $this->testUser->getUserId(),
+            'balance'   => money_format('%i', ($this->testUser->getBalance() - 240.0 + 60.0)),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -74,12 +83,10 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodBetWin3(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
         $request = [
             'cmd'       => 'writeBet',
-            'space'     => '1805',
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
+            'space'     => $this->space,
+            'login'     => $this->testUser->getUserId(),
             'bet'       => '360.0',
             'winLose'   => '90.0',
             'tradeId'   => md5(microtime()),
@@ -90,15 +97,17 @@ class DriveMediaPlaytechBorderlineApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options['1805']['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'balance'   => money_format('%i', ($testUser->getBalance() - 360.0 + 450.0)),
+            'login'     => $this->testUser->getUserId(),
+            'balance'   => money_format('%i', ($this->testUser->getBalance() - 360.0 + 450.0)),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -106,12 +115,10 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
         $request = [
             'cmd'       => 'writeBet',
-            'space'     => '1805',
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
+            'space'     => $this->space,
+            'login'     => $this->testUser->getUserId(),
             'bet'       => '0.00',
             'winLose'   => '0.10',
             'tradeId'   => md5(microtime()),
@@ -122,7 +129,9 @@ class DriveMediaPlaytechBorderlineApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options['1805']['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
@@ -136,15 +145,15 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodWrongSign(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
         $request = [
             'cmd'   => 'getBalance',
-            'space' => '1805',
-            'login' => "{$testUser->id}--1--1--127-0-0-1",
+            'space' => $this->space,
+            'login' => $this->testUser->getUserId(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5(http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5(http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
@@ -164,7 +173,9 @@ class DriveMediaPlaytechBorderlineApiCest
             'login' => "348578934578934570702728--1--1--127-0-0-1",
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options['1805']['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
@@ -173,6 +184,28 @@ class DriveMediaPlaytechBorderlineApiCest
         $I->seeResponseContainsJson([
             'status'    => 'fail',
             'error'     => 'user_not_found'
+        ]);
+    }
+
+    public function testMethodSpaceNotFound(ApiTester $I)
+    {
+        $request = [
+            'cmd'   => 'getBalance',
+            'space' => '1',
+            'login' => $this->testUser->getUserId(),
+        ];
+
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/playtech', $request);
+        $I->seeResponseCodeIs(500);
+        $I->canSeeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'status'    => 'fail',
+            'error'     => 'internal_error'
         ]);
     }
 
