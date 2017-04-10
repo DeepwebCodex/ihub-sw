@@ -6,6 +6,7 @@ use App\Components\Formatters\JsonApiFormatter;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\Templates\GameSessionTemplate;
 use App\Http\Requests\GameSession\SessionCreateRequest;
+use App\Http\Requests\GameSession\SessionCreateWithContextRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 
@@ -19,6 +20,10 @@ class GameSessionController extends BaseApiController
 
     public static $exceptionTemplate = GameSessionTemplate::class;
 
+    /**
+     * GameSessionController constructor.
+     * @param JsonApiFormatter $formatter
+     */
     public function __construct(JsonApiFormatter $formatter)
     {
         parent::__construct($formatter);
@@ -32,15 +37,49 @@ class GameSessionController extends BaseApiController
      */
     public function create(SessionCreateRequest $request)
     {
-        $input = Input::only('user_id', 'partner_id', 'game_id', 'currency', 'unique_id', 'cashdesk_id', 'userIp');
+        $input = Input::only(
+            'user_id',
+            'partner_id',
+            'game_id',
+            'currency',
+            'unique_id',
+            'cashdesk_id',
+            'userIp',
+            'context'
+        );
 
         $sessionId = app('GameSession')->create($input, 'md5');
 
         return $this->respondOk(Response::HTTP_OK, 'success', ['token' => $sessionId]);
     }
 
+    /**
+     * @param SessionCreateWithContextRequest $request
+     * @return Response
+     */
+    public function createWithContext(SessionCreateWithContextRequest $request)
+    {
+        $input = Input::only(
+            'user_id',
+            'partner_id',
+            'game_id',
+            'currency',
+            'unique_id',
+            'cashdesk_id',
+            'userIp',
+            'context'
+        );
+
+        $sessionId = app('GameSession')->createWithContext($input['context'], $input, 'md5');
+
+        return $this->respondOk(Response::HTTP_OK, 'success', ['token' => $sessionId]);
+    }
+
+    /**
+     * @return Response
+     */
     public function error()
     {
-        $this->respond(Response::HTTP_BAD_REQUEST, 'Bad request');
+        return $this->respond(Response::HTTP_BAD_REQUEST, 'Bad request');
     }
 }
