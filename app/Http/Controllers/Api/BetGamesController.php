@@ -244,8 +244,8 @@ class BetGamesController extends BaseApiController
             'method' => $request->input('method'),
             'token' => $request->input('token'),
             'balance' => $user->getBalanceInCents(),
-            'partnerId' => !is_null($betTransaction) ? $betTransaction->partner_id : $request->input('partner_id', 0),
-            'cashdeskId' => !is_null($betTransaction) ? $betTransaction->cashdesk : $request->input('cashdesk_id', 0),
+            'partnerId' => $request->input('partner_id', !is_null($betTransaction) ? $betTransaction->partner_id : 0),
+            'cashdeskId' => $request->input('cashdesk_id', !is_null($betTransaction) ? $betTransaction->cashdesk : 0),
         ]);
 
         $transactionMap = new TransactionMap($request->input('method'));
