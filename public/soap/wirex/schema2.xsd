@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://ws.platform.betsite/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           version="1.0" targetNamespace="http://ws.platform.betsite/">
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1 (UNKNOWN_BRANCH-false; 2015-01-15T16:53:43+0100) JAXWS-RI/2.2.10 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. -->
+<xs:schema xmlns:tns="http://ws.platform.betsite/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0"
+           targetNamespace="http://ws.platform.betsite/">
+
     <xs:complexType name="platformRequestHeader">
         <xs:complexContent>
             <xs:extension base="tns:platformMessageHeader">
@@ -12,9 +13,11 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
     <xs:complexType name="platformMessageHeader">
         <xs:sequence/>
     </xs:complexType>
+
     <xs:complexType name="platformResponseHeader">
         <xs:complexContent>
             <xs:extension base="tns:platformMessageHeader">
@@ -26,6 +29,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
     <xs:complexType name="contextRemoteAccountEntryDetailedRequest">
         <xs:complexContent>
             <xs:extension base="tns:contextRemoteAccountEntryRequestHeader">
@@ -41,6 +45,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
     <xs:complexType name="contextRemoteAccountEntryRequestHeader">
         <xs:complexContent>
             <xs:extension base="tns:platformRequestHeader">
@@ -50,13 +55,16 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
     <xs:complexType name="contextRemoteAccountEntryDetailed">
         <xs:sequence>
             <xs:element name="accountEntry" type="tns:contextRemoteAccountEntry" minOccurs="0"/>
             <xs:element name="selectedAmounts" type="xs:decimal" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="selectedEntryTypeLabels" type="xs:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="selectedEntryTypeLabels" type="xs:int" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
+
     <xs:complexType name="contextRemoteAccountEntry">
         <xs:sequence>
             <xs:element name="account" type="xs:int"/>
@@ -71,6 +79,7 @@
             <xs:element name="valuta" type="xs:dateTime" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
+
     <xs:complexType name="contextRemoteAccountEntryDetailedResponse">
         <xs:complexContent>
             <xs:extension base="tns:platformResponseHeader">
@@ -84,6 +93,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
     <xs:complexType name="partyAamsInfoResponse">
         <xs:complexContent>
             <xs:extension base="tns:platformResponseHeader">
@@ -95,6 +105,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
     <xs:complexType name="partyInfoResponse">
         <xs:complexContent>
             <xs:extension base="tns:platformResponseHeader">
@@ -104,6 +115,7 @@
                     <xs:element name="birthdate" type="xs:string" minOccurs="0"/>
                     <xs:element name="birthstate" type="xs:string" minOccurs="0"/>
                     <xs:element name="city" type="xs:string" minOccurs="0"/>
+                    <xs:element name="country" type="xs:string" minOccurs="0"/>
                     <xs:element name="currency" type="xs:string" minOccurs="0"/>
                     <xs:element name="email" type="xs:string" minOccurs="0"/>
                     <xs:element name="firstname" type="xs:string" minOccurs="0"/>
@@ -119,6 +131,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
     <xs:complexType name="remotePersistentSessionResponse">
         <xs:complexContent>
             <xs:extension base="tns:platformResponseHeader">
