@@ -18,7 +18,6 @@ class SetPartnerCashdeskCest
     public function testServices(\UnitTester $I)
     {
         $this->processMiddleware('favbet', $I);
-        $this->processMiddleware('favbet', $I);
         $this->processMiddleware('favbet-app', $I);
         $this->processMiddleware('favorit', $I);
         $this->processMiddleware('favorit-app', $I);
