@@ -21,8 +21,13 @@ class ApiValidation
 
     public function checkTransactionParams($serviceId, $transactionType, $partnerId)
     {
-        $result = Transactions::getTransaction($serviceId, $this->request->input('tid'), $transactionType, $partnerId);
-        if(!$result){
+        $result = Transactions::getTransaction(
+            $serviceId,
+            $this->request->input('tid'),
+            $transactionType,
+            $partnerId
+        );
+        if (!$result) {
             return $this;
         }
         $trans = $result->getAttributes();
