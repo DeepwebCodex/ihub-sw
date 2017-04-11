@@ -21,6 +21,7 @@ use App\Http\WirexGaming\GetUserDataRequest;
 use App\Http\WirexGaming\RollbackWithdrawRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Response as ResponseFacade;
 
 /**
  * Class WirexController
@@ -45,7 +46,7 @@ class WirexGamingController extends BaseApiController
         $this->options = config('integrations.wirexGaming');
 
         $this->middleware('check.ip:wirexGaming');
-        $this->middleware('input.xml');
+        //$this->middleware('input.xml');
     }
 
     /**
@@ -54,6 +55,7 @@ class WirexGamingController extends BaseApiController
      */
     public function index(Request $request)
     {
+        $this->middleware('input.xml');
         $body = $request->input('soap:Body');
         $method = key($body);
 
@@ -64,6 +66,29 @@ class WirexGamingController extends BaseApiController
         }
 
         return app()->call([$this, 'error'], $request->all());
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function docs(Request $request)
+    {
+        $input = $request->input();
+        $exampleUrl = 'https://pcws.casino.com:443/portal/PlatformControllerWS';
+        $wsdlFolder = public_path() . '/soap/wirex';
+        if (isset($input['wsdl'])) {
+            $content = file_get_contents($wsdlFolder . '/wirex.wsdl');
+            $content = str_replace($exampleUrl, $request->url(), $content);
+        } elseif (isset($input['xsd'])) {
+            if ($input['xsd'] == 1) {
+                $content = file_get_contents($wsdlFolder . '/schema1.xsd');
+                $content = str_replace($exampleUrl, $request->url(), $content);
+            } elseif ($input['xsd'] == 2) {
+                $content = file_get_contents($wsdlFolder . '/schema2.xsd');
+            }
+        }
+        $header['Content-Type'] = 'text/xml; charset=utf-8';
+        return ResponseFacade::make($content, 200, $header);
     }
 
     /**
