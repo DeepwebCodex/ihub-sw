@@ -200,6 +200,18 @@
                 <soap:fault name="Exception" use="literal" />
             </fault>
         </operation>
+        <operation name="getAamsUserData">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="Exception">
+                <soap:fault name="Exception" use="literal"/>
+            </fault>
+        </operation>
         <operation name="addWithdrawEntry">
             <soap:operation soapAction="" />
             <input>
