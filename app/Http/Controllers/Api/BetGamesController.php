@@ -54,8 +54,8 @@ class BetGamesController extends BaseApiController
         $this->middleware('check.ip:betGames');
         $this->middleware('input.xml')->except(['error']);
 
-        /** @see SetPartnerCashdesk, parsePlayerIdOnWin  */
-        $this->middleware('input.bg.SetPartnerCashdesk');
+        /** @see setPartnerCashdesk, parsePlayerIdOnWin  */
+        $this->middleware('input.bg.setPartnerCashdesk');
         $this->middleware('input.bg.parsePlayerIdOnWin');
 
         /**
@@ -244,8 +244,8 @@ class BetGamesController extends BaseApiController
             'method' => $request->input('method'),
             'token' => $request->input('token'),
             'balance' => $user->getBalanceInCents(),
-            'partnerId' => !is_null($betTransaction) ? $betTransaction->partner_id : 0,
-            'cashdeskId' => !is_null($betTransaction) ? $betTransaction->cashdesk : 0,
+            'partnerId' => !is_null($betTransaction) ? $betTransaction->partner_id : $request->input('partner_id', 0),
+            'cashdeskId' => !is_null($betTransaction) ? $betTransaction->cashdesk : $request->input('cashdesk_id', 0),
         ]);
 
         $transactionMap = new TransactionMap($request->input('method'));

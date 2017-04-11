@@ -71,7 +71,7 @@ class Kernel extends HttpKernel
         'log.request.response' => \App\Http\Middleware\LogRequestResponse::class,
         'check.ip' => \App\Http\Middleware\IPList::class,
         'input.bg.parsePlayerIdOnWin' => \App\Http\Middleware\BetGames\ParsePlayerIdOnWin::class,
-        'input.bg.SetPartnerCashdesk' => \App\Http\Middleware\BetGames\SetPartnerCashdesk::class,
+        'input.bg.setPartnerCashdesk' => \App\Http\Middleware\BetGames\SetPartnerCashdesk::class,
         'input.netEntertainment.parsePlayerIdOnOffline' => \App\Http\Middleware\NetEntertainment\ParsePlayerIdOnOffline::class,
     ];
 }
