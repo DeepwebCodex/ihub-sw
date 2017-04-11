@@ -10,7 +10,9 @@ class GetBalanceRequest extends BaseRequest {
      * @return array
      */
     public function messages() {
-        return [];
+        return [
+                // 'cmd' => 'Cmd must be fill'
+        ];
     }
 
     /**

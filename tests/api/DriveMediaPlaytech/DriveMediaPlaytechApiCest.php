@@ -1,41 +1,32 @@
 <?php
 
-use DriveMedia\TestUser;
-
 class DriveMediaPlaytechApiCest
 {
-    private $key;
-    private $space;
-
-    /** @var  TestUser $testUser */
-    private $testUser;
+    private $options;
 
     public function _before() {
-        $this->key = config('integrations.DriveMediaPlaytech.spaces.FUN.key');
-        $this->space = config('integrations.DriveMediaPlaytech.spaces.FUN.id');
-
-        $this->testUser = new TestUser();
+        $this->options = config('integrations.DriveMediaPlaytech');
     }
 
     public function testMethodBalance(ApiTester $I)
     {
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+
         $request = [
             'cmd'   => 'getBalance',
-            'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'space' => '1805',
+            'login' => "{$testUser->id}--1--1--127-0-0-1",
         ];
 
-        $request = array_merge($request, [
-            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
-        ]);
+        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options['1805']['key'].http_build_query($request)))]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', $this->testUser->getBalance()),
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
+            'balance'   => money_format('%i', $testUser->getBalance()),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -43,10 +34,12 @@ class DriveMediaPlaytechApiCest
 
     public function testMethodBet(ApiTester $I)
     {
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+
         $request = [
             'cmd'       => 'writeBet',
-            'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
+            'space'     => '1805',
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'bet'       => '1.0',
             'winLose'   => '-1.0',
             'tradeId'   => md5(microtime()),
@@ -57,16 +50,15 @@ class DriveMediaPlaytechApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, [
-            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
-        ]);
+        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options['1805']['key'].http_build_query($request)))]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
         $I->seeResponseCodeIs(200);
+
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 1.0)),
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
+            'balance'   => money_format('%i', ($testUser->getBalance() - 1.0)),
             'status'    => 'success',
             'error'     => ''
         ]);
