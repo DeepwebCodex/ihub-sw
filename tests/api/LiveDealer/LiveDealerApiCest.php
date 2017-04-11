@@ -44,7 +44,6 @@ class LiveDealerApiCest
     public function _before(\ApiTester $I, Scenario $s)
     {
         $I->mockAccountManager($I, config('integrations.liveDealer.service_id'));
-        $I->disableMiddleware();
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
