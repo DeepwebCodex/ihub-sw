@@ -93,6 +93,8 @@ class BetGamesController extends BaseApiController
     {
         $all = $request->all();
         unset($all['signature']);
+        unset($all['partner_id']);
+        unset($all['cashdesk_id']);
 
         $signature = new Signature($all, $this->partnerId, $this->cashdeskId);
         if ($signature->isWrong($request->input('signature'))) {
