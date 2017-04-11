@@ -1,8 +1,8 @@
 <?php
 
-namespace NetEntertainment;
+namespace Fundist;
 
-use App\Components\Integrations\NetEntertainment\Hmac;
+use App\Components\Integrations\Fundist\Hmac;
 use Testing\Params;
 
 class TestData
@@ -16,7 +16,7 @@ class TestData
     public $bigAmount;
     public $gameId;
 
-    public function __construct()
+    public function __construct(string $integration)
     {
         $this->userId = (int)env('TEST_USER_ID') . '_' . Params::CURRENCY;
         $this->currency = Params::CURRENCY;
@@ -24,6 +24,7 @@ class TestData
         $this->amount = Params::AMOUNT;
         $this->bigAmount = Params::BIG_AMOUNT;
         $this->game_id = Params::GAME_ID;
+        Hmac::$INTEGRATION = $integration;
     }
 
     public function notFound()

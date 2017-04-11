@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\NetEntertainment;
+namespace App\Http\Requests\Fundist;
 
 use App\Components\AppLog;
-use App\Components\Integrations\NetEntertainment\ApiMethod;
-use App\Components\Integrations\NetEntertainment\CodeMapping;
-use App\Components\Integrations\NetEntertainment\StatusCode;
+use App\Components\Integrations\Fundist\ApiMethod;
+use App\Components\Integrations\Fundist\CodeMapping;
+use App\Components\Integrations\Fundist\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Traits\MetaDataTrait;
 use App\Exceptions\Api\ApiHttpException;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class BaseRequest
- * @package App\Http\Requests\NetEntertainment
+ * @package App\Http\Requests\Fundist
  */
 class BaseRequest extends ApiRequest implements ApiValidationInterface
 {
@@ -55,7 +55,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     }
 
     /**
-     * @see NetEntertainmentValidation::checkHmac, NetEntertainmentValidation::checkMethod
+     * @see FundistValidation::checkHmac, FundistValidation::checkMethod
      */
     public function rules()
     {

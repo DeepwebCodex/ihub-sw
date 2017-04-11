@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\NetEntertainment;
+namespace App\Http\Requests\Fundist;
 
 /**
  * Class WinRequest
- * @package App\Http\Requests\NetEntertainment
+ * @package App\Http\Requests\Fundist
  */
 class WinRequest extends BaseRequest
 {
