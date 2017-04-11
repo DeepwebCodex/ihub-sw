@@ -19,7 +19,7 @@ class WirexGamingApiFormatter extends XmlApiFormatter
     public function format(array $data)
     {
         if ($data) {
-            return Array2Xml::createXML('soap:Body', $data)->saveXML();
+            return Array2Xml::createXML('soap:Envelope', ['soap:Body' => $data])->saveXML();
         }
         return '';
     }

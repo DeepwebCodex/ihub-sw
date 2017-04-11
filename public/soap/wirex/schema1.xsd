@@ -142,8 +142,7 @@
     </xs:complexType>
     <xs:complexType name="addDepositEntry">
         <xs:sequence>
-            <xs:element name="accountEntryPlatformRequest" type="tns:accountEntryPlatformRequest"
-                        minOccurs="0"/>
+            <xs:element name="accountEntryPlatformRequest" type="tns:accountEntryPlatformRequest" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="addDepositEntryResponse">

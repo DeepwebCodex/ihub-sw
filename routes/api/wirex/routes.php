@@ -2,4 +2,4 @@
 
 Route::any('{any}', "WirexGamingController@error");
 Route::get('/', "WirexGamingController@docs");
-Route::post('/', "WirexGamingController@index");
+Route::post('/', "WirexGamingController@index")->middleware('input.xml');

@@ -7,7 +7,6 @@ use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\WirexGaming\CodeMapping;
 use App\Components\Integrations\WirexGaming\WirexGamingHelper;
 use App\Components\Traits\MetaDataTrait;
-use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
@@ -55,7 +54,6 @@ class WirexGamingController extends BaseApiController
      */
     public function index(Request $request)
     {
-        $this->middleware('input.xml');
         $body = $request->input('soap:Body');
         $method = key($body);
 
@@ -75,14 +73,15 @@ class WirexGamingController extends BaseApiController
     {
         $input = $request->input();
         $exampleUrl = 'https://pcws.casino.com:443/portal/PlatformControllerWS';
+        $url = 'http://vb-test.favbet.com/ihub/wirex';
         $wsdlFolder = public_path() . '/soap/wirex';
         if (isset($input['wsdl'])) {
             $content = file_get_contents($wsdlFolder . '/wirex.wsdl');
-            $content = str_replace($exampleUrl, $request->url(), $content);
+            $content = str_replace($exampleUrl, $url, $content);
         } elseif (isset($input['xsd'])) {
             if ($input['xsd'] == 1) {
                 $content = file_get_contents($wsdlFolder . '/schema1.xsd');
-                $content = str_replace($exampleUrl, $request->url(), $content);
+                $content = str_replace($exampleUrl, $url, $content);
             } elseif ($input['xsd'] == 2) {
                 $content = file_get_contents($wsdlFolder . '/schema2.xsd');
             }
