@@ -49,7 +49,7 @@ abstract class FundistController extends BaseApiController
 
         $this->middleware('check.ip:' . $this->integration);
 //        $this->middleware('input.json')->except(['error']);
-        $this->middleware('input.netEntertainment.parsePlayerIdOnOffline');
+        $this->middleware('input.fundist.parsePlayerIdOnOffline');
 
         /**
          * @see FundistValidation::checkHmac,FundistValidation::checkMethod
