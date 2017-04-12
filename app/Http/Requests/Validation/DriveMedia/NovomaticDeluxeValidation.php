@@ -11,28 +11,16 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
 use function array_get;
 
-/**
- * Class NovomaticDeluxeValidation
- * @package App\Http\Requests\Validation\DriveMedia
- */
 class NovomaticDeluxeValidation {
 
     use MetaDataTrait;
 
-    /**
-     * @param $attribute
-     * @param $value
-     * @param $parameters
-     * @param $validator
-     * @return bool
-     */
     public function checkSign($attribute, $value, $parameters, $validator): bool {
         if (!($request = Request::getFacadeRoot())) {
             return false;
         }
 
         $all = $this->pullMetaField('imprint');
-
         unset($all['userId']);
         unset($all['userIp']);
         unset($all['partnerId']);
@@ -45,53 +33,17 @@ class NovomaticDeluxeValidation {
         return true;
     }
 
-    /**
-     * @param string $userCurrency
-     * @param string $space
-     */
-    public static function checkCurrency(string $userCurrency, string $space) {
-        $userSpace = Config::get("integrations.DriveMediaNovomaticDeluxe.spaces.{$userCurrency}.id");
+    public static function checkCurrency(string $userCurrency, string $space): bool {
+        if (App::environment('production')) {
+            $spaces = Config::get("integrations.DriveMediaNovomaticDeluxe.spaces");
+            $currency = array_get($spaces, $space . ".currency");
 
-        if ($userSpace !== $space) {
-            throw new ApiHttpException(400, CodeMapping::INVALID_CURRENCY);
-        }
-    }
-
-    /**
-     * @param $attribute
-     * @param $value
-     * @param $parameters
-     * @param $validator
-     */
-    public function validateSpace($attribute, $value, $parameters, $validator) {
-        if (!($request = Request::getFacadeRoot())) {
-            return false;
-        }
-
-        $all = $request->all();
-
-        if(!(bool)$this->getSpace($all['space'])) {
-            throw new ApiHttpException(500, CodeMapping::SERVER_ERROR);
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $space
-     * @return bool
-     */
-    protected function getSpace(string $space):bool
-    {
-        $spaces = Config::get("integrations.DriveMediaNovomaticDeluxe.spaces");
-
-        foreach ($spaces as $v) {
-            if($v['id'] === $space) {
-                return true;
+            if ($userCurrency != $currency) {
+                throw new ApiHttpException(400, CodeMapping::INVALID_CURRENCY);
             }
         }
 
-        return false;
+        return true;
     }
 
 }

@@ -14,7 +14,7 @@ class BalanceRequest extends BaseDriveMediaRequest
     public function rules()
     {
         return [
-            'space'     => 'bail|required|validate_space',
+            'space'     => 'bail|required|string',
             'login'     => 'bail|required|string',
             'cmd'       => 'bail|required|string',
             'sign'      => 'bail|required|validate_sign',
