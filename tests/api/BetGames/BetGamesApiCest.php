@@ -3,6 +3,7 @@
 namespace api\BetGames;
 
 use App\Components\Integrations\BetGames\CodeMapping;
+use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Integrations\GameSession\GameSessionService;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
@@ -51,7 +52,7 @@ class BetGamesApiCest
     public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendPOST('/bg/favbet/', $this->data->notFound());
-        $this->getResponseFail($I, StatusCode::SIGNATURE);
+        $this->getResponseFail($I, StatusCode::UNKNOWN);
 
     }
 
@@ -79,9 +80,11 @@ class BetGamesApiCest
 
     public function testFailPending(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessBetGames::class);
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
+
+        $mock = $this->mock(ProcessBetGames::class);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
+
         $request = $this->data->bet();
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::UNKNOWN);
@@ -163,8 +166,6 @@ class BetGamesApiCest
         $bet = $this->execBet($I);
         $balanceBefore = $this->testUser->getBalanceInCents();
         $request = $this->data->win($bet['params']['bet_id']);
-
-//         $I->getApplication()->forgetInstances();
 
         $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
@@ -330,7 +331,18 @@ class BetGamesApiCest
     private function getResponseOk(\ApiTester $I)
     {
         $I->seeResponseCodeIs(200);
+
         $data = $this->responseToArray($I);
+
+        $signatureValidation = $this->validateSignature(
+            array_get($data, 'signature'),
+            $data,
+            $this->data->partnerId,
+            $this->data->cashdeskId
+        );
+
+        $I->assertTrue($signatureValidation);
+
         $I->assertArrayHasKey('method', $data);
         $I->assertArrayHasKey('token', $data);
         $I->assertArrayHasKey('success', $data);
@@ -351,6 +363,16 @@ class BetGamesApiCest
     private function getResponseFail(\ApiTester $I, $errorCode)
     {
         $data = $this->responseToArray($I);
+
+        $signatureValidation = $this->validateSignature(
+            array_get($data, 'signature'),
+            $data,
+            $this->data->partnerId,
+            $this->data->cashdeskId
+        );
+
+        $I->assertTrue($signatureValidation);
+
         $I->assertArrayHasKey('method', $data);
         $I->assertArrayHasKey('token', $data);
         $I->assertArrayHasKey('success', $data);
@@ -387,6 +409,22 @@ class BetGamesApiCest
 
     private function responseToArray(\ApiTester $I)
     {
-        return json_decode(json_encode((array)simplexml_load_string($I->grabResponse())), 1);
+        $xml = new \SimpleXMLElement($I->grabResponse());
+        $result = json_decode(json_encode((array)$xml), 1);
+
+        if (isset($result['error_text']) && is_array($result['error_text']) && count($result['error_text']) === 0){
+            $result['error_text'] = '';
+        }
+
+        return $result;
+    }
+
+    private function validateSignature($signature, $data, $partnerId, $cashdeskId)
+    {
+        unset($data['signature']);
+
+        $generatedSignature = new Signature($data, $partnerId, $cashdeskId);
+        $this->signature = $generatedSignature->getHash();
+        return !$generatedSignature->isWrong($signature);
     }
 }
