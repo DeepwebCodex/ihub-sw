@@ -20,6 +20,8 @@ class BetGamesValidation
                 'code' => StatusCode::TIME,
                 'method' => Request::getFacadeRoot()->method,
                 'token' => Request::getFacadeRoot()->token,
+                'partnerId' => Request::getFacadeRoot()->partner_id,
+                'cashdeskId' => Request::getFacadeRoot()->cashdesk_id,
             ]);
         }
 
@@ -31,9 +33,11 @@ class BetGamesValidation
         $apiMethod = new ApiMethod($value);
         if (!$apiMethod->get()) {
             throw new ApiHttpException(400, null, [
-                'code' => StatusCode::SIGNATURE,
+                'code' => StatusCode::UNKNOWN,
                 'method' => Request::getFacadeRoot()->method,
                 'token' => Request::getFacadeRoot()->token,
+                'partnerId' => Request::getFacadeRoot()->partner_id,
+                'cashdeskId' => Request::getFacadeRoot()->cashdesk_id,
             ]);
         }
 
@@ -54,6 +58,8 @@ class BetGamesValidation
             'code' => StatusCode::TOKEN,
             'method' => Request::getFacadeRoot()->method,
             'token' => Request::getFacadeRoot()->token,
+            'partnerId' => Request::getFacadeRoot()->partner_id,
+            'cashdeskId' => Request::getFacadeRoot()->cashdesk_id,
         ]);
     }
 }
