@@ -12,14 +12,24 @@ use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\DriveMediaTemplate;
 use App\Http\Requests\DriveMedia\Amatic\BalanceRequest;
 use App\Http\Requests\DriveMedia\Amatic\PlayRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Components\Formatters\JsonApiFormatter;
 
+/**
+ * Class DriveMediaAmaticController
+ * @package App\Http\Controllers\Api
+ */
 class DriveMediaAmaticController extends BaseApiController
 {
+    /** @var string  */
     public static $exceptionTemplate = DriveMediaTemplate::class;
 
+    /**
+     * DriveMediaAmaticController constructor.
+     * @param JsonApiFormatter $formatter
+     */
     public function __construct(JsonApiFormatter $formatter)
     {
         parent::__construct($formatter);
@@ -30,9 +40,14 @@ class DriveMediaAmaticController extends BaseApiController
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 
+        Validator::extend('validate_space', 'App\Http\Requests\Validation\DriveMedia\AmaticValidation@validateSpace');
         Validator::extend('validate_sign', 'App\Http\Requests\Validation\DriveMedia\AmaticValidation@validateSign');
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
         $method = AmaticHelper::mapMethod($request->input('cmd'));
@@ -44,9 +59,15 @@ class DriveMediaAmaticController extends BaseApiController
         return app()->call([$this, 'error'], $request->all());
     }
 
+    /**
+     * @param BalanceRequest $request
+     * @return Response
+     */
     public function balance(BalanceRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaAmatic');
+
+        AmaticHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
@@ -54,20 +75,19 @@ class DriveMediaAmaticController extends BaseApiController
         ]);
     }
 
+    /**
+     * @param PlayRequest $request
+     * @return Response
+     */
     public function bet(PlayRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaAmatic');
 
-        if(app()->environment() == 'production') {
-            if ($user->getActiveWallet()->currency != $this->getOption($request->input('space'))['currency']) {
-                $this->error();
-            }
-        }
+        AmaticHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         $transactions = AmaticHelper::getTransactions($request->input('bet'), $request->input('winLose'));
 
-        foreach ($transactions as $key => $transaction)
-        {
+        foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
                 0,
@@ -87,8 +107,7 @@ class DriveMediaAmaticController extends BaseApiController
 
             $transactionResponse = $transactionHandler->handle(new ProcessAmatic());
 
-            if($key == 0 && sizeof($transactions) == 2)
-            {
+            if($key == 0 && sizeof($transactions) == 2) {
                 $user->updateBalance($transactionResponse->getBalanceInCents());
             }
         }
@@ -105,6 +124,12 @@ class DriveMediaAmaticController extends BaseApiController
         throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
     }
 
+    /**
+     * @param int $statusCode
+     * @param string|null $message
+     * @param array $payload
+     * @return Response
+     */
     public function respondOk($statusCode = Response::HTTP_OK, string $message = null, array $payload = [])
     {
         $payload = array_merge($payload, [
