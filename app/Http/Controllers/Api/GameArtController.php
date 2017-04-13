@@ -18,14 +18,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GameArtController extends BaseApiController
 {
+
     public static $exceptionTemplate = GameArtTemplate::class;
 
     public function __construct(JsonApiFormatter $formatter)
     {
         parent::__construct($formatter);
-
         $this->options = config('integrations.gameart');
-
         Validator::extend('validate_key', 'App\Http\Requests\Validation\GameArtValidation@validateKey');
     }
 
@@ -48,7 +47,7 @@ class GameArtController extends BaseApiController
         $this->checkCurrency($user->getCurrency(), $remoteData['currency']);
 
         return $this->respondOk(Response::HTTP_OK, '', [
-            'balance' => self::toFloat($user->getBalanceInCents())
+                    'balance' => self::toFloat($user->getBalanceInCents())
         ]);
     }
 
@@ -61,24 +60,13 @@ class GameArtController extends BaseApiController
         $this->checkCurrency($user->getCurrency(), $remoteData['currency']);
 
         $transactionRequest = new TransactionRequest(
-            $this->getOption('service_id'),
-            $request->input('round_id'),
-            $user->id,
-            $user->getCurrency(),
-            GameArtHelper::getTransactionDirection($request->input('action_type')),
-            $request->input('amount'),
-            GameArtHelper::getTransactionType($request->input('action_type')),
-            $request->input('transaction_id'),
-            $request->input('game_id'),
-            $remoteData['partner_id'],
-            $remoteData['cashdesk_id'],
-            $remoteData['user_ip']
+                $this->getOption('service_id'), $request->input('round_id'), $user->id, $user->getCurrency(), GameArtHelper::getTransactionDirection($request->input('action_type')), $request->input('amount'), GameArtHelper::getTransactionType($request->input('action_type')), $request->input('transaction_id'), $request->input('game_id'), $remoteData['partner_id'], $remoteData['cashdesk_id'], $remoteData['user_ip']
         );
 
         $transactionResponse = GameArtHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(Response::HTTP_OK, '', [
-            'balance' => self::toFloat($transactionResponse->getBalanceInCents())
+                    'balance' => self::toFloat($transactionResponse->getBalanceInCents())
         ]);
     }
 
@@ -91,24 +79,13 @@ class GameArtController extends BaseApiController
         $this->checkCurrency($user->getCurrency(), $remoteData['currency']);
 
         $transactionRequest = new TransactionRequest(
-            $this->getOption('service_id'),
-            $request->input('round_id'),
-            $user->id,
-            $user->getCurrency(),
-            GameArtHelper::getTransactionDirection($request->input('action_type')),
-            $request->input('amount'),
-            GameArtHelper::getTransactionType($request->input('action_type')),
-            $request->input('transaction_id'),
-            $request->input('game_id'),
-            $remoteData['partner_id'],
-            $remoteData['cashdesk_id'],
-            $remoteData['user_ip']
+                $this->getOption('service_id'), $request->input('round_id'), $user->id, $user->getCurrency(), GameArtHelper::getTransactionDirection($request->input('action_type')), $request->input('amount'), GameArtHelper::getTransactionType($request->input('action_type')), $request->input('transaction_id'), $request->input('game_id'), $remoteData['partner_id'], $remoteData['cashdesk_id'], $remoteData['user_ip']
         );
 
         $transactionResponse = GameArtHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(Response::HTTP_OK, '', [
-            'balance' => self::toFloat($transactionResponse->getBalanceInCents())
+                    'balance' => self::toFloat($transactionResponse->getBalanceInCents())
         ]);
     }
 
@@ -120,7 +97,7 @@ class GameArtController extends BaseApiController
     public function respondOk($statusCode = Response::HTTP_OK, string $message = '', array $payload = [])
     {
         $payload = array_merge($payload, [
-            'status' => (string)$statusCode
+            'status' => (string) $statusCode
         ]);
 
         return parent::respondOk($statusCode, $message, $payload);
@@ -128,8 +105,7 @@ class GameArtController extends BaseApiController
 
     protected function checkCurrency($userCurrency, $reqCurrency)
     {
-        if($userCurrency != $reqCurrency)
-        {
+        if ($userCurrency != $reqCurrency) {
             $this->error();
         }
     }
@@ -139,4 +115,5 @@ class GameArtController extends BaseApiController
         $balance /= 100;
         return number_format($balance, 2, '.', '');
     }
+
 }
