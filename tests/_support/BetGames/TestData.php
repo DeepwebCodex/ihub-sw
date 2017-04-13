@@ -22,12 +22,14 @@ class TestData
 
     public function __construct()
     {
-//        $this->amount = self::AMOUNT;
         $this->userId = (int)env('TEST_USER_ID');
         $this->currency = Params::CURRENCY;
         $this->amount_backup =
         $this->amount = Params::AMOUNT * 100;
         $this->bigAmount = Params::BIG_AMOUNT * 100;
+
+        $this->partnerId = (int)env('TEST_PARTNER_ID');
+        $this->cashdeskId = (int)env('TEST_CASHEDESK');
     }
 
     public function notFound()
@@ -43,20 +45,19 @@ class TestData
             'time' => time(),
             'params' => null,
         ];
-        $sign = new Signature($data);
 
-        return array_merge($data, ['signature' => $sign->getHash()]);
+        return $this->setSignature($data);
     }
 
     public function token()
     {
         $data = [
-            'method' => 'get_account_details',
+            'method' => 'request_new_token',
             'token' => $this->getIcmsToken(),
             'time' => time(),
             'params' => null,
         ];
-        $this->setSignature($data);
+        $data = $this->setSignature($data);
 
         return $data;
     }
@@ -109,7 +110,7 @@ class TestData
             'time' => time(),
             'params' => [],
         ];
-        $this->setSignature($data);
+        $data = $this->setSignature($data);
 
         return $data;
     }
@@ -168,7 +169,7 @@ class TestData
             'time' => 12345,
             'params' => $params,
         ];
-        $this->setSignature($data);
+        $data = $this->setSignature($data);
 
         return $data;
     }
@@ -177,13 +178,12 @@ class TestData
     {
         $data = [
             'method' => $method,
-            'token' => (string)(microtime(true) * 10000),
+            'token' => (string)(microtime(true) * 10000) . 'Qwe',
             'time' => time(),
             'params' => $params,
         ];
-        $this->setSignature($data);
 
-        return $data;
+        return $this->setSignature($data);
     }
 
     private function transaction($method, $bet_id = null, $trans_id = null, $player_id = null)
@@ -202,10 +202,20 @@ class TestData
         return $this->basic($method, $params);
     }
 
-    private function setSignature(&$data)
+    private function setSignature($input)
     {
-        $sign = new Signature($data);
-        $data['signature'] = $sign->getHash();
+        $data = $input;
+        $data['signature'] = (new Signature($input, $this->partnerId, $this->cashdeskId))->getHash();
+
+        return $data;
+    }
+
+    public function updateSignature($input)
+    {
+        unset($input['signature']);
+        $data = $input;
+        $data['signature'] = (new Signature($input, $this->partnerId, $this->cashdeskId))->getHash();
+        return $data;
     }
 
     private function getObjectId()

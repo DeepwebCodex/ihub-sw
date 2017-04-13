@@ -24,10 +24,14 @@ class DriveMediaNovomaticProdObjectIdMap extends Model
         $model = static::find($object_id);
 
         if (!$model) {
-            $model = static::create([
-                'id' => $object_id,
-                'trade_id' => $tradeId,
-            ]);
+            try{
+                $model = static::create([
+                    'id' => $object_id,
+                    'trade_id' => $tradeId,
+                ]);
+            } catch (\Exception $e) {
+                app('AppLog')->error($e->getMessage());
+            }
         }
 
         return isset($model->id) ? $model->id : 0;

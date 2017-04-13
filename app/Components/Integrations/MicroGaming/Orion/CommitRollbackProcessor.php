@@ -10,8 +10,12 @@ use App\Components\Transactions\TransactionRequest;
 use App\Components\Transactions\TransactionResponse;
 use App\Components\Users\IntegrationUser;
 use App\Components\Users\Interfaces\UserInterface;
+use App\Exceptions\Api\ApiHttpException;
 use Exception;
 use Illuminate\Support\Facades\Config;
+use function app;
+use function dd;
+use function GuzzleHttp\json_encode;
 
 class CommitRollbackProcessor implements IOperationsProcessor
 {
@@ -48,6 +52,24 @@ class CommitRollbackProcessor implements IOperationsProcessor
                 if ($this->bar) {
                     $this->bar->advance();
                 }
+            } catch (ApiHttpException $e) {
+                $rawStr = $e->getMessage();
+                $payload = json_decode($rawStr, true);
+                if (isset($payload['message']) && $payload['message'] == 'Invalid operation order') {
+                    $value['unlockType'] = $this->unlockType;
+                    $value['operationId'] = app('AccountManager')->getFreeOperationId();
+                    $value['isDuplicate'] = false;
+                    $dataRes[] = $value;
+                    $group = 'MicroGaming-Orion-BadOrderTransaction';
+                } else {
+                    $group = 'MicroGaming-Orion';
+                }
+
+                $logRecords = [
+                    'data' => var_export($value, true),
+                    'message' => var_export($e->getMessage(), true)
+                ];
+                app('AppLog')->warning(json_encode($logRecords), '', '', '', $group);
             } catch (Exception $e) {
                 $logRecords = [
                     'data' => var_export($value, true),

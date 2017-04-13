@@ -20,12 +20,12 @@ class CheckPartnerId
      */
     public function handle($request, \Closure $next)
     {
-        if (is_numeric($request->server('PARTNER_ID'))) {
+        if ($pId = $request->input('partner_id')) {
+            $request->server->set('PARTNER_ID', (int)$pId);
             return $next($request);
         }
 
-        if ($pId = $request->input('partner_id')) {
-            $request->server->set('PARTNER_ID', (int)$pId);
+        if (is_numeric($request->server('PARTNER_ID'))) {
             return $next($request);
         }
 
