@@ -11,6 +11,7 @@ use App\Models\Line\Market;
 use App\Models\Line\ResultGame;
 use App\Models\Line\ResultGameTotal;
 use App\Models\Line\StatusDesc;
+use Carbon\Carbon;
 
 abstract class EventResult
 {
@@ -52,7 +53,8 @@ abstract class EventResult
                 'amount'                => array_get($result, 'amount'),
                 'result_time'           => 0,
                 'approve'               => 'yes',
-                'staff_id'              => $this->getConfigOption('user_id')
+                'staff_id'              => $this->getConfigOption('user_id'),
+                'dt'                    => array_get($result, 'dt', Carbon::now('UTC')->format('Y-m-d H:i:s'))
             ]);
 
             if(! $resultGame) {

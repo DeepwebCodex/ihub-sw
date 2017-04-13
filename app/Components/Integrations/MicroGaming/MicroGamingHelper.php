@@ -3,7 +3,6 @@
 namespace App\Components\Integrations\MicroGaming;
 
 use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
 
 class MicroGamingHelper
 {

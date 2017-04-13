@@ -7,8 +7,6 @@
  */
 
 namespace App\Components\Integrations\EuroGamesTech;
-use App\Components\Integrations\EuroGamesTech\StatusCode;
-
 
 use App\Components\Integrations\CodeMappingBase;
 

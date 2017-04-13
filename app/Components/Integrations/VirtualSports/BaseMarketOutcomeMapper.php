@@ -126,7 +126,7 @@ abstract class BaseMarketOutcomeMapper
             return null;
         }
 
-        $numParticipant = (int) $this->outcomeType->participant_num;
+        $numParticipant = (int) data_get($this->outcome, 'ParticipantRequire', $this->outcomeType->participant_num);
 
         if($numParticipant === null) {
             if ($this->isParticipantRequired($this->marketTemplate->market_type_id) === false) {

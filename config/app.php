@@ -165,7 +165,9 @@ return [
         \App\Providers\AmqpServiceProvider::class,
         \App\Providers\GameSessionServiceProvider::class,
         \App\Providers\QueueRabbitMQServiceProvider::class,
-        \App\Providers\GuzzleServiceProvider::class
+        \App\Providers\GuzzleServiceProvider::class,
+        \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class,
+        \App\Providers\VermantiaGameServiceProvider::class
     ],
 
     /*

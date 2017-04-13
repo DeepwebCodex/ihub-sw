@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Components\ExternalServices\Mysterion\TransactionProcessor;
-use App\Components\Transactions\TransactionRequest;
 use App\Models\Transactions;
 
 /**

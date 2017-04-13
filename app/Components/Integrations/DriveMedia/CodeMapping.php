@@ -2,7 +2,6 @@
 
 namespace App\Components\Integrations\DriveMedia;
 
-use App\Components\Integrations\DriveMedia\StatusCode;
 use App\Components\Integrations\CodeMappingBase;
 
 class CodeMapping extends CodeMappingBase

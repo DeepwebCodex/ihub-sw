@@ -22,9 +22,40 @@ abstract class EventProcessor
     protected $amqpExchange;
     protected $amqpKey;
 
+    protected $transactionConnections = [
+        'line',
+        'trans'
+    ];
+
     public function __construct(int $eventId = null)
     {
         $this->eventId = $eventId;
+    }
+
+    public function createOnlyTournamentAndCategory(DataMapperInterface $dataMapper) : bool
+    {
+        /**@var EventBuilderInterface $eventBuilder*/
+        $eventBuilder = new $this->eventBuilderClass($dataMapper);
+
+        $this->startDbTransaction();
+
+        try
+        {
+            //need a category for event
+            $eventCategory = $eventBuilder->createCategory();
+
+            //creating tournament for category
+            $eventBuilder->createTournament($eventCategory->id, $dataMapper->getTournamentName());
+
+        } catch (\Exception $exception) {
+            $this->rollBackDbTransaction();
+
+            throw $exception;
+        }
+        $this->commitDbTransaction();
+
+
+        return true;
     }
 
     public function create(DataMapperInterface $dataMapper) : bool
@@ -32,24 +63,17 @@ abstract class EventProcessor
         /**@var EventBuilderInterface $eventBuilder*/
         $eventBuilder = new $this->eventBuilderClass($dataMapper);
 
-        DB::connection('line')->beginTransaction();
-        DB::connection('trans')->beginTransaction();
+        $this->startDbTransaction();
 
         try
         {
             $this->eventId = $eventBuilder->create();
         } catch (\Exception $exception) {
-            DB::connection('line')->rollBack();
-            DB::connection('trans')->rollBack();
+            $this->rollBackDbTransaction();
 
-            app('AppLog')->warning([
-                'message' => $exception->getMessage()
-            ], null, 'event-failed');
-
-            return false;
+            throw $exception;
         }
-        DB::connection('trans')->commit();
-        DB::connection('line')->commit();
+        $this->commitDbTransaction();
 
 
         return true;
@@ -63,6 +87,7 @@ abstract class EventProcessor
             if($finish) {
                 if (!ResultGame::isResultsApproved($this->eventId)) {
                     $this->sendMessageFinished();
+                    return;
                 }
             }
 
@@ -175,6 +200,34 @@ abstract class EventProcessor
         return true;
     }
 
+    public function addDbTransactionConnection(string $connectionName)
+    {
+        $this->transactionConnections[] = $connectionName;
+
+        return $this;
+    }
+
+    protected function startDbTransaction()
+    {
+        foreach ($this->transactionConnections as $connection) {
+            DB::connection($connection)->beginTransaction();
+        }
+    }
+
+    protected function commitDbTransaction()
+    {
+        foreach ($this->transactionConnections as $connection) {
+            DB::connection($connection)->commit();
+        }
+    }
+
+    protected function rollBackDbTransaction()
+    {
+        foreach ($this->transactionConnections as $connection) {
+            DB::connection($connection)->rollBack();
+        }
+    }
+
     /**
      * @return int|null
      */
@@ -225,7 +278,7 @@ abstract class EventProcessor
         $response = app('AmqpService')->sendMsg(
             $this->amqpExchange,
             $this->amqpKey. $this->eventId,
-            json_encode($data)
+            $data
         );
 
         if(!$response){

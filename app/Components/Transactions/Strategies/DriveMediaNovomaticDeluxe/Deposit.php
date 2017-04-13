@@ -7,7 +7,6 @@ use App\Components\Integrations\DriveMediaNovomaticDeluxe\StatusCode;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
 use App\Models\Transactions;
-use App\Components\Transactions\Strategies\DriveMediaNovomaticDeluxe\TransactionProcessor;
 
 /**
  * @property  TransactionRequest $request

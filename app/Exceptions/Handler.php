@@ -9,7 +9,6 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 
 class Handler extends ExceptionHandler

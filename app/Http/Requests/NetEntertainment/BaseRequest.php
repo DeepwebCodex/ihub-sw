@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\NetEntertainment;
 
-use App\Components\AppLog;
 use App\Components\Integrations\NetEntertainment\ApiMethod;
 use App\Components\Integrations\NetEntertainment\CodeMapping;
 use App\Components\Integrations\NetEntertainment\StatusCode;

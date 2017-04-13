@@ -10,11 +10,9 @@ namespace App\Components\Users;
 
 
 use App\Components\ExternalServices\AccountManager;
-use App\Components\Users\Exceptions\UserGetException;
 use App\Components\Users\Exceptions\UserServiceException;
 use App\Components\Users\Exceptions\UserWalletException;
 use App\Components\Users\Interfaces\UserInterface;
-use App\Exceptions\Api\ApiHttpException;
 
 /**
  * @property  AccountManager $accountManager

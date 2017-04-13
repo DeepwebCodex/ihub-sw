@@ -7,7 +7,6 @@ use App\Components\Formatters\BaseApiFormatter;
 use App\Http\Controllers\Api\BaseApiController;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 trait ApiHandlerTrait
 {

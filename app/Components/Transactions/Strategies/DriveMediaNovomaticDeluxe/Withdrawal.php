@@ -8,7 +8,6 @@ use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
 use App\Models\CommonSerial;
 use App\Models\Transactions;
-use Illuminate\Http\Request;
 
 /**
  * @property  TransactionRequest $request

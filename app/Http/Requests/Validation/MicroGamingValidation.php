@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests\Validation;
 
-use App\Components\Integrations\Casino\CasinoHelper;
 use App\Components\Integrations\GameSession\TokenControl\TokenControl;
 use App\Components\Integrations\MicroGaming\CodeMapping;
-use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use App\Exceptions\Api\ApiHttpException;
-use Illuminate\Support\Facades\Request;
 
 class MicroGamingValidation
 {

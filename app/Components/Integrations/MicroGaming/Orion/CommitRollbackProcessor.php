@@ -10,7 +10,6 @@ use App\Components\Transactions\TransactionRequest;
 use App\Components\Transactions\TransactionResponse;
 use App\Components\Users\IntegrationUser;
 use App\Components\Users\Interfaces\UserInterface;
-use App\Facades\AppLog;
 use Exception;
 use Illuminate\Support\Facades\Config;
 

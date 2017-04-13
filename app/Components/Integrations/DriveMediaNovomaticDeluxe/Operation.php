@@ -15,7 +15,6 @@ use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
 use Illuminate\Http\Request;
-use stdClass;
 
 /**
  * Description of Operation

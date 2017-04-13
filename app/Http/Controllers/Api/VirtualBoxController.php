@@ -76,9 +76,14 @@ class VirtualBoxController extends BaseApiController
 
         $dataMap = new DataMapper($request->all(), 'box');
 
-        $created = $eventProcessor->create($dataMap);
+        try {
+            $eventProcessor->create($dataMap);
+        } catch (\Exception $exception) {
+            
+            app('AppLog')->warning([
+                'message' => $exception->getMessage()
+            ]);
 
-        if(!$created) {
             throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::EVENT_NOT_FOUND));
         }
 

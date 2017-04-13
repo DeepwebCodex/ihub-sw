@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\DriveMediaNovomaticDeluxe;
 
-use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\StatusCode;
 use App\Components\Traits\MetaDataTrait;

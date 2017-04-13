@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Components\Formatters\EgtXmlApiFormatter;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
-use App\Components\Integrations\GameSession\TokenControl\TokenControl;
 use App\Components\Traits\MetaDataTrait;
 use App\Components\Transactions\TransactionHelper;
 use App\Components\Transactions\TransactionRequest;

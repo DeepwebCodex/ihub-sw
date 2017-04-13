@@ -8,9 +8,7 @@
 
 namespace App\Components\Users;
 
-use App\Components\Users\Exceptions\UserCurrencyException;
 use App\Components\Users\Interfaces\UserInterface;
-use App\Components\Users\Traits\SessionCurrency;
 
 /**
  * @property integer $id

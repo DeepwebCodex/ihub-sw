@@ -65,11 +65,14 @@ class InspiredVirtualGaming extends BaseApiController
                     (int) array_get($eventData, 'EventType')
                 );
 
-                $created = $eventProcessor->create($dataMap);
-
-                if(!$created) {
-                    throw new \RuntimeException("Unable to create event");
+                try {
+                    $eventProcessor->create($dataMap);
+                } catch (\Exception $exception) {
+                    app('AppLog')->warning([
+                        'message' => $exception->getMessage()
+                    ]);
                 }
+
             } else {
                 continue;
             }
@@ -117,7 +120,8 @@ class InspiredVirtualGaming extends BaseApiController
         throw new ApiHttpException(404, 'BADFORMAT');
     }
 
-    public function respondOk($statusCode = Response::HTTP_OK, string $message = 'ACK', array $payload = []){
+    public function respondOk($statusCode = Response::HTTP_OK, string $message = 'ACK', array $payload = [])
+    {
         return parent::respondOk($statusCode, $message, $payload);
     }
 }

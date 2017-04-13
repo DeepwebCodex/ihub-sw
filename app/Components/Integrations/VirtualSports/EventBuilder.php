@@ -30,13 +30,23 @@ abstract class EventBuilder
         $this->dataMapper = $dataMapper;
     }
 
+    public function createCategory() : Category
+    {
+        return $this->getCategory();
+    }
+
+    public function createTournament(int $categoryId, string $tournamentName) : Tournament
+    {
+        return $this->getTournament($categoryId, $tournamentName);
+    }
+
     public function create()
     {
         //need a category for event
-        $eventCategory = $this->getCategory();
+        $eventCategory = $this->createCategory();
 
         //creating tournament for category
-        $tournament = $this->getTournament($eventCategory->id, $this->dataMapper->getTournamentName());
+        $tournament = $this->createTournament($eventCategory->id, $this->dataMapper->getTournamentName());
 
         //creating event for this tournament
         $event = $this->getEvent(

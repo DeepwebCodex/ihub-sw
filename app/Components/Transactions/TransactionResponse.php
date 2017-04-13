@@ -2,9 +2,6 @@
 
 namespace App\Components\Transactions;
 
-
-use App\Components\ExternalServices\AccountManager;
-use App\Exceptions\Api\ApiHttpException;
 use Stringy\StaticStringy as S;
 
 /**
