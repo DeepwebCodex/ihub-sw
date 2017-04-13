@@ -19,7 +19,13 @@ class CodeMapping extends CodeMappingBase
                 'message'   => 'System error',
                 'map'       => [],
                 'attribute' => null,
-                'meanings'  => [self::SERVER_ERROR, self::INVALID_CURRENCY, CodeMapping::DUPLICATE, CodeMapping::TIMED_OUT]
+                'meanings'  => [
+                    self::SERVER_ERROR,
+                    self::INVALID_CURRENCY,
+                    CodeMapping::DUPLICATE,
+                    CodeMapping::TIMED_OUT,
+                    CodeMapping::UNKNOWN_METHOD
+                ]
             ],
             StatusCode::USER_NOT_AUTHORIZED_CODE => [
                 'message'   => 'User not authorized',

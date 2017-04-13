@@ -54,11 +54,14 @@ class WirexGamingController extends BaseApiController
      */
     public function index(Request $request)
     {
-        $body = $request->input('soap:Body');
+        $body = $request->input('S:Body');
         $method = key($body);
+        $method = str_replace('ns2:', '', $method);
+
+        $this->addMetaField('method', $method);
 
         if (method_exists($this, $method)) {
-            $data = $body[$method];
+            $data = $body['ns2:' . $method]['request'];
             $this->data = $data;
             return app()->call([$this, $method], $request->all());
         }
@@ -86,8 +89,21 @@ class WirexGamingController extends BaseApiController
                 $content = file_get_contents($wsdlFolder . '/schema2.xsd');
             }
         }
+        if (empty($content)) {
+            $this->error();
+        }
+
         $header['Content-Type'] = 'text/xml; charset=utf-8';
         return ResponseFacade::make($content, 200, $header);
+    }
+
+    public function error()
+    {
+        throw new ApiHttpException(
+            404,
+            'Unknown method',
+            CodeMapping::getByMeaning(CodeMapping::UNKNOWN_METHOD)
+        );
     }
 
     /**

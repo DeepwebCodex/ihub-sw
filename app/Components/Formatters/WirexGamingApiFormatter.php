@@ -18,10 +18,18 @@ class WirexGamingApiFormatter extends XmlApiFormatter
      */
     public function format(array $data)
     {
-        if ($data) {
-            return Array2Xml::createXML('soap:Envelope', ['soap:Body' => $data])->saveXML();
+        if (empty($data)) {
+            return '';
         }
-        return '';
+        return Array2Xml::createXML(
+            'S:Envelope',
+            [
+                '@attributes' => [
+                    'xmlns:S' => 'http://schemas.xmlsoap.org/soap/envelope/'
+                ],
+                'S:Body' => $data
+            ]
+        )->saveXML();
     }
 
     /**
@@ -50,6 +58,10 @@ class WirexGamingApiFormatter extends XmlApiFormatter
         $payload = array_merge($message ? compact('message') : [], $payload);
 
         ksort($payload);
+
+        $payload = [
+            $this->getMetaField('method') . 'Response' => $payload
+        ];
 
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'application/xml'
