@@ -15,15 +15,16 @@ class CancelTransactionRequest extends BaseRequest
      */
     public function rules()
     {
+        $prefix = $this->getRequestDataPrefix();
         return [
-            'amount' => 'bail|required',
-            'callerContextId' => 'bail|required|numeric',
-            'contextId' => 'bail|required|numeric',
-            'originatingPid' => 'bail|required|numeric',
-            'partyOriginatingUid' => 'bail|required|numeric',
-            'relatedTransUid' => 'bail|required|numeric',
-            'sessionToken' => 'bail|required|string',
-            'transactionUid' => 'bail|required|numeric',
+            $prefix . 'amount' => 'bail|required',
+            $prefix . 'callerContextId' => 'bail|required|numeric',
+            $prefix . 'contextId' => 'bail|required|numeric',
+            $prefix . 'originatingPid' => 'bail|required|numeric',
+            $prefix . 'partyOriginatingUid' => 'bail|required|numeric',
+            $prefix . 'relatedTransUid' => 'bail|required|numeric',
+            $prefix . 'sessionToken' => 'bail|required|string',
+            $prefix . 'transactionUid' => 'bail|required|numeric',
         ];
     }
 }

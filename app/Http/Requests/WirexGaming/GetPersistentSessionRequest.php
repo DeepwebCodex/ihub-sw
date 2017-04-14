@@ -17,11 +17,12 @@ class GetPersistentSessionRequest extends BaseRequest
      */
     public function rules()
     {
+        $prefix = $this->getRequestDataPrefix();
         return [
-            'remotePersistentSessionId' => 'bail|required|alpha_num',
-            'remotePersistentSessionMagic' => 'bail|required|numeric',
-            'partyOriginatingUid' => 'bail|required|numeric',
-            'previousContextId' => 'bail|required|numeric',
+            $prefix . 'remotePersistentSessionId' => 'bail|required|numeric',
+            $prefix . 'remotePersistentSessionMagic' => 'bail|required|alpha_num',
+            $prefix . 'partyOriginatingUid' => 'bail|required|numeric',
+            $prefix . 'previousContextId' => 'bail|required|numeric',
         ];
     }
 
@@ -30,6 +31,15 @@ class GetPersistentSessionRequest extends BaseRequest
      * @return bool
      */
     public function authorizeUser(Request $request)
+    {
+        return true;
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    public function authorize(Request $request)
     {
         return true;
     }

@@ -15,8 +15,9 @@ class AvailableBalanceRequest extends BaseRequest
      */
     public function rules()
     {
+        $prefix = $this->getRequestDataPrefix();
         return [
-            'partyOriginatingUid' => 'bail|required|numeric'
+            $prefix . 'partyOriginatingUid' => 'bail|required|numeric'
         ];
     }
 }

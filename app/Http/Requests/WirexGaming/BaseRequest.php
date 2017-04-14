@@ -22,6 +22,14 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     protected $codeMapClass = CodeMapping::class;
 
     /**
+     * @return string
+     */
+    protected function getRequestDataPrefix()
+    {
+        return 'S:Body.ns2:' . $this->getMetaField('method') . '.request.';
+    }
+
+    /**
      * @return bool
      */
     public function isFromTrustedProxy()

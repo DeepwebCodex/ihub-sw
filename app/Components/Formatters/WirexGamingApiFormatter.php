@@ -21,6 +21,16 @@ class WirexGamingApiFormatter extends XmlApiFormatter
         if (empty($data)) {
             return '';
         }
+        if (!empty($this->getMetaField('method'))) {
+            $data = [
+                'ns2:' . $this->getMetaField('method') . 'Response' => [
+                    '@attributes' => [
+                        'xmlns:ns2' => 'http://ws.platform.commersite.com/'
+                    ],
+                    'return' => $data
+                ],
+            ];
+        }
         return Array2Xml::createXML(
             'S:Envelope',
             [
@@ -58,10 +68,6 @@ class WirexGamingApiFormatter extends XmlApiFormatter
         $payload = array_merge($message ? compact('message') : [], $payload);
 
         ksort($payload);
-
-        $payload = [
-            $this->getMetaField('method') . 'Response' => $payload
-        ];
 
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'application/xml'

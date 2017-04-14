@@ -113,11 +113,11 @@ class WirexGamingController extends BaseApiController
      */
     public function getPersistentSession(GetPersistentSessionRequest $request)
     {
-        $userUid = $request->input('partyOriginatingUid');
+        $userUid = $this->data['partyOriginatingUid'];
         $userId = WirexGamingHelper::parseUid($userUid);
 
-        $sessionId = $request->input('remotePersistentSessionId');
-        $sessionMagic = $request->input('remotePersistentSessionMagic');
+        $sessionId = $this->data['partyOriginatingUid'];
+        $sessionMagic = $this->data['partyOriginatingUid'];
 
         $sessionContext = [$sessionId, $sessionMagic];
 
@@ -142,7 +142,7 @@ class WirexGamingController extends BaseApiController
      */
     public function getUserData(GetUserDataRequest $request)
     {
-        $userUid = $request->input('partyOriginatingUid');
+        $userUid = $this->data['partyOriginatingUid'];
         $userId = WirexGamingHelper::parseUid($userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
@@ -172,7 +172,7 @@ class WirexGamingController extends BaseApiController
      */
     public function getAvailableBalance(AvailableBalanceRequest $request)
     {
-        $userUid = $request->input('partyOriginatingUid');
+        $userUid = $this->data['partyOriginatingUid'];
         $userId = WirexGamingHelper::parseUid($userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
@@ -188,13 +188,13 @@ class WirexGamingController extends BaseApiController
      */
     public function addWithdrawEntry(AddWithdrawRequest $request)
     {
-        $userUid = $request->input('partyOriginatingUid');
+        $userUid = $this->data['partyOriginatingUid'];
         $userId = WirexGamingHelper::parseUid($userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
         WirexGamingHelper::checkSessionCurrency($user->getCurrency());
 
-        $transactionUid = $request->input('transactionUid');
+        $transactionUid = $this->data['transactionUid'];
         $transactionId = WirexGamingHelper::parseUid($transactionUid);
 
         $transactionRequest = new TransactionRequest(
@@ -203,7 +203,7 @@ class WirexGamingController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
-            $request->input('amount'),
+            $this->data['amount'],
             TransactionRequest::TRANS_BET,
             $transactionId,
             \app('GameSession')->get('game_id'),
@@ -219,7 +219,7 @@ class WirexGamingController extends BaseApiController
                 'accountEntry' => [
                     'account' => '',
                     'accountEntryType' => '',
-                    'amount' => $request->input('amount'),
+                    'amount' => $this->data['amount'],
                     'balance' => $transactionResponse->getBalanceInCents(),
                     'codice' => '',
                     'creationDate' => '',
@@ -244,13 +244,15 @@ class WirexGamingController extends BaseApiController
      */
     public function rollbackWithdraw(RollbackWithdrawRequest $request)
     {
-        $userUid = $request->input('partyOriginatingUid');
+        $userUid = $this->data['partyOriginatingUid'];
         $userId = WirexGamingHelper::parseUid($userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
         WirexGamingHelper::checkSessionCurrency($user->getCurrency());
 
-        $transactionUid = $request->input('transactionUid');
+        $sessionToken = $this->data['sessionToken'];
+
+        $transactionUid = $this->data['transactionUid'];
         $transactionId = WirexGamingHelper::parseUid($transactionUid);
 
         $transactionRequest = new TransactionRequest(
@@ -259,7 +261,7 @@ class WirexGamingController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
-            $request->input('amount'),
+            $this->data['amount'],
             TransactionRequest::TRANS_REFUND,
             $transactionId,
             \app('GameSession')->get('game_id'),
@@ -272,7 +274,7 @@ class WirexGamingController extends BaseApiController
 
         return $this->respondOk(200, null, [
             'relatedTransUid' => $transactionResponse->operation_id,
-            'sessionToken' => $request->input('sessionToken'),
+            'sessionToken' => $sessionToken,
         ]);
     }
 
@@ -282,13 +284,13 @@ class WirexGamingController extends BaseApiController
      */
     public function addDepositEntry(AddDepositRequest $request)
     {
-        $userUid = $request->input('partyOriginatingUid');
+        $userUid = $this->data['partyOriginatingUid'];
         $userId = WirexGamingHelper::parseUid($userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
         WirexGamingHelper::checkSessionCurrency($user->getCurrency());
 
-        $transactionUid = $request->input('transactionUid');
+        $transactionUid = $this->data['transactionUid'];
         $transactionId = WirexGamingHelper::parseUid($transactionUid);
 
         $transactionRequest = new TransactionRequest(
@@ -297,7 +299,7 @@ class WirexGamingController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
-            $request->input('amount'),
+            $this->data['amount'],
             TransactionRequest::TRANS_WIN,
             $transactionId,
             \app('GameSession')->get('game_id'),
@@ -313,7 +315,7 @@ class WirexGamingController extends BaseApiController
                 'accountEntry' => [
                     'account' => '',
                     'accountEntryType' => '',
-                    'amount' => $request->input('amount'),
+                    'amount' => $this->data['amount'],
                     'balance' => $transactionResponse->getBalanceInCents(),
                     'codice' => '',
                     'creationDate' => '',
@@ -338,15 +340,15 @@ class WirexGamingController extends BaseApiController
      */
     public function cancelTransaction(CancelTransactionRequest $request)
     {
-        $userUid = $request->input('partyOriginatingUid');
+        $userUid = $this->data['partyOriginatingUid'];
         $userId = WirexGamingHelper::parseUid($userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
-        $sessionToken = $request->input('sessionToken');
+        $sessionToken = $this->data['sessionToken'];
 
         WirexGamingHelper::checkSessionCurrency($user->getCurrency());
 
-        $transactionUid = $request->input('transactionUid');
+        $transactionUid = $this->data['transactionUid'];
         $transactionId = WirexGamingHelper::parseUid($transactionUid);
 
         $transactionRequest = new TransactionRequest(
@@ -355,7 +357,7 @@ class WirexGamingController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
-            $request->input('amount'),
+            $this->data['amount'],
             TransactionRequest::TRANS_REFUND,
             $transactionId,
             \app('GameSession')->get('game_id'),
@@ -368,7 +370,7 @@ class WirexGamingController extends BaseApiController
 
         return $this->respondOk(200, null, [
             'relatedTransUid' => $transactionResponse->operation_id,
-            'sessionToken' => $request->input('sessionToken'),
+            'sessionToken' => $sessionToken,
         ]);
     }
 }
