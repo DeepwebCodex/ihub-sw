@@ -35,21 +35,8 @@ class EndorphinaApiCest
 
     public function _before(\ApiTester $I, Scenario $s)
     {
-        $I->mockAccountManager($I, config('integrations.betGames.service_id'));
-
-        if (!in_array($s->getFeature(), self::OFFLINE)) {
-            $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
-            $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
-        }
-    }
-
-    private function mock($class)
-    {
-        $mock = \Mockery::mock($class)
-                ->shouldAllowMockingProtectedMethods()
-                ->makePartial();
-        app()->instance($class, $mock);
-        return $mock;
+        $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
     public function testMethodNotFound(\ApiTester $I)
@@ -58,11 +45,6 @@ class EndorphinaApiCest
         $this->getResponseFail($I, StatusCode::UNKNOWN);
     }
 
-    public function testPing(\ApiTester $I)
-    {
-        $I->sendPOST('/bg/favbet/', $this->data->ping());
-        $this->getResponseOk($I);
-    }
 
     private function getResponseOk(\ApiTester $I)
     {
