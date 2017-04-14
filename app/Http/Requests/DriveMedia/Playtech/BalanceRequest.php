@@ -16,7 +16,7 @@ class BalanceRequest extends BaseDriveMediaRequest
     {
         return [
             'cmd'       => 'bail|required|string',
-            'space'     => 'bail|required|validate_space',
+            'space'     => 'bail|required|string',
             'login'     => 'bail|required|string',
             'sign'      => 'bail|required|validate_sign',
             'userId'    => 'bail|required|integer',

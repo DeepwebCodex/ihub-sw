@@ -29,7 +29,6 @@ class DriveMediaNovomaticController extends BaseApiController
 
     const NODE = 'DriveMediaNovomatic';
 
-    /** @var string  */
     public static $exceptionTemplate = DriveMediaNovomaticTemplate::class;
 
     /**
@@ -61,7 +60,6 @@ class DriveMediaNovomaticController extends BaseApiController
         if (method_exists($this, $method)) {
             return app()->call([$this, $method], $request->all());
         }
-
         return app()->call([$this, 'error'], $request->all());
     }
 
@@ -72,10 +70,12 @@ class DriveMediaNovomaticController extends BaseApiController
      */
     protected function validateCurrentCurrency(UserInterface $user, string $space)
     {
+        if (app()->environment() !== 'production') {
+            return;
+        }
         $userCurrency = $user->getCurrency();
-        $userSpace = $this->options['spaces'][$userCurrency]['id'];
-
-        if($userSpace !== $space) {
+        $requestCurrency = $this->options['spaces'][$space]['currency'];
+        if ($userCurrency !== $requestCurrency) {
             $this->error();
         }
     }
