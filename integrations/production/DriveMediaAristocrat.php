@@ -2,11 +2,9 @@
 
 return [
     'service_id' => 45,
-    'spaces' => [
-        'FUN' => [
-            'id' => '1810',
-            'key'   => 's91582trm'
-        ],
+    '418' => [
+        'currency' => 'EUR',
+        'key' => 'ffdf966dd'
     ],
     'allowed_ips' => [],
 ];

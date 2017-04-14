@@ -14,7 +14,7 @@ class PlayRequest extends BaseDriveMediaRequest
     public function rules()
     {
         return [
-            'space'     => 'bail|required|validate_space',
+            'space'     => 'bail|required|string',
             'login'     => 'bail|required|string',
             'cmd'       => 'bail|required|string',
             'bet'       => 'bail|required',
