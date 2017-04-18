@@ -121,6 +121,7 @@ test_on_dev_conf_prod_env_prod:
 
 compile_dev:
   <<: *template_dev
+  <<: *template_add_ssh_auth
   stage: compile_project
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   script:
