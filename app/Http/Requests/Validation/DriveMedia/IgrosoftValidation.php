@@ -2,56 +2,30 @@
 
 namespace App\Http\Requests\Validation\DriveMedia;
 
-use App\Components\Integrations\DriveMedia\CodeMapping;
-use App\Components\Integrations\DriveMedia\Igrosoft\IgrosoftHelper;
+use App\Components\Integrations\DriveMedia\StatusCode;
 use Illuminate\Support\Facades\Request;
 use App\Exceptions\Api\ApiHttpException;
 
-/**
- * Class IgrosoftValidation
- * @package App\Http\Requests\Validation\DriveMedia
- */
 class IgrosoftValidation
 {
-    /**
-     * @param $attribute
-     * @param $value
-     * @param $parameters
-     * @param $validator
-     * @return bool
-     */
     public function validateSign($attribute, $value, $parameters, $validator):bool
     {
         if (!($request = Request::getFacadeRoot())) {
             return false;
         }
+        $all = $request->all();
+        $sign = $all['sign'];
 
-        $sign = $request->input('sign');
-        $all = IgrosoftHelper::clearRequest($request->request->all());
+        unset($all['sign']);
+        unset($all['partnerId']);
+        unset($all['cashdeskId']);
+        unset($all['userId']);
+        unset($all['userIp']);
 
-        if($sign != strtoupper(hash('md5', IgrosoftHelper::getKey($all['space']) . http_build_query($all)))) {
-            throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::INVALID_SIGNATURE));
+        if($sign != strtoupper(hash('md5', config('integrations.DriveMediaIgrosoft')[$all['space']]['key'] . http_build_query($all))))
+        {
+            throw new ApiHttpException(500, null, ['code' => StatusCode::INVALID_SIGNATURE]);
         }
-
-        return true;
-    }
-
-    /**
-     * @param $attribute
-     * @param $value
-     * @param $parameters
-     * @param $validator
-     * @return bool
-     */
-    public function validateSpace($attribute, $value, $parameters, $validator):bool
-    {
-        if (!($request = Request::getFacadeRoot())) {
-            return false;
-        }
-
-        if (!(bool)IgrosoftHelper::getSpace($request->input('space'))) {
-            throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
-        };
 
         return true;
     }

@@ -1,29 +1,24 @@
 <?php
 
-use DriveMedia\TestUser;
-
 class DriveMediaIgrosoftBorderlineApiCest
 {
 
-    private $key;
+    private $options;
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
-
     public function _before() {
-        $this->key = config('integrations.DriveMediaIgrosoft.spaces.FUN.key');
-        $this->space = config('integrations.DriveMediaIgrosoft.spaces.FUN.id');
-
-        $this->testUser = new TestUser();
+        $this->options = config('integrations.DriveMediaIgrosoft');
+        $this->space = '1809';
     }
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
+            'login'     => "{$testUser->id}--1--1--127-0-0-1",
             'bet'       => '0.00',
             'winLose'   => '0.30',
             'tradeId'   => md5(microtime()),
@@ -34,9 +29,7 @@ class DriveMediaIgrosoftBorderlineApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, [
-            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
-        ]);
+        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options[$this->space]['key'].http_build_query($request)))]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/igrosoft', $request);
@@ -50,15 +43,15 @@ class DriveMediaIgrosoftBorderlineApiCest
 
     public function testMethodWrongSign(ApiTester $I)
     {
+        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => "{$testUser->id}--1--1--127-0-0-1",
         ];
 
-        $request = array_merge($request, [
-            'sign'  => strtoupper(md5(http_build_query($request)))
-        ]);
+        $request = array_merge($request, ['sign'  => strtoupper(md5(http_build_query($request)))]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/igrosoft', $request);
@@ -67,28 +60,6 @@ class DriveMediaIgrosoftBorderlineApiCest
         $I->seeResponseContainsJson([
             'status'    => 'fail',
             'error'     => 'error_sign'
-        ]);
-    }
-
-    public function testMethodSpaceNotFound(ApiTester $I)
-    {
-        $request = [
-            'cmd'   => 'getBalance',
-            'space' => '1',
-            'login' => $this->testUser->getUserId(),
-        ];
-
-        $request = array_merge($request, [
-            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
-        ]);
-
-        $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('/igrosoft', $request);
-        $I->seeResponseCodeIs(500);
-        $I->canSeeResponseIsJson();
-        $I->seeResponseContainsJson([
-            'status'    => 'fail',
-            'error'     => 'internal_error'
         ]);
     }
 

@@ -3,96 +3,96 @@
 return [
     'service_id' => 38,
     'spaces' => [
-        'UAH' => [
-            'id' => '1837',
+        '1837' => [
+            'currency' => 'UAH',
             'key' => '2f58Cu371V5x',
         ],
-        'RUB' => [
-            'id' => '1838',
+        '1838' => [
+            'currency' => 'RUB',
             'key' => '78N2PZi4A9h2',
         ],
-        'USD' => [
-            'id' => '1839',
+        '1839' => [
+            'currency' => 'USD',
             'key' => 'ILq77762rQve',
         ],
-        'EUR' => [
-            'id' => '1840',
+        '1840' => [
+            'currency' => 'EUR',
             'key' => 'i09lXo87U7Qw',
         ],
-        'AUD' => [
-            'id' => '1841',
+        '1841' => [
+            'currency' => 'AUD',
             'key' => 'k5Hq1Z872jcY',
         ],
-        'BGN' => [
-            'id' => '1842',
+        '1842' => [
+            'currency' => 'BGN',
             'key' => 'It816ez42vWA',
         ],
-        'CAD' => [
-            'id' => '1843',
+        '1843' => [
+            'currency' => 'CAD',
             'key' => 'p6xah6N1T66W',
         ],
-        'GBP' => [
-            'id' => '1845',
+        '1845' => [
+            'currency' => 'GBP',
             'key' => '1C3u45M4NYAN',
         ],
-        'HUF' => [
-            'id' => '1846',
+        '1846' => [
+            'currency' => 'HUF',
             'key' => 'uH371P4rP1EL',
         ],
-        'INR' => [
-            'id' => '1847',
+        '1847' => [
+            'currency' => 'INR',
             'key' => 'Ul7gB4833rAi',
         ],
-        'JPY' => [
-            'id' => '1848',
+        '1848' => [
+            'currency' => 'JPY',
             'key' => 'Q6zN6JT880A5',
         ],
-        'MXN' => [
-            'id' => '1849',
+        '1849' => [
+            'currency' => 'MXN',
             'key' => 'Lo8145P612Tb',
         ],
-        'NOK' => [
-            'id' => '1850',
+        '1850' => [
+            'currency' => 'NOK',
             'key' => 'I9h2O777ektI',
         ],
-        'PLN' => [
-            'id' => '1851',
+        '1851' => [
+            'currency' => 'PLN',
             'key' => 'y0N622147WuL',
         ],
-        'RON' => [
-            'id' => '1852',
+        '1852' => [
+            'currency' => 'RON',
             'key' => '14Jo2R8T183E',
         ],
-        'SGD' => [
-            'id' => '1853',
+        '1853' => [
+            'currency' => 'SGD',
             'key' => 'R67QoTk929EM',
         ],
-        'SEK' => [
-            'id' => '1854',
+        '1854' => [
+            'currency' => 'SEK',
             'key' => '3sG70i05mH0T',
         ],
-        'MYR' => [
-            'id' => '1855',
+        '1855' => [
+            'currency' => 'MYR',
             'key' => 'iQ1W4538wJnd',
         ],
-        'MAD' => [
-            'id' => '1856',
+        '1856' => [
+            'currency' => 'MAD',
             'key' => 'O6yzZ2816x8y',
         ],
-        'TND' => [
-            'id' => '1857',
+        '1857' => [
+            'currency' => 'TND',
             'key' => '8h249IUb28gA',
         ],
-        'CHF' => [
-            'id' => '1858',
+        '1858' => [
+            'currency' => 'CHF',
             'key' => 'Ia37624fqCz6',
         ],
-        'AMD' => [
-            'id' => '1859',
+        '1859' => [
+            'currency' => 'AMD',
             'key' => '885ISl6R9XDd',
         ],
-        'DKK' => [
-            'id' => '1883',
+        '1883' => [
+            'currency' => 'DKK',
             'key' => 'lK40Ud00e9M1',
         ],
     ],
