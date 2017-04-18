@@ -53,7 +53,7 @@ class WirexGamingApiFormatter extends XmlApiFormatter
         ksort($payload);
 
         return ResponseFacade::make($this->format($payload), 200, [
-            'Content-type' => 'application/xml'
+            'Content-type' => 'text/xml'
         ]);
     }
 
@@ -75,7 +75,7 @@ class WirexGamingApiFormatter extends XmlApiFormatter
         ksort($payload);
 
         return ResponseFacade::make($this->format($payload), $statusCode, [
-            'Content-type' => 'application/xml'
+            'Content-type' => 'text/xml'
         ]);
     }
 }
