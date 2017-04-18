@@ -7,10 +7,12 @@ use App\Components\Integrations\Vermantia\EventProcessor;
 use App\Components\Integrations\Vermantia\Services\DataMapper;
 use App\Components\Integrations\Vermantia\Tasks\CancelEventTask;
 use App\Components\Integrations\Vermantia\Tasks\FinishEventTask;
+use App\Components\Integrations\Vermantia\Tasks\ResultEventTask;
 use App\Components\Integrations\Vermantia\VermantiaDirectory;
 use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
 use App\Console\Commands\Vermantia\Traits\DateParserTrait;
 use Carbon\Carbon;
+use Exception;
 use iHubGrid\DynamicScheduler\DynamicSchedulerService;
 
 class ResultEvent extends BaseEventCommand
@@ -21,7 +23,7 @@ class ResultEvent extends BaseEventCommand
      *
      * @var string
      */
-    protected $signature = 'vermantia:process-results {event-id : Event id for resulting}';
+    protected $signature = 'vermantia:process-results {event-id : Event id for resulting} {attempt=0 : how many times this task was attempted}';
 
     /**
      * The console command description.
@@ -39,6 +41,7 @@ class ResultEvent extends BaseEventCommand
 
     public function runHandle()
     {
+        $this->attempt = $this->argument('attempt') ?? 0;
         $this->eventId = $this->argument('event-id');
 
         if($this->eventId) {
@@ -82,5 +85,13 @@ class ResultEvent extends BaseEventCommand
             $item['dateDiff'] = $this->getTimeDiff($rawData['LocalTime'], $rawData['UtcTime'], $timeAfterRequest);
             return $item;
         })->first();
+    }
+
+    protected function failing(Exception $e, int $attempt = 0)
+    {
+        if($attempt < $this->retryAttempts) {
+            $attempt = $attempt +1;
+            (new DynamicSchedulerService())->addTask(new ResultEventTask($this->eventId), Carbon::now()->addSeconds(5), $attempt);
+        }
     }
 }

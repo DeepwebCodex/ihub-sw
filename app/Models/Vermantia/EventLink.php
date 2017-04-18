@@ -10,6 +10,7 @@ namespace App\Models\Vermantia;
 
 use App\Models\Line\Event;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
 
 /**
  * Class EventLink
@@ -17,10 +18,20 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EventLink extends Model
 {
+    const DB_SCHEMA = 'vermantia';
+
     /**
      * {@inheritdoc}
      */
-    protected $connection = 'integration';
+    protected $connection = 'line';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTable()
+    {
+        return self::DB_SCHEMA . '.' . parent::getTable();
+    }
 
     /**
      * {@inheritdoc}
@@ -46,22 +57,12 @@ class EventLink extends Model
 
     public static function getEventId(int $vermantiaEventId)
     {
-        $map = static::find($vermantiaEventId);
-
-        if($map) {
-            $event = Event::where([
-                'id' => $map->event_id,
-                'del' => 'no'
-            ])->first();
-
-            if($event) {
-                return $event->id;
-            }
-
-            return true;
-        }
-
-        return false;
+        return static::where('vermantia_event_link.event_id_vermantia', $vermantiaEventId)
+            ->join('event', function($join){
+                /** @var JoinClause $join */
+                $join->on('vermantia_event_link.event_id', 'event.id')->where('event.del', 'no');
+            })
+            ->value('event_id');
     }
 
     public static function isExists(int $eventId) : bool

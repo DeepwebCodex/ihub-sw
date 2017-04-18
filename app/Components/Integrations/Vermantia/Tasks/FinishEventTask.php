@@ -31,11 +31,12 @@ final class FinishEventTask extends BaseSchedulerTask
         $command = "vermantia:finish-event";
 
         $this->runCommand($command, [
-            $this->eventId
+            $this->eventId,
+            $this->currentAttempt
         ]);
     }
 
-    public function failing(FailedTaskException $e)
+    public function failing(FailedTaskException $e, int $attempt = 0)
     {
 
     }

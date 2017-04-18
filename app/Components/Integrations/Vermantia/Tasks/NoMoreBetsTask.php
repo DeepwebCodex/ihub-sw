@@ -31,11 +31,12 @@ final class NoMoreBetsTask extends BaseSchedulerTask
         $command = "vermantia:stop-bets";
 
         $this->runCommand($command, [
-            $this->eventId
+            $this->eventId,
+            $this->currentAttempt
         ]);
     }
 
-    public function failing(FailedTaskException $e)
+    public function failing(FailedTaskException $e, int $attempt = 0)
     {
 
     }

@@ -31,11 +31,12 @@ final class FetchEventsTask extends BaseSchedulerTask
         $command = "vermantia:fetch-events";
 
         $this->runCommand($command, [
-            $this->hours
+            $this->hours,
+            $this->currentAttempt
         ]);
     }
 
-    public function failing(FailedTaskException $e)
+    public function failing(FailedTaskException $e, int $attempt = 0)
     {
 
     }

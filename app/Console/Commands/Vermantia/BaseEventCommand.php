@@ -11,6 +11,9 @@ abstract class BaseEventCommand extends Command
     protected $node;
     protected $group;
 
+    protected $attempt = 0;
+    protected $retryAttempts = 3;
+
     public function __construct(string $node = null, string $group = null)
     {
         parent::__construct();
@@ -29,6 +32,7 @@ abstract class BaseEventCommand extends Command
         try {
             $this->runHandle();
         } catch (\Exception $e) {
+            $this->failing($e, $this->attempt);
             $this->report($e);
             exit(-1);
         }
@@ -104,4 +108,6 @@ abstract class BaseEventCommand extends Command
     }
 
     abstract public function runHandle();
+
+    abstract protected function failing(Exception $e, int $attempt =0);
 }

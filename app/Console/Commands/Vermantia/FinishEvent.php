@@ -3,7 +3,11 @@
 namespace App\Console\Commands\Vermantia;
 
 use App\Components\Integrations\Vermantia\EventProcessor;
+use App\Components\Integrations\Vermantia\Tasks\FinishEventTask;
 use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
+use Carbon\Carbon;
+use Exception;
+use iHubGrid\DynamicScheduler\DynamicSchedulerService;
 
 class FinishEvent extends BaseEventCommand
 {
@@ -12,7 +16,7 @@ class FinishEvent extends BaseEventCommand
      *
      * @var string
      */
-    protected $signature = 'vermantia:finish-event {event-id : Id of an event for signal}';
+    protected $signature = 'vermantia:finish-event {event-id : Id of an event for signal} {attempt=0 : how many times this task was attempted}';
 
     /**
      * The console command description.
@@ -30,6 +34,7 @@ class FinishEvent extends BaseEventCommand
 
     public function runHandle()
     {
+        $this->attempt = $this->argument('attempt') ?? 0;
         $this->eventId = (int) $this->argument('event-id');
 
         if($this->eventId) {
@@ -42,5 +47,13 @@ class FinishEvent extends BaseEventCommand
         }
 
         $this->respondOk(CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::MISS_ELEMENT));
+    }
+
+    protected function failing(Exception $e, int $attempt = 0)
+    {
+        if($attempt < $this->retryAttempts) {
+            $attempt = $attempt +1;
+            (new DynamicSchedulerService())->addTask(new FinishEventTask($this->eventId), Carbon::now()->addSeconds(5), $attempt);
+        }
     }
 }

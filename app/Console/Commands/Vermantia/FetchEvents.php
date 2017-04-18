@@ -10,6 +10,7 @@ use App\Components\Integrations\Vermantia\Tasks\ScheduleEventTask;
 use App\Components\Integrations\Vermantia\VermantiaDirectory;
 use App\Console\Commands\Vermantia\Traits\DateParserTrait;
 use Carbon\Carbon;
+use Exception;
 use iHubGrid\DynamicScheduler\DynamicSchedulerService;
 use Illuminate\Support\Collection;
 
@@ -21,7 +22,7 @@ class FetchEvents extends BaseEventCommand
      *
      * @var string
      */
-    protected $signature = 'vermantia:fetch-events {hours=1 : Event fetch time range}';
+    protected $signature = 'vermantia:fetch-events {hours=1 : Event fetch time range} {attempt=0 : how many times this task was attempted}';
 
     /**
      * The console command description.
@@ -39,6 +40,7 @@ class FetchEvents extends BaseEventCommand
 
     public function runHandle()
     {
+        $this->attempt = $this->argument('attempt') ?? 0;
         $this->hours = (int)$this->argument('hours');
 
         /*
@@ -87,5 +89,13 @@ class FetchEvents extends BaseEventCommand
             $item['dateDiff'] = $this->getTimeDiff($rawData['LocalTime'], $rawData['UtcTime'], $timeAfterRequest);
             return $item;
         });
+    }
+
+    protected function failing(Exception $e, int $attempt = 0)
+    {
+        if($attempt < $this->retryAttempts) {
+            $attempt = $attempt +1;
+            (new DynamicSchedulerService())->addTask(new FetchEventsTask($this->hours), Carbon::now()->addSeconds(5), $attempt);
+        }
     }
 }

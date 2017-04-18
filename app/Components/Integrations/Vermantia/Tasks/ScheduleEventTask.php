@@ -32,11 +32,12 @@ final class ScheduleEventTask extends BaseSchedulerTask
         $command = "vermantia:process-event";
 
         $this->runCommand($command, [
-            json_encode($this->eventData)
+            json_encode($this->eventData),
+            $this->currentAttempt
         ]);
     }
 
-    public function failing(FailedTaskException $e)
+    public function failing(FailedTaskException $e, int $attempt = 0)
     {
 
     }
