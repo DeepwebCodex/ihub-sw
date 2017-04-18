@@ -9,8 +9,14 @@ variables:
   GIT_SSL_NO_VERIFY: "true"
   RANCHER_DEV_URL: "http://10.141.11.53:8080"
   RANCHER_PROD_URL: "http://10.120.12.41:8080"
+  HTTP_PROXY_FOR_PROD: "http://10.120.12.56:3128"
+  HTTPS_PROXY_FOR_PROD: "http://10.120.12.56:3128"
+  HTTP_PROXY_FOR_DEV: "http://10.141.11.57:3128"
+  HTTPS_PROXY_FOR_DEV: "http://10.141.11.57:3128"
+  RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
+  CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/icms-infrastructure:php-fpm-master
+  CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/icms-infrastructure:php-fpm-dev
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
-
 
 
 #====================== templates ======================#
@@ -43,7 +49,7 @@ variables:
   <<: *template_dev
   <<: *template_add_ssh_auth
   stage: test
-  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
+  image: $CONTAINER_PHP_FPM_IMAGE_DEV
   cache:
     key: $CI_BUILD_REF_NAME
     untracked: true
@@ -106,7 +112,7 @@ test_features:
 
 test_on_dev_conf_prod_env_prod:
   <<: *template_compile_n_test
-  image: gitlab.favorit:4567/integrations/docker:php-fpm-master
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
     - bash ./run/prod/tests.sh
   only:
@@ -116,7 +122,7 @@ test_on_dev_conf_prod_env_prod:
 compile_dev:
   <<: *template_dev
   stage: compile_project
-  image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
+  image: $CONTAINER_PHP_FPM_IMAGE_DEV
   script:
     - rm -rf .env .env.testing .git
     - bash ./run/dev/install-rancher.sh
@@ -136,10 +142,10 @@ compile_prod:
   <<: *template_prod
   <<: *template_add_ssh_auth
   stage: compile_project
-  image: gitlab.favorit:4567/integrations/docker:php-fpm-master
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
-    - export http_proxy="http://10.120.12.56:3128"
-    - export https_proxy="http://10.120.12.56:3128"
+    - export http_proxy=$HTTP_PROXY_FOR_PROD
+    - export https_proxy=$HTTP_PROXY_FOR_PROD
     - rm -rf .env .env.testing ./tests .git
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
@@ -170,7 +176,7 @@ build_docker_image_prod:
 deploy_to_servers_dev:
   <<: *template_dev
   stage: deploy_to_servers
-  image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
+  image: $RANCHER_REST_WRAPPER_IMAGE
   script:
     - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_DEV_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_DEV_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
@@ -182,7 +188,7 @@ manual_deploy_to_system_servers_prod:
   <<: *template_prod
   <<: *template_add_ssh_auth
   stage: deploy_to_servers
-  image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
+  image: $RANCHER_REST_WRAPPER_IMAGE
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
@@ -194,7 +200,7 @@ manual_deploy_to_all_servers_prod:
   <<: *template_prod
   <<: *template_add_ssh_auth
   stage: deploy_to_servers
-  image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
+  image: $RANCHER_REST_WRAPPER_IMAGE
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
