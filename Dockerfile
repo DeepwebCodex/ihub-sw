@@ -1,7 +1,5 @@
-FROM alpine
+FROM busybox
 
 VOLUME /ihub
 
 COPY . /ihub/
-
-ENTRYPOINT ["ls"]
