@@ -16,7 +16,7 @@ variables:
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
   CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/icms-infrastructure:php-fpm-master
   CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/icms-infrastructure:php-fpm-dev
-  CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
+  CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub-grid/ihub-sw:$CI_BUILD_REF_NAME
 
 
 #====================== templates ======================#
