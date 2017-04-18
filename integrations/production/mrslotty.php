@@ -2,5 +2,5 @@
 
 return [
     'service_id' => '46',
-    'secret' => '1927738d-8f4e-4d9c-ab8b-e91e2517ca07'
+    'secret' => '1a9d6ad3-7728-40ec-9543-711831a69cec'
 ];
