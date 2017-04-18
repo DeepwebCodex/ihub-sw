@@ -61,7 +61,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     {
         return [
             'type' => 'bail|required|string|check_method',
-            'hmac' => 'bail|required|string|check_hmac',
+            'hmac' => ['bail', 'required', 'string', 'check_hmac:' . $this->getMetaField('integration')],
         ];
     }
 

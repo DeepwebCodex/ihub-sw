@@ -19,7 +19,7 @@ class FundistValidation
         $all = $request->all();
         unset($all['hmac']);
         unset($all['userId']);
-        if (!(new Hmac($all, $value))->isCorrect()) {
+        if (!(new Hmac($all, $parameters[0], $value))->isCorrect()) {
             throw new ApiHttpException(Response::HTTP_OK, null, [
                 'code' => StatusCode::HMAC,
             ]);

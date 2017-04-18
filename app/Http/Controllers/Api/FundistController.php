@@ -34,6 +34,7 @@ abstract class FundistController extends BaseApiController
     private $partnerId;
     private $cashdeskId;
     private $gameId;
+    private $hmac;
 
     /**
      * FundistController constructor.
@@ -45,11 +46,12 @@ abstract class FundistController extends BaseApiController
 
         $this->setIntegration();
         $this->options = config('integrations.' . $this->integration);
-        Hmac::$INTEGRATION = $this->integration;
 
         $this->middleware('check.ip:' . $this->integration);
 //        $this->middleware('input.json')->except(['error']);
         $this->middleware('input.fundist.parsePlayerIdOnOffline');
+
+        $this->addMetaField('integration', $this->integration);
 
         /**
          * @see FundistValidation::checkHmac,FundistValidation::checkMethod
@@ -187,7 +189,7 @@ abstract class FundistController extends BaseApiController
             'status' => 'OK',
         ], $params);
 
-        $view['hmac'] = (new Hmac($view))->get();
+        $view['hmac'] = (new Hmac($view, $this->integration))->get();
 
         return $this->respond(Response::HTTP_OK, '', $view);
     }

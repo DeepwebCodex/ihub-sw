@@ -24,7 +24,7 @@ class TestData
         $this->amount = Params::AMOUNT;
         $this->bigAmount = Params::BIG_AMOUNT;
         $this->game_id = Params::GAME_ID;
-        Hmac::$INTEGRATION = $integration;
+        $this->integration = $integration;
     }
 
     public function notFound()
@@ -54,7 +54,7 @@ class TestData
             'i_gamedesc' => '3434',
             'i_actionid' => '4545',
         ];
-        $params['hmac'] = (new Hmac($params))->get();
+        $params['hmac'] = (new Hmac($params, $this->integration))->get();
 
         return $params;
     }
@@ -72,7 +72,7 @@ class TestData
             'i_extparam' => '',
             'i_gamedesc' => '',
         ];
-        $params['hmac'] = (new Hmac($params))->get();
+        $params['hmac'] = (new Hmac($params, $this->integration))->get();
 
         return $params;
     }
@@ -90,7 +90,7 @@ class TestData
             'i_extparam' => '',
             'i_gamedesc' => '',
         ];
-        $params['hmac'] = (new Hmac($params))->get();
+        $params['hmac'] = (new Hmac($params, $this->integration))->get();
 
         return $params;
     }
@@ -98,7 +98,7 @@ class TestData
     public function renewHmac(array $params)
     {
         unset($params['hmac']);
-        $params['hmac'] = (new Hmac($params))->get();
+        $params['hmac'] = (new Hmac($params, $this->integration))->get();
 
         return $params;
     }
@@ -168,7 +168,7 @@ class TestData
         $params = [
             'type' => $method,
         ];
-        $params['hmac'] = (new Hmac($params))->get();
+        $params['hmac'] = (new Hmac($params, $this->integration))->get();
 
         return $params;
     }
