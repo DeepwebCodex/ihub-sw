@@ -55,7 +55,7 @@ class CancelEvent extends BaseEventCommand
     {
         if($attempt < $this->retryAttempts) {
             $attempt = $attempt +1;
-            (new DynamicSchedulerService())->addTask(new CancelEventTask($this->eventId), Carbon::now()->addSeconds(5), $attempt);
+            (new DynamicSchedulerService())->addTask(new CancelEventTask($this->eventId), Carbon::now()->addSeconds($this->retryDelay), $attempt);
         }
     }
 }

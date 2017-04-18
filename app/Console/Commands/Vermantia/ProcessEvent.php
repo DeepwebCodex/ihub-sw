@@ -73,7 +73,7 @@ class ProcessEvent extends BaseEventCommand
     {
         if($attempt < $this->retryAttempts) {
             $attempt = $attempt +1;
-            (new DynamicSchedulerService())->addTask(new ScheduleEventTask($this->eventData), Carbon::now()->addSeconds(5), $attempt);
+            (new DynamicSchedulerService())->addTask(new ScheduleEventTask($this->eventData), Carbon::now()->addSeconds($this->retryDelay), $attempt);
         }
     }
 }

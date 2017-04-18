@@ -12,7 +12,8 @@ abstract class BaseEventCommand extends Command
     protected $group;
 
     protected $attempt = 0;
-    protected $retryAttempts = 3;
+    protected $retryAttempts = 50;
+    protected $retryDelay = 10; //Seconds
 
     public function __construct(string $node = null, string $group = null)
     {
