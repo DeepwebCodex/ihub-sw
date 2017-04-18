@@ -129,7 +129,7 @@ class WirexGamingController extends BaseApiController
                 CodeMapping::getByErrorCode($exception->getCode())
             );
         }
-        return $this->respondOk(200, null, [
+        return $this->respondOk(200, '', [
             'sessionToken' => $sessionToken
         ]);
     }
@@ -174,7 +174,7 @@ class WirexGamingController extends BaseApiController
         $userId = WirexGamingHelper::parseUid($userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
-        return $this->respondOk(200, null, [
+        return $this->respondOk(200, '', [
             'balance' => $user->getBalanceInCents(),
             'currency' => $user->getCurrency()
         ]);
@@ -212,7 +212,7 @@ class WirexGamingController extends BaseApiController
 
         $transactionResponse = WirexGamingHelper::handleTransaction($transactionRequest, $user);
 
-        return $this->respondOk(200, null, [
+        return $this->respondOk(200, '', [
             'accountEntryDetailed' => [
                 'accountEntry' => [
                     'account' => '',
@@ -270,7 +270,7 @@ class WirexGamingController extends BaseApiController
 
         $transactionResponse = WirexGamingHelper::handleTransaction($transactionRequest, $user);
 
-        return $this->respondOk(200, null, [
+        return $this->respondOk(200, '', [
             'relatedTransUid' => $transactionResponse->operation_id,
             'sessionToken' => $sessionToken,
         ]);
@@ -308,7 +308,7 @@ class WirexGamingController extends BaseApiController
 
         $transactionResponse = WirexGamingHelper::handleTransaction($transactionRequest, $user);
 
-        return $this->respondOk(200, null, [
+        return $this->respondOk(200, '', [
             'accountEntryDetailed' => [
                 'accountEntry' => [
                     'account' => '',
@@ -366,7 +366,7 @@ class WirexGamingController extends BaseApiController
 
         $transactionResponse = WirexGamingHelper::handleTransaction($transactionRequest, $user);
 
-        return $this->respondOk(200, null, [
+        return $this->respondOk(200, '', [
             'relatedTransUid' => $transactionResponse->operation_id,
             'sessionToken' => $sessionToken,
         ]);
