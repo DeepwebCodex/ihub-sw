@@ -51,7 +51,7 @@ abstract class FundistController extends BaseApiController
 //        $this->middleware('input.json')->except(['error']);
         $this->middleware('input.fundist.parsePlayerIdOnOffline');
 
-        $this->addMetaField('integration', 'netEntertainment');
+        $this->addMetaField('integration', $this->integration);
 
         /**
          * @see FundistValidation::checkHmac,FundistValidation::checkMethod
