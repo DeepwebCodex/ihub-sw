@@ -2,102 +2,59 @@
 
 namespace api\BetGames;
 
-use App\Components\Integrations\BetGames\CodeMapping;
-use App\Components\Integrations\BetGames\Signature;
-use App\Components\Integrations\BetGames\StatusCode;
+use ApiTester;
+use App\Components\Integrations\Endorphina\StatusCode;
 use App\Components\Integrations\GameSession\GameSessionService;
-use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
 use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\GenericApiHttpException;
 use App\Models\Transactions;
-use \BetGames\TestData;
-use \BetGames\TestUser;
 use Codeception\Scenario;
+use Endorphina\TestData;
+use Helper\TestUser;
+use Testing\AccountManager\Protocol\ProtocolV1;
 use Testing\GameSessionsMock;
+use function GuzzleHttp\json_decode;
 
-/**
- * Class BetGamesApiCest
- * @package api\BetGames
- */
 class EndorphinaApiCest
 {
 
     private $data;
-
-    /** @var TestUser */
     private $testUser;
+    private $protocol;
 
     public function __construct()
     {
         $this->testUser = new TestUser();
-        $this->data = new TestData();
+        $this->data = new TestData($this->testUser);
+        $this->protocol = new ProtocolV1();
     }
 
-    public function _before(\ApiTester $I, Scenario $s)
+    public function _before(ApiTester $I, Scenario $s)
     {
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
-    public function testMethodNotFound(\ApiTester $I)
-    {
-        $I->sendPOST('/bg/favbet/', $this->data->notFound());
-        $this->getResponseFail($I, StatusCode::UNKNOWN);
-    }
-
-
-    private function getResponseOk(\ApiTester $I)
+    private function getResponseOk(ApiTester $I)
     {
         $I->seeResponseCodeIs(200);
-
+        $I->canSeeResponseIsJson();
         $data = $this->responseToArray($I);
-
-        $signatureValidation = $this->validateSignature(
-                array_get($data, 'signature'), $data, $this->data->partnerId, $this->data->cashdeskId
-        );
-
-        $I->assertTrue($signatureValidation);
-
-        $I->assertArrayHasKey('method', $data);
-        $I->assertArrayHasKey('token', $data);
-        $I->assertArrayHasKey('success', $data);
-        $I->assertArrayHasKey('error_code', $data);
-        $I->assertArrayHasKey('error_text', $data);
-        $I->assertArrayHasKey('params', $data);
-        if (in_array($data['method'], ['transaction_bet_payin', 'transaction_bet_payout'])) {
-            $I->assertArrayHasKey('already_processed', $data['params']);
-            $I->assertArrayHasKey('balance_after', $data['params']);
-            $I->assertNotNull($data['params']['balance_after']);
-            $I->assertNotNull($data['params']['already_processed']);
-        }
-        $I->assertEquals(1, $data['success']);
-
         return $data;
     }
 
-    private function getResponseFail(\ApiTester $I, $errorCode)
+    private function getResponseFail(ApiTester $I, $errorCode, $code = '')
     {
         $data = $this->responseToArray($I);
-
-        $signatureValidation = $this->validateSignature(
-                array_get($data, 'signature'), $data, $this->data->partnerId, $this->data->cashdeskId
-        );
-
-        $I->assertTrue($signatureValidation);
-
-        $I->assertArrayHasKey('method', $data);
-        $I->assertArrayHasKey('token', $data);
-        $I->assertArrayHasKey('success', $data);
-        $I->assertArrayHasKey('error_code', $data);
-        $I->assertArrayHasKey('error_text', $data);
-        $I->assertEquals(0, $data['success']);
-        $error = CodeMapping::getByErrorCode($errorCode);
-        $I->assertEquals($error['code'], $data['error_code']);
-
+        $I->assertArrayHasKey('code', $data);
+        $I->assertArrayHasKey('message', $data);
+        $I->assertEquals($code, $data['code']);
+        $I->assertNotEmpty($data['message']);
+        $I->seeResponseCodeIs($errorCode);
+        $I->canSeeResponseIsJson();
         return $data;
     }
 
-    private function isRecord(\ApiTester $I, $request, $method)
+    private function isRecord(ApiTester $I, $request, $method)
     {
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
@@ -108,7 +65,7 @@ class EndorphinaApiCest
         ]);
     }
 
-    private function noRecord(\ApiTester $I, $request, $method)
+    private function noRecord(ApiTester $I, $request, $method)
     {
         $I->expect('Can`t see record of transaction applied');
         $I->cantSeeRecord(Transactions::class, [
@@ -119,25 +76,51 @@ class EndorphinaApiCest
         ]);
     }
 
-    private function responseToArray(\ApiTester $I)
+    private function responseToArray(ApiTester $I)
     {
-        $xml = new \SimpleXMLElement($I->grabResponse());
-        $result = json_decode(json_encode((array) $xml), 1);
-
-        if (isset($result['error_text']) && is_array($result['error_text']) && count($result['error_text']) === 0) {
-            $result['error_text'] = '';
-        }
-
-        return $result;
+        $data = $I->grabResponse();
+        return json_decode($data, true);
     }
 
-    private function validateSignature($signature, $data, $partnerId, $cashdeskId)
+    //        $accoutManagerMock = new AccountManagerMock($this->protocol, $I);
+    //        $accoutManagerMock->getMockAccountManager($data, [], 0, $betId);
+    public function testMethodNotFound(ApiTester $I)
     {
-        unset($data['signature']);
+        $I->sendPOST('/endorphina/unknownmethod/', []);
+        $this->getResponseFail($I, 500, StatusCode::EXTERNAl_INTERNAL_ERROR);
+    }
 
-        $generatedSignature = new Signature($data, $partnerId, $cashdeskId);
-        $this->signature = $generatedSignature->getHash();
-        return !$generatedSignature->isWrong($signature);
+    public function testSession(ApiTester $I)
+    {
+        $packet = $this->data->getPacketSession();
+        $I->sendGET('/endorphina/session/', $packet);
+        $data = $this->getResponseOk($I);
+        $I->assertArrayHasKey('player', $data);
+        $I->assertArrayHasKey('currency', $data);
+        $I->assertArrayHasKey('game', $data);
+        $I->assertEquals($this->data->currency, $data['currency']);
+        $I->assertEquals($this->data->userId, $data['player']);
+    }
+
+    public function testBalance(ApiTester $I)
+    {
+        $packet = $this->data->getPacketBalance();
+        $I->sendGET('/endorphina/balance/', $packet);
+        $data = $this->getResponseOk($I);
+        $I->assertArrayHasKey('balance', $data);
+        $I->assertEquals($this->testUser->getBalanceInCents(), $data['balance']);
+    }
+
+    public function testBet(ApiTester $I)
+    {
+        $packet = $this->data->getPacketBet();
+        $I->sendPOST('/endorphina/bet/', $packet);
+        $data = $this->getResponseOk($I);
+        $I->assertArrayHasKey('balance', $data);
+        $I->assertArrayHasKey('transactionId', $data);
+        $balance = $this->testUser->getBalanceInCents() - $packet['amount'];
+        $I->assertEquals($balance, $data['balance']);
+        $I->assertGreaterThan(1, $data['transactionId']);
     }
 
 }
