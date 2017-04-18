@@ -116,11 +116,10 @@ class WirexGamingController extends BaseApiController
         $userUid = $this->data['partyOriginatingUid'];
         $userId = WirexGamingHelper::parseUid($userUid);
 
-        $sessionId = $this->data['partyOriginatingUid'];
-        $sessionMagic = $this->data['partyOriginatingUid'];
+        $sessionId = $this->data['remotePersistentSessionId'];
+        $sessionMagic = $this->data['remotePersistentSessionMagic'];
 
         $sessionContext = [$sessionId, $sessionMagic];
-
         try {
             $sessionToken = \app('GameSession')->getSessionIdByContext($sessionContext);
         } catch (SessionDoesNotExist $exception) {
@@ -130,7 +129,6 @@ class WirexGamingController extends BaseApiController
                 CodeMapping::getByErrorCode($exception->getCode())
             );
         }
-
         return $this->respondOk(200, null, [
             'sessionToken' => $sessionToken
         ]);

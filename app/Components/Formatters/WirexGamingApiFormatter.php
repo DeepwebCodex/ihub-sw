@@ -65,7 +65,12 @@ class WirexGamingApiFormatter extends XmlApiFormatter
      */
     public function formatResponse($statusCode, string $message, array $payload = [])
     {
-        $payload = array_merge($message ? compact('message') : [], $payload);
+        $payloadDefault = [
+            'code' => 0,
+            'message' => $message ?: 'Success',
+            'status' => 'OK',
+        ];
+        $payload = array_merge($payloadDefault, $payload);
 
         ksort($payload);
 
