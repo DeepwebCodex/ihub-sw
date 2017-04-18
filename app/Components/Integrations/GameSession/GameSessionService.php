@@ -29,13 +29,14 @@ class GameSessionService
      */
     public function create(array $sessionData, $algorithm = 'sha512'): string
     {
-        return $this->processCreate($sessionData, $sessionData, $algorithm);
+        return $this->processCreate($sessionData, $sessionData, $algorithm, true);
     }
 
     /**
      * @param array $context
      * @param array $sessionData
      * @param $algorithm
+     * @param $useTimeInAlgorithm
      * @return string
      */
     protected function processCreate(array $context, array $sessionData, $algorithm, $useTimeInAlgorithm)
