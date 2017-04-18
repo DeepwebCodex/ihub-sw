@@ -38,7 +38,7 @@ class GameSessionService
      * @param $algorithm
      * @return string
      */
-    protected function processCreate(array $context, array $sessionData, $algorithm)
+    protected function processCreate(array $context, array $sessionData, $algorithm, $useTimeInAlgorithm)
     {
         $referenceId = $this->makeReferenceId($context);
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
@@ -50,7 +50,7 @@ class GameSessionService
             return $sessionId;
         }
 
-        $sessionId = $this->makeSessionId($context, $algorithm);
+        $sessionId = $this->makeSessionId($context, $algorithm, $useTimeInAlgorithm);
 
         $this->sessionStoreItem = SessionStoreItem::create($sessionId, $sessionData, $referenceId);
         ReferenceStoreItem::create($referenceId, $sessionId);
@@ -101,12 +101,13 @@ class GameSessionService
      *
      * @param array $data
      * @param string $algorithm
+     * @param bool $useTimeInAlgorithm
      * @return string
      */
-    protected function makeSessionId(array $data, $algorithm = 'sha512'): string
+    protected function makeSessionId(array $data, $algorithm = 'sha512', $useTimeInAlgorithm = true): string
     {
         $sessionKey = implode('', array_values($data));
-        $time = microtime(true);
+        $time = $useTimeInAlgorithm ? microtime(true) : '';
         return hash_hmac($algorithm, $sessionKey . $time, $this->getConfigOption('storage_secret'));
     }
 
@@ -118,7 +119,7 @@ class GameSessionService
      */
     public function createWithContext(array $context, array $sessionData, $algorithm = 'sha512'): string
     {
-        return $this->processCreate($context, $sessionData, $algorithm);
+        return $this->processCreate($context, $sessionData, $algorithm, false);
     }
 
     /**
@@ -129,7 +130,7 @@ class GameSessionService
      */
     public function getSessionIdByContext(array $context, $algorithm = 'sha512'): string
     {
-        $sessionId = $this->makeSessionId($context, $algorithm);
+        $sessionId = $this->makeSessionId($context, $algorithm, false);
         $sessionStoreItem = new SessionStoreItem($sessionId);
         $sessionStoreItem->checkExists();
         return $sessionId;

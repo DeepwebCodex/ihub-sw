@@ -121,7 +121,7 @@ class WirexGamingController extends BaseApiController
 
         $sessionContext = [$sessionId, $sessionMagic];
         try {
-            $sessionToken = \app('GameSession')->getSessionIdByContext($sessionContext);
+            $sessionToken = \app('GameSession')->getSessionIdByContext($sessionContext, 'md5');
         } catch (SessionDoesNotExist $exception) {
             throw new ApiHttpException(
                 400,
