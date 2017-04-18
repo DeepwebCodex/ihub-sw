@@ -26,14 +26,16 @@ class ProcessBetGames extends BaseSeamlessWalletProcessor implements Transaction
         $this->request = $request;
 
         if ($this->request->transaction_type == TransactionRequest::TRANS_WIN) {
-            $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, $this->request->partner_id);
-            if (!$betTransaction) {
-                throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER));
+            if ($this->request->game_id !== 'from-ferapont'){
+                $betTransaction = Transactions::getBetTransaction($this->request->service_id, $this->request->user_id, $this->request->object_id, $this->request->partner_id);
+                if (!$betTransaction) {
+                    throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER));
+                }
             }
 
             $winTransaction = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
             if ($winTransaction && $winTransaction->getAttribute('status') == 'completed'){
-                throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::DUPLICATED_WIN));
+                $this->onTransactionDuplicate(new ApiHttpException(500));
             }
         }
 
@@ -41,10 +43,6 @@ class ProcessBetGames extends BaseSeamlessWalletProcessor implements Transaction
             $this->processZeroAmountTransaction();
         } else {
             $this->processTransaction();
-        }
-
-        if ($this->responseData['operation_id'] === null) {
-            throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
         }
 
         return $this->responseData;

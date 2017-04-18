@@ -1,17 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of GetCommitQueueData
- *
- * @author petroff
- */
-
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use Illuminate\Support\Facades\Config;
@@ -36,7 +24,7 @@ class ManuallyValidateBet extends Request
             if ($value['a:RowId']) {
                 $tmp['ori:RowId'] = $value['a:RowId'];
             } else {
-                $tmp['ori:RowIdLong'] = $value['a:RowIdLong'];
+                $tmp['ori:RowId'] = $value['a:RowIdLong'];
             }
             $dataValidateBet['ori:ValidteBetRequest'] [] = $tmp;
         }

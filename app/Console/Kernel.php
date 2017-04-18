@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Components\LoadEnvironmentVariables;
 use App\Console\Commands\CancelPendingOperations;
+use App\Console\Commands\MaksymenkoTest;
 use App\Console\Commands\MicrogamingSequence;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -32,6 +33,7 @@ class Kernel extends ConsoleKernel
         Commands\Orion\EndGame::class,
         MicrogamingSequence::class,
         CancelPendingOperations::class,
+        MaksymenkoTest::class,
     ];
 
     /**

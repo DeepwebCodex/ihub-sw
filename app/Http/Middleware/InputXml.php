@@ -22,6 +22,10 @@ class InputXml
      */
     public function handle($request, \Closure $next)
     {
+        if (app()->environment() == 'testing') {
+            return $next($request);
+        }
+
         $bodyContent = $request->getContent();
 
         if (!$bodyContent) {

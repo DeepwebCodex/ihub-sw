@@ -11,6 +11,12 @@ variables:
   RANCHER_PROD_URL: "http://10.120.12.41:8080"
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
 
+
+
+#====================== templates ======================#
+#====================== templates ======================#
+#====================== templates ======================#
+#====================== templates ======================#
 #====================== templates ======================#
 .template_dev: &template_dev
   tags:
@@ -25,12 +31,19 @@ variables:
     - master
     - tags
 
+.template_add_ssh_auth: &template_add_ssh_auth
+  before_script:
+    - mkdir ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
+    - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+
 .template_compile_n_test: &template_compile_n_test
   <<: *template_dev
+  <<: *template_add_ssh_auth
   stage: test
   image: gitlab.favorit:4567/integrations/docker:php-fpm-dev
-  services:
-    - redis:3.2
   cache:
     key: $CI_BUILD_REF_NAME
     untracked: true
@@ -61,9 +74,13 @@ variables:
 .template_build_docker_image: &template_build_docker_image_prod
   <<: *template_prod
   <<: *template_build_docker_image
-
-
 #====================== templates ======================#
+#====================== templates ======================#
+#====================== templates ======================#
+#====================== templates ======================#
+#====================== templates ======================#
+
+
 
 fail_build_for_incorrect_branches:
   tags:
@@ -87,8 +104,9 @@ test_features:
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
-test_on_dev_env_prod:
+test_on_dev_conf_prod_env_prod:
   <<: *template_compile_n_test
+  image: gitlab.favorit:4567/integrations/docker:php-fpm-master
   script:
     - bash ./run/prod/tests.sh
   only:
@@ -116,6 +134,7 @@ compile_dev:
 
 compile_prod:
   <<: *template_prod
+  <<: *template_add_ssh_auth
   stage: compile_project
   image: gitlab.favorit:4567/integrations/docker:php-fpm-master
   script:
@@ -161,6 +180,7 @@ deploy_to_servers_dev:
 
 manual_deploy_to_system_servers_prod:
   <<: *template_prod
+  <<: *template_add_ssh_auth
   stage: deploy_to_servers
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:
@@ -172,6 +192,7 @@ manual_deploy_to_system_servers_prod:
 
 manual_deploy_to_all_servers_prod:
   <<: *template_prod
+  <<: *template_add_ssh_auth
   stage: deploy_to_servers
   image: gitlab.favorit:4567/integrations/rancher-rest-wrapper:master
   script:

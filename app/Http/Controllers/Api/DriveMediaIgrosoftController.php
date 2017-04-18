@@ -25,6 +25,7 @@ class DriveMediaIgrosoftController extends BaseApiController
 
         $this->options = config('integrations.DriveMediaIgrosoft');
 
+        $this->middleware('check.ip:DriveMediaIgrosoft');
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 

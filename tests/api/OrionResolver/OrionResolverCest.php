@@ -60,5 +60,21 @@ class OrionResolverCest
         $output = Artisan::output();
         $I->assertContains('Success.', trim($output));
     }
+    
+    public function testEndGameWhenRowIdWithMinus(ApiTester $I)
+    {
+        $this->testData->initMockEndGameWhenRowIdWithMinus($I);
+        Artisan::call('orion:endgame');
+        $output = Artisan::output();
+        $I->assertContains('Success.', trim($output));
+    }
+    
+    public function testCommitWithoutBet(ApiTester $I)
+    {
+        $this->testData->initMockCommitWithoutBet($I);
+        Artisan::call('orion:commit');
+        $output = Artisan::output();
+        $I->assertContains('Success.', trim($output));
+    }
 
 }
