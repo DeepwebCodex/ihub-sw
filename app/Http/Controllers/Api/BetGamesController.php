@@ -72,6 +72,9 @@ class BetGamesController extends BaseApiController
      */
     public function index(BaseRequest $request)
     {
+        $this->partnerId = $request->input('partner_id', 0);
+        $this->cashdeskId = $request->input('cashdesk_id', 0);
+
         $apiMethod = new ApiMethod($request->input('method'));
         if (!$apiMethod->isOffline()) {
             $this->userId = app('GameSession')->get('user_id') ?? 0;
