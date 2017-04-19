@@ -86,7 +86,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^APP_ENV=local/APP_ENV=testing/g" \
        -e "s/^APP_DEBUG=true/APP_DEBUG=true/g" \
        -e "s/^APP_REQUEST_DEBUG=true/APP_REQUEST_DEBUG=true/g" \
-       -e "s/^APP_LOG_LEVEL=debug/APP_LOG_LEVEL=debug/g" \
+       -e "s/^APP_LOG_LEVEL=debug/APP_LOG_LEVEL=warning/g" \
         \
        -e "s/^SESSION_DRIVER=file/SESSION_DRIVER=redis/g" \
        -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
