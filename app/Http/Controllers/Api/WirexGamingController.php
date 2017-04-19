@@ -153,7 +153,7 @@ class WirexGamingController extends BaseApiController
             'currency' => $user->getCurrency(),
             'email' => $user->email,
             'firstname' => $user->first_name,
-            'language' => '',
+            'language' => $user->lang,
             'lastname' => $user->last_name,
             'partyTypes' => '',
             'phone' => $user->phone_number,

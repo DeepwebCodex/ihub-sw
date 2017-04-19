@@ -19,8 +19,8 @@ class WirexGamingHelper
      */
     public static function makeUid($oid)
     {
-        $pid = config('integrations.wirexGaming.pid]');
-        return ($oid << 16) + $pid;
+        $previousContextId = config('integrations.wirexGaming.previous_context_id');
+        return ($oid << 16) + $previousContextId;
     }
 
     /**
@@ -29,18 +29,8 @@ class WirexGamingHelper
      */
     public static function parseUid($uid)
     {
-        return $uid >> 16;
-    }
-
-    /**
-     * @param string $currency
-     * @return mixed
-     */
-    public static function mapCurrencyCode(string $currency)
-    {
-        $currencyMap = config('integrations.microgaming.list_currency');
-
-        return array_get($currencyMap, $currency, $currency);
+        $previousContextId = config('integrations.wirexGaming.previous_context_id');
+        return ($uid - $previousContextId) >> 16;
     }
 
     /**
