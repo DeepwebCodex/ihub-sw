@@ -44,7 +44,7 @@ abstract class FundistController extends BaseApiController
     {
         parent::__construct($formatter);
 
-        $this->setIntegration();
+        $this->integration = $this->setIntegration();
         $this->options = config('integrations.' . $this->integration);
 
         $this->middleware('check.ip:' . $this->integration);

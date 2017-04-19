@@ -6,6 +6,6 @@ class LiveDealerController extends FundistController
 {
     protected function setIntegration()
     {
-        $this->integration = 'liveDealer';
+        return 'liveDealer';
     }
 }

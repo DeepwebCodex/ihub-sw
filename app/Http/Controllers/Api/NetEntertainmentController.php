@@ -7,6 +7,6 @@ class NetEntertainmentController extends FundistController
 {
     protected function setIntegration()
     {
-        $this->integration = 'netEntertainment';
+        return 'netEntertainment';
     }
 }
