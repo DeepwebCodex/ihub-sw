@@ -3,13 +3,13 @@
 namespace api\BetGames;
 
 use ApiTester;
+use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\StatusCode;
 use App\Components\Integrations\GameSession\GameSessionService;
 use App\Components\Transactions\TransactionRequest;
 use App\Models\Transactions;
 use Codeception\Scenario;
 use Endorphina\TestData;
-use Helper\TestUser;
 use Testing\AccountManager\Protocol\ProtocolV1;
 use Testing\GameSessionsMock;
 use function GuzzleHttp\json_decode;
@@ -18,13 +18,10 @@ class EndorphinaApiCest
 {
 
     private $data;
-    private $testUser;
 
     public function __construct()
     {
-        $this->testUser = new TestUser();
-        $this->data = new TestData($this->testUser);
-        $this->protocol = new ProtocolV1();
+        $this->data = new TestData(new ProtocolV1());
     }
 
     public function _before(ApiTester $I, Scenario $s)
@@ -42,11 +39,14 @@ class EndorphinaApiCest
         return $data;
     }
 
-    private function getResponseFail(ApiTester $I, $errorCode, $code = '')
+    private function getResponseFail(ApiTester $I, $errorCode, $code = '', $message = '')
     {
         $data = $this->responseToArray($I);
         $I->assertArrayHasKey('code', $data);
         $I->assertArrayHasKey('message', $data);
+        if ($message) {
+            $I->assertEquals($message, $data['message']);
+        }
         $I->assertEquals($code, $data['code']);
         $I->assertNotEmpty($data['message']);
         $I->seeResponseCodeIs($errorCode);
@@ -59,7 +59,7 @@ class EndorphinaApiCest
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $transaction_id,
-            'transaction_type' => ($method == 'bet') ? TransactionRequest::TRANS_BET : TransactionRequest::TRANS_WIN,
+            'transaction_type' => $method,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => ($method == 'bet') ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT
         ]);
@@ -106,7 +106,7 @@ class EndorphinaApiCest
         $I->sendGET('/endorphina/balance/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
-        $I->assertEquals($this->testUser->getBalanceInCents(), $data['balance']);
+        $I->assertEquals($this->data->user->getBalanceInCents(), $data['balance']);
     }
 
     public function testBet(ApiTester $I)
@@ -116,23 +116,74 @@ class EndorphinaApiCest
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
-        $balance = $this->testUser->getBalanceInCents() - $packet['amount'];
+        $balance = $this->data->user->getBalanceInCents() - $packet['amount'];
         $I->assertEquals($balance, $data['balance']);
         $I->assertGreaterThan(1, $data['transactionId']);
-        $this->isRecord($I, $packet['id'], 'bet');
+        $this->isRecord($I, $packet['id'], TransactionRequest::TRANS_BET);
+        return $packet;
     }
 
     public function testWin(ApiTester $I)
     {
+        $this->testBet($I);
         $packet = $this->data->getPacketWin();
         $I->sendPOST('/endorphina/win/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
-        $balance = $this->testUser->getBalanceInCents() + $packet['amount'];
+        $balance = $this->data->user->getBalanceInCents() + $packet['amount'];
         $I->assertEquals($balance, $data['balance']);
         $I->assertGreaterThan(1, $data['transactionId']);
-        $this->isRecord($I, $packet['id'], 'bet');
+        $this->isRecord($I, $packet['id'], TransactionRequest::TRANS_WIN);
+    }
+
+    public function testRefund(ApiTester $I)
+    {
+        $dataBet = $this->testBet($I);
+        $packet = $this->data->getPacketRefund($dataBet['id']);
+        $I->sendPOST('/endorphina/refund/', $packet);
+        $data = $this->getResponseOk($I);
+        $I->assertArrayHasKey('balance', $data);
+        $I->assertArrayHasKey('transactionId', $data);
+        $balance = $this->data->user->getBalanceInCents() + $packet['amount'];
+        $I->assertEquals($balance, $data['balance']);
+        $I->assertGreaterThan(1, $data['transactionId']);
+        $this->isRecord($I, $packet['id'], TransactionRequest::TRANS_REFUND);
+    }
+
+    //Exception situations
+    public function testRefundWithoutBet(ApiTester $I)
+    {
+        $packet = $this->data->getPacketRefundWithoutBet();
+        $I->sendPOST('/endorphina/refund/', $packet);
+        $data = $this->getResponseOk($I);
+        $I->assertArrayHasKey('balance', $data);
+        $I->assertArrayHasKey('transactionId', $data);
+        $balance = $this->data->user->getBalanceInCents();
+        $I->assertEquals($balance, $data['balance']);
+        $I->assertGreaterThan(1, $data['transactionId']);
+        $this->isRecord($I, $packet['id'], TransactionRequest::TRANS_REFUND);
+        return $packet;
+    }
+
+    public function testBetAfterRefund(ApiTester $I)
+    {
+        $refundPacket = $this->testRefundWithoutBet($I);
+        $packet = $this->data->getPacketBet($refundPacket['id']);
+        $I->sendPOST('/endorphina/bet/', $packet);
+        $error = CodeMapping::getByErrorCode(StatusCode::BAD_ORDER);
+        $this->getResponseFail($I, 500, StatusCode::EXTERNAl_INTERNAL_ERROR, $error['message']);
+    }
+
+    public function testDuplicateOperation(ApiTester $I)
+    {
+        $packetBet = $this->testBet($I);
+        $packet = $this->data->getPacketBet($packetBet['id']);
+        $I->sendPOST('/endorphina/bet/', $packet);
+        $data = $this->getResponseOk($I);
+        $I->assertArrayHasKey('balance', $data);
+        $I->assertArrayHasKey('transactionId', $data);
+        $I->assertEquals($this->data->user->getBalanceInCents(), $data['balance']);
     }
 
 }

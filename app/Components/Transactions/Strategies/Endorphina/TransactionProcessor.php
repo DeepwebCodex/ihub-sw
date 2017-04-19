@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 abstract class TransactionProcessor extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
 
-    protected function process(TransactionRequest $lastRecord = null)
+    protected function make(Model $lastRecord = null)
     {
 
         $status = is_object($lastRecord) ? $lastRecord->status : null;

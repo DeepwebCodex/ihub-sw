@@ -36,6 +36,18 @@ class CodeMapping extends CodeMappingBase
                 'attribute' => null,
                 'meanings' => [self::INVALID_CURRENCY]
             ],
+            StatusCode::BAD_ORDER => [
+                'message' => 'Bad order transactions',
+                'map' => [],
+                'attribute' => null,
+                'meanings' => []
+            ],
+            StatusCode::INSUFFICIENT_FUNDS => [
+                'message' => 'Insufficient funds',
+                'map' => [],
+                'attribute' => null,
+                'meanings' => []
+            ],
         ];
     }
 

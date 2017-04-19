@@ -5,8 +5,11 @@ namespace Endorphina;
 use App\Components\Integrations\Endorphina\Sign;
 use App\Components\Users\IntegrationUser;
 use Helper\TestUser;
-use Testing\AccountManager\Protocol\ProtocolV1;
-use Testing\MicroGaming\AccountManagerMock;
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
+use Testing\AccountManager\AccountManagerMock;
+use Testing\AccountManager\Protocol\ProtocolInterface;
+use Testing\AccountManager\Protocol\v1\DefaultParams;
+use function config;
 use function env;
 
 class TestData
@@ -19,20 +22,22 @@ class TestData
      */
     public $userId;
     public $currency = 'EUR';
+    public $user;
     private $amount = 13 * 100;
-    private $user;
     private $game = 'endorphina_Geisha@ENDORPHINA';
     private $gameId = 1;
     private $protocol;
     private $I;
+    private $serviceId;
 
-    public function __construct(TestUser $user, ProtocolInterface $protocol)
+    public function __construct(ProtocolInterface $protocol)
     {
+
         $this->userId = (int) env('TEST_USER_ID');
         $this->partnerId = (int) env('TEST_PARTNER_ID');
         $this->cashdeskId = (int) env('TEST_CASHEDESK');
-        $this->user = $user;
         $this->protocol = $protocol;
+        $this->serviceId = config('integrations.endorphina.service_id');
     }
 
     private function setSignature(array $data)
@@ -67,22 +72,60 @@ class TestData
 
     public function getPacketBalance()
     {
+        $userCurrency = DefaultParams::CURRENCY;
         $data = [
-            'currency' => $this->user->getCurrency(),
+            'currency' => $userCurrency,
             'player' => (string) $this->userId,
             'game' => $this->game,
             'token' => $this->getToken(),
         ];
+        $accoutManagerMock = new AccountManagerMock($this->protocol, $this->I);
+        $accoutManagerMock->getUserInfo([])->getMock();
+        $this->user = new TestUser();
 
         $data['sign'] = $this->setSignature($data);
         return $data;
     }
 
-    public function getPacketBet()
+    public function getPacketBet(int $betId = 0)
     {
 
+        $userBalance = DefaultParams::AMOUNT_BALANCE;
+        $userCurrency = DefaultParams::CURRENCY;
+        if (!$betId) {
+            $betId = $this->rand();
+        }
         $data = [
-            'currency' => $this->user->getCurrency(),
+            'currency' => $userCurrency,
+            'player' => (string) $this->userId,
+            'game' => $this->game,
+            'token' => $this->getToken(),
+            'gameId' => $this->gameId,
+            'date' => time(),
+            'id' => $betId,
+            'amount' => $this->amount
+        ];
+        $paramsTransactions = [
+            'object_id' => $this->rand(),
+            'operation_id' => $this->rand(),
+            'service_id' => config('integrations.endorphina.service_id'),
+            'deposit_rest' => $userBalance - ($this->amount / 100),
+            'amount' => ($this->amount / 100)
+        ];
+        $accoutManagerMock = new AccountManagerMock($this->protocol, $this->I);
+        $accoutManagerMock->getMockAccountManager($paramsTransactions);
+        $this->user = new TestUser();
+
+        $data['sign'] = $this->setSignature($data);
+        return $data;
+    }
+
+    public function getPacketWin()
+    {
+        $userBalance = DefaultParams::AMOUNT_BALANCE;
+        $userCurrency = DefaultParams::CURRENCY;
+        $data = [
+            'currency' => $userCurrency,
             'player' => (string) $this->userId,
             'game' => $this->game,
             'token' => $this->getToken(),
@@ -91,9 +134,79 @@ class TestData
             'id' => $this->rand(),
             'amount' => $this->amount
         ];
-
+        $paramsTransactions = [
+            'object_id' => $this->rand(),
+            'operation_id' => $this->rand(),
+            'service_id' => config('integrations.endorphina.service_id'),
+            'deposit_rest' => $userBalance + ($this->amount / 100),
+            'amount' => ($this->amount / 100),
+            'move' => 0
+        ];
         $accoutManagerMock = new AccountManagerMock($this->protocol, $this->I);
-        $accoutManagerMock->getMockAccountManager($data);
+        $accoutManagerMock->getMockAccountManager($paramsTransactions);
+        $this->user = new TestUser();
+
+        $data['sign'] = $this->setSignature($data);
+        return $data;
+    }
+
+    public function getPacketRefund(int $betId)
+    {
+        $userBalance = DefaultParams::AMOUNT_BALANCE;
+        $userCurrency = DefaultParams::CURRENCY;
+
+        $data = [
+            'currency' => $userCurrency,
+            'player' => (string) $this->userId,
+            'game' => $this->game,
+            'token' => $this->getToken(),
+            'gameId' => $this->gameId,
+            'date' => time(),
+            'id' => $betId,
+            'amount' => $this->amount
+        ];
+        $paramsTransactions = [
+            'object_id' => $this->rand(),
+            'operation_id' => $this->rand(),
+            'service_id' => config('integrations.endorphina.service_id'),
+            'deposit_rest' => $userBalance + ($this->amount / 100),
+            'amount' => ($this->amount / 100),
+            'move' => 0
+        ];
+        $accoutManagerMock = new AccountManagerMock($this->protocol, $this->I);
+        $accoutManagerMock->getMockAccountManager($paramsTransactions);
+        $this->user = new TestUser();
+
+        $data['sign'] = $this->setSignature($data);
+        return $data;
+    }
+
+    public function getPacketRefundWithoutBet()
+    {
+        $userBalance = DefaultParams::AMOUNT_BALANCE;
+        $userCurrency = DefaultParams::CURRENCY;
+
+        $data = [
+            'currency' => $userCurrency,
+            'player' => (string) $this->userId,
+            'game' => $this->game,
+            'token' => $this->getToken(),
+            'gameId' => $this->gameId,
+            'date' => time(),
+            'id' => $this->rand(),
+            'amount' => $this->amount
+        ];
+        $paramsTransactions = [
+            'object_id' => $this->rand(),
+            'operation_id' => $this->rand(),
+            'service_id' => config('integrations.endorphina.service_id'),
+            'deposit_rest' => $userBalance,
+            'amount' => $this->amount,
+            'move' => 0
+        ];
+        $accoutManagerMock = new AccountManagerMock($this->protocol, $this->I);
+        $accoutManagerMock->getMockAccountManager($paramsTransactions);
+        $this->user = new TestUser();
 
         $data['sign'] = $this->setSignature($data);
         return $data;

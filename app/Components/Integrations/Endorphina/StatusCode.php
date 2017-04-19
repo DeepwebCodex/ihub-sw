@@ -12,6 +12,8 @@ abstract class StatusCode
     const INVALID_TOKEN = 3;
     const INVALID_AUTH = 4;
     const SIGNATURE_WRONG = 5;
+    const BAD_ORDER = 6;
+    const INSUFFICIENT_FUNDS = 7;
     //external code error
     const EXTERNAl_INTERNAL_ERROR = 'INTERNAL_ERROR';
     const EXTERNAl_TOKEN_NOT_FOUND = 'TOKEN_NOT_FOUND';
@@ -25,7 +27,9 @@ abstract class StatusCode
         4 => self::EXTERNAl_TOKEN_NOT_FOUND,
         5 => self::EXTERNAl_ACCESS_DENIED,
         CodeMappingBase::INVALID_TOKEN => self::EXTERNAl_TOKEN_NOT_FOUND,
-        CodeMappingBase::INVALID_CURRENCY => self::EXTERNAl_INTERNAL_ERROR
+        CodeMappingBase::INVALID_CURRENCY => self::EXTERNAl_INTERNAL_ERROR,
+        6 => self::EXTERNAl_INTERNAL_ERROR,
+        7 => self::EXTERNAl_INSUFFICIENT_FUNDS
     ];
 
 }
