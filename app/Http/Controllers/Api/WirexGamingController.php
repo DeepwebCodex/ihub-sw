@@ -170,12 +170,12 @@ class WirexGamingController extends BaseApiController
      */
     public function getAvailableBalance(AvailableBalanceRequest $request)
     {
-        $userUid = $this->data['partyOriginatingUid'];
+        $userUid = $this->data['partyOriginatingUId'];
         $userId = WirexGamingHelper::parseUid($userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
         return $this->respondOk(200, '', [
-            'balance' => $user->getBalanceInCents(),
+            'balance' => $user->getBalance(),
             'currency' => $user->getCurrency()
         ]);
     }
@@ -218,7 +218,7 @@ class WirexGamingController extends BaseApiController
                     'account' => '',
                     'accountEntryType' => '',
                     'amount' => $this->data['amount'],
-                    'balance' => $transactionResponse->getBalanceInCents(),
+                    'balance' => $transactionResponse->getBalance(),
                     'codice' => '',
                     'creationDate' => '',
                     'currency' => '',
@@ -314,7 +314,7 @@ class WirexGamingController extends BaseApiController
                     'account' => '',
                     'accountEntryType' => '',
                     'amount' => $this->data['amount'],
-                    'balance' => $transactionResponse->getBalanceInCents(),
+                    'balance' => $transactionResponse->getBalance(),
                     'codice' => '',
                     'creationDate' => '',
                     'currency' => '',
