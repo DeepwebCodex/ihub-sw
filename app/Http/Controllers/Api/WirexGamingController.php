@@ -147,7 +147,7 @@ class WirexGamingController extends BaseApiController
         return $this->respondOk(200, '', [
             'address' => $user->adress,
             'birthcountry' => '',
-            'birthdate' => $user->date_of_birth,
+            'birthdate' => date('Y-m-d', strtotime($user->date_of_birth)),
             'birthstate' => '',
             'city' => $user->city,
             'currency' => $user->getCurrency(),
@@ -155,10 +155,10 @@ class WirexGamingController extends BaseApiController
             'firstname' => $user->first_name,
             'language' => $user->lang,
             'lastname' => $user->last_name,
-            'partyTypes' => '',
+            'partyTypes' => 2,
             'phone' => $user->phone_number,
             'sex' => '',
-            'userType' => '',
+            'userType' => 0,
             'username' => $user->login,
             'zip' => $user->zip,
         ]);
