@@ -7,6 +7,10 @@ use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\Game;
 use App\Components\Integrations\Endorphina\StatusCode;
 use App\Components\Traits\MetaDataTrait;
+use App\Components\Transactions\Strategies\Endorphina\Withdrawal;
+use App\Components\Transactions\TransactionHandler;
+use App\Components\Transactions\TransactionHelper;
+use App\Components\Transactions\TransactionRequest;
 use App\Components\Users\IntegrationUser;
 use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\EndorphinaTemplate;
@@ -80,17 +84,17 @@ class EndorphinaController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
-            TransactionHelper::amountCentsToWhole($request->input('params.amount')),
-            $transactionMap->getType(),
-            $request->input('params.transaction_id'),
-            str_slug(transliterate($request->input('params.game'))),
-            $this->partnerId,
-            $this->cashdeskId,
-            $this->userIP
+            TransactionHelper::amountCentsToWhole($request->input('amount')),
+            TransactionRequest::TRANS_BET,
+            $request->input('id'),
+            $request->input('game'),
+            app('GameSession')->get('partner_id'),
+            app('GameSession')->get('cashdesk_id'),
+            app('GameSession')->get('userIp')
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
-        $response = $transaction->handle(app(ProcessBetGames::class));
+        $response = $transaction->handle(app(Withdrawal::class));
         return $this->respondOk(Response::HTTP_OK, '', [
                     'balance' => $response->getBalanceInCents(),
                     'transactionId' => $response->operation_id

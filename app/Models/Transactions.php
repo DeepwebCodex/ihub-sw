@@ -161,4 +161,23 @@ class Transactions extends Model
             ['status', TransactionRequest::STATUS_COMPLETED]
         ])->first();
     }
+    
+    /***
+     * @param int $serviceId
+     * @param int $userId
+     * @param string $currency
+     * @param int $partnerId
+     * @return Transactions
+     */
+    public static function getLastBetTransaction(int $serviceId, int $userId, string $currency, int $partnerId)
+    {
+        return Transactions::where([
+            ['service_id', $serviceId],
+            ['user_id', $userId],
+            ['currency', $currency],
+            ['partner_id', $partnerId],
+            ['transaction_type', TransactionRequest::TRANS_BET],
+            ['status', TransactionRequest::STATUS_COMPLETED]
+        ])->first();
+    }
 }

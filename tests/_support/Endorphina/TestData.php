@@ -5,6 +5,8 @@ namespace Endorphina;
 use App\Components\Integrations\Endorphina\Sign;
 use App\Components\Users\IntegrationUser;
 use Helper\TestUser;
+use Testing\AccountManager\Protocol\ProtocolV1;
+use Testing\MicroGaming\AccountManagerMock;
 use function env;
 
 class TestData
@@ -21,13 +23,16 @@ class TestData
     private $user;
     private $game = 'endorphina_Geisha@ENDORPHINA';
     private $gameId = 1;
+    private $protocol;
+    private $I;
 
-    public function __construct(TestUser $user)
+    public function __construct(TestUser $user, ProtocolInterface $protocol)
     {
         $this->userId = (int) env('TEST_USER_ID');
         $this->partnerId = (int) env('TEST_PARTNER_ID');
         $this->cashdeskId = (int) env('TEST_CASHEDESK');
         $this->user = $user;
+        $this->protocol = $protocol;
     }
 
     private function setSignature(array $data)
@@ -43,6 +48,11 @@ class TestData
     private function rand()
     {
         return time() + mt_rand(1, 10000);
+    }
+
+    public function setI($I)
+    {
+        $this->I = $I;
     }
 
     public function getPacketSession()
@@ -70,6 +80,7 @@ class TestData
 
     public function getPacketBet()
     {
+
         $data = [
             'currency' => $this->user->getCurrency(),
             'player' => (string) $this->userId,
@@ -80,6 +91,9 @@ class TestData
             'id' => $this->rand(),
             'amount' => $this->amount
         ];
+
+        $accoutManagerMock = new AccountManagerMock($this->protocol, $this->I);
+        $accoutManagerMock->getMockAccountManager($data);
 
         $data['sign'] = $this->setSignature($data);
         return $data;

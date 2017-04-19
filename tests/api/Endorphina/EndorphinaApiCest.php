@@ -19,7 +19,6 @@ class EndorphinaApiCest
 
     private $data;
     private $testUser;
-    private $protocol;
 
     public function __construct()
     {
@@ -30,6 +29,7 @@ class EndorphinaApiCest
 
     public function _before(ApiTester $I, Scenario $s)
     {
+        $this->data->setI($I);
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
@@ -54,11 +54,11 @@ class EndorphinaApiCest
         return $data;
     }
 
-    private function isRecord(ApiTester $I, $request, $method)
+    private function isRecord(ApiTester $I, string $transaction_id, string $method)
     {
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
-            'foreign_id' => $request['params']['transaction_id'],
+            'foreign_id' => $transaction_id,
             'transaction_type' => ($method == 'bet') ? TransactionRequest::TRANS_BET : TransactionRequest::TRANS_WIN,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => ($method == 'bet') ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT
@@ -82,8 +82,6 @@ class EndorphinaApiCest
         return json_decode($data, true);
     }
 
-    //        $accoutManagerMock = new AccountManagerMock($this->protocol, $I);
-    //        $accoutManagerMock->getMockAccountManager($data, [], 0, $betId);
     public function testMethodNotFound(ApiTester $I)
     {
         $I->sendPOST('/endorphina/unknownmethod/', []);
@@ -121,6 +119,20 @@ class EndorphinaApiCest
         $balance = $this->testUser->getBalanceInCents() - $packet['amount'];
         $I->assertEquals($balance, $data['balance']);
         $I->assertGreaterThan(1, $data['transactionId']);
+        $this->isRecord($I, $packet['id'], 'bet');
+    }
+
+    public function testWin(ApiTester $I)
+    {
+        $packet = $this->data->getPacketWin();
+        $I->sendPOST('/endorphina/win/', $packet);
+        $data = $this->getResponseOk($I);
+        $I->assertArrayHasKey('balance', $data);
+        $I->assertArrayHasKey('transactionId', $data);
+        $balance = $this->testUser->getBalanceInCents() + $packet['amount'];
+        $I->assertEquals($balance, $data['balance']);
+        $I->assertGreaterThan(1, $data['transactionId']);
+        $this->isRecord($I, $packet['id'], 'bet');
     }
 
 }

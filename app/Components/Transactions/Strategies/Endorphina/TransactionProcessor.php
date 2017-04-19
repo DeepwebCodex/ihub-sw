@@ -1,39 +1,22 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Components\Transactions\Strategies\Endorphina;
 
-use App\Components\Integrations\NetEntertainment\CodeMapping;
-use App\Components\Integrations\NetEntertainment\StatusCode;
 use App\Components\Transactions\BaseSeamlessWalletProcessor;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
-use App\Models\DriveMediaNovomaticDeluxe;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use function GuzzleHttp\json_encode;
 
 /**
  * Description of Transaction
  *
  * @author petroff
  */
-abstract class TransactionProcessor extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface {
+abstract class TransactionProcessor extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
+{
 
-    protected $additional;
-
-    function __construct(Request $request) {
-        $this->additional = $request;
-    }
-
-    protected function make(Model $lastRecord = null) {
+    protected function process(TransactionRequest $lastRecord = null)
+    {
 
         $status = is_object($lastRecord) ? $lastRecord->status : null;
 
@@ -61,37 +44,19 @@ abstract class TransactionProcessor extends BaseSeamlessWalletProcessor implemen
         return $this->responseData;
     }
 
-    protected function writeTransaction($model = null, string $newStatus = null) {
-        if ($model && $newStatus && $newStatus != $model->status) {
-            return parent::writeTransaction($model, $newStatus);
-        } else {
-            DB::beginTransaction();
-            $model = parent::writeTransaction($model, $newStatus);
-            if (!$model) {
-                DB::rollBack();
-                return $model;
-            }
-            $res = DriveMediaNovomaticDeluxe::create([
-                        'betInfo' => $this->additional->input('betInfo'),
-                        'bet' => $this->additional->input('bet'),
-                        'winLose' => $this->additional->input('winLose'),
-                        'matrix' => $this->additional->input('matrix'),
-                        'packet' => json_encode($this->additional->all()),
-                        'parent_id' => $model->id
-            ]);
-            if (!$res) {
-                DB::rollBack();
-                return $res;
-            }
-            DB::commit();
+    protected function onTransactionDuplicate($e)
+    {
+        $operation = $this->getAccountManager()->getOperations(
+                $this->request->user_id, $this->request->direction, $this->request->object_id, $this->request->service_id);
+
+        if (!$operation) {
+            throw new ApiHttpException(409, "Finance error", CodeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
+        } else if (count($operation) != count($operation, COUNT_RECURSIVE)) {
+            throw new ApiHttpException(409, "Finance error, duplicated duplication", CodeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
         }
 
-        return $model;
-    }
-
-    protected function onInsufficientFunds($e) {
-        throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByErrorCode
-                (StatusCode::FAIL_BALANCE));
+        $this->responseData = $operation;
+        $this->isDuplicate = true;
     }
 
 }
