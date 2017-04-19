@@ -6,6 +6,8 @@ namespace App\Components\Integrations\Fundist;
 
 class Hmac
 {
+    public static $INTEGRATION;
+
     private $hmac;
     private $forCheck;
     private $integration;

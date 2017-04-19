@@ -5,6 +5,7 @@ namespace App\Http\Requests\Fundist;
 use App\Components\AppLog;
 use App\Components\Integrations\Fundist\ApiMethod;
 use App\Components\Integrations\Fundist\CodeMapping;
+use App\Components\Integrations\Fundist\Hmac;
 use App\Components\Integrations\Fundist\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Traits\MetaDataTrait;
@@ -61,7 +62,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     {
         return [
             'type' => 'bail|required|string|check_method',
-            'hmac' => ['bail', 'required', 'string', 'check_hmac:' . $this->getMetaField('integration')],
+            'hmac' => ['bail', 'required', 'string', 'check_hmac:' . Hmac::$INTEGRATION],
         ];
     }
 
