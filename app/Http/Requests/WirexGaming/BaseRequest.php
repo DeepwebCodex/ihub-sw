@@ -58,8 +58,9 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorizeUser(Request $request)
     {
+        $dataPrefix = $this->getRequestDataPrefix();
         try {
-            app('GameSession')->start($request->input('soap:Body.session_token', ''));
+            app('GameSession')->start($request->input($dataPrefix .'sessionToken', ''));
         } catch (SessionDoesNotExist $e) {
             throw new ApiHttpException(
                 400,
@@ -91,13 +92,13 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
             $this->isSecureRequest();
         }
 
-        $configPlatformPassword = config('integrations.wirexGaming.platform_password');
+        $dataPrefix = $this->getRequestDataPrefix();
+
         $configClientPid = config('integrations.wirexGaming.client_pid');
         $configServerPid = config('integrations.wirexGaming.server_pid');
 
-        if ($configPlatformPassword === $request->input('soap:Header.platformPassword')
-            && $configClientPid === $request->input('soap:Header.clientPid')
-            && $configServerPid === $request->input('soap:Header.serverPid')
+        if ($configClientPid == $request->input($dataPrefix . 'clientPid')
+            && $configServerPid == $request->input($dataPrefix . 'serverPid')
         ) {
             $this->authorizeUser($request);
 
