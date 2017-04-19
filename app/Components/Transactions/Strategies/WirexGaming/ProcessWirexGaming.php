@@ -2,15 +2,14 @@
 
 namespace App\Components\Transactions\Strategies\MicroGaming;
 
-use App\Components\Integrations\CodeMappingBase;
 use App\Components\Integrations\MicroGaming\CodeMapping;
+use App\Components\Integrations\WirexGaming\StatusCode;
 use App\Components\Transactions\BaseSeamlessWalletProcessor;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Transactions\TransactionRequest;
 use App\Exceptions\Api\ApiHttpException;
 use App\Models\Transactions;
-use App\Models\WirexGamingObjectIdMap;
-use App\Models\WirexGamingProdObjectIdMap;
+use Illuminate\Http\Response;
 
 /**
  * @property TransactionRequest $request
@@ -18,65 +17,50 @@ use App\Models\WirexGamingProdObjectIdMap;
  */
 class ProcessWirexGaming extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
-    protected $codeMapping = CodeMapping::class;
-
     /**
-     * @return Transactions
+     * @var string
      */
-    protected function getBetRecords()
-    {
-        $originalObjectId = $this->request->object_id;
-
-        $this->request->object_id = $this->getObjectIdMap(
-            $this->request->user_id,
-            $this->request->currency,
-            $originalObjectId
-        );
-        /**@var Transactions $betTransaction */
-        return Transactions::getBetTransaction(
-            $this->request->service_id,
-            $this->request->user_id,
-            $this->request->object_id,
-            $this->request->partner_id
-        );
-    }
+    protected $codeMapping = CodeMapping::class;
 
     /**
      * @param TransactionRequest $request
      * @return array
      */
-    protected function process(TransactionRequest $request)
+    protected function process(TransactionRequest $request): array
     {
         $this->request = $request;
-        $betTransaction = $this->getBetRecords();
-
-        if ($this->request->transaction_type != TransactionRequest::TRANS_BET) {
+        if ($this->request->transaction_type == TransactionRequest::TRANS_WIN) {
+            $betTransaction = Transactions::getBetTransaction(
+                $this->request->service_id,
+                $this->request->user_id,
+                $this->request->object_id,
+                $this->request->partner_id
+            );
             if (!$betTransaction) {
-                $this->onHaveNotBet(
-                    new ApiHttpException(
-                        500,
-                        null,
-                        $this->codeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR)
-                    )
-                );
-                return $this->responseData;
-            }
-        } elseif ($this->request->transaction_type == TransactionRequest::TRANS_BET) {
-            //unique double bet
-            if ($betTransaction && $betTransaction->foreign_id != $this->request->foreign_id) {
-                $modifiedObjectId = $this->request->object_id;
-                $this->request->object_id = $this->getObjectIdMapForDuplicate(
-                    $this->request->user_id,
-                    $this->request->currency,
-                    $modifiedObjectId
-                );
+                throw new ApiHttpException(Response::HTTP_OK, null,
+                    CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER));
             }
         }
 
         if ($this->request->amount == 0) {
-            return $this->processZeroAmountTransaction();
+            $this->processZeroAmountTransaction();
+        } else {
+            $this->processTransaction();
         }
 
+        if ($this->responseData['operation_id'] === null) {
+            throw new ApiHttpException(Response::HTTP_REQUEST_TIMEOUT, null,
+                CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
+        }
+
+        return $this->responseData;
+    }
+
+    /**
+     * @return array
+     */
+    private function processTransaction(): array
+    {
         $lastRecord = Transactions::getTransaction(
             $this->request->service_id,
             $this->request->foreign_id,
@@ -84,7 +68,7 @@ class ProcessWirexGaming extends BaseSeamlessWalletProcessor implements Transact
             $this->request->partner_id
         );
 
-        $status = is_object($lastRecord) ? $lastRecord->status : null;
+        $status = $lastRecord->status ?? null;
 
         switch ($status) {
             case TransactionRequest::STATUS_NULL:
@@ -100,7 +84,7 @@ class ProcessWirexGaming extends BaseSeamlessWalletProcessor implements Transact
                 $this->isDuplicate = true;
                 break;
             case TransactionRequest::STATUS_CANCELED:
-                $this->responseData = null;
+                $this->responseData = [];
                 $this->isDuplicate = true;
                 break;
             default:
@@ -111,77 +95,25 @@ class ProcessWirexGaming extends BaseSeamlessWalletProcessor implements Transact
     }
 
     /**
-     * @param ApiHttpException $exception
-     * @return $this
+     * @param \App\Exceptions\Api\GenericApiHttpException $e
      */
-    protected function onTransactionDuplicate($exception)
+    protected function onTransactionDuplicate($e)
     {
-        $operation = $this->getAccountManager()->getOperations(
-            $this->request->user_id,
-            $this->request->direction,
-            $this->request->object_id,
-            $this->request->service_id
-        );
-
-        if (!$operation) {
-            throw new ApiHttpException(
-                409,
-                'Finance error',
-                $this->codeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR)
-            );
-        } elseif (count($operation) > 1) {
-            throw new ApiHttpException(
-                409,
-                'Finance error, duplicated duplication',
-                $this->codeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR)
-            );
+        if ($this->request->transaction_type == TransactionRequest::TRANS_WIN) {
+            throw new ApiHttpException(Response::HTTP_OK, null,
+                CodeMapping::getByErrorCode(StatusCode::DUPLICATED_WIN));
         }
-        $this->responseData = $operation[0];
-        $this->isDuplicate = true;
+
+        throw new ApiHttpException(Response::HTTP_OK, null,
+            CodeMapping::getByErrorCode(StatusCode::DUPLICATED_TRANSACTION));
     }
 
     /**
-     * @param \App\Exceptions\Api\GenericApiHttpException $exception
+     * @param \App\Exceptions\Api\GenericApiHttpException $e
      */
-    protected function onHaveNotBet($exception)
+    protected function onInsufficientFunds($e)
     {
-        if ($this->request->transaction_type !== TransactionRequest::TRANS_REFUND) {
-            parent::onHaveNotBet($exception);
-            return;
-        }
-        $this->responseData = array_merge(
-            $this->responseData,
-            [
-                'operation_id' => app('AccountManager')->getFreeOperationId()
-            ]
-        );
-    }
-
-    /**
-     * @param int $userId
-     * @param string $currency
-     * @param int $gameId
-     * @return int
-     */
-    protected function getObjectIdMap(int $userId, string $currency, int $gameId): int
-    {
-        if (app()->environment() === 'production') {
-            return WirexGamingProdObjectIdMap::getObjectId($userId, $currency, $gameId);
-        }
-        return WirexGamingObjectIdMap::getObjectId($userId, $currency, $gameId);
-    }
-
-    /**
-     * @param int $userId
-     * @param string $currency
-     * @param int $gameId
-     * @return int
-     */
-    protected function getObjectIdMapForDuplicate(int $userId, string $currency, int $gameId): int
-    {
-        if (app()->environment() === 'production') {
-            return WirexGamingProdObjectIdMap::getNextPrimaryIndex();
-        }
-        return WirexGamingObjectIdMap::getNextPrimaryIndex($userId, $currency, $gameId);
+        throw new ApiHttpException(Response::HTTP_OK, null,
+            CodeMapping::getByErrorCode(StatusCode::INSUFFICIENT_FUNDS));
     }
 }

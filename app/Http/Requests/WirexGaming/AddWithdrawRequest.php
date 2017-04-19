@@ -9,6 +9,14 @@ namespace App\Http\WirexGaming;
 class AddWithdrawRequest extends BaseRequest
 {
     /**
+     * @return string
+     */
+    protected function getRequestDataPrefix()
+    {
+        return 'S:Body.ns2:' . $this->getMetaField('method') . '.accountEntryPlatformRequest.';
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
