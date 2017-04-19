@@ -4,14 +4,7 @@ namespace Testing\AccountManager;
 
 use App\Components\ExternalServices\AccountManager;
 use Testing\AccountManager\Protocol\ProtocolInterface;
-use Testing\AccountManager\Protocol\v1\DefaultParams;
 use Testing\BaseMock;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  * Description of AccountManager
@@ -20,6 +13,7 @@ use Testing\BaseMock;
  */
 class AccountManagerMock extends BaseMock
 {
+
     protected $protocol;
     protected $currentMock = AccountManager::class;
 
@@ -30,7 +24,18 @@ class AccountManagerMock extends BaseMock
         return $this;
     }
 
-    public function getMockAccountManager(array $paramsTransactions, array $userParams = [], int $freeOperationId = 0, int $freeCardId = 0)
+    /**
+     * Example
+     * $paramsTransactions = [
+     * 'object_id' => $request['params']['bet_id'],
+     * 'operation_id' => $this->getUniqInt(),
+     * 'service_id' => 13,
+     * 'deposit_rest' => DefaultParams::AMOUNT_BALANCE - ($this->data->getAmount() / 100),
+     * 'amount' => ($this->data->getAmount() / 100) * -1
+     * ];
+     */
+    public function getMockAccountManager(array $paramsTransactions, array $userParams = [], int $freeOperationId = 0,
+            int $freeCardId = 0)
     {
 
         return $this->createTransaction($paramsTransactions)
