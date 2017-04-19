@@ -172,6 +172,7 @@ build_docker_image_dev:
 build_docker_image_prod:
   <<: *template_build_docker_image_prod
   only:
+    - master
     - tags
 
 deploy_to_servers_dev:
