@@ -14,8 +14,8 @@ variables:
   HTTP_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   HTTPS_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
-  CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/icms-infrastructure:php-fpm-master
-  CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/icms-infrastructure:php-fpm-dev
+  CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-master
+  CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-dev
   CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub-grid/ihub-sw:$CI_BUILD_REF_NAME
 
 
