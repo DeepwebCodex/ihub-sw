@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2e7d418bcf44b3c0649e791eceef0994",
-    "content-hash": "27d631ff3f0a82b23715a60fcdfffa0f",
+    "hash": "c5d6c9707375351f945e91e1d779d87b",
+    "content-hash": "908c3ae39e54c759c0eaa488d1e9f562",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -813,11 +813,11 @@
         },
         {
             "name": "ihub-grid/packages/accounting",
-            "version": "1.0.02",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git",
-                "reference": "ff8a127e46467321e3950a4f7bcdfa527ca3237d"
+                "reference": "c7ed17f711dfaac135ffb4950788daf0fecf461b"
             },
             "require": {
                 "ihub-grid/packages/error-handler": "~1.0",
@@ -853,7 +853,7 @@
                 "accounting",
                 "ihub-grid"
             ],
-            "time": "2017-04-19 12:07:44"
+            "time": "2017-04-20 12:36:09"
         },
         {
             "name": "ihub-grid/packages/dynamic-scheduler",
@@ -899,11 +899,11 @@
         },
         {
             "name": "ihub-grid/packages/error-handler",
-            "version": "1.0.06",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/error-handler.git",
-                "reference": "01da812435e389e301686a2393b6da0e5aecf7bc"
+                "reference": "b60d19f4d0ce4f18eead2e3711ac87d4cc09c1ec"
             },
             "require": {
                 "danielstjules/stringy": "~2.3",
@@ -942,15 +942,15 @@
                 "error-handler",
                 "ihub-grid"
             ],
-            "time": "2017-04-20 09:04:56"
+            "time": "2017-04-20 11:53:58"
         },
         {
             "name": "ihub-grid/packages/seamless-wallet-core",
-            "version": "1.0.01",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git",
-                "reference": "a32476f4f26b516c667c2daad764cf094725a936"
+                "reference": "fa5892e67f83ea728020943e95b98e64b69bcfed"
             },
             "require": {
                 "danielstjules/stringy": "~2.3",
@@ -987,7 +987,7 @@
                 "ihub-grid",
                 "seamless-wallet-core"
             ],
-            "time": "2017-04-19 14:41:59"
+            "time": "2017-04-20 12:25:35"
         },
         {
             "name": "kozz/laravel-guzzle-provider",
