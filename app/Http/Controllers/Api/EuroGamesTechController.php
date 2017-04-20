@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\EgtXmlApiFormatter;
+use App\Components\Integrations\CodeMappingBase;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
 use App\Components\Integrations\GameSession\TokenControl\TokenControl;
@@ -17,6 +18,7 @@ use App\Http\Requests\EuroGamesTech\DepositRequest;
 use App\Http\Requests\EuroGamesTech\PlayerBalanceRequest;
 use App\Http\Requests\EuroGamesTech\WithdrawAndDepositRequest;
 use App\Http\Requests\EuroGamesTech\WithdrawRequest;
+use App\Models\Transactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,6 +32,10 @@ class EuroGamesTechController extends BaseApiController
 
     public static $exceptionTemplate = EuroGamesTechTemplate::class;
 
+    private $partnerId;
+    private $cashdeskId;
+    private $userIP;
+
     public function __construct(EgtXmlApiFormatter $formatter)
     {
         parent::__construct($formatter);
@@ -38,7 +44,6 @@ class EuroGamesTechController extends BaseApiController
 
         $this->middleware('check.ip:egt');
         $this->middleware('input.xml')->except(['error']);
-        $this->middleware('input.egt.parsePlayerId')->except(['error']);
 
         Validator::extend('validate_defence_code', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateDefenceCode');
         Validator::extend('validate_deposit', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateDepositReason');
@@ -47,6 +52,10 @@ class EuroGamesTechController extends BaseApiController
 
     public function authenticate(AuthRequest $request)
     {
+        $this->userIP = app('GameSession')->get('userIp');
+        $this->partnerId = app('GameSession')->get('partner_id');
+        $this->cashdeskId = app('GameSession')->get('cashdesk_id');
+
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
         EgtHelper::checkInputCurrency($user->getCurrency(), EgtHelper::getCurrencyFromPortalCode($request->input('PortalCode')));
@@ -83,9 +92,9 @@ class EuroGamesTechController extends BaseApiController
             EgtHelper::getTransactionType($request->input('Reason')),
             $request->input('TransferId'),
             $request->input('GameId'),
-            $request->input('PartnerId'),
-            $request->input('CashdeskId'),
-            $request->input('UserIp')
+            $this->partnerId,
+            $this->cashdeskId,
+            $this->userIP
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -102,6 +111,17 @@ class EuroGamesTechController extends BaseApiController
 
         EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
 
+        $betTransaction = Transactions::getBetTransaction(
+            $this->getOption('service_id'),
+            $user->id,
+            $request->input('GameNumber')
+        );
+
+        if (!$betTransaction) {
+            throw new ApiHttpException(500, "Bet was not placed",
+                CodeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
+        }
+
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
             $request->input('GameNumber'),
@@ -112,9 +132,9 @@ class EuroGamesTechController extends BaseApiController
             EgtHelper::getTransactionType($request->input('Reason'), true),
             $request->input('TransferId'),
             $request->input('GameId'),
-            $request->input('PartnerId'),
-            $request->input('CashdeskId'),
-            $request->input('UserIp')
+            $betTransaction->partner_id,
+            $betTransaction->cashdesk,
+            $betTransaction->client_ip
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -141,9 +161,9 @@ class EuroGamesTechController extends BaseApiController
             TransactionRequest::TRANS_BET,
             $request->input('TransferId'),
             $request->input('GameId'),
-            $request->input('PartnerId'),
-            $request->input('CashdeskId'),
-            $request->input('UserIp')
+            $this->partnerId,
+            $this->cashdeskId,
+            $this->userIP
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -160,9 +180,9 @@ class EuroGamesTechController extends BaseApiController
             EgtHelper::getTransactionType($request->input('Reason')),
             $request->input('TransferId'),
             $request->input('GameId'),
-            $request->input('PartnerId'),
-            $request->input('CashdeskId'),
-            $request->input('UserIp')
+            $this->partnerId,
+            $this->cashdeskId,
+            $this->userIP
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
