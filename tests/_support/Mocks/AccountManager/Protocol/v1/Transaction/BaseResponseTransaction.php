@@ -59,10 +59,6 @@ abstract class BaseResponseTransaction implements ResponseInterface
             throw new Exception('amount must be fill');
         }
         
-        if (!isset($params['deposit_rest'])) {
-            throw new Exception('deposit_rest must be fill');
-        }
-
         return $params;
     }
 

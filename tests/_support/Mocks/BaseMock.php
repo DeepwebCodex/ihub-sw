@@ -20,10 +20,16 @@ class BaseMock
 
     protected $I;
     protected $class;
+    protected $disable = false;
 
     function __construct($I = '')
     {
         $this->I = $I;
+    }
+
+    function setDisable($disable)
+    {
+        $this->disable = $disable;
     }
 
     protected function getMocker($entity, string $method, $response, string $type = '', array $constructor = [])
@@ -34,7 +40,7 @@ class BaseMock
 
     protected function injectMock($entityMock)
     {
-        if ($this->I) {
+        if ($this->I && !$this->disable) {
             $this->I->getApplication()->instance($this->class, $entityMock);
             $this->I->haveInstance($this->class, $entityMock);
         }
