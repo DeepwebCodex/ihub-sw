@@ -1,6 +1,6 @@
 <?php
 
-namespace api\NetEntertainment;
+namespace api\Fundist;
 
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\StatusCode;
@@ -14,12 +14,13 @@ use \Fundist\TestUser;
 use Symfony\Component\HttpFoundation\Response;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
+use Testing\Params;
 
 /**
  * Class BetGamesApiCest
  * @package api\BetGames
  */
-class NetEntertainmentApiCest
+class LiveDealerApiCest
 {
     /** @var  TestData */
     private $data;
@@ -36,13 +37,13 @@ class NetEntertainmentApiCest
     public function __construct()
     {
         $this->testUser = new TestUser();
-        $this->data = new TestData('netEntertainment');
-        $this->action = '/netent';
+        $this->data = new TestData('liveDealer');
+        $this->action = '/livedealer';
     }
 
     public function _before(\ApiTester $I, Scenario $s)
     {
-        $I->mockAccountManager($I, config('integrations.netEntertainment.service_id'));
+        $I->mockAccountManager($I, config('integrations.liveDealer.service_id'));
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
@@ -66,8 +67,6 @@ class NetEntertainmentApiCest
         $I->sendPOST($this->action, $this->data->getBalance());
         $data = $this->getResponseOk($I);
         $I->assertNotNull($data['balance']);
-        $I->assertTrue(is_array(explode('.', $data['balance'])));
-        $I->assertTrue(count(explode('.', $data['balance'])) == 2);
     }
 
     public function testBet(\ApiTester $I)
@@ -221,22 +220,22 @@ class NetEntertainmentApiCest
         $this->getResponseFail($I);
     }
 
-    public function testMismatch(\ApiTester $I)
-    {
-        $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
-
-        $this->transMismatch($I, $request, 'userid', '1' . $request['userid']); // Another user in credit
-        $this->transMismatch($I, $request, 'currency', 'QQ'); // Another currency in crefit
-        $this->transMismatch($I, $request, 'amount', $request['amount'] + 1); // Another amount in credit
-    }
-
     private function transMismatch(\ApiTester $I, $request, $attr, $value)
     {
         $request[$attr] = $value;
         $request = $this->data->renewHmac($request);
         $I->sendPOST($this->action, $request);
         $this->getResponseFail($I, StatusCode::TRANSACTION_MISMATCH);
+    }
+
+    public function testMismatch(\ApiTester $I)
+    {
+        $request = $this->data->bet();
+        $I->sendPOST($this->action, $request);
+
+        $this->transMismatch($I, $request, 'userid', time() . '_' . Params::CURRENCY);
+        $this->transMismatch($I, $request, 'currency', 'QQ');
+        $this->transMismatch($I, $request, 'amount', $request['amount'] + 1);
     }
 
     /** fail in runtime */
@@ -275,11 +274,11 @@ class NetEntertainmentApiCest
         return $mock;
     }
 
+
     private function getResponseOk(\ApiTester $I, $isTransaction = false)
     {
         $I->seeResponseCodeIs(200);
         $data = $this->responseToArray($I);
-        $I->assertArrayNotHasKey('error', $data);
         $I->assertEquals('OK', $data['status']);
         $I->assertNotNull($data['hmac']);
         if ($isTransaction) {
