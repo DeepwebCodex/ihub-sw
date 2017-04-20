@@ -25,10 +25,7 @@ class AddWithdrawRequest extends BaseRequest
     {
         $prefix = $this->getRequestDataPrefix();
         return [
-            $prefix . 'amount' => 'bail|required',
-            $prefix . 'callerContextId' => 'bail|required|numeric',
-            $prefix . 'contextId' => 'bail|required|numeric',
-            $prefix . 'originatingPid' => 'bail|required|numeric',
+            $prefix . 'accountEntryDetailed.accountEntry.amount' => 'bail|required',
             $prefix . 'partyOriginatingUid' => 'bail|required|numeric',
             $prefix . 'relatedTransUid' => 'bail|required|numeric',
             $prefix . 'sessionToken' => 'bail|required|string',

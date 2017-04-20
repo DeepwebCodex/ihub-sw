@@ -244,7 +244,6 @@ class WirexGamingController extends BaseApiController
             ],
             'callerContextId' => $this->data['callerContextId'],
             'contextId' => $this->data['contextId'],
-            'customerId' => $this->data['customerId'],
             'sourceContextId' => $this->data['sourceContextId'],
         ]);
     }
@@ -335,7 +334,6 @@ class WirexGamingController extends BaseApiController
             ],
             'callerContextId' => $this->data['callerContextId'],
             'contextId' => $this->data['contextId'],
-            'customerId' => $this->data['customerId'],
             'sourceContextId' => $this->data['sourceContextId'],
         ]);
     }
