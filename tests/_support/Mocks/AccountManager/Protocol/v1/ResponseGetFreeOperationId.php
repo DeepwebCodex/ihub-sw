@@ -20,8 +20,11 @@ use Testing\AccountManager\Protocol\v1\ResponseInterface;
 class ResponseGetFreeOperationId implements ResponseInterface
 {
 
-    public function getBase()
+    public function getBase(array $params)
     {
+        if ($params['free_operation_id']) {
+            return $params['free_operation_id'];
+        }
         $default = DefaultParams::get();
         return $default->getUniqueId();
     }
@@ -29,7 +32,7 @@ class ResponseGetFreeOperationId implements ResponseInterface
     public function getProtocol(array $params)
     {
         $params = $this->validation($params);
-        $base = $this->getBase();
+        $base = $this->getBase($params);
         return $base;
     }
 
