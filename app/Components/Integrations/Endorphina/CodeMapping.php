@@ -48,6 +48,7 @@ class CodeMapping extends CodeMappingBase
                 'attribute' => null,
                 'meanings' => []
             ],
+            
         ];
     }
 

@@ -39,7 +39,7 @@ class Deposit extends TransactionProcessor
             }
             $this->request->object_id = $transactionBet->object_id;
         }
-
+        
         return parent::make($lastRecord);
     }
 

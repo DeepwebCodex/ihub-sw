@@ -152,7 +152,7 @@ class EndorphinaApiCest
         $this->isRecord($I, $packet['id'], TransactionRequest::TRANS_WIN);
     }
 
-    public function testWinAmountZero(ApiTester $I)
+    protected function testWinAmountZero(ApiTester $I)
     {
         $this->testBet($I);
         $packet = $this->data->getPacketWin(0);
@@ -240,12 +240,12 @@ class EndorphinaApiCest
                 ])->first();
         $transaction->status = TransactionRequest::STATUS_PENDING;
         $transaction->save();
-        $packet = $this->data->getPacketBet($packetBet['id']);
+        $packet = $this->data->getPacketBet($packetBet['id'], null, null);
         $I->sendPOST('/endorphina/bet/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
-        $balance = $this->data->user->getBalanceInCents() - $packet['amount'];
+        $balance = $this->data->user->getBalanceInCents();
         $I->assertEquals($balance, $data['balance']);
         $this->countRecord($I, $packetBet['id'], TransactionRequest::TRANS_BET, 1);
     }
@@ -260,12 +260,12 @@ class EndorphinaApiCest
                 ])->first();
         $transaction->status = TransactionRequest::STATUS_PENDING;
         $transaction->save();
-        $packet = $this->data->getPacketBet($packetBet['id']);
+        $packet = $this->data->getPacketBet($packetBet['id'], null, null);
         $I->sendPOST('/endorphina/bet/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
-        $balance = $this->data->user->getBalanceInCents() - $packet['amount'];
+        $balance = $this->data->user->getBalanceInCents();
         $I->assertEquals($balance, $data['balance']);
         $this->countRecord($I, $packetBet['id'], TransactionRequest::TRANS_BET, 1);
     }

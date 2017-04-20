@@ -20,7 +20,7 @@ abstract class TransactionProcessor extends BaseSeamlessWalletProcessor implemen
 
     protected function make(Model $lastRecord = null)
     {
-
+        $this->request->comment = json_encode($this->request->getComment()); //overade zeo object id
         $status = is_object($lastRecord) ? $lastRecord->status : null;
 
         switch ($status) {
@@ -53,13 +53,18 @@ abstract class TransactionProcessor extends BaseSeamlessWalletProcessor implemen
                 $this->request->user_id, $this->request->direction, $this->request->object_id, $this->request->service_id);
 
         if (!$operation) {
-            throw new ApiHttpException(500, "Finance error", CodeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
+            throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
         } else if (count($operation) > 1) {
-            throw new ApiHttpException(500, "Finance error, duplicated duplication", CodeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
+            throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
         }
 
         $this->responseData = $operation[0];
         $this->isDuplicate = true;
+    }
+
+    protected function onInsufficientFunds($e)
+    {
+        throw new ApiHttpException(402, null, CodeMapping::getByMeaning(CodeMappingBase::NO_MONEY));
     }
 
 }
