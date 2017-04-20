@@ -62,9 +62,5 @@ abstract class TransactionProcessor extends BaseSeamlessWalletProcessor implemen
         $this->isDuplicate = true;
     }
 
-    protected function onInsufficientFunds($e)
-    {
-        throw new ApiHttpException(402, null, CodeMapping::getByMeaning(CodeMappingBase::NO_MONEY));
-    }
 
 }

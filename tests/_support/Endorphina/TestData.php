@@ -228,4 +228,22 @@ class TestData
         return $data;
     }
 
+    public function getWrongPacketBet()
+    {
+
+ 
+        $data = [
+            'currency' => 'EUR',
+            'player' => (string) $this->userId,
+            'game' => $this->game,
+            'token' => $this->getToken(),
+            'gameId' => $this->gameId,
+            'date' => time(),
+            'amount' => $this->amount
+        ];
+       
+        $data['sign'] = $this->setSignature($data);
+        return $data;
+    }
+
 }

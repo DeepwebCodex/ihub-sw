@@ -12,7 +12,7 @@ class BetRequest extends BaseRequest
      */
     public function rules()
     {
-        return [
+        return array_merge(parent::rules(), [
             'currency' => 'bail|required|string',
             'game' => 'bail|required|string',
             'player' => 'bail|required|string',
@@ -20,7 +20,7 @@ class BetRequest extends BaseRequest
             'date' => 'bail|required|numeric',
             'gameId' => 'bail|required|numeric|min:1',
             'id' => 'bail|required|numeric',
-        ];
+        ]);
     }
 
 }

@@ -180,20 +180,6 @@ class EndorphinaApiCest
         $this->isRecord($I, $packet['id'], TransactionRequest::TRANS_REFUND);
     }
 
-    public function testBetInsufficientFunds(ApiTester $I)
-    {
-        $packet = $this->data->getPacketBet(0, 0);
-        $I->sendPOST('/endorphina/bet/', $packet);
-        $data = $this->getResponseOk($I);
-        $I->assertArrayHasKey('balance', $data);
-        $I->assertArrayHasKey('transactionId', $data);
-        $balance = $this->data->user->getBalanceInCents() - $packet['amount'];
-        $I->assertEquals($balance, $data['balance']);
-        $I->assertGreaterThan(1, $data['transactionId']);
-        $this->isRecord($I, $packet['id'], TransactionRequest::TRANS_BET);
-        return $packet;
-    }
-
     //Exception situations
     public function testRefundWithoutBet(ApiTester $I)
     {
@@ -268,6 +254,22 @@ class EndorphinaApiCest
         $balance = $this->data->user->getBalanceInCents();
         $I->assertEquals($balance, $data['balance']);
         $this->countRecord($I, $packetBet['id'], TransactionRequest::TRANS_BET, 1);
+    }
+    
+    public function testWrongSign(ApiTester $I)
+    {
+        $packet = $this->data->getPacketBet();
+        $packet['sign'] = md5('wrong');
+        $I->sendPOST('/endorphina/bet/', $packet);
+        $this->getResponseFail($I, 401, StatusCode::EXTERNAl_ACCESS_DENIED);
+    }
+    
+    public function testWrongPacket(ApiTester $I)
+    {
+        $packet = $this->data->getWrongPacketBet();
+
+        $I->sendPOST('/endorphina/bet/', $packet);
+        $this->getResponseFail($I, 500, StatusCode::EXTERNAl_INTERNAL_ERROR);
     }
 
 }

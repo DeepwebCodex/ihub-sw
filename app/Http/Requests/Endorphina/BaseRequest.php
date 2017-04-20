@@ -46,8 +46,8 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     public function rules()
     {
         return [
-            'token' => 'bail|required|string|',
-            'sign' => 'bail|required|string|check_sign|',
+            'token' => 'bail|required|string',
+            'sign' => 'bail|required|string|check_sign',
         ];
     }
 
