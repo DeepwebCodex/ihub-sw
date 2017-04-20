@@ -30,19 +30,27 @@ class ResponseGetUserInfo implements ResponseInterface
     {
         $default = DefaultParams::get();
 
-        if (!isset($params['user_id'])) {
+        if (isset($params['user_id'])) {
+            $user_id = $params['user_id'];
+        }else{
             $user_id = $default->user_id;
         }
 
-        if (!isset($params['balance'])) {
+        if (isset($params['balance'])) {
+            $balance = $params['balance'];
+        }else{
             $balance = DefaultParams::AMOUNT_BALANCE;
         }
 
-        if (!isset($params['currency'])) {
+        if (isset($params['currency'])) {
+            $currency = $params['currency'];
+        }else{
             $currency = DefaultParams::CURRENCY;
         }
 
-        if (!isset($params['cashdesk'])) {
+        if (isset($params['cashdesk'])) {
+            $cashdesk = $params['cashdesk'];
+        }else{
             $cashdesk = DefaultParams::CASHDESK_ID;
         }
 
