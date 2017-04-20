@@ -22,7 +22,7 @@ class FundistTemplate implements IExceptionTemplate
         $view = [
             'error' => $error['message'] ?? ''
         ];
-        $view['hmac'] = (new Hmac($view, $item['integration'] ?? 'netEntertainment'))->get();
+        $view['hmac'] = (new Hmac($view, Hmac::$INTEGRATION))->get();
 
         return $view;
     }
