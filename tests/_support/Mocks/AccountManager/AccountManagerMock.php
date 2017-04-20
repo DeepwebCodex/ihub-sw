@@ -87,7 +87,7 @@ class AccountManagerMock extends BaseMock
             $userParams = $this->paramsGetUserInfo;
         }
 
-        if (!$freeOperationId) {
+        if (!$freeOperationId && $this->paramsGetFreeOperationId) {
             $paramsGetFreeOperationId = $this->paramsGetFreeOperationId;
         } else {
             $paramsGetFreeOperationId = [
@@ -95,7 +95,7 @@ class AccountManagerMock extends BaseMock
             ];
         }
 
-        if (!$freeCardId) {
+        if (!$freeCardId && $this->paramsGetFreeCardId) {
             $paramsGetFreeCardId = $this->paramsGetFreeCardId;
         } else {
             $paramsGetFreeCardId = [
