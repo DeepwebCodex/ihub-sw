@@ -14,9 +14,9 @@ variables:
   HTTP_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   HTTPS_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
-  CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/icms-infrastructure:php-fpm-master
-  CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/icms-infrastructure:php-fpm-dev
-  CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub:$CI_BUILD_REF_NAME
+  CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-master
+  CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-dev
+  CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub-grid/ihub-sw:$CI_BUILD_REF_NAME
 
 
 #====================== templates ======================#
@@ -121,6 +121,7 @@ test_on_dev_conf_prod_env_prod:
 
 compile_dev:
   <<: *template_dev
+  <<: *template_add_ssh_auth
   stage: compile_project
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   script:
@@ -171,6 +172,7 @@ build_docker_image_dev:
 build_docker_image_prod:
   <<: *template_build_docker_image_prod
   only:
+    - master
     - tags
 
 deploy_to_servers_dev:
@@ -194,6 +196,7 @@ manual_deploy_to_system_servers_prod:
     - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
   only:
     - tags
+    - master
   when: manual
 
 manual_deploy_to_all_servers_prod:

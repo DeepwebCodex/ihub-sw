@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Components\Transactions\Strategies\NetEntertainment;
+namespace App\Components\Transactions\Strategies\Fundist;
 
-use App\Components\Integrations\NetEntertainment\CodeMapping;
-use App\Components\Integrations\NetEntertainment\StatusCode;
+use App\Components\Integrations\Fundist\CodeMapping;
+use App\Components\Integrations\Fundist\StatusCode;
 use App\Components\Transactions\BaseSeamlessWalletProcessor;
 use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
 use App\Components\Transactions\TransactionRequest;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @property  TransactionRequest $request
  */
-class ProcessNetEntertainment extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
+class ProcessFundist extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
     protected $codeMapping = CodeMapping::class;
 
