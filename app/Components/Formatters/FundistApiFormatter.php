@@ -5,7 +5,7 @@ namespace App\Components\Formatters;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 
-class NetEntertainmentApiFormatter extends JsonApiFormatter
+class FundistApiFormatter extends JsonApiFormatter
 {
     /**
      * @param \Exception $exception
