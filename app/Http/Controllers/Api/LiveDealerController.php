@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-class NetEntertainmentController extends FundistController
+class LiveDealerController extends FundistController
 {
     protected function setIntegration()
     {
-        return 'netEntertainment';
+        return 'liveDealer';
     }
 }

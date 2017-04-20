@@ -64,7 +64,7 @@ class MrSlottyBorderlineApiCest
         ksort($request);
 
         $request = array_merge($request, [
-            'hash' => hash_hmac("sha256", http_build_query($request), $this->options['secret'])
+            'hash' => hash_hmac("sha256", http_build_query($request), $this->options['salt'])
         ]);
 
         $I->sendGET('/mrslotty', $request);
@@ -103,7 +103,7 @@ class MrSlottyBorderlineApiCest
         ksort($request);
 
         $request = array_merge($request, [
-            'hash' => hash_hmac("sha256", http_build_query($request), $this->options['secret'])
+            'hash' => hash_hmac("sha256", http_build_query($request), $this->options['salt'])
         ]);
 
         $I->sendGET('/mrslotty', $request);
@@ -140,7 +140,7 @@ class MrSlottyBorderlineApiCest
         ksort($request);
 
         $request = array_merge($request, [
-            'hash' => hash_hmac("sha256", http_build_query($request), $this->options['secret'])
+            'hash' => hash_hmac("sha256", http_build_query($request), $this->options['salt'])
         ]);
 
         $I->sendGET('/mrslotty', $request);
@@ -171,7 +171,7 @@ class MrSlottyBorderlineApiCest
         ksort($request);
 
         $request = array_merge($request, [
-            'hash' => hash_hmac("sha256", http_build_query($request), $this->options['secret'])
+            'hash' => hash_hmac("sha256", http_build_query($request), $this->options['salt'])
         ]);
 
         $I->sendGET('/mrslotty', $request);

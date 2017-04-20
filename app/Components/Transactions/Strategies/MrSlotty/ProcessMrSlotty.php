@@ -17,6 +17,9 @@ use iHubGrid\SeamlessWalletCore\Models\Transactions;
  */
 class ProcessMrSlotty extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
+
+    protected $codeMapping = CodeMapping::class;
+
     /**
      * @param TransactionRequest $request
      * @return array|null

@@ -2,12 +2,12 @@
 
 namespace App\Exceptions\Api\Templates;
 
-use App\Components\Integrations\NetEntertainment\CodeMapping;
-use App\Components\Integrations\NetEntertainment\StatusCode;
-use App\Components\Integrations\NetEntertainment\Hmac;
+use App\Components\Integrations\Fundist\CodeMapping;
+use App\Components\Integrations\Fundist\StatusCode;
+use App\Components\Integrations\Fundist\Hmac;
 use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
-class NetEntertainmentTemplate implements IExceptionTemplate
+class FundistTemplate implements IExceptionTemplate
 {
     /**
      * @param array $item
@@ -23,7 +23,7 @@ class NetEntertainmentTemplate implements IExceptionTemplate
         $view = [
             'error' => $error['message'] ?? ''
         ];
-        $view['hmac'] = (new Hmac($view))->get();
+        $view['hmac'] = (new Hmac($view, Hmac::$INTEGRATION))->get();
 
         return $view;
     }
