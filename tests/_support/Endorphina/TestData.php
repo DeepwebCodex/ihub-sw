@@ -87,7 +87,7 @@ class TestData
         return $data;
     }
 
-    public function getPacketBet(int $betId = 0)
+    public function getPacketBet(int $betId = 0, $userAmount = null)
     {
 
         $userBalance = DefaultParams::AMOUNT_BALANCE;
@@ -112,18 +112,26 @@ class TestData
             'deposit_rest' => $userBalance - ($this->amount / 100),
             'amount' => ($this->amount / 100)
         ];
+        if ($userAmount !== null) {
+            $userParams = ['balance' => $userAmount];
+        } else {
+            $userParams = [];
+        }
         $accoutManagerMock = new AccountManagerMock($this->protocol, $this->I);
-        $accoutManagerMock->getMockAccountManager($paramsTransactions);
+        $accoutManagerMock->getMockAccountManager($paramsTransactions, $userParams);
         $this->user = new TestUser();
 
         $data['sign'] = $this->setSignature($data);
         return $data;
     }
 
-    public function getPacketWin()
+    public function getPacketWin($amount = null)
     {
         $userBalance = DefaultParams::AMOUNT_BALANCE;
         $userCurrency = DefaultParams::CURRENCY;
+        if ($amount === null) {
+            $amount = $this->amount;
+        }
         $data = [
             'currency' => $userCurrency,
             'player' => (string) $this->userId,
@@ -132,14 +140,14 @@ class TestData
             'gameId' => $this->gameId,
             'date' => time(),
             'id' => $this->rand(),
-            'amount' => $this->amount
+            'amount' => $amount
         ];
         $paramsTransactions = [
             'object_id' => $this->rand(),
             'operation_id' => $this->rand(),
             'service_id' => config('integrations.endorphina.service_id'),
             'deposit_rest' => $userBalance + ($this->amount / 100),
-            'amount' => ($this->amount / 100),
+            'amount' => ($amount / 100),
             'move' => 0
         ];
         $accoutManagerMock = new AccountManagerMock($this->protocol, $this->I);

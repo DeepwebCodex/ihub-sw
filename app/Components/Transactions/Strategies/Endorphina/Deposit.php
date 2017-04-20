@@ -25,6 +25,10 @@ class Deposit extends TransactionProcessor
     protected function process(TransactionRequest $request)
     {
         $this->request = $request;
+        if ($this->request->amount == 0) {
+            return $this->processZeroAmountTransaction();
+        }
+
         $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
 
         if (!$lastRecord) {

@@ -16,7 +16,7 @@ class RefundRequest extends BaseRequest
             'currency' => 'bail|required|string',
             'game' => 'bail|required|string',
             'player' => 'bail|required|string',
-            'amount' => 'bail|required|numeric',
+            'amount' => 'bail|required|numeric|min:1',
             'date' => 'bail|required|numeric',
             'gameId' => 'bail|required|numeric|min:1',
             'id' => 'bail|required|numeric',

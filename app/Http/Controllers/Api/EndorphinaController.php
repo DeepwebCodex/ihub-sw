@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\Formatters\JsonApiFormatter;
+use App\Components\Formatters\EndorphinaApiFormatter;
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\Game;
 use App\Components\Integrations\Endorphina\StatusCode;
@@ -34,7 +34,7 @@ class EndorphinaController extends BaseApiController
 
     public static $exceptionTemplate = EndorphinaTemplate::class;
 
-    public function __construct(JsonApiFormatter $formatter)
+    public function __construct(EndorphinaApiFormatter $formatter)
     {
         parent::__construct($formatter);
         $this->options = config('integrations.endorphina');
