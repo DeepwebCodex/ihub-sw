@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Middleware\NetEntertainment;
+namespace App\Http\Middleware\Fundist;
 
-use App\Components\Integrations\NetEntertainment\ApiMethod;
+use App\Components\Integrations\Fundist\ApiMethod;
 
 /**
  * @package App\Http\Middleware
