@@ -16,11 +16,46 @@ class AccountManagerMock extends BaseMock
 
     protected $protocol;
     protected $currentMock = AccountManager::class;
+    protected $paramsCreateTransaction = [];
+    protected $paramsCommitTransaction = [];
+    protected $paramsGetUserInfo = [];
+    protected $paramsGetFreeOperationId = [];
+    protected $paramsGetFreeCardId = [];
 
-    function __construct(ProtocolInterface $protocol, $I = '')
+    public function __construct(ProtocolInterface $protocol, $I = '')
     {
         parent::__construct($I);
         $this->protocol = $protocol;
+        return $this;
+    }
+
+    function setParamsCreateTransaction($paramsCreateTransaction)
+    {
+        $this->paramsCreateTransaction = $paramsCreateTransaction;
+        return $this;
+    }
+
+    function setParamsCommitTransaction($paramsCommitTransaction)
+    {
+        $this->paramsCommitTransaction = $paramsCommitTransaction;
+        return $this;
+    }
+
+    function setParamsGetUserInfo($paramsGetUserInfo)
+    {
+        $this->paramsGetUserInfo = $paramsGetUserInfo;
+        return $this;
+    }
+
+    function setParamsGetFreeOperationId($paramsGetFreeOperationId)
+    {
+        $this->paramsGetFreeOperationId = $paramsGetFreeOperationId;
+        return $this;
+    }
+
+    function setParamsGetFreeCardId($paramsGetFreeCardId)
+    {
+        $this->paramsGetFreeCardId = $paramsGetFreeCardId;
         return $this;
     }
 
@@ -34,19 +69,46 @@ class AccountManagerMock extends BaseMock
      * 'amount' => ($this->data->getAmount() / 100) * -1
      * ];
      */
-    public function getMockAccountManager(array $paramsTransactions, array $userParams = [], int $freeOperationId = 0,
-            int $freeCardId = 0)
+    public function getMockAccountManager(array $paramsTransactions = [], array $userParams = [],
+            int $freeOperationId = 0, int $freeCardId = 0)
     {
+        if (!$paramsTransactions) {
+            $paramsTransactions = $this->paramsCreateTransaction;
+            if ($this->paramsCommitTransaction) {
+                $paramsCommitTransactions = $this->paramsCommitTransaction;
+            } else {
+                $paramsCommitTransactions = $paramsTransactions;
+            }
+        } else {
+            $paramsCommitTransactions = $paramsTransactions;
+        }
+
+        if (!$userParams) {
+            $userParams = $this->paramsGetUserInfo;
+        }
+
+        if (!$freeOperationId) {
+            $paramsGetFreeOperationId = $this->paramsGetFreeOperationId;
+        } else {
+            $paramsGetFreeOperationId = [
+                'free_operation_id' => $freeOperationId
+            ];
+        }
+
+        if (!$freeCardId) {
+            $paramsGetFreeCardId = $this->paramsGetFreeCardId;
+        } else {
+            $paramsGetFreeCardId = [
+                'free_card_id' => $freeCardId
+            ];
+        }
+
 
         return $this->createTransaction($paramsTransactions)
-                        ->commitTransaction($paramsTransactions)
+                        ->commitTransaction($paramsCommitTransactions)
                         ->getUserInfo($userParams)
-                        ->getFreeOperationId([
-                            'free_operation_id' => $freeOperationId
-                        ])
-                        ->getFreeCardId([
-                            'free_card_id' => $freeCardId
-                        ])
+                        ->getFreeOperationId($paramsGetFreeOperationId)
+                        ->getFreeCardId($paramsGetFreeCardId)
                         ->getMock();
     }
 
