@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Components\Transactions\TransactionRequest;
 use Illuminate\Database\Eloquent\Model;
 
 class DriveMediaAristocratProdObjectIdMap extends Model

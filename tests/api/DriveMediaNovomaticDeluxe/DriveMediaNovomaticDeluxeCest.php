@@ -3,8 +3,8 @@
 namespace api\NovomaticDeluxe;
 
 use ApiTester;
-use App\Components\Transactions\TransactionRequest;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use DriveMedia\NovomaticDeluxe\TestData;
 use DriveMedia\TestUser;
 use function GuzzleHttp\json_decode;

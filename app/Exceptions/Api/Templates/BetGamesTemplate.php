@@ -5,7 +5,8 @@ namespace App\Exceptions\Api\Templates;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\StatusCode;
-use App\Components\Transactions\TransactionHelper;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class BetGamesTemplate implements IExceptionTemplate
 {

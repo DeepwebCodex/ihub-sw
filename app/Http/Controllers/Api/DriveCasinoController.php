@@ -5,16 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Components\Integrations\DriveMedia\CodeMapping;
 use App\Components\Integrations\DriveMedia\DriveCasino\DriveCasinoHelper;
 use App\Components\Transactions\Strategies\DriveMedia\ProcessDriveCasino;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\DriveMediaTemplate;
 use App\Http\Requests\DriveMedia\DriveCasino\BalanceRequest;
 use App\Http\Requests\DriveMedia\DriveCasino\PlayRequest;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Components\Formatters\JsonApiFormatter;
+use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 
 class DriveCasinoController extends BaseApiController
 {

@@ -10,7 +10,7 @@ use App\Components\Integrations\VirtualSports\Services\CategoryService;
 use App\Components\Integrations\VirtualSports\Services\EventService;
 use App\Components\Integrations\VirtualSports\Services\TournamentService;
 use App\Components\Traits\ConfigTrait;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Category;
 use App\Models\Line\Event;
 use App\Models\Line\Market;

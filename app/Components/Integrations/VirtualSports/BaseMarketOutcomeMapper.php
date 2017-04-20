@@ -9,7 +9,7 @@
 namespace App\Components\Integrations\VirtualSports;
 
 
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Models\Line\EventParticipant;
 use App\Models\Line\MarketTemplate;
 use App\Models\Line\OutcomeType;
@@ -126,7 +126,7 @@ abstract class BaseMarketOutcomeMapper
             return null;
         }
 
-        $numParticipant = (int) $this->outcomeType->participant_num;
+        $numParticipant = (int) data_get($this->outcome, 'ParticipantRequire', $this->outcomeType->participant_num);
 
         if($numParticipant === null) {
             if ($this->isParticipantRequired($this->marketTemplate->market_type_id) === false) {

@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\BetGames;
 
-use App\Components\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 
 class Signature
 {

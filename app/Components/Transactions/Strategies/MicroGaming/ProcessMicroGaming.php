@@ -2,15 +2,15 @@
 
 namespace App\Components\Transactions\Strategies\MicroGaming;
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 use App\Components\Integrations\MicroGaming\CodeMapping;
-use App\Components\Transactions\BaseSeamlessWalletProcessor;
-use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
+use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Models\MicroGamingObjectIdMap;
 use App\Models\MicroGamingProdObjectIdMap;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 
 /**
  * @property  TransactionRequest $request

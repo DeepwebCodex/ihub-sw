@@ -8,6 +8,7 @@
 
 namespace App\Components\Formatters;
 
+use iHubGrid\ErrorHandler\Formatters\BaseApiFormatter;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 

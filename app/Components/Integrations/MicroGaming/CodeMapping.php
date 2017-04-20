@@ -9,7 +9,7 @@
 namespace App\Components\Integrations\MicroGaming;
 
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 
 class CodeMapping extends CodeMappingBase
 {

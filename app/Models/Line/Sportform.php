@@ -2,8 +2,6 @@
 
 namespace App\Models\Line;
 
-use Illuminate\Database\Query\JoinClause;
-
 /**
  * Class Sportform
  * @package App\Models\Line
@@ -33,7 +31,6 @@ class Sportform extends BaseLineModel
     /**
      * @param $sportId
      * @return array
-     * @throws \App\Exceptions\Api\VirtualBoxing\ErrorException
      */
     public static function getSportFormIds(int $sportId):array
     {

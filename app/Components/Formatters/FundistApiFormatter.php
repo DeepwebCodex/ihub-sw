@@ -2,6 +2,7 @@
 
 namespace App\Components\Formatters;
 
+use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 

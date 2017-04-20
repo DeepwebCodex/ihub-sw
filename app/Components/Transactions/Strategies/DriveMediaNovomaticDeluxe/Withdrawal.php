@@ -2,13 +2,12 @@
 
 namespace App\Components\Transactions\Strategies\DriveMediaNovomaticDeluxe;
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\CodeMapping;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Models\CommonSerial;
-use App\Models\Transactions;
-use Illuminate\Http\Request;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 
 /**
  * @property  TransactionRequest $request

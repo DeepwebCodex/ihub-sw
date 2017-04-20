@@ -4,8 +4,7 @@ namespace App\Http\Requests\Validation;
 
 use App\Components\Integrations\MrSlotty\CodeMapping;
 use Illuminate\Support\Facades\Request;
-use App\Exceptions\Api\ApiHttpException;
-use App\Components\Integrations\MrSlotty\StatusCode;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 class MrSlottyValidation
 {

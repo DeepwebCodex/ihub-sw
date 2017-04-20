@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\GenericApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;

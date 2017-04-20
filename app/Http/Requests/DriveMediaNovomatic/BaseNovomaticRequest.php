@@ -3,9 +3,9 @@
 namespace App\Http\Requests\DriveMediaNovomatic;
 
 use App\Components\Integrations\DriveMediaNovomatic\CodeMapping;
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiRequest;
-use App\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
 
 /**
@@ -24,7 +24,7 @@ class BaseNovomaticRequest extends ApiRequest implements ApiValidationInterface
     }
 
     /**
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws ApiHttpException
      */
     public function failedAuthorization()
     {

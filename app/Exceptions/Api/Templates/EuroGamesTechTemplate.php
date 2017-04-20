@@ -11,6 +11,7 @@ namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use \App\Components\Integrations\EuroGamesTech\StatusCode;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class EuroGamesTechTemplate implements IExceptionTemplate
 {

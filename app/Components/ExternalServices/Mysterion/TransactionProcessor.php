@@ -2,8 +2,8 @@
 
 namespace App\Components\ExternalServices\Mysterion;
 
-use App\Components\Transactions\TransactionRequest;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Spatie\Fractal\ArraySerializer;
 
 /**

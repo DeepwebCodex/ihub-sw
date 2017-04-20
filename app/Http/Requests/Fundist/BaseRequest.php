@@ -2,16 +2,15 @@
 
 namespace App\Http\Requests\Fundist;
 
-use App\Components\AppLog;
 use App\Components\Integrations\Fundist\ApiMethod;
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\Hmac;
 use App\Components\Integrations\Fundist\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiRequest;
-use App\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 

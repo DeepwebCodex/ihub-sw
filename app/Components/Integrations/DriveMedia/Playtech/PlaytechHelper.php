@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\DriveMedia\Playtech;
 
-use App\Components\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 
 class PlaytechHelper
 {

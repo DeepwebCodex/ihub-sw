@@ -8,13 +8,6 @@
 
 namespace App\Components\Integrations\VirtualSports\Interfaces;
 
-use App\Components\Integrations\InspiredVirtualGaming\SportMapping\FootballDataMap;
-use App\Components\Integrations\InspiredVirtualGaming\SportMapping\HorsesDataMap;
-use App\Components\Integrations\InspiredVirtualGaming\SportMapping\NumbersDataMap;
-use App\Components\Integrations\InspiredVirtualGaming\SportMapping\SportDataMapInterface;
-use App\Components\Integrations\InspiredVirtualGaming\SportMapping\TennisDataMap;
-use Stringy\StaticStringy as S;
-
 interface DataMapperInterface
 {
     public function getEventType();
