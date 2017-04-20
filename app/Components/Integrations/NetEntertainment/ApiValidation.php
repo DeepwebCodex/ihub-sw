@@ -6,7 +6,7 @@ namespace App\Components\Integrations\NetEntertainment;
 
 
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\NetEntertainment\BaseRequest;
+use App\Http\Requests\Fundist\BaseRequest;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\Accounting\Users\IntegrationUser;
 use Symfony\Component\HttpFoundation\Response;
