@@ -4,10 +4,11 @@ namespace App\Components\Integrations\EuroGamesTech;
 
 
 use App\Components\Transactions\Strategies\EuroGamesTech\ProcessEuroGamesTech;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionResponse;
 
 class EgtHelper
 {
@@ -31,7 +32,7 @@ class EgtHelper
     /**
      * @param TransactionRequest $transactionRequest
      * @param IntegrationUser $user
-     * @return \App\Components\Transactions\TransactionResponse
+     * @return TransactionResponse
      */
     public static function handleTransaction($transactionRequest, $user){
 

@@ -1,5 +1,7 @@
 <?php
 
+use iHubGrid\Accounting\Users\IntegrationUser;
+
 class MrSlottyBorderlineApiCest
 {
 
@@ -15,7 +17,7 @@ class MrSlottyBorderlineApiCest
 
     public function testMethodWrongHash(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'action'   => 'balance',
@@ -42,7 +44,7 @@ class MrSlottyBorderlineApiCest
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'action'   => 'win',
@@ -79,7 +81,7 @@ class MrSlottyBorderlineApiCest
 
     public function testMethodBetWin(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'action'   => 'bet_win',
@@ -116,7 +118,7 @@ class MrSlottyBorderlineApiCest
 
     public  function testMethodBetWin2(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $round_id = (string)time() . random_int(0, 9);
 

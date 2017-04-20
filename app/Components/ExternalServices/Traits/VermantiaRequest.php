@@ -6,8 +6,8 @@ namespace App\Components\ExternalServices\Traits;
  * Request handling for account ROH post API
  */
 
-use App\Exceptions\Api\GenericApiHttpException;
-use App\Facades\AppLog;
+use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
+use iHubGrid\ErrorHandler\Facades\AppLog;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Response;
 use Nathanmac\Utilities\Parser\Facades\Parser;

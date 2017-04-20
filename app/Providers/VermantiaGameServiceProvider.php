@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Components\ExternalServices\AccountManager;
-
 use App\Components\ExternalServices\Vermantia\VermantiaGameService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -21,7 +19,7 @@ class VermantiaGameServiceProvider extends ServiceProvider
     /**
      * Register the service provider.
      *
-     * @return AccountManager
+     * @return VermantiaGameService
      */
     public function register()
     {

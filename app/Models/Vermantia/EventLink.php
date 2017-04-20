@@ -8,7 +8,6 @@
 
 namespace App\Models\Vermantia;
 
-use App\Models\Line\Event;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
 

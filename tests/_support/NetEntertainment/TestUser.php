@@ -2,7 +2,7 @@
 
 namespace NetEntertainment;
 
-use \App\Components\Users\IntegrationUser;
+use iHubGrid\Accounting\Users\IntegrationUser;
 
 class TestUser
 {

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\GameSession;
 
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Request;
 
@@ -15,7 +15,7 @@ class BaseGameSessionRequest extends ApiRequest
 {
     /**
      * @return bool
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws ApiHttpException
      */
     public function authorize()
     {

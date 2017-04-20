@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\DriveMedia;
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 
 class CodeMapping extends CodeMappingBase
 {

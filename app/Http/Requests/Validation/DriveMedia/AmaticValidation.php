@@ -4,7 +4,7 @@ namespace App\Http\Requests\Validation\DriveMedia;
 
 use Illuminate\Support\Facades\Request;
 use App\Components\Integrations\DriveMedia\StatusCode;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 class AmaticValidation
 {

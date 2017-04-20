@@ -8,6 +8,8 @@
 
 namespace App\Models\VirtualBoxing;
 
+use Illuminate\Database\Query\JoinClause;
+
 /**
  * Class EventLink
  * @package App\Models\VirtualBoxing

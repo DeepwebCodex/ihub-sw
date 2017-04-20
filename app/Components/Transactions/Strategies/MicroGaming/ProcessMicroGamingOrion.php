@@ -3,8 +3,8 @@
 namespace App\Components\Transactions\Strategies\MicroGaming;
 
 use App\Components\Integrations\MicroGaming\CodeMapping;
-use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
-use App\Components\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 
 /**
  * @property  TransactionRequest $request

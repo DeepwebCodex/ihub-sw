@@ -5,7 +5,7 @@ namespace App\Components\Integrations\VirtualBox;
 
 use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
 use App\Components\Integrations\VirtualSports\Interfaces\EventProcessorInterface;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Models\VirtualBoxing\EventLink;
 
 class EventProcessor extends \App\Components\Integrations\VirtualSports\EventProcessor implements EventProcessorInterface

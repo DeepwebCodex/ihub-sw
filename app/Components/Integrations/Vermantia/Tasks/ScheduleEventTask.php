@@ -13,7 +13,7 @@ use iHubGrid\DynamicScheduler\Exceptions\FailedTaskException;
 
 final class ScheduleEventTask extends BaseSchedulerTask
 {
-    private $retries = 3;
+    private $retries = 50;
     private $eventData;
 
     public function __construct(array $eventData)

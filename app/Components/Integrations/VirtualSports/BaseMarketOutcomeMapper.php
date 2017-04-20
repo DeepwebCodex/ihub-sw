@@ -9,7 +9,7 @@
 namespace App\Components\Integrations\VirtualSports;
 
 
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Models\Line\EventParticipant;
 use App\Models\Line\MarketTemplate;
 use App\Models\Line\OutcomeType;

@@ -4,12 +4,11 @@ namespace App\Http\Requests\DriveMediaNovomaticDeluxe;
 
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\StatusCode;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiRequest;
-use App\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
-use function app;
 use function array_get;
 
 class BaseRequest extends ApiRequest implements ApiValidationInterface {

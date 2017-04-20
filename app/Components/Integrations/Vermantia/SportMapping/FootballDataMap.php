@@ -5,7 +5,6 @@ namespace App\Components\Integrations\Vermantia\SportMapping;
 use App\Components\Integrations\VirtualSports\Interfaces\SportDataMapInterface;
 use App\Components\Integrations\VirtualSports\BaseSportDataMap;
 use App\Models\Line\Participant;
-use Carbon\Carbon;
 
 class FootballDataMap extends BaseSportDataMap implements SportDataMapInterface
 {

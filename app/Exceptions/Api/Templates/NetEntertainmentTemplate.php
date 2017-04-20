@@ -5,6 +5,7 @@ namespace App\Exceptions\Api\Templates;
 use App\Components\Integrations\NetEntertainment\CodeMapping;
 use App\Components\Integrations\NetEntertainment\StatusCode;
 use App\Components\Integrations\NetEntertainment\Hmac;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class NetEntertainmentTemplate implements IExceptionTemplate
 {

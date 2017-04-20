@@ -1,5 +1,7 @@
 <?php
 
+use iHubGrid\Accounting\Users\IntegrationUser;
+
 class MrSlottyApiCest
 {
     private $options;
@@ -14,7 +16,7 @@ class MrSlottyApiCest
 
     public function testMethodBalance(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'action'   => 'balance',
@@ -39,7 +41,7 @@ class MrSlottyApiCest
 
     public function testMethodBet(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'action'   => 'bet',

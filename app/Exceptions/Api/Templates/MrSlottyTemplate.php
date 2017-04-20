@@ -3,6 +3,7 @@
 namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\MrSlotty\CodeMapping;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class MrSlottyTemplate implements IExceptionTemplate
 {
@@ -10,6 +11,7 @@ class MrSlottyTemplate implements IExceptionTemplate
      * @param array $item
      * @param $statusCode
      * @param $isApiException
+     * @return array
      */
     public function mapping($item, $statusCode, $isApiException)
     {

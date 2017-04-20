@@ -4,10 +4,11 @@
 namespace App\Components\Integrations\NetEntertainment;
 
 
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
+
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\NetEntertainment\BaseRequest;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\Accounting\Users\IntegrationUser;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiValidation

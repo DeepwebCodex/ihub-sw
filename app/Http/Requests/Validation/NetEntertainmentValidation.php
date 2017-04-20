@@ -5,7 +5,7 @@ namespace App\Http\Requests\Validation;
 use App\Components\Integrations\NetEntertainment\ApiMethod;
 use App\Components\Integrations\NetEntertainment\Hmac;
 use App\Components\Integrations\NetEntertainment\StatusCode;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Request;
 

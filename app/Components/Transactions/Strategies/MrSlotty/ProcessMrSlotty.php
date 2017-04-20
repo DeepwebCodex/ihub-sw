@@ -4,12 +4,12 @@ namespace App\Components\Transactions\Strategies\MrSlotty;
 
 
 use App\Components\Integrations\MrSlotty\StatusCode;
-use App\Components\Transactions\BaseSeamlessWalletProcessor;
-use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
-use App\Components\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
+use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use App\Components\Integrations\MrSlotty\CodeMapping;
-use App\Exceptions\Api\ApiHttpException;
-use App\Models\Transactions;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 
 /**
  * Class ProcessMrSlotty

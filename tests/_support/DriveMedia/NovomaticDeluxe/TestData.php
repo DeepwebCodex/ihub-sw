@@ -4,8 +4,7 @@ namespace DriveMedia\NovomaticDeluxe;
 
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\BetInfo;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\Sign;
-use App\Components\Users\IntegrationUser;
-use Carbon\Carbon;
+use iHubGrid\Accounting\Users\IntegrationUser;
 use DriveMedia\TestUser;
 use function GuzzleHttp\json_encode;
 

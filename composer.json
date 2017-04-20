@@ -8,6 +8,18 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/dynamic-scheduler.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/error-handler.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git"
         }
     ],
     "require": {
@@ -20,7 +32,10 @@
         "spatie/laravel-fractal": "^1.9",
         "danielstjules/stringy": "~2.3",
         "doctrine/dbal": "^2.5",
-        "ihub-grid/packages/dynamic-scheduler": "~1.0"
+        "ihub-grid/packages/dynamic-scheduler": "~1.0",
+        "ihub-grid/packages/accounting": "~1.0",
+        "ihub-grid/packages/error-handler": "~1.0",
+        "ihub-grid/packages/seamless-wallet-core": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

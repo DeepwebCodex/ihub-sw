@@ -4,7 +4,7 @@ namespace App\Http\Requests\Validation\DriveMedia;
 
 use App\Components\Integrations\DriveMediaNovomatic\SignatureMaker;
 use App\Components\Integrations\DriveMediaNovomatic\StatusCode;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Request;
 
 /**
@@ -19,7 +19,7 @@ class NovomaticValidation
      * @param $parameters
      * @param $validator
      * @return bool
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws ApiHttpException
      */
     public function validateSign($attribute, $value, $parameters, $validator): bool
     {

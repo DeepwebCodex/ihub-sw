@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     'logger' => [
         'default' => env('LOG_DRIVER', null),
         'connections' => [

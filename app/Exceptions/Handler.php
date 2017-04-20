@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-use App\Exceptions\Api\Traits\ApiHandlerTrait;
-use App\Facades\AppLog;
+use iHubGrid\ErrorHandler\Exceptions\Api\Traits\ApiHandlerTrait;
+use iHubGrid\ErrorHandler\Facades\AppLog;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -38,49 +38,8 @@ class Handler extends ExceptionHandler
         if ($this->shouldntReport($exception)) {
             return;
         }
-
-        try {
-            $logger = app('AppLog');
-        } catch (Exception $ex) {
-            throw $exception; // throw the original exception
-        }
-
-        $errorThrownBy = $this->composeContextFromTrace($exception->getTrace());
-
-        $logger->error(
-            collect([
-                $exception->getMessage(),
-                json_encode($exception->getTrace())
-            ]),
-            $errorThrownBy['node'],
-            $errorThrownBy['module'],
-            $errorThrownBy['line']
-        );
-    }
-
-    /**
-     * @param $trace
-     * @return array
-     */
-    private function composeContextFromTrace($trace)
-    {
-        $trace = array_filter($trace, function ($elem){
-            if(isset($elem['class'])) {
-                return ($elem['class'] !== __CLASS__);
-            }
-
-            return false;
-        });
-
-        $trace = array_values($trace);
-
-        list($traceLineInfo) = $trace;
-
-        $node = $traceLineInfo['class'] ?? '';
-        $module = $traceLineInfo['function'] ?? '';
-        $line = $traceLineInfo['line'] ?? '';
-
-        return compact('node', 'module', 'line');
+        
+        $this->reportWithLogger($exception);
     }
 
     /**

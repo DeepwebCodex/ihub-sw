@@ -7,7 +7,7 @@ use App\Components\Integrations\MicroGaming\Orion\CommitRollbackProcessor;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetCommitQueueData;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
-use App\Components\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use App\Http\Requests\Validation\Orion\CommitValidation;
 use App\Http\Requests\Validation\Orion\ManualValidation;
 use Illuminate\Console\Command;

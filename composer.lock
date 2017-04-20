@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ad5f589b10d8d1e112021bc141e33157",
-    "content-hash": "5c46c7cd0720a6d876c54444870bde05",
+    "hash": "2e7d418bcf44b3c0649e791eceef0994",
+    "content-hash": "27d631ff3f0a82b23715a60fcdfffa0f",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -812,12 +812,56 @@
             "time": "2017-03-20 17:10:46"
         },
         {
+            "name": "ihub-grid/packages/accounting",
+            "version": "1.0.02",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git",
+                "reference": "ff8a127e46467321e3950a4f7bcdfa527ca3237d"
+            },
+            "require": {
+                "ihub-grid/packages/error-handler": "~1.0",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
+                "kozz/laravel-guzzle-provider": "~6.0",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iHubGrid\\Accounting\\": "src/"
+                }
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "php artisan vendor:publish --tag=config --provider=\"iHubGrid\\Accounting\\AccountManagerServiceProvider\""
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Integrations team",
+                    "email": "author_email",
+                    "homepage": "ihub.favbet.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5.* accounting",
+            "homepage": "https://gitlab.favorit/integrations/ihub-grid/packages/accounting",
+            "keywords": [
+                "accounting",
+                "ihub-grid"
+            ],
+            "time": "2017-04-19 12:07:44"
+        },
+        {
             "name": "ihub-grid/packages/dynamic-scheduler",
-            "version": "1.0.3",
+            "version": "1.0.32",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/dynamic-scheduler.git",
-                "reference": "4540ee70028ed849f98cdce3b117d464a92a7f75"
+                "reference": "9e6193675209c42a5a2898827ebccadbcb35b7ce"
             },
             "require": {
                 "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
@@ -851,7 +895,99 @@
                 "dynamic-scheduler",
                 "ihub-grid"
             ],
-            "time": "2017-04-18 12:26:47"
+            "time": "2017-04-20 09:41:50"
+        },
+        {
+            "name": "ihub-grid/packages/error-handler",
+            "version": "1.0.06",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.favorit:integrations/ihub-grid/packages/error-handler.git",
+                "reference": "01da812435e389e301686a2393b6da0e5aecf7bc"
+            },
+            "require": {
+                "danielstjules/stringy": "~2.3",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
+                "nathanmac/parser": "4.*",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iHubGrid\\ErrorHandler\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "php artisan vendor:publish --tag=config --provider=\"iHubGrid\\ErrorHandler\\ErrorHandlerServiceProvider\""
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Integrations team",
+                    "email": "author_email",
+                    "homepage": "ihub.favbet.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5.* error-handler",
+            "homepage": "https://gitlab.favorit/integrations/ihub-grid/packages/error-handler",
+            "keywords": [
+                "error-handler",
+                "ihub-grid"
+            ],
+            "time": "2017-04-20 09:04:56"
+        },
+        {
+            "name": "ihub-grid/packages/seamless-wallet-core",
+            "version": "1.0.01",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git",
+                "reference": "a32476f4f26b516c667c2daad764cf094725a936"
+            },
+            "require": {
+                "danielstjules/stringy": "~2.3",
+                "ihub-grid/packages/accounting": "~1.0",
+                "ihub-grid/packages/error-handler": "~1.0",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iHubGrid\\SeamlessWalletCore\\": "src/"
+                }
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "php artisan vendor:publish --tag=config --provider=\"iHubGrid\\SeamlessWalletCore\\SeamlessWalletCoreServiceProvider\""
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Integrations team",
+                    "email": "author_email",
+                    "homepage": "ihub.favbet.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5.* seamless-wallet-core",
+            "homepage": "https://gitlab.favorit/integrations/ihub-grid/packages/seamless-wallet-core",
+            "keywords": [
+                "ihub-grid",
+                "seamless-wallet-core"
+            ],
+            "time": "2017-04-19 14:41:59"
         },
         {
             "name": "kozz/laravel-guzzle-provider",
@@ -2864,12 +3000,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "00ef880e9327c6c13a3a14da66bd65e847a2bd83"
+                "reference": "8092098de7e628561253ffee8cbf8c5578387cf1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/00ef880e9327c6c13a3a14da66bd65e847a2bd83",
-                "reference": "00ef880e9327c6c13a3a14da66bd65e847a2bd83",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/8092098de7e628561253ffee8cbf8c5578387cf1",
+                "reference": "8092098de7e628561253ffee8cbf8c5578387cf1",
                 "shasum": ""
             },
             "require": {
@@ -2949,7 +3085,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2017-04-18 08:13:42"
+            "time": "2017-04-18 12:52:36"
         },
         {
             "name": "codeception/specify",
@@ -3272,12 +3408,12 @@
             "version": "0.9.9",
             "source": {
                 "type": "git",
-                "url": "https://github.com/padraic/mockery.git",
+                "url": "https://github.com/mockery/mockery.git",
                 "reference": "6fdb61243844dc924071d3404bb23994ea0b6856"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/6fdb61243844dc924071d3404bb23994ea0b6856",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/6fdb61243844dc924071d3404bb23994ea0b6856",
                 "reference": "6fdb61243844dc924071d3404bb23994ea0b6856",
                 "shasum": ""
             },

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Validation;
 
 use App\Components\Integrations\GameSession\TokenControl\TokenControl;
 use App\Components\Integrations\MicroGaming\CodeMapping;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 class MicroGamingValidation
 {
