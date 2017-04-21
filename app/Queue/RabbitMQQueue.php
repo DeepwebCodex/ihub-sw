@@ -6,7 +6,7 @@ use AMQPChannel;
 use AMQPConnection;
 use AMQPEnvelope;
 use AMQPExchange;
-use App\Facades\AppLog;
+use iHubGrid\ErrorHandler\Facades\AppLog;
 use App\Queue\Jobs\RabbitMQJob;
 use DateTime;
 use ErrorException;

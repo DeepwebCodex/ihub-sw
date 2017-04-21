@@ -2,8 +2,7 @@
 
 namespace App\Components\Integrations\DriveMediaNovomaticDeluxe;
 
-use App\Components\Integrations\CodeMappingBase;
-use App\Components\Integrations\DriveMediaNovomaticDeluxe\StatusCode;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 
 class CodeMapping extends CodeMappingBase {
     

@@ -2,9 +2,9 @@
 
 namespace api\EuroGamesTech;
 
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use \EuroGamesTech\TestData;
 use \EuroGamesTech\TestUser;
 
@@ -49,7 +49,7 @@ class EuroGamesTechBorderlineApiCest
         $I->seeXmlResponseIncludes("<ErrorMessage>Bet was not placed</ErrorMessage>");
 
         $I->expect('Can`t see record of transaction applied');
-        $I->cantSeeRecord(\App\Models\Transactions::class, [
+        $I->cantSeeRecord(Transactions::class, [
             'foreign_id' => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_WIN,
             'status' => TransactionRequest::STATUS_COMPLETED,
@@ -77,7 +77,7 @@ class EuroGamesTechBorderlineApiCest
             'game_id'       => 0
         ]);
 
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => array_get($request, 'TransferId'),
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_PENDING,
@@ -91,7 +91,7 @@ class EuroGamesTechBorderlineApiCest
         $I->seeXmlResponseIncludes("<ErrorCode>3000</ErrorCode>");
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_PENDING,
@@ -119,7 +119,7 @@ class EuroGamesTechBorderlineApiCest
             'game_id'       => 0
         ]);
 
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => array_get($request, 'TransferId'),
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_COMPLETED,
@@ -175,7 +175,7 @@ class EuroGamesTechBorderlineApiCest
         $I->seeXmlResponseIncludes("<Balance>{$this->testUser->getBalanceInCents()}</Balance>");
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_WIN,
             'status' => TransactionRequest::STATUS_COMPLETED,
@@ -200,14 +200,14 @@ class EuroGamesTechBorderlineApiCest
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of both transactions applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_WIN,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_DEPOSIT
         ]);
 
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_COMPLETED,
@@ -229,7 +229,7 @@ class EuroGamesTechBorderlineApiCest
         $I->seeXmlResponseIncludes("<Balance>{$expectedBalance}</Balance>");
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['TransferId'],
             'transaction_type' => TransactionRequest::TRANS_BONUS_WIN,
             'status' => TransactionRequest::STATUS_COMPLETED,

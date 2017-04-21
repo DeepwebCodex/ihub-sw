@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\Formatters\JsonApiFormatter;
+use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 use App\Components\Integrations\MrSlotty\CodeMapping;
 use App\Components\Integrations\MrSlotty\MrSlottyHelper;
 use App\Components\Integrations\MrSlotty\StatusCode;
 use App\Components\Transactions\Strategies\MrSlotty\ProcessMrSlotty;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\MrSlottyTemplate;
 use App\Http\Requests\MrSlotty\BalanceRequest;
 use App\Http\Requests\MrSlotty\BetRequest;
 use App\Http\Requests\MrSlotty\BetWinRequest;
 use App\Http\Requests\MrSlotty\WinRequest;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 

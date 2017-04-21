@@ -3,9 +3,10 @@
 namespace App\Http\Requests\MrSlotty;
 
 
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiRequest;
-use App\Http\Requests\ApiValidationInterface;
+use App\Components\Integrations\MrSlotty\CodeMapping;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
 
 /**
@@ -24,7 +25,7 @@ class BaseMrSlottyRequest extends ApiRequest implements ApiValidationInterface
     }
 
     /**
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws ApiHttpException
      */
     public function failedAuthorization()
     {

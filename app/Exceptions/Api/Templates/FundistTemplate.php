@@ -5,6 +5,7 @@ namespace App\Exceptions\Api\Templates;
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\StatusCode;
 use App\Components\Integrations\Fundist\Hmac;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class FundistTemplate implements IExceptionTemplate
 {

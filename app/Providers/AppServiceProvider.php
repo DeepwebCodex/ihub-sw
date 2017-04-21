@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use App\Observers\TransactionsObserver;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -18,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Validator::extend('session_token', 'App\Http\Requests\Validation\GlobalValidation@CheckSessionToken');
+
         Transactions::observe(TransactionsObserver::class);
     }
 

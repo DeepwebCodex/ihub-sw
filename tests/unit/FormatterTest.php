@@ -2,11 +2,12 @@
 
 
 use App\Components\Formatters\EgtXmlApiFormatter;
-use App\Components\Formatters\JsonApiFormatter;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 use App\Components\Formatters\MicroGamingApiFormatter;
 use App\Components\Formatters\TextApiFormatter;
-use App\Components\Formatters\XmlApiFormatter;
-use App\Components\ThirdParty\Array2Xml;
+use iHubGrid\ErrorHandler\Formatters\XmlApiFormatter;
+use iHubGrid\ErrorHandler\ThirdParty\Array2Xml;
 
 class FormatterTest extends \Codeception\Test\Unit
 {
@@ -45,7 +46,7 @@ class FormatterTest extends \Codeception\Test\Unit
 
         $this->specify("Test exception formatter", function() use($formatter, $exitPayload){
             /**@var \Illuminate\Http\Response $response*/
-            $response = $formatter->formatException(new \App\Exceptions\Api\ApiHttpException(400, "Test", $this->payload));
+            $response = $formatter->formatException(new ApiHttpException(400, "Test", $this->payload));
 
             verify("Is response instance of Response", $response)->isInstanceOf(\Illuminate\Http\Response::class);
 
@@ -82,7 +83,7 @@ class FormatterTest extends \Codeception\Test\Unit
 
         $this->specify("Test exception formatter", function() use($formatter, $exitPayload){
             /**@var \Illuminate\Http\Response $response*/
-            $response = $formatter->formatException(new \App\Exceptions\Api\ApiHttpException(400, "Test", $this->payload));
+            $response = $formatter->formatException(new ApiHttpException(400, "Test", $this->payload));
 
             verify("Is response instance of Response", $response)->isInstanceOf(\Illuminate\Http\Response::class);
 
@@ -112,7 +113,7 @@ class FormatterTest extends \Codeception\Test\Unit
 
         $this->specify("Test exception formatter", function() use($formatter, $exitPayload){
             /**@var \Illuminate\Http\Response $response*/
-            $response = $formatter->formatException(new \App\Exceptions\Api\ApiHttpException(400, "Test", $this->payload));
+            $response = $formatter->formatException(new ApiHttpException(400, "Test", $this->payload));
 
             verify("Is response body is xml", $response->getContent())
                 ->equalsXmlString($formatter->format($exitPayload));
@@ -136,7 +137,7 @@ class FormatterTest extends \Codeception\Test\Unit
 
         $this->specify("Test exception formatter", function() use($formatter, $exitPayload){
             /**@var \Illuminate\Http\Response $response*/
-            $response = $formatter->formatException(new \App\Exceptions\Api\ApiHttpException(400, "Test", $this->payload));
+            $response = $formatter->formatException(new ApiHttpException(400, "Test", $this->payload));
 
             verify("Is response body is xml", $response->getContent())
                 ->equalsXmlString(Array2Xml::createXML('pkt', $exitPayload)->saveXML());
@@ -159,7 +160,7 @@ class FormatterTest extends \Codeception\Test\Unit
 
         $this->specify("Test exception formatter", function() use($formatter, $exitPayload){
             /**@var \Illuminate\Http\Response $response*/
-            $response = $formatter->formatException(new \App\Exceptions\Api\ApiHttpException(400, "Test", $this->payload));
+            $response = $formatter->formatException(new ApiHttpException(400, "Test", $this->payload));
 
             verify("Is response body is text", $response->getContent())
                 ->equals(implode(' ', $exitPayload));

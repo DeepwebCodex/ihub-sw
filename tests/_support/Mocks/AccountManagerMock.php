@@ -8,12 +8,10 @@
 
 namespace Testing;
 
-use App\Components\ExternalServices\AccountManager;
-use App\Components\Integrations\Casino\StatusCode;
-use App\Components\Transactions\TransactionHelper;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
-use App\Exceptions\Api\GenericApiHttpException;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use Mockery;
 use Symfony\Component\HttpFoundation\Response;
 

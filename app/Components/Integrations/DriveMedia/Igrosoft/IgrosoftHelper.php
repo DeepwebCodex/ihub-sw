@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\DriveMedia\Igrosoft;
 
-use App\Components\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 
 class IgrosoftHelper
 {

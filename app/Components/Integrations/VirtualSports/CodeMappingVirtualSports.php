@@ -9,7 +9,7 @@
 namespace App\Components\Integrations\VirtualSports;
 
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 use ReflectionClass;
 
 class CodeMappingVirtualSports extends CodeMappingBase
