@@ -3,9 +3,10 @@
 namespace App\Components\Integrations\DriveMediaNovomatic;
 
 use App\Components\Transactions\Strategies\DriveMedia\ProcessNovomatic;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionResponse;
 
 /**
  * Class NovomaticHelper
@@ -87,7 +88,7 @@ class NovomaticHelper
     /**
      * @param TransactionRequest $transactionRequest
      * @param IntegrationUser $user
-     * @return \App\Components\Transactions\TransactionResponse
+     * @return TransactionResponse
      */
     public static function handleTransaction($transactionRequest, $user)
     {

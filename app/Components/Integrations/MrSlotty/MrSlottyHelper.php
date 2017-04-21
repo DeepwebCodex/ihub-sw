@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Components\Integrations\MrSlotty;
-use App\Components\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 
 /**
  * Class MrSlottyHelper

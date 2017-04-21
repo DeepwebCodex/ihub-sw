@@ -10,12 +10,11 @@ namespace App\Components\Integrations\DriveMediaNovomaticDeluxe;
 
 use App\Components\Transactions\Strategies\DriveMediaNovomaticDeluxe\Deposit;
 use App\Components\Transactions\Strategies\DriveMediaNovomaticDeluxe\Withdrawal;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use Illuminate\Http\Request;
-use stdClass;
 
 /**
  * Description of Operation

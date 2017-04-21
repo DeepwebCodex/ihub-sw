@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Components\Formatters\TextApiFormatterIVG;
 use App\Components\Integrations\InspiredVirtualGaming\EventProcessor;
 use App\Components\Integrations\InspiredVirtualGaming\Services\DataMapper;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\InspiredVirtualGamingTemplate;
 use App\Http\Requests\InspiredVirtualGaming\BaseInspiredRequest;
 use App\Http\Requests\InspiredVirtualGaming\EventCardRequest;
@@ -65,11 +66,14 @@ class InspiredVirtualGaming extends BaseApiController
                     (int) array_get($eventData, 'EventType')
                 );
 
-                $created = $eventProcessor->create($dataMap);
-
-                if(!$created) {
-                    throw new \RuntimeException("Unable to create event");
+                try {
+                    $eventProcessor->create($dataMap);
+                } catch (\Exception $exception) {
+                    app('AppLog')->warning([
+                        'message' => $exception->getMessage()
+                    ]);
                 }
+
             } else {
                 continue;
             }
@@ -117,7 +121,8 @@ class InspiredVirtualGaming extends BaseApiController
         throw new ApiHttpException(404, 'BADFORMAT');
     }
 
-    public function respondOk($statusCode = Response::HTTP_OK, string $message = 'ACK', array $payload = []){
+    public function respondOk($statusCode = Response::HTTP_OK, string $message = 'ACK', array $payload = [])
+    {
         return parent::respondOk($statusCode, $message, $payload);
     }
 }

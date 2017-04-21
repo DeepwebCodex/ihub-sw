@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Validation;
 
 use App\Components\Integrations\BetGames\ApiMethod;
-use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\StatusCode;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Request;
 
 class BetGamesValidation

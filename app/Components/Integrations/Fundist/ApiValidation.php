@@ -4,10 +4,10 @@
 namespace App\Components\Integrations\Fundist;
 
 
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\Fundist\BaseRequest;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiValidation

@@ -1,9 +1,10 @@
 <?php
 namespace api\MicroGaming;
 
-use App\Components\ExternalServices\AccountManager;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
@@ -169,7 +170,7 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()-$this->params->getAmount()).'\']');
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['methodcall']['call']['actionid'],
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_COMPLETED,
@@ -215,7 +216,7 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()+$this->params->getAmount()).'\']');
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['methodcall']['call']['actionid'],
             'transaction_type' => TransactionRequest::TRANS_WIN,
             'status' => TransactionRequest::STATUS_COMPLETED,

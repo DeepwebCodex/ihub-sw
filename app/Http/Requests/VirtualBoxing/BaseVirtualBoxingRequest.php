@@ -3,10 +3,10 @@
 namespace App\Http\Requests\VirtualBoxing;
 
 use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiRequest;
-use App\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
 
 /**

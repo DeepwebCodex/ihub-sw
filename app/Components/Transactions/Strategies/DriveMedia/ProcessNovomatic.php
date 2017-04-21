@@ -2,14 +2,14 @@
 
 namespace App\Components\Transactions\Strategies\DriveMedia;
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 use App\Components\Integrations\MicroGaming\CodeMapping;
-use App\Components\Transactions\BaseSeamlessWalletProcessor;
-use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
+use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Models\DriveMediaNovomaticProdObjectIdMap;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 
 /**
  * @property TransactionRequest $request
@@ -22,7 +22,7 @@ class ProcessNovomatic extends BaseSeamlessWalletProcessor implements Transactio
     /**
      * @param TransactionRequest $request
      * @return array|null
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws ApiHttpException
      */
     protected function process(TransactionRequest $request)
     {

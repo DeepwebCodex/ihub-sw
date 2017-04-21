@@ -1,5 +1,7 @@
 <?php
 
+use iHubGrid\Accounting\Users\IntegrationUser;
+
 class DriveMediaAristocratBorderlineApiCest
 {
     private $options;
@@ -12,7 +14,7 @@ class DriveMediaAristocratBorderlineApiCest
 
     public function testMethodBetWin(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'cmd' => 'writeBet',
@@ -44,7 +46,7 @@ class DriveMediaAristocratBorderlineApiCest
 
     public function testMethodWrongSign(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'space' => $this->space,

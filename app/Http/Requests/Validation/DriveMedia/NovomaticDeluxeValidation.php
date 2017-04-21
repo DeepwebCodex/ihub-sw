@@ -4,8 +4,8 @@ namespace App\Http\Requests\Validation\DriveMedia;
 
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\Sign;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;

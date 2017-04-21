@@ -6,8 +6,9 @@ use App\Components\Formatters\TextApiFormatter;
 use App\Components\Integrations\VirtualBox\EventProcessor;
 use App\Components\Integrations\VirtualBox\Services\DataMapper;
 use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\VirtualBoxingTemplate;
 use App\Http\Requests\VirtualBoxing\MatchBetRequest;
 use App\Http\Requests\VirtualBoxing\MatchProgressRequest;
@@ -76,9 +77,14 @@ class VirtualBoxController extends BaseApiController
 
         $dataMap = new DataMapper($request->all(), 'box');
 
-        $created = $eventProcessor->create($dataMap);
+        try {
+            $eventProcessor->create($dataMap);
+        } catch (\Exception $exception) {
+            
+            app('AppLog')->warning([
+                'message' => $exception->getMessage()
+            ]);
 
-        if(!$created) {
             throw new ApiHttpException(500, null, CodeMappingVirtualSports::getByMeaning(CodeMappingVirtualSports::EVENT_NOT_FOUND));
         }
 
