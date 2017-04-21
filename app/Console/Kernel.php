@@ -34,6 +34,12 @@ class Kernel extends ConsoleKernel
         MicrogamingSequence::class,
         CancelPendingOperations::class,
         MaksymenkoTest::class,
+        Commands\Vermantia\FetchEvents::class,
+        Commands\Vermantia\ProcessEvent::class,
+        Commands\Vermantia\NoMoreBetsEvent::class,
+        Commands\Vermantia\CancelEvent::class,
+        Commands\Vermantia\FinishEvent::class,
+        Commands\Vermantia\ResultEvent::class
     ];
 
     /**

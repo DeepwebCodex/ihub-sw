@@ -28,7 +28,7 @@ class AmqpService
      */
     public function sendMsg($exchange, $routingKey, $msgBody)
     {
-        $url = 'http://' . $this->config['host'] . ':' . $this->config['port'] . '/api/mqsend';
+        $url = 'http://' . $this->config['host'] . ':' . $this->config['port'] . '/mq/send';
 
         try {
             $response = app('Guzzle')->request(
@@ -38,10 +38,10 @@ class AmqpService
                     RequestOptions::HEADERS => [
                         'Accept' => 'application/json'
                     ],
-                    RequestOptions::FORM_PARAMS => [
+                    RequestOptions::JSON => [
                         'exchange' => $exchange,
                         'routing_key' => $routingKey,
-                        'data' => $msgBody
+                        'payload' => json_encode($msgBody)
                     ]
                 ]
             );
@@ -59,6 +59,6 @@ class AmqpService
         }
 
         $decodedData = json_decode((string)$data, true);
-        return (isset($decodedData['result']) && $decodedData['result'] === 'ok');
+        return (isset($decodedData['status']) && $decodedData['status'] === 'ok');
     }
 }

@@ -10,6 +10,7 @@ namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\MicroGaming\CodeMapping;
 use Carbon\Carbon;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 use Illuminate\Http\Response;
 use Stringy\StaticStringy as S;
 

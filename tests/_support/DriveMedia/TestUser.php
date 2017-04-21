@@ -2,7 +2,7 @@
 
 namespace DriveMedia;
 
-use \App\Components\Users\IntegrationUser;
+use iHubGrid\Accounting\Users\IntegrationUser;
 
 class TestUser {
     private $user;

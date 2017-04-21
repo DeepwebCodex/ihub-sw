@@ -2,7 +2,7 @@
 
 namespace App\Components;
 
-use App\Http\Controllers\Api\BaseApiController;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
 use Illuminate\Support\Facades\Log;
 
 /**

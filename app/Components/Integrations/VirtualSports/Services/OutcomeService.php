@@ -12,7 +12,7 @@ namespace App\Components\Integrations\VirtualSports\Services;
 
 use App\Components\Integrations\VirtualSports\CodeMappingVirtualSports;
 use App\Components\Integrations\VirtualSports\Interfaces\MarketOutcomeMapInterface;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Market;
 use App\Models\Line\MarketTemplate;
 use App\Models\Line\Outcome;

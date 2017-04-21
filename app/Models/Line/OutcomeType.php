@@ -3,7 +3,6 @@
 namespace App\Models\Line;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\JoinClause;
 
 /**
  * @property integer $participant_num

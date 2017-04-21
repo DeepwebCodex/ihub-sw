@@ -4,6 +4,7 @@ namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\DriveMedia\CodeMapping;
 use App\Components\Integrations\DriveMedia\StatusCode;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class DriveMediaTemplate implements IExceptionTemplate
 {

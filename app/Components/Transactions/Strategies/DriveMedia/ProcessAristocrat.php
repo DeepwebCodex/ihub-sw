@@ -3,12 +3,12 @@
 namespace App\Components\Transactions\Strategies\DriveMedia;
 
 use App\Components\Integrations\DriveMedia\CodeMapping;
-use App\Components\Transactions\BaseSeamlessWalletProcessor;
-use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
-use App\Components\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
+use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use App\Models\DriveMediaAristocratProdObjectIdMap;
-use App\Models\Transactions;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 
 class ProcessAristocrat  extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface

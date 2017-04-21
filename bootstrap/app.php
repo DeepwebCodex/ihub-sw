@@ -11,6 +11,7 @@
 |
 */
 
+use iHubGrid\ErrorHandler\Log\Logger;
 use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 
 $app = new Illuminate\Foundation\Application(
@@ -53,7 +54,7 @@ $app->singleton(
 );
 
 $app->configureMonologUsing(function ($monolog) use($app) {
-    new \App\Log\Logger(config('log.logger'), $monolog, $app);
+    new Logger(config('error-handler.logger'), $monolog, $app);
 });
 
 /*

@@ -1,5 +1,7 @@
 <?php
 
+use iHubGrid\Accounting\Users\IntegrationUser;
+
 class DriveMediaPlaytechBorderlineApiCest
 {
     private $options;
@@ -10,7 +12,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodBetWin(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'cmd'       => 'writeBet',
@@ -42,7 +44,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodBetWin2(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'cmd'       => 'writeBet',
@@ -74,7 +76,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodBetWin3(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'cmd'       => 'writeBet',
@@ -106,7 +108,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'cmd'       => 'writeBet',
@@ -136,7 +138,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodWrongSign(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'cmd'   => 'getBalance',
