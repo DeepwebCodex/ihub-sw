@@ -3,8 +3,8 @@
 namespace App\Http\Requests\GameArt;
 
 use App\Components\Integrations\GameArt\CodeMapping;
-use App\Http\Requests\ApiRequest;
-use App\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
 
 class BaseGameArtRequest extends ApiRequest implements ApiValidationInterface

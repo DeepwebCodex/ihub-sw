@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Validation;
 
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Request;
 use App\Components\Integrations\GameArt\CodeMapping;
 

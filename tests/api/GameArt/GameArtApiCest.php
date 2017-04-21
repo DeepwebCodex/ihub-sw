@@ -1,6 +1,8 @@
 <?php
 
 
+use iHubGrid\Accounting\Users\IntegrationUser;
+
 class GameArtApiCest
 {
     private $options;
@@ -19,7 +21,7 @@ class GameArtApiCest
 
     public function testMethodBalance(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'action' => 'balance',
@@ -48,7 +50,7 @@ class GameArtApiCest
     }
 
     public function testMethodBet(ApiTester $I) {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'action' => 'debit',

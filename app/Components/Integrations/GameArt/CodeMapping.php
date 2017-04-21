@@ -3,7 +3,7 @@
 namespace App\Components\Integrations\GameArt;
 
 use App\Components\Integrations\GameArt\StatusCode;
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 
 class CodeMapping extends CodeMappingBase
 {

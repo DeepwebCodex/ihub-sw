@@ -3,6 +3,7 @@
 namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\GameArt\StatusCode;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class GameArtTemplate implements IExceptionTemplate
 {

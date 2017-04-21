@@ -2,12 +2,12 @@
 
 namespace App\Components\Transactions\Strategies\GameArt;
 
-use App\Components\Transactions\BaseSeamlessWalletProcessor;
-use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
-use App\Components\Transactions\TransactionRequest;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
+use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use App\Components\Integrations\GameArt\CodeMapping;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 class ProcessGameArt extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {

@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Components\Integrations\GameArt\GameArtHelper;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\GameArt\BalanceRequest;
 use App\Http\Requests\GameArt\CreditRequest;
 use App\Http\Requests\GameArt\DebitRequest;
-use App\Components\Transactions\TransactionRequest;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use App\Exceptions\Api\Templates\GameArtTemplate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Components\Formatters\JsonApiFormatter;
-use App\Components\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
+use iHubGrid\Accounting\Users\IntegrationUser;
 use App\Components\Integrations\GameArt\CodeMapping;
 use Symfony\Component\HttpFoundation\Response;
 

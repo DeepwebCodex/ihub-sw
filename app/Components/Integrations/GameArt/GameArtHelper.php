@@ -4,8 +4,8 @@
 namespace App\Components\Integrations\GameArt;
 
 use App\Components\Transactions\Strategies\GameArt\ProcessGameArt;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 
 class GameArtHelper
 {
