@@ -1,10 +1,10 @@
 <?php
 namespace api\MicroGaming;
 
-use App\Components\ExternalServices\AccountManager;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Models\Transactions;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;

@@ -22,7 +22,14 @@ class ResultGame extends BaseLineModel
      * {@inheritdoc}
      */
     public $fillable = [
-        'event_id', 'scope_data_id', 'result_type_id', 'event_particpant_id', 'amount', 'staff_id', 'result_time'
+        'event_id',
+        'scope_data_id',
+        'result_type_id',
+        'event_particpant_id',
+        'amount',
+        'staff_id',
+        'result_time',
+        'dt'
     ];
 
     /**

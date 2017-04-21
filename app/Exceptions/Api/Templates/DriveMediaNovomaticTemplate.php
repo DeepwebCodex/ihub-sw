@@ -4,6 +4,7 @@ namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\DriveMediaNovomatic\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomatic\StatusCode;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 /**
  * Class NovomaticTemplate

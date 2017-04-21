@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests\Validation;
 
-use App\Components\Integrations\EuroGamesTech\EgtHelper;
-use App\Components\Integrations\EuroGamesTech\DefenceCode;
 use App\Components\Integrations\EuroGamesTech\StatusCode;
 use App\Components\Integrations\GameSession\TokenControl\TokenControl;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Request;
 
 class EuroGamesTechValidation

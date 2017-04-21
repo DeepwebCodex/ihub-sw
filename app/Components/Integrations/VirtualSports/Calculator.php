@@ -19,10 +19,11 @@ class Calculator
     {
         $routingKey = 'calc';
 
+        //TODO::separate redis connection for prod
         $val = Redis::get('calc_event:' . $eventId);
         if ($val !== 'calc_inprogress') {
             $exchange = 'calculator';
-            $msg = json_encode(['events' => [$eventId]]);
+            $msg = ['events' => [$eventId]];
 
             $response = app('AmqpService')->sendMsg($exchange, $routingKey, $msg);
 

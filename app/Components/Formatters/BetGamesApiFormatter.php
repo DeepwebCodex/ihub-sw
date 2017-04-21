@@ -2,6 +2,7 @@
 
 namespace App\Components\Formatters;
 
+use iHubGrid\ErrorHandler\Formatters\XmlApiFormatter;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 
 class BetGamesApiFormatter extends XmlApiFormatter

@@ -3,7 +3,7 @@
 namespace App\Components\Integrations\BetGames;
 
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 
 class CodeMapping extends CodeMappingBase
 {

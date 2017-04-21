@@ -23,7 +23,7 @@ trait ConfigTrait
     protected function getConfigOption(string $name)
     {
         if (!($val = array_get($this->config, $name)) && $val === null) {
-            throw new ConfigOptionNotFoundException();
+            throw new ConfigOptionNotFoundException("Configuration error: key '{$name}'");
         }
         return $val;
     }

@@ -4,10 +4,9 @@ namespace Helper;
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I
 
-use App\Components\ExternalServices\AccountManager;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\AccountManagerMock;
-use Testing\AccountManagerSingleton;
 use Testing\GameSessionsMock;
 use Testing\Params;
 

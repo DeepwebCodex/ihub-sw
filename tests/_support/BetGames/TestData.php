@@ -2,7 +2,7 @@
 
 namespace BetGames;
 
-use App\Components\Users\IntegrationUser;
+use iHubGrid\Accounting\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
 use Testing\Params;
 use GuzzleHttp\Psr7\Response;

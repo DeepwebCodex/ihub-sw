@@ -2,7 +2,7 @@
 
 namespace App\Components\ExternalServices\Mysterion;
 
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use League\Fractal\TransformerAbstract;
 
 /**

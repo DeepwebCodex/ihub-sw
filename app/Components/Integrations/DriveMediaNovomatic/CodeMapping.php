@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\DriveMediaNovomatic;
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 
 /**
  * Class CodeMapping

@@ -2,8 +2,7 @@
 
 namespace App\Components\Integrations\MicroGaming;
 
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 
 class MicroGamingHelper
 {

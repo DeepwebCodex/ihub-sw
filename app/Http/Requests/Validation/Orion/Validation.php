@@ -10,7 +10,7 @@ namespace App\Http\Requests\Validation\Orion;
 
 use App\Exceptions\Internal\Orion\CheckEmptyValidation;
 use Illuminate\Validation\ValidationException;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Description of Validation

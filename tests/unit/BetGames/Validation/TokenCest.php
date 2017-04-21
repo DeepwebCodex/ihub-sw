@@ -3,7 +3,7 @@
 namespace unit\BetGames\Validation;
 
 
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Http\Requests\Validation\BetGamesValidation;
 
 class TokenCest

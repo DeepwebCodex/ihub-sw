@@ -5,7 +5,8 @@ namespace App\Exceptions\Api\Templates;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\StatusCode;
-use App\Components\Transactions\TransactionHelper;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class BetGamesTemplate implements IExceptionTemplate
 {
@@ -50,7 +51,7 @@ class BetGamesTemplate implements IExceptionTemplate
             'error_text' => $this->errorMessage,
             'time' => time(),
         ];
-        $payload['signature'] = (new Signature($payload, $item['partnerId'], $item['cashdeskId']))->getHash();
+        $payload['signature'] = (new Signature($payload, $this->partnerId, $this->cashdeskId))->getHash();
 
         return $payload;
     }
@@ -63,8 +64,8 @@ class BetGamesTemplate implements IExceptionTemplate
         $this->balance = $item['balance'] ?? null;
         $this->statusCode = $statusCode ?? 500;
 
-        $this->partnerId = $item['partnerId'];
-        $this->cashdeskId = $item['cashdeskId'];
+        $this->partnerId = $item['partnerId'] ?? 0;
+        $this->cashdeskId = $item['cashdeskId'] ?? 0;
 
         $error = CodeMapping::getByErrorCode($this->code);
         $this->errorCode = $error['code'] ?? null;

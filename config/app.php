@@ -143,9 +143,8 @@ return [
         Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
-        \App\Providers\ApiValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        \iHubGrid\ErrorHandler\Providers\ApiValidationServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -159,13 +158,16 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
-        \App\Providers\AccountManagerServiceProvider::class,
-        \App\Providers\AppLogServiceProvider::class,
+        \iHubGrid\Accounting\AccountManagerServiceProvider::class,
+        \iHubGrid\ErrorHandler\ErrorHandlerServiceProvider::class,
+        \iHubGrid\SeamlessWalletCore\SeamlessWalletCoreServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
         \App\Providers\AmqpServiceProvider::class,
         \App\Providers\GameSessionServiceProvider::class,
         \App\Providers\QueueRabbitMQServiceProvider::class,
-        \App\Providers\GuzzleServiceProvider::class
+        \iHubGrid\ErrorHandler\Providers\GuzzleServiceProvider::class,
+        \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class,
+        \App\Providers\VermantiaGameServiceProvider::class
     ],
 
     /*
@@ -213,9 +215,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Parser' => \Nathanmac\Utilities\Parser\Facades\Parser::class,
-        'AppLog' => \App\Facades\AppLog::class,
-        'Fractal' => Spatie\Fractal\FractalFacade::class,
-        'Uuid' => Webpatser\Uuid\UuidFacade::class,
+        'AppLog' => \iHubGrid\ErrorHandler\Facades\AppLog::class,
+        'Fractal' => Spatie\Fractal\FractalFacade::class
     ],
 
 ];

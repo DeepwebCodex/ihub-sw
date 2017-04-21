@@ -4,8 +4,7 @@ namespace App\Http\Requests\Validation;
 
 use App\Components\Integrations\MrSlotty\CodeMapping;
 use Illuminate\Support\Facades\Request;
-use App\Exceptions\Api\ApiHttpException;
-use App\Components\Integrations\MrSlotty\StatusCode;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 class MrSlottyValidation
 {
@@ -20,7 +19,7 @@ class MrSlottyValidation
         unset($all['hash']);
         ksort($all);
 
-        if($hash != hash_hmac("sha256", http_build_query($all), config('integrations.mrslotty.secret'))) {
+        if($hash != hash_hmac("sha256", http_build_query($all), config('integrations.mrslotty.salt'))) {
             throw new ApiHttpException(401, "", CodeMapping::getByMeaning(CodeMapping::INVALID_SIGNATURE));
         }
 
