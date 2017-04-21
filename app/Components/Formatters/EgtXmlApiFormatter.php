@@ -9,6 +9,7 @@
 namespace App\Components\Formatters;
 
 
+use iHubGrid\ErrorHandler\Formatters\XmlApiFormatter;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 use Illuminate\Support\Facades\Route;

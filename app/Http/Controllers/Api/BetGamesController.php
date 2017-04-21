@@ -8,19 +8,20 @@ use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Integrations\BetGames\TransactionMap;
-use App\Components\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionHelper;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\BetGamesTemplate;
 use App\Http\Requests\BetGames\BaseRequest;
 use App\Http\Requests\BetGames\BetRequest;
 use App\Http\Requests\BetGames\OnlineRequest;
 use App\Http\Requests\BetGames\WinRequest;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\Accounting\Users\IntegrationUser;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -53,6 +54,9 @@ class BetGamesController extends BaseApiController
 
         $this->middleware('check.ip:betGames');
         $this->middleware('input.xml')->except(['error']);
+
+        /** @see setPartnerCashdesk, parsePlayerIdOnWin  */
+        $this->middleware('input.bg.setPartnerCashdesk');
         $this->middleware('input.bg.parsePlayerIdOnWin');
 
         /**
@@ -69,11 +73,14 @@ class BetGamesController extends BaseApiController
      */
     public function index(BaseRequest $request)
     {
+        $this->partnerId = $request->input('partner_id', 0);
+        $this->cashdeskId = $request->input('cashdesk_id', 0);
+
         $apiMethod = new ApiMethod($request->input('method'));
         if (!$apiMethod->isOffline()) {
             $this->userId = app('GameSession')->get('user_id') ?? 0;
-            $this->partnerId = app('GameSession')->get('partner_id');
-            $this->cashdeskId = app('GameSession')->get('cashdesk_id');
+            $this->partnerId = $request->input('partner_id') ?? app('GameSession')->get('partner_id');
+            $this->cashdeskId = $request->input('cashdesk_id') ?? app('GameSession')->get('cashdesk_id');
             $this->gameId = app('GameSession')->get('game_id'); // Т.к. у BetGames нет идентификатора игры при запуске, мы из сессии будем получать 0
             $this->userIP = app('GameSession')->get('userIp');
 
@@ -90,6 +97,9 @@ class BetGamesController extends BaseApiController
     {
         $all = $request->all();
         unset($all['signature']);
+        // In input.bg.setPartnerCashdesk we're added partner_id and cashdesk_id to request
+        unset($all['partner_id']);
+        unset($all['cashdesk_id']);
 
         $signature = new Signature($all, $this->partnerId, $this->cashdeskId);
         if ($signature->isWrong($request->input('signature'))) {
@@ -97,6 +107,8 @@ class BetGamesController extends BaseApiController
                 'code' => StatusCode::SIGNATURE,
                 'method' => $request->input('method'),
                 'token' => $request->input('token'),
+                'partnerId' => $request->input('partner_id'),
+                'cashdeskId' => $request->input('cashdesk_id'),
             ]);
         }
 
@@ -109,7 +121,9 @@ class BetGamesController extends BaseApiController
      */
     public function ping(BaseRequest $request)
     {
-        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+        $this->addMetaField('method', $request->input('method'));
+        $this->addMetaField('token', $request->input('token'));
+
         return $this->responseOk('ping', $request->input('token'), [], false);
     }
 
@@ -119,7 +133,9 @@ class BetGamesController extends BaseApiController
      */
     public function account(OnlineRequest $request)
     {
-        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+        $this->addMetaField('method', $request->input('method'));
+        $this->addMetaField('token', $request->input('token'));
+
         $user = IntegrationUser::get($this->userId, $this->getOption('service_id'), 'betGames');
         $attributes = $user->getAttributes();
 
@@ -137,7 +153,9 @@ class BetGamesController extends BaseApiController
      */
     public function refreshToken(OnlineRequest $request)
     {
-        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+        $this->addMetaField('method', $request->input('method'));
+        $this->addMetaField('token', $request->input('token'));
+
         return $this->responseOk($request->input('method'), $request->input('token'));
     }
 
@@ -147,7 +165,9 @@ class BetGamesController extends BaseApiController
      */
     public function newToken(OnlineRequest $request)
     {
-        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+        $this->addMetaField('method', $request->input('method'));
+        $this->addMetaField('token', $request->input('token'));
+
         $newToken = app('GameSession')->regenerate($request->input('token'), 'md5');
         return $this->responseOk($request->input('method'), $request->input('token'), ['new_token' => $newToken], false);
     }
@@ -159,7 +179,9 @@ class BetGamesController extends BaseApiController
     public function getBalance(OnlineRequest $request)
     {
         $user = IntegrationUser::get($this->userId, $this->getOption('service_id'), 'betGames');
-        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+
+        $this->addMetaField('method', $request->input('method'));
+        $this->addMetaField('token', $request->input('token'));
 
         return $this->responseOk('get_balance', $request->input('token'), [
             'balance' => $user->getBalanceInCents()
@@ -174,7 +196,8 @@ class BetGamesController extends BaseApiController
     {
         $user = IntegrationUser::get($this->userId, $this->getOption('service_id'), 'betGames');
 
-        $this->setMetaData(['method' => $request->input('method'), 'token' => $request->input('token')]);
+        $this->addMetaField('method', $request->input('method'));
+        $this->addMetaField('token', $request->input('token'));
 
         $transactionMap = new TransactionMap($request->input('method'));
         $transactionRequest = new TransactionRequest(
@@ -237,13 +260,14 @@ class BetGamesController extends BaseApiController
 
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'betGames');
 
-        $this->setMetaData([
-            'method' => $request->input('method'),
-            'token' => $request->input('token'),
-            'balance' => $user->getBalanceInCents(),
-            'partnerId' => !is_null($betTransaction) ? $betTransaction->partner_id : 0,
-            'cashdeskId' => !is_null($betTransaction) ? $betTransaction->cashdesk : 0,
-        ]);
+        $partnerId = $request->input('partner_id', !is_null($betTransaction) ? $betTransaction->partner_id : 0);
+        $cashdeskId = $request->input('cashdesk_id', !is_null($betTransaction) ? $betTransaction->cashdesk : 0);
+
+        $this->addMetaField('method', $request->input('method'));
+        $this->addMetaField('token', $request->input('token'));
+        $this->addMetaField('balance', $user->getBalanceInCents());
+        $this->addMetaField('partnerId', $partnerId);
+        $this->addMetaField('cashdeskId', $cashdeskId);
 
         $transactionMap = new TransactionMap($request->input('method'));
         $transactionRequest = new TransactionRequest(
@@ -256,8 +280,8 @@ class BetGamesController extends BaseApiController
             $transactionMap->getType(),
             $request->input('params.transaction_id'),
             !is_null($betTransaction) ? $betTransaction->game_id : 0,
-            !is_null($betTransaction) ? $betTransaction->partner_id : 0,
-            !is_null($betTransaction) ? $betTransaction->cashdesk : 0,
+            $partnerId,
+            $cashdeskId,
             !is_null($betTransaction) ? $betTransaction->client_ip : ''
         );
 
@@ -284,7 +308,7 @@ class BetGamesController extends BaseApiController
         }
 
         $error = CodeMapping::getByErrorCode(StatusCode::OK);
-        $view = [
+        $payload = [
             'method' => $method,
             'token' => $token,
             'success' => 1,
@@ -293,13 +317,13 @@ class BetGamesController extends BaseApiController
             'time' => time(),
             'params' => $params
         ];
-        $view['signature'] = (new Signature(
-                $view,
+        $payload['signature'] = (new Signature(
+                $payload,
                 $this->partnerId ?? $this->pullMetaField('partnerId'),
                 $this->cashdeskId ?? $this->pullMetaField('cashdeskId')
             ))->getHash();
 
-        return $view;
+        return $payload;
     }
 
 
@@ -316,8 +340,8 @@ class BetGamesController extends BaseApiController
             app('GameSession')->prolong($token);
         }
 
-        $view = $this->prepareResponse($method, $token, $params);
+        $data = $this->prepareResponse($method, $token, $params);
 
-        return $this->respond(Response::HTTP_OK, '', $view);
+        return $this->respond(Response::HTTP_OK, '', $data);
     }
 }

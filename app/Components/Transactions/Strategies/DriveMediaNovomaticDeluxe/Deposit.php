@@ -4,10 +4,9 @@ namespace App\Components\Transactions\Strategies\DriveMediaNovomaticDeluxe;
 
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\StatusCode;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
-use App\Models\Transactions;
-use App\Components\Transactions\Strategies\DriveMediaNovomaticDeluxe\TransactionProcessor;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 
 /**
  * @property  TransactionRequest $request

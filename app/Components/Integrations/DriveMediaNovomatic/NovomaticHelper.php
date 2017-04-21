@@ -3,10 +3,10 @@
 namespace App\Components\Integrations\DriveMediaNovomatic;
 
 use App\Components\Transactions\Strategies\DriveMedia\ProcessNovomatic;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionResponse;
 
 /**
  * Class NovomaticHelper
@@ -88,46 +88,12 @@ class NovomaticHelper
     /**
      * @param TransactionRequest $transactionRequest
      * @param IntegrationUser $user
-     * @return \App\Components\Transactions\TransactionResponse
+     * @return TransactionResponse
      */
     public static function handleTransaction($transactionRequest, $user)
     {
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
 
         return $transactionHandler->handle(new ProcessNovomatic());
-    }
-
-    /**
-     * @param $space
-     * @return mixed
-     */
-    public static function getKey($space)
-    {
-        $spaces = config("integrations.DriveMediaNovomatic.spaces");
-
-        foreach ($spaces as $v) {
-            if($v['id'] === $space) {
-                return $v['key'];
-            }
-        }
-
-        throw new ApiHttpException(200, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
-    }
-
-    /**
-     * @param $space
-     * @return mixed
-     */
-    public static function getSpace($space)
-    {
-        $spaces = config("integrations.DriveMediaNovomatic.spaces");
-
-        foreach ($spaces as $v) {
-            if($v['id'] === $space) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\Formatters\JsonApiFormatter;
-use App\Components\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 use App\Exceptions\Api\Templates\GameSessionTemplate;
 use App\Http\Requests\GameSession\SessionCreateRequest;
 use Illuminate\Http\Response;

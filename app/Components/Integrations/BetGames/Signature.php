@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\BetGames;
 
-use App\Components\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 
 class Signature
 {
@@ -19,7 +19,7 @@ class Signature
      * @param $partnerId
      * @param $cashdeskId
      */
-    public function __construct(array $data, $partnerId = null, $cashdeskId = null)
+    public function __construct(array $data, $partnerId, $cashdeskId)
     {
         $this->partnerId = $partnerId;
         $this->cashdeskId = $cashdeskId;

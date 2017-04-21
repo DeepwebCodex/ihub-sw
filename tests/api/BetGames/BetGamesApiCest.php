@@ -3,12 +3,13 @@
 namespace api\BetGames;
 
 use App\Components\Integrations\BetGames\CodeMapping;
+use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\StatusCode;
 use App\Components\Integrations\GameSession\GameSessionService;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\GenericApiHttpException;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use \BetGames\TestData;
 use \BetGames\TestUser;
 use Codeception\Scenario;
@@ -41,7 +42,6 @@ class BetGamesApiCest
     public function _before(\ApiTester $I, Scenario $s)
     {
         $I->mockAccountManager($I, config('integrations.betGames.service_id'));
-        $I->disableMiddleware();
 
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
@@ -51,14 +51,14 @@ class BetGamesApiCest
 
     public function testMethodNotFound(\ApiTester $I)
     {
-        $I->sendPOST('/bg', $this->data->notFound());
-        $this->getResponseFail($I, StatusCode::SIGNATURE);
+        $I->sendPOST('/bg/favbet/', $this->data->notFound());
+        $this->getResponseFail($I, StatusCode::UNKNOWN);
 
     }
 
     public function testPing(\ApiTester $I)
     {
-        $I->sendPOST('/bg', $this->data->ping());
+        $I->sendPOST('/bg/favbet/', $this->data->ping());
         $this->getResponseOk($I);
     }
 
@@ -74,17 +74,19 @@ class BetGamesApiCest
 
     public function testFailAuth(\ApiTester $I)
     {
-        $I->sendPOST('/bg', $this->data->authFailed());
+        $I->sendPOST('/bg/favbet/', $this->data->authFailed());
         $this->getResponseFail($I, StatusCode::TOKEN);
     }
 
     public function testFailPending(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessBetGames::class);
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
+
+        $mock = $this->mock(ProcessBetGames::class);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
+
         $request = $this->data->bet();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::UNKNOWN);
         $this->noRecord($I, $request, 'bet');
     }
@@ -95,7 +97,7 @@ class BetGamesApiCest
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         $mock->shouldReceive('runCompleted')->once()->withAnyArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
         $request = $this->data->bet();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::UNKNOWN);
         $this->noRecord($I, $request, 'bet');
     }
@@ -105,14 +107,14 @@ class BetGamesApiCest
         $mock = $this->mock(ProcessBetGames::class);
         $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
         $request = $this->data->bet();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::UNKNOWN);
         $this->noRecord($I, $request, 'bet');
     }
 
     public function testAccount(\ApiTester $I)
     {
-        $I->sendPOST('/bg', $this->data->account());
+        $I->sendPOST('/bg/favbet/', $this->data->account());
         $response = $this->getResponseOk($I);
         $I->assertEquals($this->testUser->getUser()->id, $response['params']['user_id']);
     }
@@ -120,7 +122,7 @@ class BetGamesApiCest
     public function testRefreshToken(\ApiTester $I)
     {
         $request = $this->data->refreshToken();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertEquals($request['token'], $response['token']);
     }
@@ -128,7 +130,7 @@ class BetGamesApiCest
     public function testNewToken(\ApiTester $I)
     {
         $request = $this->data->newToken();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
 
         $I->assertEquals($request['token'], $response['token']);
@@ -138,7 +140,7 @@ class BetGamesApiCest
     public function testGetBalance(\ApiTester $I)
     {
         $request = $this->data->getBalance();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertNotNull($response['params']['balance']);
     }
@@ -148,7 +150,7 @@ class BetGamesApiCest
         $balanceBefore = $this->testUser->getBalanceInCents();
         $request = $this->data->bet();
 
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertEquals($balanceBefore - $this->data->getAmount(), $response['params']['balance_after']);
 
@@ -165,9 +167,7 @@ class BetGamesApiCest
         $balanceBefore = $this->testUser->getBalanceInCents();
         $request = $this->data->win($bet['params']['bet_id']);
 
-//         $I->getApplication()->forgetInstances();
-
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertEquals($balanceBefore + $this->data->getAmount(), $response['params']['balance_after']);
 
@@ -182,7 +182,7 @@ class BetGamesApiCest
         $balanceBefore = $this->testUser->getBalanceInCents();
         $request = $this->data->bet(null, $bet['params']['transaction_id']);
 
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertEquals(1, $response['params']['already_processed']);
         $I->assertEquals($balanceBefore, $response['params']['balance_after']);
@@ -195,7 +195,7 @@ class BetGamesApiCest
         $balanceBefore = $this->testUser->getBalanceInCents();
         $request = $this->data->win($win['params']['bet_id'], $win['params']['transaction_id']);
 
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertEquals(1, $response['params']['already_processed']);
         $I->assertEquals($balanceBefore, $response['params']['balance_after']);
@@ -205,7 +205,7 @@ class BetGamesApiCest
     {
         $balanceBefore = $this->testUser->getBalanceInCents();
         $request = $this->data->win();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::BAD_OPERATION_ORDER);
         $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
 
@@ -217,7 +217,7 @@ class BetGamesApiCest
         $win = $this->testWin($I);
         $request = $this->data->win($win['params']['bet_id']);
         $balanceBefore = $this->testUser->getBalanceInCents();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertEquals(1, $response['params']['already_processed']);
         $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
@@ -232,7 +232,7 @@ class BetGamesApiCest
         $request = $this->data->bet();
         $balanceBefore = $this->testUser->getBalanceInCents();
 
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::INSUFFICIENT_FUNDS);
         $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
         $this->data->resetAmount();
@@ -245,7 +245,7 @@ class BetGamesApiCest
         $this->data->setAmount(0);
 
         $request = $this->data->bet();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
         $this->data->resetAmount();
 
@@ -258,7 +258,7 @@ class BetGamesApiCest
         $this->data->setAmount(0);
 
         $request = $this->data->win($bet['params']['bet_id']);
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseOk($I);
         $this->data->resetAmount();
 
@@ -272,7 +272,7 @@ class BetGamesApiCest
         $this->data->setAmount(-100);
         $request = $this->data->bet();
 
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
         $this->data->resetAmount();
 
@@ -283,14 +283,14 @@ class BetGamesApiCest
     {
         $data = $this->data->bet();
         $data['signature'] = '123';
-        $I->sendPOST('/bg', $data);
+        $I->sendPOST('/bg/favbet/', $data);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
     }
 
     public function testWrongTime(\ApiTester $I)
     {
         $data = $this->data->wrongTime('get_balance');
-        $I->sendPOST('/bg', $data);
+        $I->sendPOST('/bg/favbet/', $data);
         $this->getResponseFail($I, StatusCode::TIME);
     }
 
@@ -298,7 +298,7 @@ class BetGamesApiCest
     {
         $data = $this->data->bet();
         unset($data['params']['amount']);
-        $I->sendPOST('/bg', $data);
+        $I->sendPOST('/bg/favbet/', $data);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
     }
 
@@ -308,14 +308,14 @@ class BetGamesApiCest
         $data['token'] = '123';
         $request = $this->data->updateSignature($data);
 
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::TOKEN);
     }
 
     /*public function testToken(\ApiTester $I)
     {
         $data = $this->data->token();
-        $I->sendPOST('/bg', $data);
+        $I->sendPOST('/bg/favbet/', $data);
         $response = $this->getResponseOk($I);
         $I->assertNotNull($response['params']['new_token']);
     }*/
@@ -323,7 +323,7 @@ class BetGamesApiCest
     private function execBet(\ApiTester $I)
     {
         $request = $this->data->bet();
-        $I->sendPOST('/bg', $request);
+        $I->sendPOST('/bg/favbet/', $request);
 
         return $request;
     }
@@ -331,7 +331,18 @@ class BetGamesApiCest
     private function getResponseOk(\ApiTester $I)
     {
         $I->seeResponseCodeIs(200);
+
         $data = $this->responseToArray($I);
+
+        $signatureValidation = $this->validateSignature(
+            array_get($data, 'signature'),
+            $data,
+            $this->data->partnerId,
+            $this->data->cashdeskId
+        );
+
+        $I->assertTrue($signatureValidation);
+
         $I->assertArrayHasKey('method', $data);
         $I->assertArrayHasKey('token', $data);
         $I->assertArrayHasKey('success', $data);
@@ -352,6 +363,16 @@ class BetGamesApiCest
     private function getResponseFail(\ApiTester $I, $errorCode)
     {
         $data = $this->responseToArray($I);
+
+        $signatureValidation = $this->validateSignature(
+            array_get($data, 'signature'),
+            $data,
+            $this->data->partnerId,
+            $this->data->cashdeskId
+        );
+
+        $I->assertTrue($signatureValidation);
+
         $I->assertArrayHasKey('method', $data);
         $I->assertArrayHasKey('token', $data);
         $I->assertArrayHasKey('success', $data);
@@ -388,6 +409,22 @@ class BetGamesApiCest
 
     private function responseToArray(\ApiTester $I)
     {
-        return json_decode(json_encode((array)simplexml_load_string($I->grabResponse())), 1);
+        $xml = new \SimpleXMLElement($I->grabResponse());
+        $result = json_decode(json_encode((array)$xml), 1);
+
+        if (isset($result['error_text']) && is_array($result['error_text']) && count($result['error_text']) === 0){
+            $result['error_text'] = '';
+        }
+
+        return $result;
+    }
+
+    private function validateSignature($signature, $data, $partnerId, $cashdeskId)
+    {
+        unset($data['signature']);
+
+        $generatedSignature = new Signature($data, $partnerId, $cashdeskId);
+        $this->signature = $generatedSignature->getHash();
+        return !$generatedSignature->isWrong($signature);
     }
 }

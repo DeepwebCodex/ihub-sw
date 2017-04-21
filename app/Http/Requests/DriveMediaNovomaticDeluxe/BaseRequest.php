@@ -2,15 +2,13 @@
 
 namespace App\Http\Requests\DriveMediaNovomaticDeluxe;
 
-use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\StatusCode;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiRequest;
-use App\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
 use Illuminate\Http\Request;
-use function app;
 use function array_get;
 
 class BaseRequest extends ApiRequest implements ApiValidationInterface {
@@ -31,27 +29,22 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface {
         throw new ApiHttpException('401', null, CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
     }
 
-    /**
-     * @return array
-     */
     public function rules() {
         return [
-            'cmd'   => 'bail|required|string|validate_space',
+            'cmd' => 'bail|required|string|',
             'space' => 'bail|required|string|',
             'login' => 'bail|required|string|',
-            'sign'  => 'bail|required|string|check_sign',
+            'sign' => 'bail|required|string|check_sign|',
         ];
     }
 
-    /**
-     * @param array $errors
-     */
     public function response(array $errors) {
         $firstError = $this->getFirstError($errors);
 
         throw new ApiHttpException('400', array_get($firstError, 'message', 'Invalid input'), [
-            'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
-        ]);
+    'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
+        ]
+        );
     }
 
 }

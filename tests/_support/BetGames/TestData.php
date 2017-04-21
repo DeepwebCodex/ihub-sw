@@ -2,7 +2,7 @@
 
 namespace BetGames;
 
-use App\Components\Users\IntegrationUser;
+use iHubGrid\Accounting\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
 use Testing\Params;
 use GuzzleHttp\Psr7\Response;
@@ -22,12 +22,14 @@ class TestData
 
     public function __construct()
     {
-//        $this->amount = self::AMOUNT;
         $this->userId = (int)env('TEST_USER_ID');
         $this->currency = Params::CURRENCY;
         $this->amount_backup =
         $this->amount = Params::AMOUNT * 100;
         $this->bigAmount = Params::BIG_AMOUNT * 100;
+
+        $this->partnerId = (int)env('TEST_PARTNER_ID');
+        $this->cashdeskId = (int)env('TEST_CASHEDESK');
     }
 
     public function notFound()
@@ -203,7 +205,7 @@ class TestData
     private function setSignature($input)
     {
         $data = $input;
-        $data['signature'] = (new Signature($input))->getHash();
+        $data['signature'] = (new Signature($input, $this->partnerId, $this->cashdeskId))->getHash();
 
         return $data;
     }
@@ -212,7 +214,7 @@ class TestData
     {
         unset($input['signature']);
         $data = $input;
-        $data['signature'] = (new Signature($input))->getHash();
+        $data['signature'] = (new Signature($input, $this->partnerId, $this->cashdeskId))->getHash();
         return $data;
     }
 

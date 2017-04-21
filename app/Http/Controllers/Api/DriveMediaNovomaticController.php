@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Components\Formatters\JsonApiFormatter;
+use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 use App\Components\Integrations\DriveMediaNovomatic\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomatic\NovomaticHelper;
-use App\Components\Traits\MetaDataTrait;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 use App\Components\Transactions\Strategies\DriveMedia\ProcessNovomatic;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Components\Users\Interfaces\UserInterface;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\Accounting\Users\Interfaces\UserInterface;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\DriveMediaNovomaticTemplate;
 use App\Http\Requests\DriveMediaNovomatic\GetBalanceRequest;
 use App\Http\Requests\DriveMediaNovomatic\WriteBetRequest;
@@ -29,7 +30,6 @@ class DriveMediaNovomaticController extends BaseApiController
 
     const NODE = 'DriveMediaNovomatic';
 
-    /** @var string  */
     public static $exceptionTemplate = DriveMediaNovomaticTemplate::class;
 
     /**
@@ -61,21 +61,22 @@ class DriveMediaNovomaticController extends BaseApiController
         if (method_exists($this, $method)) {
             return app()->call([$this, $method], $request->all());
         }
-
         return app()->call([$this, 'error'], $request->all());
     }
 
     /**
      * @param UserInterface $user
      * @param $space
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws ApiHttpException
      */
     protected function validateCurrentCurrency(UserInterface $user, string $space)
     {
+        if (app()->environment() !== 'production') {
+            return;
+        }
         $userCurrency = $user->getCurrency();
-        $userSpace = $this->options['spaces'][$userCurrency]['id'];
-
-        if($userSpace !== $space) {
+        $requestCurrency = $this->options['spaces'][$space]['currency'];
+        if ($userCurrency !== $requestCurrency) {
             $this->error();
         }
     }
@@ -100,7 +101,7 @@ class DriveMediaNovomaticController extends BaseApiController
     /**
      * @param WriteBetRequest $request
      * @return Response
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws ApiHttpException
      */
     public function writeBet(WriteBetRequest $request)
     {
@@ -145,7 +146,7 @@ class DriveMediaNovomaticController extends BaseApiController
     }
 
     /**
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws ApiHttpException
      */
     public function error()
     {

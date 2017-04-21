@@ -1,7 +1,7 @@
 <?php
 namespace api\MicroGaming;
 
-use App\Components\ExternalServices\AccountManager;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;

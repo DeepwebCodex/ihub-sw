@@ -1,9 +1,10 @@
 <?php
 namespace api\MicroGaming;
 
-use App\Components\ExternalServices\AccountManager;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
 use Carbon\Carbon;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
@@ -21,6 +22,8 @@ class MicroGamingApiCest
 
     public function _before(\ApiTester $I)
     {
+        $I->disableMiddleware();
+
         if($this->params->enableMock) {
             $mock = (new AccountManagerMock())->getMock();
             $I->getApplication()->instance(AccountManager::class, $mock);
@@ -37,8 +40,7 @@ class MicroGamingApiCest
         $I->sendGET('/mg');
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsXml();
-        $I->expect('both items are in response');
-        $I->seeXmlResponseIncludes(" <result seq=\"\" errorcode=\"6000\" errordescription=\"Empty source\"><extinfo/></result>");
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse//result[@errorcode=\'6000\']');
     }
 
     public function testMethodLogIn(\ApiTester $I)
@@ -61,7 +63,6 @@ class MicroGamingApiCest
             ]
         ];
 
-        $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
         $I->sendPOST('/mg', $request);
         $I->seeResponseCodeIs(200);
@@ -92,7 +93,6 @@ class MicroGamingApiCest
             ]
         ];
 
-        $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
         $I->sendPOST('/mg', $request);
         $I->seeResponseCodeIs(200);
@@ -123,7 +123,6 @@ class MicroGamingApiCest
             ]
         ];
 
-        $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
         $I->sendPOST('/mg', $request);
         $I->seeResponseCodeIs(200);
@@ -160,7 +159,6 @@ class MicroGamingApiCest
             ]
         ];
 
-        $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
         $I->sendPOST('/mg', $request);
         $I->seeResponseCodeIs(200);
@@ -172,7 +170,7 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()-$this->params->getAmount()).'\']');
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['methodcall']['call']['actionid'],
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_COMPLETED,
@@ -207,7 +205,6 @@ class MicroGamingApiCest
             ]
         ];
 
-        $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
         $I->sendPOST('/mg', $request);
         $I->seeResponseCodeIs(200);
@@ -219,7 +216,7 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()+$this->params->getAmount()).'\']');
 
         $I->expect('Can see record of transaction applied');
-        $I->canSeeRecord(\App\Models\Transactions::class, [
+        $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $request['methodcall']['call']['actionid'],
             'transaction_type' => TransactionRequest::TRANS_WIN,
             'status' => TransactionRequest::STATUS_COMPLETED,

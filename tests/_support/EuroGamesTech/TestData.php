@@ -2,7 +2,6 @@
 
 namespace EuroGamesTech;
 
-use App\Components\Users\IntegrationUser;
 use Testing\Params;
 
 class TestData

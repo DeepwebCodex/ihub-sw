@@ -3,6 +3,7 @@
 namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\CodeMapping;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class DriveMediaNovomaticDeluxeTemplate implements IExceptionTemplate {
 

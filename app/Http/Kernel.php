@@ -3,6 +3,9 @@
 namespace App\Http;
 
 use App\Components\LoadEnvironmentVariables;
+use iHubGrid\ErrorHandler\Http\Middleware\InputJson;
+use iHubGrid\ErrorHandler\Http\Middleware\InputXml;
+use iHubGrid\ErrorHandler\Http\Middleware\LogRequestResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -63,14 +66,15 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'input.json' => \App\Http\Middleware\InputJson::class,
+        'input.json' => InputJson::class,
         'check.partner_id' => \App\Http\Middleware\CheckPartnerId::class,
-        'input.xml' => \App\Http\Middleware\InputXml::class,
+        'input.xml' => InputXml::class,
         'input.egt.parsePlayerId' => \App\Http\Middleware\EuroGamesTech\ParsePlayerId::class,
         'input.dm.parselogin' => \App\Http\Middleware\DriveMedia\ParseLogin::class,
-        'log.request.response' => \App\Http\Middleware\LogRequestResponse::class,
+        'log.request.response' => LogRequestResponse::class,
         'check.ip' => \App\Http\Middleware\IPList::class,
         'input.bg.parsePlayerIdOnWin' => \App\Http\Middleware\BetGames\ParsePlayerIdOnWin::class,
-        'input.netEntertainment.parsePlayerIdOnOffline' => \App\Http\Middleware\NetEntertainment\ParsePlayerIdOnOffline::class,
+        'input.bg.setPartnerCashdesk' => \App\Http\Middleware\BetGames\SetPartnerCashdesk::class,
+        'input.fundist.parsePlayerIdOnOffline' => \App\Http\Middleware\Fundist\ParsePlayerIdOnOffline::class,
     ];
 }

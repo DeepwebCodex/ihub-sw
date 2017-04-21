@@ -2,6 +2,7 @@
 
 namespace App\Components\Formatters;
 
+use iHubGrid\ErrorHandler\Formatters\XmlApiFormatter;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 
 class BetGamesApiFormatter extends XmlApiFormatter
@@ -14,7 +15,15 @@ class BetGamesApiFormatter extends XmlApiFormatter
      */
     public function formatResponse($statusCode, string $message, array $payload = [])
     {
-        $payload = array_merge($message ? compact('message') : [], $this->getMetaData()?:[], $payload);
+        $payload = array_merge($message ? compact('message') : [], $payload);
+
+        $payload = array_merge(
+            $payload,
+            [
+                'method' => $this->getMetaField('method'),
+                'token' => $this->getMetaField('token'),
+            ]
+        );
 
         return ResponseFacade::make($this->format($payload), $statusCode, [
             'Content-type' => 'application/xml'
