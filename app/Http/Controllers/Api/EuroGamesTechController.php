@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\EgtXmlApiFormatter;
-use App\Components\Integrations\CodeMappingBase;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
 use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\Accounting\Users\IntegrationUser;
@@ -18,7 +19,6 @@ use App\Http\Requests\EuroGamesTech\DepositRequest;
 use App\Http\Requests\EuroGamesTech\PlayerBalanceRequest;
 use App\Http\Requests\EuroGamesTech\WithdrawAndDepositRequest;
 use App\Http\Requests\EuroGamesTech\WithdrawRequest;
-use App\Models\Transactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
