@@ -4,6 +4,7 @@ namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\StatusCode;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 class EndorphinaTemplate implements IExceptionTemplate
 {

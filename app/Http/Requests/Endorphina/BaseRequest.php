@@ -5,13 +5,12 @@ namespace App\Http\Requests\Endorphina;
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiRequest;
-use App\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 use Illuminate\Http\Request;
-use function app;
-use function array_get;
+
 
 class BaseRequest extends ApiRequest implements ApiValidationInterface
 {

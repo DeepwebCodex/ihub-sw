@@ -2,13 +2,14 @@
 
 namespace App\Components\Transactions\Strategies\Endorphina;
 
-use App\Components\Integrations\CodeMappingBase;
 use App\Components\Integrations\Endorphina\CodeMapping;
-use App\Components\Transactions\BaseSeamlessWalletProcessor;
-use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
+use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
+use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Database\Eloquent\Model;
+use function GuzzleHttp\json_encode;
 
 /**
  * Description of Transaction

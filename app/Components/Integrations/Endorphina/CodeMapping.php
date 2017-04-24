@@ -2,8 +2,9 @@
 
 namespace App\Components\Integrations\Endorphina;
 
-use App\Components\Integrations\CodeMappingBase;
-use App\Components\Integrations\Endorphina\StatusCode;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
+
+
 
 class CodeMapping extends CodeMappingBase
 {

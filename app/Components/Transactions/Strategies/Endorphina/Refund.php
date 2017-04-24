@@ -3,9 +3,8 @@
 namespace App\Components\Transactions\Strategies\Endorphina;
 
 use App\Components\Integrations\Endorphina\CodeMapping;
-use App\Components\Transactions\Strategies\Endorphina\TransactionProcessor;
-use App\Components\Transactions\TransactionRequest;
-use App\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use function app;
 
 /**

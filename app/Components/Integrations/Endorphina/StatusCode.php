@@ -2,7 +2,9 @@
 
 namespace App\Components\Integrations\Endorphina;
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
+
+
 
 abstract class StatusCode
 {

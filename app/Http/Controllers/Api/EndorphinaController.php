@@ -6,15 +6,9 @@ use App\Components\Formatters\EndorphinaApiFormatter;
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\Game;
 use App\Components\Integrations\Endorphina\StatusCode;
-use App\Components\Traits\MetaDataTrait;
 use App\Components\Transactions\Strategies\Endorphina\Deposit;
 use App\Components\Transactions\Strategies\Endorphina\Refund;
 use App\Components\Transactions\Strategies\Endorphina\Withdrawal;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionHelper;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\EndorphinaTemplate;
 use App\Http\Requests\Endorphina\BalanceRequest;
 use App\Http\Requests\Endorphina\BaseRequest;
@@ -22,10 +16,17 @@ use App\Http\Requests\Endorphina\BetRequest;
 use App\Http\Requests\Endorphina\RefundRequest;
 use App\Http\Requests\Endorphina\WinRequest;
 use App\Http\Requests\Validation\EndorphinaValidation;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
-use function app;
-use function config;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use Symfony\Component\HttpFoundation\Response;
+use Validator;
+
+
 
 class EndorphinaController extends BaseApiController
 {

@@ -3,8 +3,9 @@
 namespace App\Components\Formatters;
 
 use Exception;
-use Illuminate\Http\Response;
+use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 use Illuminate\Support\Facades\Response as ResponseFacade;
+
 
 class EndorphinaApiFormatter extends JsonApiFormatter
 {
