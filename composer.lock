@@ -945,11 +945,11 @@
         },
         {
             "name": "ihub-grid/packages/seamless-wallet-core",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git",
-                "reference": "827da6be4d2cdbc0127334522c8cca160fed1d5c"
+                "reference": "f7675a056a7489ecf740d571fd25088d1bc3d88a"
             },
             "require": {
                 "danielstjules/stringy": "~2.3",
@@ -986,7 +986,7 @@
                 "ihub-grid",
                 "seamless-wallet-core"
             ],
-            "time": "2017-04-20T12:25:35+00:00"
+            "time": "2017-04-24T12:12:47+00:00"
         },
         {
             "name": "kozz/laravel-guzzle-provider",
@@ -1175,16 +1175,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.37",
+            "version": "1.0.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "78b5cc4feb61a882302df4fbaf63b7662e5e4ccd"
+                "reference": "4ba6e13f5116204b21c3afdf400ecf2b9eb1c482"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/78b5cc4feb61a882302df4fbaf63b7662e5e4ccd",
-                "reference": "78b5cc4feb61a882302df4fbaf63b7662e5e4ccd",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/4ba6e13f5116204b21c3afdf400ecf2b9eb1c482",
+                "reference": "4ba6e13f5116204b21c3afdf400ecf2b9eb1c482",
                 "shasum": ""
             },
             "require": {
@@ -1206,12 +1206,12 @@
                 "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
                 "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching",
                 "league/flysystem-copy": "Allows you to use Copy.com storage",
-                "league/flysystem-dropbox": "Allows you to use Dropbox storage",
                 "league/flysystem-eventable-filesystem": "Allows you to use EventableFilesystem",
                 "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
                 "league/flysystem-sftp": "Allows you to use SFTP server storage via phpseclib",
                 "league/flysystem-webdav": "Allows you to use WebDAV storage",
-                "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter"
+                "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter",
+                "spatie/flysystem-dropbox": "Allows you to use Dropbox storage"
             },
             "type": "library",
             "extra": {
@@ -1254,7 +1254,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2017-03-22T15:43:14+00:00"
+            "time": "2017-04-22T18:59:19+00:00"
         },
         {
             "name": "league/fractal",
@@ -2999,12 +2999,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "8092098de7e628561253ffee8cbf8c5578387cf1"
+                "reference": "4e297aba0f06d0d32fc19534176d5d6929f6af9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/8092098de7e628561253ffee8cbf8c5578387cf1",
-                "reference": "8092098de7e628561253ffee8cbf8c5578387cf1",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/4e297aba0f06d0d32fc19534176d5d6929f6af9a",
+                "reference": "4e297aba0f06d0d32fc19534176d5d6929f6af9a",
                 "shasum": ""
             },
             "require": {
@@ -3084,7 +3084,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2017-04-18T12:52:36+00:00"
+            "time": "2017-04-24T08:16:24+00:00"
         },
         {
             "name": "codeception/specify",
