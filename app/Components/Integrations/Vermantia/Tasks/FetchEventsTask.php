@@ -1,43 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: doom_sentinel
- * Date: 3/31/17
- * Time: 10:49 AM
- */
 
 namespace App\Components\Integrations\Vermantia\Tasks;
 
-use iHubGrid\DynamicScheduler\BaseSchedulerTask;
-use iHubGrid\DynamicScheduler\Exceptions\FailedTaskException;
+use iHubGrid\DynamicScheduler\Components\BasicTasks\RunArtisanCommand;
 
-final class FetchEventsTask extends BaseSchedulerTask
+final class FetchEventsTask extends RunArtisanCommand
 {
-    private $retries = 50;
+    protected $retries = 50;
     private $hours;
 
     public function __construct(int $hours)
     {
         $this->hours = $hours;
-    }
 
-    public function getMaxRetries(): int
-    {
-        return $this->retries;
-    }
-
-    public function handle()
-    {
-        $command = "vermantia:fetch-events";
-
-        $this->runCommand($command, [
-            $this->hours,
-            $this->currentAttempt
-        ]);
-    }
-
-    public function failing(FailedTaskException $e, int $attempt = 0)
-    {
-
+        parent::__construct('vermantia:fetch-events', [$this->hours], true);
     }
 }

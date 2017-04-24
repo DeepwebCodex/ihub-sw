@@ -857,11 +857,11 @@
         },
         {
             "name": "ihub-grid/packages/dynamic-scheduler",
-            "version": "1.0.32",
+            "version": "1.0.33",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/dynamic-scheduler.git",
-                "reference": "9e6193675209c42a5a2898827ebccadbcb35b7ce"
+                "reference": "636d93f5ba544809e95a8ecdf4660ccb656731d7"
             },
             "require": {
                 "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
@@ -895,7 +895,7 @@
                 "dynamic-scheduler",
                 "ihub-grid"
             ],
-            "time": "2017-04-20 09:41:50"
+            "time": "2017-04-24 15:28:54"
         },
         {
             "name": "ihub-grid/packages/error-handler",
@@ -946,11 +946,11 @@
         },
         {
             "name": "ihub-grid/packages/seamless-wallet-core",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git",
-                "reference": "fa5892e67f83ea728020943e95b98e64b69bcfed"
+                "reference": "f7675a056a7489ecf740d571fd25088d1bc3d88a"
             },
             "require": {
                 "danielstjules/stringy": "~2.3",
@@ -987,7 +987,7 @@
                 "ihub-grid",
                 "seamless-wallet-core"
             ],
-            "time": "2017-04-20 12:25:35"
+            "time": "2017-04-24 12:12:47"
         },
         {
             "name": "kozz/laravel-guzzle-provider",
@@ -1176,16 +1176,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.37",
+            "version": "1.0.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "78b5cc4feb61a882302df4fbaf63b7662e5e4ccd"
+                "reference": "4ba6e13f5116204b21c3afdf400ecf2b9eb1c482"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/78b5cc4feb61a882302df4fbaf63b7662e5e4ccd",
-                "reference": "78b5cc4feb61a882302df4fbaf63b7662e5e4ccd",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/4ba6e13f5116204b21c3afdf400ecf2b9eb1c482",
+                "reference": "4ba6e13f5116204b21c3afdf400ecf2b9eb1c482",
                 "shasum": ""
             },
             "require": {
@@ -1207,12 +1207,12 @@
                 "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
                 "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching",
                 "league/flysystem-copy": "Allows you to use Copy.com storage",
-                "league/flysystem-dropbox": "Allows you to use Dropbox storage",
                 "league/flysystem-eventable-filesystem": "Allows you to use EventableFilesystem",
                 "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
                 "league/flysystem-sftp": "Allows you to use SFTP server storage via phpseclib",
                 "league/flysystem-webdav": "Allows you to use WebDAV storage",
-                "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter"
+                "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter",
+                "spatie/flysystem-dropbox": "Allows you to use Dropbox storage"
             },
             "type": "library",
             "extra": {
@@ -1255,7 +1255,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2017-03-22 15:43:14"
+            "time": "2017-04-22 18:59:19"
         },
         {
             "name": "league/fractal",
@@ -1884,16 +1884,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.6",
+            "version": "v5.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e"
+                "reference": "56db4ed32a6d5c9824c3ecc1d2e538f663f47eb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
-                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/56db4ed32a6d5c9824c3ecc1d2e538f663f47eb4",
+                "reference": "56db4ed32a6d5c9824c3ecc1d2e538f663f47eb4",
                 "shasum": ""
             },
             "require": {
@@ -1934,7 +1934,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2017-02-13 07:52:53"
+            "time": "2017-04-20 17:32:18"
         },
         {
             "name": "symfony/console",
@@ -3000,12 +3000,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "8092098de7e628561253ffee8cbf8c5578387cf1"
+                "reference": "4e297aba0f06d0d32fc19534176d5d6929f6af9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/8092098de7e628561253ffee8cbf8c5578387cf1",
-                "reference": "8092098de7e628561253ffee8cbf8c5578387cf1",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/4e297aba0f06d0d32fc19534176d5d6929f6af9a",
+                "reference": "4e297aba0f06d0d32fc19534176d5d6929f6af9a",
                 "shasum": ""
             },
             "require": {
@@ -3085,7 +3085,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2017-04-18 12:52:36"
+            "time": "2017-04-24 08:16:24"
         },
         {
             "name": "codeception/specify",
