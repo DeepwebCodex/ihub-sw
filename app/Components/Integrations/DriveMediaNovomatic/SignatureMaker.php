@@ -2,6 +2,8 @@
 
 namespace App\Components\Integrations\DriveMediaNovomatic;
 
+use App\Exceptions\Api\ApiHttpException;
+
 /**
  * Class SignatureMaker
  * @package App\Components\Integrations\Novomatic
@@ -15,8 +17,7 @@ class SignatureMaker
      */
     public function make(string $space, array $requestData): string
     {
-        $secretKey = config("integrations.DriveMediaNovomatic.spaces.{$space}.key");
-
-        return strtoupper(md5($secretKey . http_build_query($requestData)));
+        return strtoupper(md5(NovomaticHelper::getKey($space) . http_build_query($requestData)));
     }
+
 }
