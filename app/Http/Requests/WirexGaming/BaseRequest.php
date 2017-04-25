@@ -5,10 +5,10 @@ namespace App\Http\WirexGaming;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\WirexGaming\CodeMapping;
 use App\Components\Integrations\WirexGaming\StatusCode;
-use App\Components\Traits\MetaDataTrait;
-use App\Exceptions\Api\ApiHttpException;
-use App\Http\Requests\ApiRequest;
-use App\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
+use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 use Illuminate\Http\Request;
 
 /**
@@ -37,9 +37,6 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
         return true;
     }
 
-    /**
-     * @throws \App\Exceptions\Api\ApiHttpException
-     */
     public function isSecureRequest()
     {
         if (!$this->isSecure()) {
@@ -107,9 +104,6 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
         return false;
     }
 
-    /**
-     * @throws \App\Exceptions\Api\ApiHttpException
-     */
     public function failedAuthorization()
     {
         throw new ApiHttpException(
@@ -129,7 +123,6 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
 
     /**
      * @param array $errors
-     * @throws \App\Exceptions\Api\ApiHttpException
      */
     public function response(array $errors)
     {

@@ -6,10 +6,6 @@ use App\Components\Formatters\WirexGamingApiFormatter;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\WirexGaming\CodeMapping;
 use App\Components\Integrations\WirexGaming\WirexGamingHelper;
-use App\Components\Traits\MetaDataTrait;
-use App\Components\Transactions\TransactionRequest;
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\WirexGamingTemplate;
 use App\Http\WirexGaming\AddDepositRequest;
 use App\Http\WirexGaming\AddWithdrawRequest;
@@ -18,6 +14,11 @@ use App\Http\WirexGaming\CancelTransactionRequest;
 use App\Http\WirexGaming\GetPersistentSessionRequest;
 use App\Http\WirexGaming\GetUserDataRequest;
 use App\Http\WirexGaming\RollbackWithdrawRequest;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
@@ -127,7 +128,6 @@ class WirexGamingController extends BaseApiController
     /**
      * @param GetPersistentSessionRequest $request
      * @return Response
-     * @throws \App\Exceptions\Api\ApiHttpException
      */
     public function getPersistentSession(GetPersistentSessionRequest $request)
     {

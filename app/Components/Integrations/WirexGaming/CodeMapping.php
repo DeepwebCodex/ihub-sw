@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\WirexGaming;
 
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 
 /**
  * Class CodeMapping
@@ -24,7 +24,8 @@ class CodeMapping extends CodeMappingBase
                     self::INVALID_CURRENCY,
                     CodeMapping::DUPLICATE,
                     CodeMapping::TIMED_OUT,
-                    CodeMapping::UNKNOWN_METHOD
+                    CodeMapping::UNKNOWN_METHOD,
+
                 ]
             ],
             StatusCode::USER_NOT_AUTHORIZED_CODE => [

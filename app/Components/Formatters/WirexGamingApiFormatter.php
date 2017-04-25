@@ -2,7 +2,8 @@
 
 namespace App\Components\Formatters;
 
-use App\Components\ThirdParty\Array2Xml;
+use iHubGrid\ErrorHandler\Formatters\XmlApiFormatter;
+use iHubGrid\ErrorHandler\ThirdParty\Array2Xml;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 

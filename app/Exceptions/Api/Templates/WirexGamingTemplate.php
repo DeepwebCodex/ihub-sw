@@ -3,6 +3,7 @@
 namespace App\Exceptions\Api\Templates;
 
 use App\Components\Integrations\WirexGaming\CodeMapping;
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
 
 /**
  * Class WirexGamingTemplate

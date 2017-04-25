@@ -3,9 +3,9 @@
 namespace App\Components\Integrations\WirexGaming;
 
 use App\Components\Transactions\Strategies\MicroGaming\ProcessWirexGaming;
-use App\Components\Transactions\TransactionHandler;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 
 /**
  * Class WirexGamingHelper
@@ -50,8 +50,6 @@ class WirexGamingHelper
     /**
      * @param TransactionRequest $transactionRequest
      * @param $user
-     * @return \App\Components\Transactions\TransactionResponse
-     * @throws \App\Exceptions\Api\ApiHttpException
      */
     public static function handleTransaction($transactionRequest, $user)
     {

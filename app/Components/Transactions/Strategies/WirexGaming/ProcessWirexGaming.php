@@ -3,12 +3,11 @@
 namespace App\Components\Transactions\Strategies\MicroGaming;
 
 use App\Components\Integrations\MicroGaming\CodeMapping;
-use App\Components\Integrations\WirexGaming\StatusCode;
-use App\Components\Transactions\BaseSeamlessWalletProcessor;
-use App\Components\Transactions\Interfaces\TransactionProcessorInterface;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
-use App\Models\Transactions;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
+use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Http\Response;
 
 /**
@@ -25,6 +24,7 @@ class ProcessWirexGaming extends BaseSeamlessWalletProcessor implements Transact
     /**
      * @param TransactionRequest $request
      * @return array
+     * @throws \iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException
      */
     protected function process(TransactionRequest $request): array
     {
@@ -37,22 +37,25 @@ class ProcessWirexGaming extends BaseSeamlessWalletProcessor implements Transact
                 $this->request->partner_id
             );
             if (!$betTransaction) {
-                throw new ApiHttpException(Response::HTTP_OK, null,
-                    CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER));
+                throw new ApiHttpException(
+                    Response::HTTP_OK,
+                    null,
+                    CodeMapping::getByErrorCode(CodeMapping::SERVER_ERROR)
+                );
             }
         }
-
         if ($this->request->amount == 0) {
             $this->processZeroAmountTransaction();
         } else {
             $this->processTransaction();
         }
-
         if ($this->responseData['operation_id'] === null) {
-            throw new ApiHttpException(Response::HTTP_REQUEST_TIMEOUT, null,
-                CodeMapping::getByErrorCode(StatusCode::UNKNOWN));
+            throw new ApiHttpException(
+                Response::HTTP_REQUEST_TIMEOUT,
+                null,
+                CodeMapping::getByErrorCode(CodeMapping::SERVER_ERROR)
+            );
         }
-
         return $this->responseData;
     }
 
@@ -95,25 +98,35 @@ class ProcessWirexGaming extends BaseSeamlessWalletProcessor implements Transact
     }
 
     /**
-     * @param \App\Exceptions\Api\GenericApiHttpException $e
+     * @param \iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException $e
+     * @throws \iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException
      */
     protected function onTransactionDuplicate($e)
     {
         if ($this->request->transaction_type == TransactionRequest::TRANS_WIN) {
-            throw new ApiHttpException(Response::HTTP_OK, null,
-                CodeMapping::getByErrorCode(StatusCode::DUPLICATED_WIN));
+            throw new ApiHttpException(
+                Response::HTTP_OK,
+                null,
+                CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR)
+            );
         }
-
-        throw new ApiHttpException(Response::HTTP_OK, null,
-            CodeMapping::getByErrorCode(StatusCode::DUPLICATED_TRANSACTION));
+        throw new ApiHttpException(
+            Response::HTTP_OK,
+            null,
+            CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR)
+        );
     }
 
     /**
-     * @param \App\Exceptions\Api\GenericApiHttpException $e
+     * @param \iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException $e
+     * @throws \iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException
      */
     protected function onInsufficientFunds($e)
     {
-        throw new ApiHttpException(Response::HTTP_OK, null,
-            CodeMapping::getByErrorCode(StatusCode::INSUFFICIENT_FUNDS));
+        throw new ApiHttpException(
+            Response::HTTP_OK,
+            null,
+            CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR)
+        );
     }
 }
