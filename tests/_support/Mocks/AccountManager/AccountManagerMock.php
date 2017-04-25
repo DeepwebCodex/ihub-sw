@@ -2,7 +2,7 @@
 
 namespace Testing\AccountManager;
 
-use App\Components\ExternalServices\AccountManager;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
 use Testing\AccountManager\Protocol\ProtocolInterface;
 use Testing\BaseMock;
 
