@@ -145,7 +145,7 @@ compile_prod:
   stage: compile_project
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
-    - git log --oneline $(git for-each-ref --sort=taggerdate --format '%(tag)' | tail -1)..HEAD | grep ".* Merge branch '[a-zA-Z]\{1,6\}-[0-9]\{1,4\}-.*' into 'master'"
+    - git log --oneline $(git for-each-ref --sort=taggerdate --format '%(tag)' | tail -1)..HEAD | grep ".* Merge branch '[a-zA-Z]\{1,6\}-[0-9]\{1,4\}-.*' into 'master'" || exit 0
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTP_PROXY_FOR_PROD
     - rm -rf .env .env.testing ./tests .git
