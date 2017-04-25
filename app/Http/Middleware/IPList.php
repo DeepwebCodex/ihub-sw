@@ -3,7 +3,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 class IPList
 {

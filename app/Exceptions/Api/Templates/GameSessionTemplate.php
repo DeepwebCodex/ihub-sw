@@ -2,6 +2,8 @@
 
 namespace App\Exceptions\Api\Templates;
 
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
+
 /**
  * Class GameSessionTemplate
  * @package App\Exceptions\Api\Templates

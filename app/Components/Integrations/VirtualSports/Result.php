@@ -2,7 +2,7 @@
 
 namespace App\Components\Integrations\VirtualSports;
 
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Models\Line\Event as EventModel;
 use App\Models\Line\ResultGame;
 use App\Models\Line\ResultGameTotal;

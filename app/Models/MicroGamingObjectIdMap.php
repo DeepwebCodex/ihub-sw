@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Components\Transactions\TransactionRequest;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class MicroGamingObjectIdMap extends Model

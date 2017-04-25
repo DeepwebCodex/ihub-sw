@@ -1,5 +1,7 @@
 <?php
 
+use iHubGrid\Accounting\Users\IntegrationUser;
+
 class DriveMediaAmaticApiCest
 {
     private $options;
@@ -12,7 +14,7 @@ class DriveMediaAmaticApiCest
 
     public function testMethodBalance(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'space' => $this->space,
@@ -36,7 +38,7 @@ class DriveMediaAmaticApiCest
 
     public function testMethodBet(ApiTester $I)
     {
-        $testUser = \App\Components\Users\IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'space'     => $this->space,

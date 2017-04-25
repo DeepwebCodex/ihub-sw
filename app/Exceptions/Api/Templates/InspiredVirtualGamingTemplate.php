@@ -8,6 +8,8 @@
 
 namespace App\Exceptions\Api\Templates;
 
+use iHubGrid\ErrorHandler\Exceptions\Api\Templates\IExceptionTemplate;
+
 /**
  * Class VirtualBoxingTemplate
  * @package App\Exceptions\Api\Templates

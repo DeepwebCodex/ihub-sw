@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\DriveMediaNovomaticDeluxeApiFormatter;
-use App\Components\Integrations\CodeMappingBase;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\Operation;
-use App\Components\Traits\MetaDataTrait;
-use App\Components\Users\IntegrationUser;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\DriveMediaNovomaticDeluxeTemplate;
 use App\Http\Requests\DriveMediaNovomaticDeluxe\GetBalanceRequest;
 use App\Http\Requests\DriveMediaNovomaticDeluxe\WriteBetRequest;

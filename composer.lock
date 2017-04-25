@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5e439d757e36445ce7c52a664691652",
+    "content-hash": "908c3ae39e54c759c0eaa488d1e9f562",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -811,6 +811,184 @@
             "time": "2017-03-20T17:10:46+00:00"
         },
         {
+            "name": "ihub-grid/packages/accounting",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git",
+                "reference": "4bf86b43e35ac51e956dd17ebc8ce3b50ac2dec5"
+            },
+            "require": {
+                "ihub-grid/packages/error-handler": "~1.0",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
+                "kozz/laravel-guzzle-provider": "~6.0",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iHubGrid\\Accounting\\": "src/"
+                }
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "php artisan vendor:publish --tag=config --provider=\"iHubGrid\\Accounting\\AccountManagerServiceProvider\""
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Integrations team",
+                    "email": "author_email",
+                    "homepage": "ihub.favbet.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5.* accounting",
+            "homepage": "https://gitlab.favorit/integrations/ihub-grid/packages/accounting",
+            "keywords": [
+                "accounting",
+                "ihub-grid"
+            ],
+            "time": "2017-04-20T12:36:09+00:00"
+        },
+        {
+            "name": "ihub-grid/packages/dynamic-scheduler",
+            "version": "1.0.33",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.favorit:integrations/ihub-grid/packages/dynamic-scheduler.git",
+                "reference": "193c5cc9523dc6520e2a7db86cb2566389daab71"
+            },
+            "require": {
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iHubGrid\\DynamicScheduler\\": "src/"
+                }
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "php artisan vendor:publish --tag=config --provider=\"iHubGrid\\DynamicScheduler\\Providers\\DynamicSchedulerServiceProvider\""
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Integrations team",
+                    "email": "author_email",
+                    "homepage": "ihub.favbet.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5.* dynamic-scheduler",
+            "homepage": "https://v.tytar@gitlab.favorit/integrations/ihub-grid/packages/dynamic-scheduler.git",
+            "keywords": [
+                "dynamic-scheduler",
+                "ihub-grid"
+            ],
+            "time": "2017-04-24T15:28:54+00:00"
+        },
+        {
+            "name": "ihub-grid/packages/error-handler",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.favorit:integrations/ihub-grid/packages/error-handler.git",
+                "reference": "f8ec504e5e52f666b089e8ef9813f2f07bf43358"
+            },
+            "require": {
+                "danielstjules/stringy": "~2.3",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
+                "nathanmac/parser": "4.*",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iHubGrid\\ErrorHandler\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "php artisan vendor:publish --tag=config --provider=\"iHubGrid\\ErrorHandler\\ErrorHandlerServiceProvider\""
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Integrations team",
+                    "email": "author_email",
+                    "homepage": "ihub.favbet.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5.* error-handler",
+            "homepage": "https://gitlab.favorit/integrations/ihub-grid/packages/error-handler",
+            "keywords": [
+                "error-handler",
+                "ihub-grid"
+            ],
+            "time": "2017-04-24T15:51:49+00:00"
+        },
+        {
+            "name": "ihub-grid/packages/seamless-wallet-core",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git",
+                "reference": "f7675a056a7489ecf740d571fd25088d1bc3d88a"
+            },
+            "require": {
+                "danielstjules/stringy": "~2.3",
+                "ihub-grid/packages/accounting": "~1.0",
+                "ihub-grid/packages/error-handler": "~1.0",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iHubGrid\\SeamlessWalletCore\\": "src/"
+                }
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "php artisan vendor:publish --tag=config --provider=\"iHubGrid\\SeamlessWalletCore\\SeamlessWalletCoreServiceProvider\""
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Integrations team",
+                    "email": "author_email",
+                    "homepage": "ihub.favbet.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5.* seamless-wallet-core",
+            "homepage": "https://gitlab.favorit/integrations/ihub-grid/packages/seamless-wallet-core",
+            "keywords": [
+                "ihub-grid",
+                "seamless-wallet-core"
+            ],
+            "time": "2017-04-24T12:12:47+00:00"
+        },
+        {
             "name": "kozz/laravel-guzzle-provider",
             "version": "6.0",
             "source": {
@@ -1418,76 +1596,6 @@
                 "random"
             ],
             "time": "2017-03-13T16:27:32+00:00"
-        },
-        {
-            "name": "php-amqplib/php-amqplib",
-            "version": "v2.6.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-amqplib/php-amqplib.git",
-                "reference": "fa2f0d4410a11008cb36b379177291be7ee9e4f6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/fa2f0d4410a11008cb36b379177291be7ee9e4f6",
-                "reference": "fa2f0d4410a11008cb36b379177291be7ee9e4f6",
-                "shasum": ""
-            },
-            "require": {
-                "ext-bcmath": "*",
-                "ext-mbstring": "*",
-                "php": ">=5.3.0"
-            },
-            "replace": {
-                "videlalvaro/php-amqplib": "self.version"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8",
-                "scrutinizer/ocular": "^1.1",
-                "squizlabs/php_codesniffer": "^2.5"
-            },
-            "suggest": {
-                "ext-sockets": "Use AMQPSocketConnection"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PhpAmqpLib\\": "PhpAmqpLib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "authors": [
-                {
-                    "name": "Alvaro Videla",
-                    "role": "Original Maintainer"
-                },
-                {
-                    "name": "John Kelly",
-                    "email": "johnmkelly86@gmail.com",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Raúl Araya",
-                    "email": "nubeiro@gmail.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "Formerly videlalvaro/php-amqplib.  This library is a pure PHP implementation of the AMQP protocol. It's been tested against RabbitMQ.",
-            "homepage": "https://github.com/php-amqplib/php-amqplib/",
-            "keywords": [
-                "message",
-                "queue",
-                "rabbitmq"
-            ],
-            "time": "2016-04-11T14:30:01+00:00"
         },
         {
             "name": "predis/predis",

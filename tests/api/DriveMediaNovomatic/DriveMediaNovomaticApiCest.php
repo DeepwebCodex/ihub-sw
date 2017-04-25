@@ -1,6 +1,5 @@
 <?php
 
-use App\Components\Users\IntegrationUser;
 use DriveMedia\TestUser;
 
 class DriveMediaNovomaticApiCest

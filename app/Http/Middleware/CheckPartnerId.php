@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 /**
  * Class InputJson
@@ -15,7 +15,7 @@ class CheckPartnerId
      * @param \Closure $next
      * @return mixed
      *
-     * @throws \App\Exceptions\Api\ApiHttpException
+     * @throws ApiHttpException
      * @throws \LogicException
      */
     public function handle($request, \Closure $next)

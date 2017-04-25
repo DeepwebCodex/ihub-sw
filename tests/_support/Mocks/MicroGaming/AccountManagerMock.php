@@ -2,13 +2,9 @@
 
 namespace Testing\MicroGaming;
 
-use App\Components\ExternalServices\AccountManager;
-use App\Components\Integrations\MicroGaming\StatusCode;
-use App\Components\Transactions\TransactionHelper;
-use App\Components\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Mockery;
-use Symfony\Component\HttpFoundation\Response;
 
 class AccountManagerMock
 {
