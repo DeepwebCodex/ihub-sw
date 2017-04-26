@@ -2,7 +2,7 @@
 
 return [
     'service_id' => 23,
-    'sport_id'  => 100,
+    'sport_id' => 100,
     'amqp' => [
         'exchange' => 'service_23',
         'key' => 'service_23.event.'

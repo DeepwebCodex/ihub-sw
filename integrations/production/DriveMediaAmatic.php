@@ -5,7 +5,7 @@ return [
     'spaces' => [
         'FUN' => [
             'id' => '1811',
-            'key'   => 'l91507g5g'
+            'key' => 'l91507g5g'
         ],
     ],
     'allowed_ips' => [],
