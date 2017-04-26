@@ -13,7 +13,7 @@ use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 class ProcessAristocrat  extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
-    protected $CodeMapping = CodeMapping::class;
+    protected $codeMapping = CodeMapping::class;
 
     protected function process(TransactionRequest $request)
     {
