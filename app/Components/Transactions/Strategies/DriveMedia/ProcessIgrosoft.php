@@ -25,7 +25,7 @@ class ProcessIgrosoft extends BaseSeamlessWalletProcessor implements Transaction
         } else {
             $betTransaction = Transactions::getLastBetByUserWithForeignId($this->request->service_id, $this->request->user_id, $this->request->partner_id, $this->request->game_id, $this->request->foreign_id);
             if(!$betTransaction) {
-                throw new ApiHttpException(200, null, ($this->CodeMapping)::getByMeaning(CodeMapping::SERVER_ERROR));
+                throw new ApiHttpException(200, null, ($this->codeMapping)::getByMeaning(CodeMapping::SERVER_ERROR));
             }
 
             $this->request->object_id = $betTransaction->object_id;
