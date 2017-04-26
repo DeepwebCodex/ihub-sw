@@ -2,6 +2,10 @@
 
 namespace App\Http\Requests\DriveMediaNovomaticDeluxe;
 
+/**
+ * Class WriteBetRequest
+ * @package App\Http\Requests\DriveMediaNovomaticDeluxe
+ */
 class WriteBetRequest extends BaseRequest {
 
     /**
@@ -10,9 +14,7 @@ class WriteBetRequest extends BaseRequest {
      * @return array
      */
     public function messages() {
-        return [
-                // 'cmd' => 'Cmd must be fill'
-        ];
+        return [];
     }
 
     /**
@@ -22,19 +24,21 @@ class WriteBetRequest extends BaseRequest {
      */
     public function rules() {
         $parentRules = parent::rules();
+
         $childRules = [
-            'bet' => 'bail|present|numeric|',
-            'winLose' => 'bail|present|numeric|',
-            'tradeId' => 'bail|required|string|',
-            'betInfo' => 'bail|required|string|',
-            'gameId' => 'bail|required|numeric|',
-            'matrix' => 'bail|required|',
-            'date' => 'bail|required|numeric|',
+            'bet'       => 'bail|present|numeric|',
+            'winLose'   => 'bail|present|numeric|',
+            'tradeId'   => 'bail|required|string|',
+            'betInfo'   => 'bail|required|string|',
+            'gameId'    => 'bail|required|numeric|',
+            'matrix'    => 'bail|required|',
+            'date'      => 'bail|required|numeric|',
             'userId'    => 'bail|required|integer',
             'partnerId' => 'bail|required|integer',
             'cashdeskId'=> 'bail|required|integer',
             'userIp'    => 'bail|required|string',
         ];
+
         return array_merge($childRules, $parentRules);
     }
 
