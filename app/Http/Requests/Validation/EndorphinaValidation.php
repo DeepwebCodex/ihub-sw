@@ -10,19 +10,18 @@ use Illuminate\Support\Facades\Request;
 class EndorphinaValidation
 {
 
-    public function checkSign($attribute, $value, $parameters, $validator): bool
+    public function checkSign($attribute, $sign, $parameters, $validator): bool
     {
 
         if (!($request = Request::getFacadeRoot())) {
             return false;
         }
         $all = $request->all();
-        $sign = $all['sign'];
 
         unset($all['sign']);
 
 
-        if ($value != Sign::generate($all)) {
+        if (strtoupper($sign) != Sign::generate($all)) {
             throw new ApiHttpException(401, null, CodeMapping::getByMeaning(CodeMapping::INVALID_SIGNATURE));
         }
 

@@ -27,7 +27,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     {
 
         try {
-            app('GameSession')->start($request->input('token', ''));
+            app('GameSession')->start(strtolower($request->input('token', '')));
         } catch (SessionDoesNotExist $e) {
             return false;
         }
@@ -54,7 +54,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     {
         $firstError = $this->getFirstError($errors);
 
-        throw new ApiHttpException('400', array_get($firstError, 'message', 'Invalid input'), [
+        throw new ApiHttpException('500', array_get($firstError, 'message', 'Invalid input'), [
     'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
         ]
         );

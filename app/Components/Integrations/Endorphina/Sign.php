@@ -18,10 +18,10 @@ class Sign
         }
         $salt = Config::get("integrations.endorphina.salt");
 
-        asort($data);
+        ksort($data);
         $str = implode('', $data);
         $hash = sha1($str . $salt);
-        return $hash;
+        return strtoupper($hash);
     }
 
 }

@@ -16,9 +16,9 @@ class BalanceRequest extends BaseRequest
     public function rules()
     {
         return array_merge(parent::rules(), [
-            'currency' => 'bail|required|string',
-            'game'=> 'bail|required|string',
-            'player' => 'bail|required|string',
+            'currency' => 'bail|sometimes|string',
+            'game'=> 'bail|sometimes|string',
+            'player' => 'bail|sometimes|string',
         ]);
     }
 

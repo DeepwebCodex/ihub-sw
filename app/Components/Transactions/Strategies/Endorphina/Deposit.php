@@ -4,10 +4,10 @@ namespace App\Components\Transactions\Strategies\Endorphina;
 
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\StatusCode;
+use App\Models\CommonSerial;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
-
 
 /**
  * @property  TransactionRequest $request
@@ -26,6 +26,7 @@ class Deposit extends TransactionProcessor
     {
         $this->request = $request;
         if ($this->request->amount == 0) {
+            $this->request->foreign_id = "zeroWin-" . CommonSerial::getSerial();
             return $this->processZeroAmountTransaction();
         }
 
@@ -39,7 +40,7 @@ class Deposit extends TransactionProcessor
             }
             $this->request->object_id = $transactionBet->object_id;
         }
-        
+
         return parent::make($lastRecord);
     }
 

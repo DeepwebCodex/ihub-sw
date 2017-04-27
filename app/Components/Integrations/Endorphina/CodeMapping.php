@@ -4,8 +4,6 @@ namespace App\Components\Integrations\Endorphina;
 
 use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 
-
-
 class CodeMapping extends CodeMappingBase
 {
 
@@ -49,7 +47,12 @@ class CodeMapping extends CodeMappingBase
                 'attribute' => null,
                 'meanings' => []
             ],
-            
+            StatusCode::INVALID_TOKEN => [
+                'message' => 'Invalid token',
+                'map' => [],
+                'attribute' => null,
+                'meanings' => [self::INVALID_TOKEN]
+            ]
         ];
     }
 

@@ -4,6 +4,7 @@ namespace App\Components\Transactions\Strategies\Endorphina;
 
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\StatusCode;
+use App\Models\CommonSerial;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
@@ -28,7 +29,8 @@ class Withdrawal extends TransactionProcessor
         $this->request = $request;
         $refund = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, TransactionRequest::TRANS_REFUND, $this->request->partner_id);
         if ($refund) {
-            throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::BAD_ORDER));
+            $this->responseData['operation_id'] = $refund->operation_id;
+            return true;
         }
 
         $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
