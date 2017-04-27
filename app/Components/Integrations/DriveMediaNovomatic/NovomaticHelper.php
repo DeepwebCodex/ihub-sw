@@ -3,11 +3,11 @@
 namespace App\Components\Integrations\DriveMediaNovomatic;
 
 use App\Components\Transactions\Strategies\DriveMedia\ProcessNovomatic;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\Accounting\Users\IntegrationUser;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionResponse;
-use App\Exceptions\Api\ApiHttpException;
 
 /**
  * Class NovomaticHelper
