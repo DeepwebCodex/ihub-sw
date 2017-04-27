@@ -200,8 +200,9 @@ class EndorphinaApiCest
         $refundPacket = $this->testRefundWithoutBet($I);
         $packet = $this->data->getPacketBet($refundPacket['id']);
         $I->sendPOST('/endorphina/bet/', $packet);
-        $error = CodeMapping::getByErrorCode(StatusCode::BAD_ORDER);
-        $this->getResponseFail($I, 500, StatusCode::EXTERNAl_INTERNAL_ERROR, $error['message']);
+        $data = $this->getResponseOk($I);
+        $I->assertArrayHasKey('balance', $data);
+        $I->assertArrayHasKey('transactionId', $data);
     }
 
     public function testDuplicateOperation(ApiTester $I)
