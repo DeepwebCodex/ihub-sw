@@ -3,8 +3,8 @@
 namespace App\Components\Integrations\DriveMedia\Playtech;
 
 use App\Components\Integrations\DriveMedia\CodeMapping;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
-use App\Exceptions\Api\ApiHttpException;
 use Illuminate\Support\Facades\Config;
 
 /**

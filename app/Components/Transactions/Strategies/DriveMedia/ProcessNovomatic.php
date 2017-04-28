@@ -17,7 +17,7 @@ use iHubGrid\SeamlessWalletCore\Models\Transactions;
  */
 class ProcessNovomatic extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
-    protected $CodeMapping = CodeMapping::class;
+    protected $codeMapping = CodeMapping::class;
 
     /**
      * @param TransactionRequest $request
