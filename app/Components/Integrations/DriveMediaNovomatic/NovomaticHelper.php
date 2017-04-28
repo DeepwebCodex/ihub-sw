@@ -3,6 +3,7 @@
 namespace App\Components\Integrations\DriveMediaNovomatic;
 
 use App\Components\Transactions\Strategies\DriveMedia\ProcessNovomatic;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\Accounting\Users\IntegrationUser;
@@ -95,5 +96,39 @@ class NovomaticHelper
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
 
         return $transactionHandler->handle(new ProcessNovomatic());
+    }
+
+    /**
+     * @param $space
+     * @return mixed
+     */
+    public static function getKey($space)
+    {
+        $spaces = config("integrations.DriveMediaNovomatic.spaces");
+
+        foreach ($spaces as $v) {
+            if($v['id'] === $space) {
+                return $v['key'];
+            }
+        }
+
+        throw new ApiHttpException(200, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
+    }
+
+    /**
+     * @param $space
+     * @return mixed
+     */
+    public static function getSpace($space)
+    {
+        $spaces = config("integrations.DriveMediaNovomatic.spaces");
+
+        foreach ($spaces as $v) {
+            if($v['id'] === $space) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
