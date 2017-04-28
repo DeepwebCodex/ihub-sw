@@ -17,10 +17,19 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 
+/**
+ * Class DriveMediaIgrosoftController
+ * @package App\Http\Controllers\Api
+ */
 class DriveMediaIgrosoftController extends BaseApiController
 {
+    /** @var string  */
     public static $exceptionTemplate = DriveMediaTemplate::class;
 
+    /**
+     * DriveMediaIgrosoftController constructor.
+     * @param JsonApiFormatter $formatter
+     */
     public function __construct(JsonApiFormatter $formatter)
     {
         parent::__construct($formatter);
@@ -31,9 +40,14 @@ class DriveMediaIgrosoftController extends BaseApiController
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 
+        Validator::extend('validate_space', 'App\Http\Requests\Validation\DriveMedia\IgrosoftValidation@validateSpace');
         Validator::extend('validate_sign', 'App\Http\Requests\Validation\DriveMedia\IgrosoftValidation@validateSign');
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
         $method = IgrosoftHelper::mapMethod($request->input('cmd'));
@@ -45,9 +59,15 @@ class DriveMediaIgrosoftController extends BaseApiController
         return app()->call([$this, 'error'], $request->all());
     }
 
+    /**
+     * @param BalanceRequest $request
+     * @return Response
+     */
     public function balance(BalanceRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaIgrosoft');
+
+        IgrosoftHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
@@ -55,20 +75,19 @@ class DriveMediaIgrosoftController extends BaseApiController
         ]);
     }
 
+    /**
+     * @param PlayRequest $request
+     * @return Response
+     */
     public function bet(PlayRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveMediaIgrosoft');
 
-        if(app()->environment() == 'production') {
-            if ($user->getActiveWallet()->currency != $this->getOption($request->input('space'))['currency']) {
-                $this->error();
-            }
-        }
+        IgrosoftHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         $transactions = IgrosoftHelper::getTransactions($request->input('bet'), $request->input('winLose'), $request->input('betInfo'));
 
-        foreach ($transactions as $key => $transaction)
-        {
+        foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
                 0,
@@ -88,8 +107,7 @@ class DriveMediaIgrosoftController extends BaseApiController
 
             $transactionResponse = $transactionHandler->handle(new ProcessIgrosoft());
 
-            if($key == 0 && sizeof($transactions) == 2)
-            {
+            if($key == 0 && sizeof($transactions) == 2) {
                 $user->updateBalance($transactionResponse->getBalanceInCents());
             }
         }
@@ -105,6 +123,12 @@ class DriveMediaIgrosoftController extends BaseApiController
         throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
     }
 
+    /**
+     * @param int $statusCode
+     * @param string|null $message
+     * @param array $payload
+     * @return Response
+     */
     public function respondOk($statusCode = Response::HTTP_OK, string $message = null, array $payload = [])
     {
         $payload = array_merge($payload, [
