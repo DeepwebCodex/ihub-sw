@@ -22,7 +22,6 @@ class GetPersistentSessionRequest extends BaseRequest
             $prefix . 'remotePersistentSessionId' => 'bail|required|numeric',
             $prefix . 'remotePersistentSessionMagic' => 'bail|required|alpha_num',
             $prefix . 'partyOriginatingUid' => 'bail|required|numeric',
-            $prefix . 'previousContextId' => 'bail|required|numeric',
         ];
     }
 

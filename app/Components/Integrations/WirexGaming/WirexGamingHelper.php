@@ -35,6 +35,7 @@ class WirexGamingHelper
 
     /**
      * @param $userCurrency
+     * @throws \iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException
      */
     public static function checkSessionCurrency($userCurrency)
     {
@@ -50,6 +51,7 @@ class WirexGamingHelper
     /**
      * @param TransactionRequest $transactionRequest
      * @param $user
+     * @throws \iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException
      */
     public static function handleTransaction($transactionRequest, $user)
     {
@@ -65,7 +67,11 @@ class WirexGamingHelper
             );
         }
         if ($transactionResponse->operation_id === null) {
-            throw new ApiHttpException(504, null, CodeMapping::getByMeaning(CodeMapping::TIMED_OUT));
+            throw new ApiHttpException(
+                504,
+                null,
+                CodeMapping::getByMeaning(CodeMapping::TIMED_OUT)
+            );
         }
         return $transactionResponse;
     }

@@ -36,7 +36,7 @@ class WirexGamingController extends BaseApiController
     public static $exceptionTemplate = WirexGamingTemplate::class;
 
     /**
-     * BetGamesController constructor.
+     * WirexGamingController constructor.
      * @param WirexGamingApiFormatter $formatter
      */
     public function __construct(WirexGamingApiFormatter $formatter)
@@ -234,13 +234,11 @@ class WirexGamingController extends BaseApiController
                     array_get($this->data, 'accountEntryDetailed.accountEntry'),
                     [
                         'balance' => $transactionResponse->getBalance(),
-                        'codice' => '',
+                        'codice' => 0,
                         'description' => '',
                         'valuta' => '',
                     ]
                 ),
-                'selectedAmounts' => '',
-                'selectedEntryTypeLabels' => '',
             ],
             'callerContextId' => $this->data['callerContextId'],
             'contextId' => $this->data['contextId'],
@@ -324,13 +322,11 @@ class WirexGamingController extends BaseApiController
                     array_get($this->data, 'accountEntryDetailed.accountEntry'),
                     [
                         'balance' => $transactionResponse->getBalance(),
-                        'codice' => '',
+                        'codice' => 0,
                         'description' => '',
                         'valuta' => '',
                     ]
                 ),
-                'selectedAmounts' => '',
-                'selectedEntryTypeLabels' => '',
             ],
             'callerContextId' => $this->data['callerContextId'],
             'contextId' => $this->data['contextId'],
