@@ -4,8 +4,15 @@ namespace App\Components\Integrations\DriveMedia;
 
 use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 
+/**
+ * Class CodeMapping
+ * @package App\Components\Integrations\DriveMedia
+ */
 class CodeMapping extends CodeMappingBase
 {
+    /**
+     * @return array
+     */
     public static function getMapping()
     {
         return [

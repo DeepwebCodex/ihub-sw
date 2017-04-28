@@ -29,22 +29,27 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface {
         throw new ApiHttpException('401', null, CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
     }
 
+    /**
+     * @return array
+     */
     public function rules() {
         return [
-            'cmd' => 'bail|required|string|',
+            'cmd'   => 'bail|required|string|validate_space',
             'space' => 'bail|required|string|',
             'login' => 'bail|required|string|',
-            'sign' => 'bail|required|string|check_sign|',
+            'sign'  => 'bail|required|string|check_sign',
         ];
     }
 
+    /**
+     * @param array $errors
+     */
     public function response(array $errors) {
         $firstError = $this->getFirstError($errors);
 
         throw new ApiHttpException('400', array_get($firstError, 'message', 'Invalid input'), [
-    'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
-        ]
-        );
+            'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
+        ]);
     }
 
 }
