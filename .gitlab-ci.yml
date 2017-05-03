@@ -58,7 +58,7 @@ variables:
       - ./tests/_output
       - ./storage/logs
       - ./.env.testing
-    expire_in: 1 day
+    expire_in: 1 hour
 
 # build_docker_image
 .template_build_docker_image: &template_build_docker_image
