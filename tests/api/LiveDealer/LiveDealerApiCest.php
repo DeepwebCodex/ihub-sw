@@ -52,19 +52,19 @@ class LiveDealerApiCest
 
     public function testMethodNotFound(\ApiTester $I)
     {
-        $I->sendPOST($this->action, $this->data->notFound());
+        $I->sendPOST($this->action, json_encode($this->data->notFound()));
         $this->getResponseFail($I, StatusCode::METHOD);
     }
 
     public function testPing(\ApiTester $I)
     {
-        $I->sendPOST($this->action, $this->data->ping());
+        $I->sendPOST($this->action, json_encode($this->data->ping()));
         $this->getResponseOk($I);
     }
 
     public function testBalance(\ApiTester $I)
     {
-        $I->sendPOST($this->action, $this->data->getBalance());
+        $I->sendPOST($this->action, json_encode($this->data->getBalance()));
         $data = $this->getResponseOk($I);
         $I->assertNotNull($data['balance']);
     }
@@ -75,7 +75,7 @@ class LiveDealerApiCest
 
         $request = $this->data->bet();
 
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertNotNull($response['balance']);
         $I->assertEquals($balanceBefore - $this->data->getAmount(), $response['balance']);
@@ -90,7 +90,7 @@ class LiveDealerApiCest
         $request = $this->data->bet();
         $request['currency'] = 'QQ';
         $request = $this->data->renewHmac($request);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I);
     }
 
@@ -101,7 +101,7 @@ class LiveDealerApiCest
         $request = $this->data->bet();
         $balanceBefore = $this->testUser->getBalance();
 
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::INSUFFICIENT_FUNDS);
         $I->assertEquals($balanceBefore, $this->testUser->getBalance());
         $this->data->resetAmount();
@@ -111,7 +111,7 @@ class LiveDealerApiCest
 
     public function testFailAuth(\ApiTester $I)
     {
-        $I->sendPOST($this->action, $this->data->authFailed());
+        $I->sendPOST($this->action, json_encode($this->data->authFailed()));
         $this->getResponseFail($I, StatusCode::TOKEN);
     }
 
@@ -120,7 +120,7 @@ class LiveDealerApiCest
         $this->data->setAmount(0.00);
 
         $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I);
         $this->data->resetAmount();
 
@@ -133,7 +133,7 @@ class LiveDealerApiCest
         $this->data->setAmount(0.00);
 
         $request = $this->data->win($bet['i_gameid']);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseOk($I, true);
         $this->data->resetAmount();
 
@@ -143,12 +143,12 @@ class LiveDealerApiCest
     public function testDuplicateBet(\ApiTester $I)
     {
         $betData = $this->data->bet();
-        $I->sendPOST($this->action, $betData);
+        $I->sendPOST($this->action, json_encode($betData));
 
         $balanceBefore = $this->testUser->getBalance();
         $request = $this->data->bet(null, $betData['tid']);
 
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore, $response['balance']);
     }
@@ -158,11 +158,11 @@ class LiveDealerApiCest
     public function testWin(\ApiTester $I)
     {
         $bet = $this->data->bet();
-        $I->sendPOST($this->action, $bet);
+        $I->sendPOST($this->action, json_encode($bet));
 
         $balanceBefore = $this->testUser->getBalance();
         $request = $this->data->win($bet['i_gameid']);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore + $this->data->getAmount(), $response['balance']);
 
@@ -178,7 +178,7 @@ class LiveDealerApiCest
         $balanceBefore = $this->testUser->getBalance();
         $request = $this->data->win($win['i_gameid'], $win['tid']);
 
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore, $response['balance']);
     }
@@ -186,7 +186,7 @@ class LiveDealerApiCest
     public function testRound(\ApiTester $I)
     {
         $request = $this->data->roundInfo();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseOk($I);
     }
 
@@ -195,7 +195,7 @@ class LiveDealerApiCest
         $balanceBefore = $this->testUser->getBalance();
         $game_number = $this->getUniqueNumber();
         $request = $this->data->win($game_number);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::BAD_OPERATION_ORDER);
         $I->assertEquals($balanceBefore, $this->testUser->getBalance());
 
@@ -207,7 +207,7 @@ class LiveDealerApiCest
     {
         $request = $this->data->ping();
         $request['hmac'] = 'qwerty';
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::HMAC);
     }
 
@@ -216,7 +216,7 @@ class LiveDealerApiCest
         $request = $this->data->getBalance();
         $request['currency'] = 'q';
         $request = $this->data->renewHmac($request);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I);
     }
 
@@ -224,14 +224,14 @@ class LiveDealerApiCest
     {
         $request[$attr] = $value;
         $request = $this->data->renewHmac($request);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::TRANSACTION_MISMATCH);
     }
 
     public function testMismatch(\ApiTester $I)
     {
         $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
 
         $this->transMismatch($I, $request, 'userid', time() . '_' . Params::CURRENCY);
         $this->transMismatch($I, $request, 'currency', 'QQ');
@@ -245,7 +245,7 @@ class LiveDealerApiCest
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
         $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::UNKNOWN, Response::HTTP_REQUEST_TIMEOUT);
         $this->noRecord($I, $request, 'bet');
     }
@@ -255,7 +255,7 @@ class LiveDealerApiCest
         $mock = $this->mock(ProcessFundist::class);
         $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
         $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::UNKNOWN, Response::HTTP_REQUEST_TIMEOUT);
         $this->noRecord($I, $request, 'bet');
     }
@@ -279,7 +279,7 @@ class LiveDealerApiCest
     {
         $I->seeResponseCodeIs(200);
         $data = $this->responseToArray($I);
-        $I->assertEquals('OK', $data['status']);
+        $I->assertEquals('OK', array_get($data, 'status'));
         $I->assertNotNull($data['hmac']);
         if ($isTransaction) {
             //$I->assertArrayHasKey('balance', $data['balance']);

@@ -44,11 +44,11 @@ abstract class FundistController extends BaseApiController
     {
         parent::__construct($formatter);
 
-        $this->integration = $this->setIntegration();
+        $this->integration = $this->getIntegration();
         $this->options = config('integrations.' . $this->integration);
 
+        $this->middleware('input.json');
         $this->middleware('check.ip:' . $this->integration);
-//        $this->middleware('input.json')->except(['error']);
         $this->middleware('input.fundist.parsePlayerIdOnOffline');
 
         Hmac::$INTEGRATION = $this->integration;
@@ -60,7 +60,7 @@ abstract class FundistController extends BaseApiController
         Validator::extend('check_method', 'App\Http\Requests\Validation\FundistValidation@checkMethod');
     }
 
-    abstract protected function setIntegration();
+    abstract protected function getIntegration();
 
     /**
      * @param BaseRequest $request
