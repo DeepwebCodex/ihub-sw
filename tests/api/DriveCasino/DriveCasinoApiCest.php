@@ -17,6 +17,9 @@ class DriveCasinoApiCest
         $this->testUser = new TestUser();
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBalance(ApiTester $I)
     {
         $request = [
@@ -41,6 +44,9 @@ class DriveCasinoApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBet(ApiTester $I)
     {
         $request = [
