@@ -29,7 +29,7 @@ class WirexGamingApiCest
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
-    public function testMethodNotFound(\ApiTester $I)
+    /*public function testMethodNotFound(\ApiTester $I)
     {
         $I->sendGET('/wirex');
         $I->seeResponseCodeIs(200);
@@ -110,7 +110,7 @@ class WirexGamingApiCest
         $I->canSeeResponseIsXml();
         $I->seeXmlResponseIncludes('<status>OK</status>');
         $I->seeXmlResponseIncludes('<code>0</code>');
-    }
+    }*/
 
     /*
     public function testAddWithdrawEntry(\ApiTester $I)
