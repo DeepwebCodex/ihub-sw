@@ -2,7 +2,6 @@
 
 namespace App\Components\Integrations\DriveMediaNovomatic;
 
-use App\Exceptions\Api\ApiHttpException;
 
 /**
  * Class SignatureMaker
