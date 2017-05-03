@@ -19,6 +19,9 @@ class DriveMediaIgrosoftApiCest
         $this->testUser = new TestUser();
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBalance(ApiTester $I)
     {
         $request = [
@@ -43,6 +46,9 @@ class DriveMediaIgrosoftApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBetWin(ApiTester $I)
     {
         $tradeId = md5(time());

@@ -16,13 +16,9 @@ variables:
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
   CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-master
   CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-dev
-  CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub-grid/ihub-sw:$CI_BUILD_REF_NAME
+  CONTAINER_CODE_IMAGE: $CI_REGISTRY/integrations/ihub-grid/ihub-sw:$CI_BUILD_REF_NAME
 
 
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
 #====================== templates ======================#
 .template_dev: &template_dev
   tags:
@@ -62,31 +58,48 @@ variables:
       - ./tests/_output
       - ./storage/logs
       - ./.env.testing
-    expire_in: 1 day
+    expire_in: 1 hour
 
+# build_docker_image
 .template_build_docker_image: &template_build_docker_image
   stage: build_docker_image
   image: docker:latest
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
     - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
-    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
-    - docker push $CONTAINER_IHUB_CODE_IMAGE
+    - docker build -t $CONTAINER_CODE_IMAGE .
+    - docker push $CONTAINER_CODE_IMAGE
 
-.template_build_docker_image: &template_build_docker_image_dev
+.template_build_docker_image_dev: &template_build_docker_image_dev
   <<: *template_dev
   <<: *template_build_docker_image
 
-.template_build_docker_image: &template_build_docker_image_prod
+.template_build_docker_image_prod: &template_build_docker_image_prod
   <<: *template_prod
   <<: *template_build_docker_image
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
+# END build_docker_image
 
+# deploy_to_servers
+.template_deploy: &template_deploy
+  stage: deploy_to_servers
+  image: $RANCHER_REST_WRAPPER_IMAGE
 
+.template_deploy_dev: &template_deploy_dev
+  <<: *template_dev
+  <<: *template_deploy
+  only:
+    - dev
+
+.template_deploy_prod: &template_deploy_prod
+  <<: *template_prod
+  <<: *template_deploy
+  only:
+    - tags
+    - master
+  when: manual
+# END deploy_to_servers
+
+#====================== templates ======================#
 
 fail_build_for_incorrect_branches:
   tags:
@@ -102,7 +115,7 @@ fail_build_for_incorrect_branches:
     - master
     - tags
 
-test_features:
+test_feature:
   <<: *template_compile_n_test
   script:
     - bash ./run/dev/install-rancher.sh
@@ -135,7 +148,7 @@ compile_dev:
     paths:
       - ./vendor
       - ./
-    expire_in: 1 day
+    expire_in: 1 hour
   only:
     - dev
 
@@ -147,7 +160,7 @@ compile_prod:
   script:
     - git log --oneline $(git for-each-ref --sort=taggerdate --format '%(tag)' | tail -1)..HEAD | grep ".* Merge branch '[a-zA-Z]\{1,6\}-[0-9]\{1,4\}-.*' into 'master'" || true
     - export http_proxy=$HTTP_PROXY_FOR_PROD
-    - export https_proxy=$HTTP_PROXY_FOR_PROD
+    - export https_proxy=$HTTPS_PROXY_FOR_PROD
     - rm -rf .env .env.testing ./tests .git
     - bash ./run/prod/decode.sh
     - bash ./run/prod/install-rancher.sh
@@ -160,7 +173,7 @@ compile_prod:
     paths:
       - ./vendor
       - ./
-    expire_in: 1 day
+    expire_in: 1 hour
   only:
     - master
     - tags
@@ -177,53 +190,33 @@ build_docker_image_prod:
     - tags
 
 deploy_to_servers_dev:
-  <<: *template_dev
-  stage: deploy_to_servers
-  image: $RANCHER_REST_WRAPPER_IMAGE
+  <<: *template_deploy_dev
   script:
     - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_DEV_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_DEV_SECRET_KEY
-    - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-    - upgrade --environment dev-ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-  only:
-    - dev
+    - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment dev-ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 
-manual_deploy_to_system_servers_prod:
-  <<: *template_prod
-  <<: *template_add_ssh_auth
-  stage: deploy_to_servers
-  image: $RANCHER_REST_WRAPPER_IMAGE
+manual_deploy_to_servers_system_prod:
+  <<: *template_deploy_prod
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-    - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-  only:
-    - tags
-    - master
-  when: manual
+    - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 
 manual_deploy_to_servers_pre_prod:
-  <<: *template_prod
-  <<: *template_add_ssh_auth
-  stage: deploy_to_servers
-  image: $RANCHER_REST_WRAPPER_IMAGE
+  <<: *template_deploy_prod
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-  only:
-    - tags
-    - master
-  when: manual
+    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 
-manual_deploy_to_all_servers_prod:
-  <<: *template_prod
-  <<: *template_add_ssh_auth
-  stage: deploy_to_servers
-  image: $RANCHER_REST_WRAPPER_IMAGE
+manual_deploy_to_servers_all_prod:
+  <<: *template_deploy_prod
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-    - upgrade --environment ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-    - upgrade --environment ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-    - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   only:
     - tags
-  when: manual

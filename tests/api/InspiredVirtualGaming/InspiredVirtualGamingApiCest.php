@@ -20,6 +20,9 @@ class InspiredVirtualGamingApiCest
         $this->clearEvent($this->eventId);
     }
 
+    /**
+     * @skip
+     */
     public function testInvalidMethod(ApiTester $I)
     {
         $I->disableMiddleware();
@@ -28,6 +31,9 @@ class InspiredVirtualGamingApiCest
         $I->seeResponseContains('BADFORMAT');
     }
 
+    /**
+     * @skip
+     */
     public function testMainSuccess(ApiTester $I)
     {
         $I->disableMiddleware();

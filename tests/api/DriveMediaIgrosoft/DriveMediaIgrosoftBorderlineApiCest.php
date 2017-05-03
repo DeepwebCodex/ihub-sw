@@ -20,6 +20,9 @@ class DriveMediaIgrosoftBorderlineApiCest
         $this->testUser = new TestUser();
     }
 
+    /**
+     * @skip
+     */
     public function testMethodWinWithoutBet(ApiTester $I)
     {
         $request = [
@@ -50,6 +53,9 @@ class DriveMediaIgrosoftBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodWrongSign(ApiTester $I)
     {
         $request = [
@@ -72,6 +78,9 @@ class DriveMediaIgrosoftBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodSpaceNotFound(ApiTester $I)
     {
         $request = [

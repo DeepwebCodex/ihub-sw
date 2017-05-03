@@ -20,6 +20,9 @@ class DriveMediaAmaticApiCest
         $this->testUser = new TestUser();
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBalance(ApiTester $I)
     {
         $request = [
@@ -44,6 +47,9 @@ class DriveMediaAmaticApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBet(ApiTester $I)
     {
         $request = [
