@@ -2,5 +2,5 @@
 
 return [
     'service_id' => 48,
-    'salt' => 'E09A0EF00E5D4B23B169E8548067B8E3',
+    'salt' => '8755706A23F2440696A467D718A21AF8',
 ];
