@@ -301,7 +301,7 @@ class WirexGamingController extends BaseApiController
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
-            $transactionUid,
+            $this->data['relatedTransUid'],
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,

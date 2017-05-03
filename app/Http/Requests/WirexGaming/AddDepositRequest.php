@@ -2,8 +2,6 @@
 
 namespace App\Http\WirexGaming;
 
-use Illuminate\Http\Request;
-
 /**
  * Class AddDepositRequest
  * @package App\Http\WirexGaming
@@ -33,16 +31,8 @@ class AddDepositRequest extends BaseRequest
             $prefix . 'originatingPid' => 'bail|required|numeric',
             $prefix . 'partyOriginatingUid' => 'bail|required|numeric',
             $prefix . 'relatedTransUid' => 'bail|required|numeric',
+            $prefix . 'sessionToken' => 'bail|required|string',
             $prefix . 'transactionUid' => 'bail|required|numeric',
         ];
-    }
-
-    /**
-     * @param Request $request
-     * @return bool
-     */
-    public function authorizeUser(Request $request)
-    {
-        return true;
     }
 }
