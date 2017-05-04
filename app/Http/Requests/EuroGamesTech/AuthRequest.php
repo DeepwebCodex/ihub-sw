@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\EuroGamesTech;
 
+use App\Components\Integrations\EuroGamesTech\EgtHelper;
 use App\Components\Integrations\EuroGamesTech\StatusCode;
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
@@ -33,15 +34,15 @@ class AuthRequest extends BaseEgtRequest
      */
     public function authorize(Request $request)
     {
-        if(parent::authorize($request)){
-            try{
-                app('GameSession')->start($request->input('DefenceCode', ''));
-            } catch (SessionDoesNotExist $e) {
-                throw new ApiHttpException(400, "Defence code expired", ['code' => StatusCode::EXPIRED]);
-            }
+        try{
+            app('GameSession')->start($request->input('DefenceCode', ''));
+        } catch (SessionDoesNotExist $e) {
+            throw new ApiHttpException(400, "Defence code expired", ['code' => StatusCode::EXPIRED]);
         }
 
-        return true;
+        app('GameSession')->set(EgtHelper::SESSION_PREFIX . $request->input('SessionId'), $request->input('DefenceCode'));
+
+        return parent::authorize($request);
     }
 
     /**

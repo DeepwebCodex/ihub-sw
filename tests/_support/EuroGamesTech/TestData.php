@@ -86,7 +86,8 @@ class TestData
             'UserName' => config('integrations.egt.UserName'),
             'Password' => config('integrations.egt.Password'),
             'PortalCode' => $this->currency,
-            'SessionId' => md5(str_random())
+            'SessionId' => Params::SESSION_ID, //md5(str_random())
+            'DefenceCode' => Params::DEFENCE_CODE
         ];
     }
 
