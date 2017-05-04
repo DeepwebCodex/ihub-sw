@@ -4,20 +4,22 @@ use DriveMedia\TestUser;
 
 class DriveCasinoApiCest
 {
-
-    private $options;
     private $space;
 
     /** @var  TestUser $testUser */
     private $testUser;
 
-    public function _before() {
-        $this->options = config('integrations.drivecasino');
-        $this->space = "1812";
+    public function _before()
+    {
+        $this->space = config('integrations.drivecasino.spaces.FUN.id');
+        $this->key = config('integrations.drivecasino.spaces.FUN.key');
 
         $this->testUser = new TestUser();
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBalance(ApiTester $I)
     {
         $request = [
@@ -26,7 +28,9 @@ class DriveCasinoApiCest
             'login' => $this->testUser->getUserId(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options[$this->space]['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/drivecasino', $request);
@@ -40,6 +44,9 @@ class DriveCasinoApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBet(ApiTester $I)
     {
         $request = [
@@ -56,7 +63,9 @@ class DriveCasinoApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options[$this->space]['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/drivecasino', $request);
