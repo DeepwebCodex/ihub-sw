@@ -23,13 +23,18 @@ class GameSessionService
     /**
      * Create session
      *
-     * @param array $sessionData
-     * @param $algorithm
+     * @param array  $sessionData
+     * @param string $algorithm
+     * @param string $referenceId
+     *
      * @return string
      */
-    public function create(array $sessionData, $algorithm = 'sha512'):string
+    public function create(array $sessionData, $algorithm = 'sha512', string $referenceId = null):string
     {
-        $referenceId = $this->makeReferenceId($sessionData);
+        if(!$referenceId){
+            $referenceId = $this->makeReferenceId($sessionData);
+        }
+
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
         $referenceStoreItem->read();
         $sessionId = $referenceStoreItem->getSessionId();
@@ -47,6 +52,14 @@ class GameSessionService
         $this->sessionStarted = true;
 
         return $sessionId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->sessionStoreItem->getData();
     }
 
     /**

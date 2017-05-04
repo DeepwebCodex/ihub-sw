@@ -70,6 +70,8 @@ class EuroGamesTechController extends BaseApiController
 
     public function withdraw(WithdrawRequest $request)
     {
+        app('GameSession')->start(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
         EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
@@ -139,6 +141,8 @@ class EuroGamesTechController extends BaseApiController
 
     public function withdrawAndDeposit(WithdrawAndDepositRequest $request)
     {
+        app('GameSession')->start(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
         EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
