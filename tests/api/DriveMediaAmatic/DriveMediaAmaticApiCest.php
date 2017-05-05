@@ -1,33 +1,33 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
 
-use DriveMedia\TestUser;
+use Testing\DriveMediaAmatic\AccountManagerMock;
+use Testing\DriveMediaAmatic\Params;
 
 class DriveMediaAmaticApiCest
 {
     private $key;
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var  Params */
+    private $params;
 
     public function _before()
     {
         $this->key = config('integrations.DriveMediaAmatic.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaAmatic.spaces.FUN.id');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params();
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBalance(ApiTester $I)
     {
+        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+
         $request = [
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
             'cmd'   => 'getBalance',
         ];
 
@@ -40,25 +40,24 @@ class DriveMediaAmaticApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', $this->testUser->getBalance()),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $this->params->balance),
             'status'    => 'success',
             'error'     => ''
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBet(ApiTester $I)
     {
+        $this->mockAccountManager($I, (new AccountManagerMock())->bet()->get());
+
         $request = [
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
+            'login'     => $this->params->login,
             'cmd'       => 'writeBet',
-            'bet'       => '0.1',
-            'winLose'   => '-0.1',
-            'tradeId'   => (string)microtime(),
+            'bet'       => $this->params->amount,
+            'winLose'   => -$this->params->amount,
+            'tradeId'   => $this->params->getTradeId(),
             'betInfo'   => 'bet',
             'gameId'    => '183',
             'matrix'    => '[6,5,3,6,1,8,7,5,4]',
@@ -74,10 +73,18 @@ class DriveMediaAmaticApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 0.1)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', ($this->params->balance - $this->params->amount)),
             'status'    => 'success',
             'error'     => ''
         ]);
+    }
+
+    private function mockAccountManager(\ApiTester $I, $mock)
+    {
+        if($this->params->enableMock) {
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
     }
 }
