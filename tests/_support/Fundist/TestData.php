@@ -49,10 +49,6 @@ class TestData
             'type' => 'balance',
             'userid' => $this->userId,
             'currency' => $this->currency,
-            'i_gameid' => $this->game_id,
-            'i_extparam' => '2323',
-            'i_gamedesc' => '3434',
-            'i_actionid' => '4545',
         ];
         $params['hmac'] = (new Hmac($params, $this->integration))->get();
 
@@ -68,7 +64,7 @@ class TestData
             'userid' => $this->userId,
             'currency' => $this->currency,
             'amount' => $this->amount,
-            'i_actionid' => $game_number ?? $this->getUniqueNumber(),
+            'i_actionid' => $game_number ?? 'D' . $this->getUniqueNumber(),
             'i_extparam' => '',
             'i_gamedesc' => '',
         ];
@@ -86,7 +82,7 @@ class TestData
             'userid' => $this->userId,
             'currency' => $this->currency,
             'amount' => $this->amount,
-            'i_actionid' => $game_number ?? $this->getUniqueNumber(),
+            'i_actionid' => $game_number ?? 'C' . $this->getUniqueNumber(),
             'i_extparam' => '',
             'i_gamedesc' => '',
         ];

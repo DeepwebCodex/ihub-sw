@@ -63,4 +63,15 @@ class EgtHelper
             throw new ApiHttpException(409, "Currency mismatch", CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
         }
     }
+
+    public static function getObjectId(string $egtId): int
+    {
+        $id = ltrim($egtId, "CD");
+        if (!is_numeric($id)) {
+            throw new ApiHttpException('400',
+                "Wrong format i_actionid: " . $egtId);
+        }
+
+        return (int)$id;
+    }
 }
