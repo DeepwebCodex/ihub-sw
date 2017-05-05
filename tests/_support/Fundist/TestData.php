@@ -68,7 +68,7 @@ class TestData
             'userid' => $this->userId,
             'currency' => $this->currency,
             'amount' => $this->amount,
-            'i_gameid' => $game_number ?? $this->getUniqueNumber(),
+            'i_actionid' => $game_number ?? $this->getUniqueNumber(),
             'i_extparam' => '',
             'i_gamedesc' => '',
         ];
@@ -86,7 +86,7 @@ class TestData
             'userid' => $this->userId,
             'currency' => $this->currency,
             'amount' => $this->amount,
-            'i_gameid' => $game_number ?? $this->getUniqueNumber(),
+            'i_actionid' => $game_number ?? $this->getUniqueNumber(),
             'i_extparam' => '',
             'i_gamedesc' => '',
         ];

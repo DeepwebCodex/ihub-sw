@@ -109,7 +109,7 @@ abstract class FundistController extends BaseApiController
 
         $transactionRequest = new TransactionRequest(
             $service_id,
-            $request->input('i_gameid'),
+            $request->input('i_actionid'),
             $user->id,
             $request->input('currency'),
             TransactionRequest::D_WITHDRAWAL,
@@ -138,7 +138,7 @@ abstract class FundistController extends BaseApiController
         $betTransaction = Transactions::getBetTransaction(
             $this->getOption('service_id'),
             $user->id,
-            $request->input('i_gameid')
+            $request->input('i_actionid')
         );
         if (is_null($betTransaction)) {
             throw new ApiHttpException(Response::HTTP_OK, null, [
@@ -156,7 +156,7 @@ abstract class FundistController extends BaseApiController
 
         $transactionRequest = new TransactionRequest(
             $service_id,
-            $request->input('i_gameid'),
+            $request->input('i_actionid'),
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
