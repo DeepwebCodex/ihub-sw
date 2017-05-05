@@ -21,6 +21,9 @@ class VirtualBoxingApiCest
         $I->seeResponseContains('Method not found');
     }
 
+    /**
+     * @skip
+     */
     public function testMainSuccess(ApiTester $I)
     {
         $this->eventId = $this->getEventId();
@@ -185,6 +188,9 @@ class VirtualBoxingApiCest
         $I->sendPOST(self::URI_PREFIX, $request);
     }
 
+    /**
+     * @skip
+     */
     public function testDuplicateBet(ApiTester $I)
     {
         $this->eventId = $this->getEventId();
@@ -202,6 +208,9 @@ class VirtualBoxingApiCest
         $this->clearEvent($this->eventId);
     }
 
+    /**
+     * @skip
+     */
     public function testDuplicateResult(ApiTester $I)
     {
         $this->eventId = $this->getEventId();
@@ -234,6 +243,9 @@ class VirtualBoxingApiCest
         $this->clearEvent($this->eventId);
     }
 
+    /**
+     * @skip
+     */
     public function testCancelEvent(ApiTester $I)
     {
         $this->eventId = $this->getEventId();
