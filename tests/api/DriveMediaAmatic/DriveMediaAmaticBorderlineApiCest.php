@@ -1,7 +1,6 @@
 <?php
 
 use iHubGrid\Accounting\ExternalServices\AccountManager;
-use DriveMedia\TestUser;
 use Testing\DriveMediaAmatic\AccountManagerMock;
 use Testing\DriveMediaAmatic\Params;
 
@@ -9,9 +8,6 @@ class DriveMediaAmaticBorderlineApiCest
 {
     private $key;
     private $space;
-
-    /** @var  TestUser $testUser */
-    private $testUser;
 
     /** @var  Params */
     private $params;
@@ -22,7 +18,6 @@ class DriveMediaAmaticBorderlineApiCest
         $this->space = config('integrations.DriveMediaAmatic.spaces.FUN.id');
 
         $this->params = new Params();
-        $this->testUser = new TestUser();
     }
 
     public function testMethodWinWithoutBet(ApiTester $I)
@@ -83,7 +78,7 @@ class DriveMediaAmaticBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
+            'login'     => $this->params->login,
             'balance'   => money_format('%i', ($this->params->balance)),
             'status'    => 'success',
             'error'     => ''
@@ -94,7 +89,7 @@ class DriveMediaAmaticBorderlineApiCest
     {
         $request = [
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
             'cmd'   => 'getBalance',
         ];
 
@@ -115,7 +110,7 @@ class DriveMediaAmaticBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1',
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
