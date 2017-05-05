@@ -40,7 +40,7 @@ class AuthRequest extends BaseEgtRequest
             throw new ApiHttpException(400, "Defence code expired", ['code' => StatusCode::EXPIRED]);
         }
 
-        app('GameSession')->create(app('GameSession')->getData(), EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+        app('GameSession')->create(app('GameSession')->getData(), 'md5', EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
 
         return parent::authorize($request);
     }
