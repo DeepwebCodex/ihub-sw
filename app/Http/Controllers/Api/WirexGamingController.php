@@ -91,27 +91,27 @@ class WirexGamingController extends BaseApiController
     /**
      * @param Request $request
      */
-    public function docs(Request $request)
+    public function wsdl(Request $request)
     {
         $input = $request->input();
         $exampleUrl = 'https://pcws.casino.com:443/portal/PlatformControllerWS';
-        $url = 'http://vb-test.favbet.com/ihub/wirex';
+        $url = array_get($this->options, 'wsdl_url');
         $wsdlFolder = public_path() . '/soap/wirex';
         if (isset($input['wsdl'])) {
             $content = file_get_contents($wsdlFolder . '/wirex.wsdl');
             $content = str_replace($exampleUrl, $url, $content);
         } elseif (isset($input['xsd'])) {
-            if ($input['xsd'] == 1) {
+            $xsdNumber = (int)$input['xsd'];
+            if ($xsdNumber === 1) {
                 $content = file_get_contents($wsdlFolder . '/schema1.xsd');
                 $content = str_replace($exampleUrl, $url, $content);
-            } elseif ($input['xsd'] == 2) {
+            } elseif ($xsdNumber === 2) {
                 $content = file_get_contents($wsdlFolder . '/schema2.xsd');
             }
         }
         if (empty($content)) {
             $this->error();
         }
-
         $header['Content-Type'] = 'text/xml; charset=utf-8';
         return ResponseFacade::make($content, 200, $header);
     }
@@ -131,9 +131,6 @@ class WirexGamingController extends BaseApiController
      */
     public function getPersistentSession(GetPersistentSessionRequest $request)
     {
-        $userUid = $this->data['partyOriginatingUid'];
-        $userId = WirexGamingHelper::parseUid($userUid);
-
         $sessionId = $this->data['remotePersistentSessionId'];
         $sessionMagic = $this->data['remotePersistentSessionMagic'];
 
@@ -209,7 +206,6 @@ class WirexGamingController extends BaseApiController
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
         $transactionUid = $this->data['transactionUid'];
-        //$transactionId = WirexGamingHelper::parseUid($transactionUid);
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -261,15 +257,14 @@ class WirexGamingController extends BaseApiController
         $sessionToken = $this->data['sessionToken'];
 
         $transactionUid = $this->data['transactionUid'];
-        //$transactionId = WirexGamingHelper::parseUid($transactionUid);
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
-            $transactionUid,
+            $this->data['relatedTransUid'],
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
-            $this->data['amount'],
+            abs($this->data['amount']),
             TransactionRequest::TRANS_REFUND,
             $transactionUid,
             \app('GameSession')->get('game_id'),
@@ -297,7 +292,6 @@ class WirexGamingController extends BaseApiController
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
         $transactionUid = $this->data['transactionUid'];
-        //$transactionId = WirexGamingHelper::parseUid($transactionUid);
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -345,15 +339,14 @@ class WirexGamingController extends BaseApiController
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
         $transactionUid = $this->data['transactionUid'];
-        //$transactionId = WirexGamingHelper::parseUid($transactionUid);
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
-            $transactionUid,
+            $this->data['relatedTransUid'],
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
-            $this->data['amount'],
+            abs($this->data['amount']),
             TransactionRequest::TRANS_REFUND,
             $transactionUid,
             \app('GameSession')->get('game_id'),

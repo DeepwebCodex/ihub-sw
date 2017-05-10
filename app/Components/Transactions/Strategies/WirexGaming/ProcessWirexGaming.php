@@ -29,7 +29,10 @@ class ProcessWirexGaming extends BaseSeamlessWalletProcessor implements Transact
     protected function process(TransactionRequest $request): array
     {
         $this->request = $request;
-        if ($this->request->transaction_type == TransactionRequest::TRANS_WIN) {
+        if (in_array(
+            $this->request->transaction_type,
+            [TransactionRequest::TRANS_WIN, TransactionRequest::TRANS_REFUND]
+        )) {
             $betTransaction = Transactions::getBetTransaction(
                 $this->request->service_id,
                 $this->request->user_id,

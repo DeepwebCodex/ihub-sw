@@ -6,4 +6,5 @@ return [
     'server_pid' => 50088,
     'previous_context_id' => 6603688,
     'use_secure_request' => false,
+    'wsdl_url' => 'https://ihub.bet/wirex',
 ];

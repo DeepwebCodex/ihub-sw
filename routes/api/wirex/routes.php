@@ -1,5 +1,5 @@
 <?php
 
 Route::any('{any}', "WirexGamingController@error");
-Route::get('/', "WirexGamingController@docs");
+Route::get('/', "WirexGamingController@wsdl");
 Route::post('/', "WirexGamingController@index")->middleware('input.xml');

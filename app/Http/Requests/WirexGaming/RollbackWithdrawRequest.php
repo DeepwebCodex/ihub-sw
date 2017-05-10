@@ -27,7 +27,7 @@ class RollbackWithdrawRequest extends BaseRequest
     {
         $prefix = $this->getRequestDataPrefix();
         return [
-            $prefix . 'accountEntryDetailed.accountEntry.amount' => 'bail|required',
+            $prefix . 'amount' => 'bail|required',
             $prefix . 'callerContextId' => 'bail|required|numeric',
             $prefix . 'contextId' => 'bail|required|numeric',
             $prefix . 'originatingPid' => 'bail|required|numeric',
