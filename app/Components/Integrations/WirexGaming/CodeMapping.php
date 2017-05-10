@@ -11,6 +11,7 @@ use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 class CodeMapping extends CodeMappingBase
 {
     const INVALID_AUTH = 'invalid_auth';
+    const BAD_OPERATION_ORDER = 'bad_operation_order';
 
     public static function getMapping()
     {
@@ -22,6 +23,7 @@ class CodeMapping extends CodeMappingBase
                 'meanings'  => [
                     self::SERVER_ERROR,
                     self::INVALID_CURRENCY,
+                    self::BAD_OPERATION_ORDER,
                     CodeMapping::DUPLICATE,
                     CodeMapping::TIMED_OUT,
                     CodeMapping::UNKNOWN_METHOD,

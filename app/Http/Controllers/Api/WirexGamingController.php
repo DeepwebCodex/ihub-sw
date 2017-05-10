@@ -18,6 +18,7 @@ use iHubGrid\Accounting\Users\IntegrationUser;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
 use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -252,9 +253,18 @@ class WirexGamingController extends BaseApiController
         $userId = WirexGamingHelper::parseUid($userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
-        WirexGamingHelper::checkSessionCurrency($user->getCurrency());
-
-        $sessionToken = $this->data['sessionToken'];
+        $betTransaction = Transactions::getBetTransaction(
+            $this->getOption('service_id'),
+            $user->id,
+            $this->data['relatedTransUid']
+        );
+        if (null === $betTransaction) {
+            throw new ApiHttpException(
+                Response::HTTP_OK,
+                'Bad operation order',
+                CodeMapping::getByMeaning(CodeMapping::BAD_OPERATION_ORDER)
+            );
+        }
 
         $transactionUid = $this->data['transactionUid'];
 
@@ -262,22 +272,21 @@ class WirexGamingController extends BaseApiController
             $this->getOption('service_id'),
             $this->data['relatedTransUid'],
             $user->id,
-            $user->getCurrency(),
+            $betTransaction->currency,
             TransactionRequest::D_DEPOSIT,
             abs($this->data['amount']),
             TransactionRequest::TRANS_REFUND,
             $transactionUid,
-            \app('GameSession')->get('game_id'),
-            \app('GameSession')->get('partner_id'),
-            \app('GameSession')->get('cashdesk_id'),
-            \app('GameSession')->get('userIp')
+            $betTransaction->game_id,
+            $betTransaction->partner_id,
+            $betTransaction->cashdesk,
+            $betTransaction->client_ip
         );
 
         $transactionResponse = WirexGamingHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, '', [
             'relatedTransUid' => $transactionResponse->operation_id,
-            'sessionToken' => $sessionToken,
         ]);
     }
 
@@ -332,7 +341,7 @@ class WirexGamingController extends BaseApiController
      * @param CancelTransactionRequest $request
      * @return Response
      */
-    public function cancelTransaction(CancelTransactionRequest $request)
+    /*public function cancelTransaction(CancelTransactionRequest $request)
     {
         $userUid = $this->data['partyOriginatingUid'];
         $userId = WirexGamingHelper::parseUid($userUid);
@@ -360,5 +369,5 @@ class WirexGamingController extends BaseApiController
         return $this->respondOk(200, '', [
             'relatedTransUid' => $transactionResponse->operation_id,
         ]);
-    }
+    }*/
 }
