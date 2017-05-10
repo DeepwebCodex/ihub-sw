@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Components\Integrations\DriveMedia\CodeMapping;
 use App\Components\Integrations\DriveMedia\Aristocrat\AristocratHelper;
 use App\Components\Transactions\Strategies\DriveMedia\ProcessAristocrat;
+use App\Models\DriveMediaAristocratProdObjectIdMap;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\Accounting\Users\IntegrationUser;
@@ -91,7 +92,7 @@ class DriveMediaAristocratController extends BaseApiController
         foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
-                0,
+                DriveMediaAristocratProdObjectIdMap::getObjectId($request->input('tradeId')),
                 $user->id,
                 $user->getCurrency(),
                 ($transaction['type'] == "bet" ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT),

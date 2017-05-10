@@ -1,36 +1,35 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
-
-use DriveMedia\TestUser;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use Testing\DriveMediaAristocrat\AccountManagerMock;
+use Testing\DriveMediaAristocrat\Params;
 
 class DriveMediaAristocratBorderlineApiCest
 {
     private $key;
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var  Params */
+    private $params;
 
     public function _before() {
         $this->key = config('integrations.DriveMediaAristocrat.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaAristocrat.spaces.FUN.id');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params();
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBetWin(ApiTester $I)
     {
+        $this->mockAccountManager($I, (new AccountManagerMock())->bet()->win()->get());
+
         $request = [
             'cmd' => 'writeBet',
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
-            'bet' => '0.05',
-            'winLose' => '-0.03',
-            'tradeId' => (string)rand(1111111111111,9999999999999).'_'.rand(111111111,999999999),
+            'login' => $this->params->login,
+            'bet' => (string)$this->params->amount,
+            'winLose' => (string)$this->params->winLose,
+            'tradeId' => $this->params->getTradeId(),
             'betInfo' => 'Bet',
             'gameId' => '125',
             'matrix' => 'EAGLE,DINGO,BOAR,BOAR,BOAR,;TEN,JACK,KING,QUEEN,TEN,;DINGO,BOAR,DINGO,DINGO,SCATTER,;',
@@ -47,21 +46,18 @@ class DriveMediaAristocratBorderlineApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', $this->testUser->getBalance() - 0.05 + 0.02),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $this->params->balance - $this->params->amount + $this->params->winLose),
             'status'    => 'success',
             'error'     => ''
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodWrongSign(ApiTester $I)
     {
         $request = [
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
             'cmd'   => 'getBalance',
         ];
 
@@ -79,15 +75,12 @@ class DriveMediaAristocratBorderlineApiCest
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodSpaceNotFound(ApiTester $I)
     {
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1',
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
@@ -104,4 +97,11 @@ class DriveMediaAristocratBorderlineApiCest
         ]);
     }
 
+    private function mockAccountManager(\ApiTester $I, $mock)
+    {
+        if($this->params->enableMock) {
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
+    }
 }
