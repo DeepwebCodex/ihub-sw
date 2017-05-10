@@ -72,7 +72,7 @@ class EuroGamesTechController extends BaseApiController
 
     public function withdraw(WithdrawRequest $request)
     {
-        $sessionId = app('GameSession')->getStorageKey(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+        $sessionId = app('GameSession')->generateReferenceId(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
         app('GameSession')->start($sessionId);
 
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
@@ -144,7 +144,7 @@ class EuroGamesTechController extends BaseApiController
 
     public function withdrawAndDeposit(WithdrawAndDepositRequest $request)
     {
-        $sessionId = app('GameSession')->getStorageKey(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+        $sessionId = app('GameSession')->generateReferenceId(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
         app('GameSession')->start($sessionId);
 
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
