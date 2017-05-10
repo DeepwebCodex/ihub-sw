@@ -35,6 +35,7 @@ class GameSessionsMock
         $game_session->shouldReceive('store')->once();
         $game_session->shouldReceive('getData')->once();
         $game_session->shouldReceive('create')->once();
+        $game_session->shouldReceive('getStorageKey')->once()->withAnyArgs()->andReturn('e4fda8473f68894a11c99acc25ecca11');
 
         return $game_session;
     }
