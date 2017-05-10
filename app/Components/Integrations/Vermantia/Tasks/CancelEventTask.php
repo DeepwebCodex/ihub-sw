@@ -3,7 +3,6 @@
 namespace App\Components\Integrations\Vermantia\Tasks;
 
 use iHubGrid\DynamicScheduler\Components\BasicTasks\RunArtisanCommand;
-use iHubGrid\DynamicScheduler\Exceptions\FailedTaskException;
 
 final class CancelEventTask extends RunArtisanCommand
 {
