@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Components\Formatters\EgtXmlApiFormatter;
 use App\Components\Integrations\EuroGamesTech\CodeMapping;
 use App\Components\Integrations\EuroGamesTech\EgtHelper;
+use iHubGrid\ErrorHandler\Http\CodeMappingBase;
 use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
 use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\Accounting\Users\IntegrationUser;
@@ -49,6 +51,8 @@ class EuroGamesTechController extends BaseApiController
     {
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
+        app('GameSession')->create(app('GameSession')->getData(), 'md5', EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+
         EgtHelper::checkInputCurrency($user->getCurrency(), EgtHelper::getCurrencyFromPortalCode($request->input('PortalCode')));
 
         return $this->respondOk(200, null, [
@@ -69,6 +73,9 @@ class EuroGamesTechController extends BaseApiController
 
     public function withdraw(WithdrawRequest $request)
     {
+        $sessionId = app('GameSession')->generateReferenceId(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+        app('GameSession')->start($sessionId);
+
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
         EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
@@ -83,9 +90,9 @@ class EuroGamesTechController extends BaseApiController
             EgtHelper::getTransactionType($request->input('Reason')),
             $request->input('TransferId'),
             $request->input('GameId'),
-            $request->input('PartnerId'),
-            $request->input('CashdeskId'),
-            $request->input('UserIp')
+            app('GameSession')->get('partner_id'),
+            app('GameSession')->get('cashdesk_id'),
+            app('GameSession')->get('userIp')
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -102,6 +109,17 @@ class EuroGamesTechController extends BaseApiController
 
         EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
 
+        $betTransaction = Transactions::getBetTransaction(
+            $this->getOption('service_id'),
+            $user->id,
+            $request->input('GameNumber')
+        );
+
+        if (!$betTransaction) {
+            throw new ApiHttpException(500, "Bet was not placed",
+                CodeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
+        }
+
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
             $request->input('GameNumber'),
@@ -112,9 +130,9 @@ class EuroGamesTechController extends BaseApiController
             EgtHelper::getTransactionType($request->input('Reason'), true),
             $request->input('TransferId'),
             $request->input('GameId'),
-            $request->input('PartnerId'),
-            $request->input('CashdeskId'),
-            $request->input('UserIp')
+            $betTransaction->partner_id,
+            $betTransaction->cashdesk,
+            $betTransaction->client_ip
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -127,6 +145,9 @@ class EuroGamesTechController extends BaseApiController
 
     public function withdrawAndDeposit(WithdrawAndDepositRequest $request)
     {
+        $sessionId = app('GameSession')->generateReferenceId(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+        app('GameSession')->start($sessionId);
+
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
         EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
@@ -141,9 +162,9 @@ class EuroGamesTechController extends BaseApiController
             TransactionRequest::TRANS_BET,
             $request->input('TransferId'),
             $request->input('GameId'),
-            $request->input('PartnerId'),
-            $request->input('CashdeskId'),
-            $request->input('UserIp')
+            app('GameSession')->get('partner_id'),
+            app('GameSession')->get('cashdesk_id'),
+            app('GameSession')->get('userIp')
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);
@@ -160,9 +181,9 @@ class EuroGamesTechController extends BaseApiController
             EgtHelper::getTransactionType($request->input('Reason')),
             $request->input('TransferId'),
             $request->input('GameId'),
-            $request->input('PartnerId'),
-            $request->input('CashdeskId'),
-            $request->input('UserIp')
+            app('GameSession')->get('partner_id'),
+            app('GameSession')->get('cashdesk_id'),
+            app('GameSession')->get('userIp')
         );
 
         $transactionResponse = EgtHelper::handleTransaction($transactionRequest, $user);

@@ -12,6 +12,8 @@ use iHubGrid\SeamlessWalletCore\Transactions\TransactionResponse;
 
 class EgtHelper
 {
+    const SESSION_PREFIX = 'EGT_';
+
     public static function getCurrencyFromPortalCode(string $portalCode){
         return substr($portalCode, -3);
     }
