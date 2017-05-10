@@ -40,6 +40,7 @@ class EuroGamesTechController extends BaseApiController
 
         $this->middleware('check.ip:egt');
         $this->middleware('input.xml')->except(['error']);
+        $this->middleware('input.egt.parsePlayerId')->except(['error']);
 
         Validator::extend('validate_defence_code', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateDefenceCode');
         Validator::extend('validate_deposit', 'App\Http\Requests\Validation\EuroGamesTechValidation@validateDepositReason');
