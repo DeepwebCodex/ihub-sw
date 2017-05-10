@@ -19,6 +19,9 @@ class DriveMediaAristocratBorderlineApiCest
         $this->testUser = new TestUser();
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBetWin(ApiTester $I)
     {
         $request = [
@@ -51,6 +54,9 @@ class DriveMediaAristocratBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodWrongSign(ApiTester $I)
     {
         $request = [
@@ -73,6 +79,9 @@ class DriveMediaAristocratBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodSpaceNotFound(ApiTester $I)
     {
         $request = [

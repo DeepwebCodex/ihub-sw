@@ -19,6 +19,9 @@ class DriveMediaAristocratApiCest
         $this->testUser = new TestUser();
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBalance(ApiTester $I)
     {
         $request = [
@@ -43,6 +46,9 @@ class DriveMediaAristocratApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBet(ApiTester $I)
     {
         $request = [

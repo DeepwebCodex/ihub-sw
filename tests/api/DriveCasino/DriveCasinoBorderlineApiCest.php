@@ -17,6 +17,9 @@ class DriveCasinoBorderlineApiCest
         $this->testUser = new TestUser();
     }
 
+    /**
+     * @skip
+     */
     public function testMethodZeroWin(ApiTester $I)
     {
         $request = [
@@ -49,6 +52,9 @@ class DriveCasinoBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBetWin(ApiTester $I)
     {
         $tradeId = md5(time());
@@ -113,6 +119,9 @@ class DriveCasinoBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodWinWithoutBet(ApiTester $I)
     {
         $request = [
@@ -143,6 +152,9 @@ class DriveCasinoBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodWrongSign(ApiTester $I)
     {
         $request = [
@@ -165,6 +177,9 @@ class DriveCasinoBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodSpaceNotFound(ApiTester $I)
     {
         $request = [
