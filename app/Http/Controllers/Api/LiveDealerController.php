@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 class LiveDealerController extends FundistController
 {
-    protected function setIntegration()
+    protected function getIntegration()
     {
         return 'liveDealer';
     }

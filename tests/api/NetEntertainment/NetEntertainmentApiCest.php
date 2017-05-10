@@ -51,19 +51,19 @@ class NetEntertainmentApiCest
 
     public function testMethodNotFound(\ApiTester $I)
     {
-        $I->sendPOST($this->action, $this->data->notFound());
+        $I->sendPOST($this->action, json_encode($this->data->notFound()));
         $this->getResponseFail($I, StatusCode::METHOD);
     }
 
     public function testPing(\ApiTester $I)
     {
-        $I->sendPOST($this->action, $this->data->ping());
+        $I->sendPOST($this->action, json_encode($this->data->ping()));
         $this->getResponseOk($I);
     }
 
     public function testBalance(\ApiTester $I)
     {
-        $I->sendPOST($this->action, $this->data->getBalance());
+        $I->sendPOST($this->action, json_encode($this->data->getBalance()));
         $data = $this->getResponseOk($I);
         $I->assertNotNull($data['balance']);
         $I->assertTrue(is_array(explode('.', $data['balance'])));
@@ -76,7 +76,7 @@ class NetEntertainmentApiCest
 
         $request = $this->data->bet();
 
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertNotNull($response['balance']);
         $I->assertEquals($balanceBefore - $this->data->getAmount(), $response['balance']);
@@ -91,7 +91,7 @@ class NetEntertainmentApiCest
         $request = $this->data->bet();
         $request['currency'] = 'QQ';
         $request = $this->data->renewHmac($request);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I);
     }
 
@@ -102,7 +102,7 @@ class NetEntertainmentApiCest
         $request = $this->data->bet();
         $balanceBefore = $this->testUser->getBalance();
 
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::INSUFFICIENT_FUNDS);
         $I->assertEquals($balanceBefore, $this->testUser->getBalance());
         $this->data->resetAmount();
@@ -112,7 +112,7 @@ class NetEntertainmentApiCest
 
     public function testFailAuth(\ApiTester $I)
     {
-        $I->sendPOST($this->action, $this->data->authFailed());
+        $I->sendPOST($this->action, json_encode($this->data->authFailed()));
         $this->getResponseFail($I, StatusCode::TOKEN);
     }
 
@@ -121,7 +121,7 @@ class NetEntertainmentApiCest
         $this->data->setAmount(0.00);
 
         $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I);
         $this->data->resetAmount();
 
@@ -134,7 +134,7 @@ class NetEntertainmentApiCest
         $this->data->setAmount(0.00);
 
         $request = $this->data->win($bet['i_gameid']);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseOk($I, true);
         $this->data->resetAmount();
 
@@ -144,12 +144,12 @@ class NetEntertainmentApiCest
     public function testDuplicateBet(\ApiTester $I)
     {
         $betData = $this->data->bet();
-        $I->sendPOST($this->action, $betData);
+        $I->sendPOST($this->action, json_encode($betData));
 
         $balanceBefore = $this->testUser->getBalance();
         $request = $this->data->bet(null, $betData['tid']);
 
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore, $response['balance']);
     }
@@ -159,11 +159,11 @@ class NetEntertainmentApiCest
     public function testWin(\ApiTester $I)
     {
         $bet = $this->data->bet();
-        $I->sendPOST($this->action, $bet);
+        $I->sendPOST($this->action, json_encode($bet));
 
         $balanceBefore = $this->testUser->getBalance();
         $request = $this->data->win($bet['i_gameid']);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore + $this->data->getAmount(), $response['balance']);
 
@@ -179,7 +179,7 @@ class NetEntertainmentApiCest
         $balanceBefore = $this->testUser->getBalance();
         $request = $this->data->win($win['i_gameid'], $win['tid']);
 
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore, $response['balance']);
     }
@@ -187,7 +187,7 @@ class NetEntertainmentApiCest
     public function testRound(\ApiTester $I)
     {
         $request = $this->data->roundInfo();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseOk($I);
     }
 
@@ -196,7 +196,7 @@ class NetEntertainmentApiCest
         $balanceBefore = $this->testUser->getBalance();
         $game_number = $this->getUniqueNumber();
         $request = $this->data->win($game_number);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::BAD_OPERATION_ORDER);
         $I->assertEquals($balanceBefore, $this->testUser->getBalance());
 
@@ -208,7 +208,7 @@ class NetEntertainmentApiCest
     {
         $request = $this->data->ping();
         $request['hmac'] = 'qwerty';
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::HMAC);
     }
 
@@ -217,14 +217,14 @@ class NetEntertainmentApiCest
         $request = $this->data->getBalance();
         $request['currency'] = 'q';
         $request = $this->data->renewHmac($request);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I);
     }
 
     public function testMismatch(\ApiTester $I)
     {
         $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
 
         $this->transMismatch($I, $request, 'userid', '1' . $request['userid']); // Another user in credit
         $this->transMismatch($I, $request, 'currency', 'QQ'); // Another currency in crefit
@@ -235,7 +235,7 @@ class NetEntertainmentApiCest
     {
         $request[$attr] = $value;
         $request = $this->data->renewHmac($request);
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::TRANSACTION_MISMATCH);
     }
 
@@ -246,7 +246,7 @@ class NetEntertainmentApiCest
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
         $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::UNKNOWN, Response::HTTP_REQUEST_TIMEOUT);
         $this->noRecord($I, $request, 'bet');
     }
@@ -256,7 +256,7 @@ class NetEntertainmentApiCest
         $mock = $this->mock(ProcessFundist::class);
         $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
         $request = $this->data->bet();
-        $I->sendPOST($this->action, $request);
+        $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::UNKNOWN, Response::HTTP_REQUEST_TIMEOUT);
         $this->noRecord($I, $request, 'bet');
     }
