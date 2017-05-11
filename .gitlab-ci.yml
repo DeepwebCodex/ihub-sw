@@ -39,7 +39,7 @@ variables:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
     - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa || true
 
 .template_compile_n_test: &template_compile_n_test
   <<: *template_dev
@@ -119,7 +119,7 @@ test_feature:
   <<: *template_compile_n_test
   script:
     - bash ./run/dev/make-configs.sh
-    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - composer install --optimize-autoloader
     - php artisan migrate
     - ./vendor/bin/codecept run
@@ -130,7 +130,7 @@ test_on_dev_conf_prod:
   <<: *template_compile_n_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
-    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - bash ./run/prod/make-configs-for-tests.sh
     - composer install
     - ./vendor/bin/codecept run --fail-fast
@@ -145,7 +145,7 @@ compile_dev:
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   script:
     - bash ./run/dev/make-configs.sh
-    - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images
+    - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images || true
     - composer install --optimize-autoloader
     - php artisan migrate
     - ./vendor/bin/codecept run
@@ -171,7 +171,7 @@ compile_prod:
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTPS_PROXY_FOR_PROD
     - rm -rf .env .env.testing ./tests .git
-    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - bash ./run/prod/decode.sh
     - bash ./run/prod/make-configs.sh
     - composer install --optimize-autoloader
