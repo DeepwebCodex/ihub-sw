@@ -126,14 +126,14 @@ test_feature:
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
-test_on_dev_conf_prod_env_prod:
+test_on_dev_conf_prod:
   <<: *template_compile_n_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
-    - bash ./run/prod/make-configs-for-tests.sh
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images
+    - bash ./run/prod/make-configs-for-tests.sh
     - composer install
-    - ./vendor/bin/codecept run
+    - ./vendor/bin/codecept run --fail-fast
   only:
     - master
     - tags
