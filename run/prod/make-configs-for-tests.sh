@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-echo "--- Preparing config.."
-chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache
-
 cp ./.env.example ./.env
 cp ./.env.example ./.env.testing
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
