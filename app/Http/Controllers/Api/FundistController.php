@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\FundistApiFormatter;
-use App\Components\Integrations\EuroGamesTech\EgtHelper;
 use App\Components\Integrations\Fundist\ApiMethod;
 use App\Components\Integrations\Fundist\ApiValidation;
 use App\Components\Integrations\Fundist\Balance;
@@ -31,7 +30,8 @@ abstract class FundistController extends BaseApiController
 
     public static $exceptionTemplate = FundistTemplate::class;
 
-    protected $integration;
+    private $integration;
+    private $objectIdKey;
     private $userId;
     private $partnerId;
     private $cashdeskId;
@@ -46,6 +46,8 @@ abstract class FundistController extends BaseApiController
         parent::__construct($formatter);
 
         $this->integration = $this->getIntegration();
+        $this->objectIdKey = $this->getObjectIdKey();
+
         $this->options = config('integrations.' . $this->integration);
 
         $this->middleware('input.json');
@@ -62,6 +64,10 @@ abstract class FundistController extends BaseApiController
     }
 
     abstract protected function getIntegration();
+
+    abstract protected function getObjectIdKey();
+
+    abstract protected function getObjectId($objectId):int;
 
     /**
      * @param BaseRequest $request
@@ -110,7 +116,7 @@ abstract class FundistController extends BaseApiController
 
         $transactionRequest = new TransactionRequest(
             $service_id,
-            EgtHelper::getObjectId($request->input('i_actionid')),
+            $this->getObjectId($request->input($this->objectIdKey)),
             $user->id,
             $request->input('currency'),
             TransactionRequest::D_WITHDRAWAL,
@@ -139,7 +145,7 @@ abstract class FundistController extends BaseApiController
         $betTransaction = Transactions::getBetTransaction(
             $this->getOption('service_id'),
             $user->id,
-            EgtHelper::getObjectId($request->input('i_actionid'))
+            $this->getObjectId($request->input($this->objectIdKey))
         );
         if (is_null($betTransaction)) {
             throw new ApiHttpException(Response::HTTP_OK, null, [
@@ -157,7 +163,7 @@ abstract class FundistController extends BaseApiController
 
         $transactionRequest = new TransactionRequest(
             $service_id,
-            EgtHelper::getObjectId($request->input('i_actionid')),
+            $this->getObjectId($request->input($this->objectIdKey)),
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
