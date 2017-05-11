@@ -259,11 +259,9 @@ class WirexGamingController extends BaseApiController
             $this->data['relatedTransUid']
         );
         if (null === $betTransaction) {
-            throw new ApiHttpException(
-                Response::HTTP_OK,
-                'Bad operation order',
-                CodeMapping::getByMeaning(CodeMapping::BAD_OPERATION_ORDER)
-            );
+            return $this->respondOk(200, '', [
+                'relatedTransUid' => $this->data['relatedTransUid'],
+            ]);
         }
 
         $transactionUid = $this->data['transactionUid'];
@@ -274,7 +272,7 @@ class WirexGamingController extends BaseApiController
             $user->id,
             $betTransaction->currency,
             TransactionRequest::D_DEPOSIT,
-            abs($this->data['amount']),
+            $this->data['amount'],
             TransactionRequest::TRANS_REFUND,
             $transactionUid,
             $betTransaction->game_id,
@@ -286,7 +284,7 @@ class WirexGamingController extends BaseApiController
         $transactionResponse = WirexGamingHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, '', [
-            'relatedTransUid' => $transactionResponse->operation_id,
+            'relatedTransUid' => $this->data['relatedTransUid'],
         ]);
     }
 
@@ -355,7 +353,7 @@ class WirexGamingController extends BaseApiController
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
-            abs($this->data['amount']),
+            $this->data['amount'],
             TransactionRequest::TRANS_REFUND,
             $transactionUid,
             \app('GameSession')->get('game_id'),
@@ -367,7 +365,7 @@ class WirexGamingController extends BaseApiController
         $transactionResponse = WirexGamingHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, '', [
-            'relatedTransUid' => $transactionResponse->operation_id,
+            'relatedTransUid' => $this->data['relatedTransUid'],
         ]);
     }*/
 }
