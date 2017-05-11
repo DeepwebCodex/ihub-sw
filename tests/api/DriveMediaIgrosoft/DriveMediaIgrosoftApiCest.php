@@ -1,33 +1,32 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
-
-use DriveMedia\TestUser;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use Testing\DriveMediaIgrosoft\AccountManagerMock;
+use Testing\DriveMediaIgrosoft\Params;
 
 class DriveMediaIgrosoftApiCest
 {
     private $key;
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var  Params */
+    private $params;
 
     public function _before() {
         $this->key = config('integrations.DriveMediaIgrosoft.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaIgrosoft.spaces.FUN.id');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params();
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBalance(ApiTester $I)
     {
+        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
@@ -39,27 +38,25 @@ class DriveMediaIgrosoftApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', $this->testUser->getBalance()),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $this->params->balance),
             'status'    => 'success',
             'error'     => ''
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBetWin(ApiTester $I)
     {
+        $this->mockAccountManager($I, (new AccountManagerMock())->bet()->win()->get());
         $tradeId = md5(time());
 
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => '0.10',
-            'winLose'   => '-0.10',
-            'tradeId'   => $tradeId,
+            'login'     => $this->params->login,
+            'bet'       => (string)$this->params->amount,
+            'winLose'   => (string)$this->params->winLose,
+            'tradeId'   => $this->params->getTradeId(),
             'betInfo'   => 'SpinNormal',
             'gameId'    => '183',
             'matrix'    => '7,8,6,;8,7,2,;2,8,7,;3,8,7,;6,7,8,;',
@@ -76,8 +73,8 @@ class DriveMediaIgrosoftApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 0.10)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', ($this->params->balance - $this->params->amount)),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -86,10 +83,10 @@ class DriveMediaIgrosoftApiCest
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => '0.00',
-            'winLose'   => '0.50',
-            'tradeId'   => $tradeId,
+            'login'     => $this->params->login,
+            'bet'       => (string)$this->params->amount,
+            'winLose'   => (string)$this->params->winLose,
+            'tradeId'   => $this->params->getTradeId(),
             'betInfo'   => 'CollectWin',
             'gameId'    => '183',
             'matrix'    => '7,8,6,;8,7,2,;2,8,7,;3,8,7,;6,7,8,;',
@@ -106,10 +103,19 @@ class DriveMediaIgrosoftApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 0.10 + 0.50)),
+            'login'     => $this->params->login,
+            //TODO:
+//            'balance'   => money_format('%i', ($this->params->balance - $this->params->amount + $this->params->winLose)),
             'status'    => 'success',
             'error'     => ''
         ]);
+    }
+
+    private function mockAccountManager(\ApiTester $I, $mock)
+    {
+        if($this->params->enableMock) {
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
     }
 }

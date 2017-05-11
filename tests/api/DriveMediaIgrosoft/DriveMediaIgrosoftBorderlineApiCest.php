@@ -1,8 +1,8 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
-
-use DriveMedia\TestUser;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use Testing\DriveMediaIgrosoft\AccountManagerMock;
+use Testing\DriveMediaIgrosoft\Params;
 
 class DriveMediaIgrosoftBorderlineApiCest
 {
@@ -10,28 +10,26 @@ class DriveMediaIgrosoftBorderlineApiCest
     private $key;
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var  Params */
+    private $params;
 
     public function _before() {
         $this->key = config('integrations.DriveMediaIgrosoft.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaIgrosoft.spaces.FUN.id');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params();
     }
 
-    /**
-     * @skip
-     */
     public function testMethodWinWithoutBet(ApiTester $I)
     {
+        $this->mockAccountManager($I, (new AccountManagerMock())->get());
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
+            'login'     => $this->params->login,
             'bet'       => '0.00',
             'winLose'   => '0.30',
-            'tradeId'   => md5(microtime()),
+            'tradeId'   => $this->params->getTradeId(),
             'betInfo'   => 'CollectWin',
             'gameId'    => (string)hexdec(substr(md5(microtime()), 0, 5)),
             'matrix'    => '7,8,6,;8,7,2,;2,8,7,;3,8,7,;6,7,8,;',
@@ -53,15 +51,12 @@ class DriveMediaIgrosoftBorderlineApiCest
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodWrongSign(ApiTester $I)
     {
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
@@ -78,15 +73,12 @@ class DriveMediaIgrosoftBorderlineApiCest
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodSpaceNotFound(ApiTester $I)
     {
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1',
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
@@ -103,4 +95,11 @@ class DriveMediaIgrosoftBorderlineApiCest
         ]);
     }
 
+    private function mockAccountManager(\ApiTester $I, $mock)
+    {
+        if($this->params->enableMock) {
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
+    }
 }
