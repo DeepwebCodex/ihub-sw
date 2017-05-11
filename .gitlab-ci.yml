@@ -132,7 +132,7 @@ test_on_dev_conf_prod:
   script:
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - bash ./run/prod/make-configs-for-tests.sh
-    - composer install
+    - composer install --optimize-autoloader
     - ./vendor/bin/codecept run --fail-fast
   only:
     - master
@@ -148,7 +148,6 @@ compile_dev:
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images || true
     - composer install --optimize-autoloader
     - php artisan migrate
-    - ./vendor/bin/codecept run
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
