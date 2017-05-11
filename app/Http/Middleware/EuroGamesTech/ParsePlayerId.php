@@ -17,7 +17,7 @@ class ParsePlayerId
     {
         $playerDataRaw = explode('_', $request->input('PlayerId', ''));
 
-        // parse format "playerId_partnerId_cashdeskId"
+        // parse format "playerId_partnerId_cashdeskId_iserIP"
         $playerData = [
             'PlayerId'   => array_get($playerDataRaw, 0, null),
             'PartnerId'  => array_get($playerDataRaw, 1, null),

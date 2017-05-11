@@ -15,6 +15,8 @@ final class Params
     const GAME_ID = 123;
     const OBJECT_ID = 1234;
     const NO_BET_OBJECT_ID = 12345;
+    const SESSION_ID = '0edbbfb1b10990c1d90be46558a5bde4';
+    const DEFENCE_CODE = '7dd18bc93e21dc21777e8d49c24ef553';
 
     private function __construct()
     {

@@ -23,8 +23,6 @@ class PlayerBalanceRequest extends BaseEgtRequest
             'SessionId' => 'bail|required|string',
             'Currency'  => 'bail|required|string',
             'GameId'    => 'bail|required|integer',
-            'PartnerId' => 'bail|integer|nullable',
-            'CashdeskId' => 'bail|integer|nullable',
         ];
     }
 }

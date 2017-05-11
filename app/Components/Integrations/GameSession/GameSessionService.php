@@ -24,22 +24,29 @@ class GameSessionService
      * Create session
      *
      * @param array $sessionData
-     * @param $algorithm
+     * @param string $algorithm
+     * @param string $definedReferenceId
+     *
      * @return string
      */
-    public function create(array $sessionData, $algorithm = 'sha512'):string
+    public function create(array $sessionData, $algorithm = 'sha512', string $definedReferenceId = null): string
     {
-        $referenceId = $this->makeReferenceId($sessionData);
+        $referenceId = $definedReferenceId ?? $this->makeReferenceId($sessionData);
+
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
         $referenceStoreItem->read();
         $sessionId = $referenceStoreItem->getSessionId();
 
-        if (SessionStoreItem::existsBySessionId($sessionId)) {
+        if ($sessionId && SessionStoreItem::existsBySessionId($sessionId)) {
             $this->start($sessionId);
             return $sessionId;
         }
 
-        $sessionId = $this->makeSessionId($sessionData, $algorithm);
+        if (!$definedReferenceId) {
+            $sessionId = $this->makeSessionId($sessionData, $algorithm);
+        } else {
+            $sessionId = $this->generateReferenceId($definedReferenceId);
+        }
 
         $this->sessionStoreItem = SessionStoreItem::create($sessionId, $sessionData, $referenceId);
         ReferenceStoreItem::create($referenceId, $sessionId);
@@ -50,10 +57,18 @@ class GameSessionService
     }
 
     /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->sessionStoreItem->getData();
+    }
+
+    /**
      * @param array $data
      * @return string
      */
-    protected function makeReferenceId(array $data):string
+    protected function makeReferenceId(array $data): string
     {
         $referenceKey = implode('', array_values($data));
         return hash_hmac('sha512', $referenceKey, $this->getConfigOption('storage_secret'));
@@ -85,6 +100,11 @@ class GameSessionService
         $referenceStoreItem->prolong();
     }
 
+    public function generateReferenceId($definedReference)
+    {
+        return ReferenceStoreItem::getStorageKey($definedReference);
+    }
+
     /**
      * Make session id
      *
@@ -92,7 +112,7 @@ class GameSessionService
      * @param string $algorithm
      * @return string
      */
-    protected function makeSessionId(array $data, $algorithm = 'sha512'):string
+    protected function makeSessionId(array $data, $algorithm = 'sha512'): string
     {
         $sessionKey = implode('', array_values($data));
         $time = microtime(true);
@@ -122,7 +142,7 @@ class GameSessionService
      * @return string
      * @throws \RuntimeException
      */
-    public function regenerate(string $sessionId, $algorithm = 'sha512'):string
+    public function regenerate(string $sessionId, $algorithm = 'sha512'): string
     {
         $sessionStoreItem = new SessionStoreItem($sessionId);
         $sessionStoreItem->read();

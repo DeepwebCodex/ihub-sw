@@ -39,6 +39,11 @@ class ReferenceStoreItem
         $this->storageKey = $this->getStorageKeyPrefix() . ':' . self::REFERENCES_STORE_PREFIX . ':' . $referenceId;
     }
 
+    public static function getStorageKey($referenceId)
+    {
+        return \config('session.game_session.storage_key_prefix') . ':' . self::REFERENCES_STORE_PREFIX . ':' . $referenceId;
+    }
+
     /**
      * @param string $referenceId
      * @param string $sessionId
