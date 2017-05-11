@@ -33,13 +33,4 @@ class GetPersistentSessionRequest extends BaseRequest
     {
         return true;
     }
-
-    /**
-     * @param Request $request
-     * @return bool
-     */
-    public function authorize(Request $request)
-    {
-        return true;
-    }
 }

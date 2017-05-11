@@ -14,22 +14,35 @@ use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 class WirexGamingHelper
 {
     /**
-     * @param $oid
-     * @return int
+     * @param $serverPid
+     * @return mixed
      */
-    public static function makeUid($oid)
+    protected static function getConfigPid($serverPid)
     {
-        $previousContextId = config('integrations.wirexGaming.previous_context_id');
-        return ($oid << 16) + $previousContextId;
+        $partnersConfig = config('integrations.wirexGaming.partners_config');
+        if ($partnersConfig) {
+            $partnersConfig = collect($partnersConfig);
+            $partnerConfig = $partnersConfig->where('server_pid', '=', $serverPid)->first();
+            return $partnerConfig['previous_context_id'];
+        }
+        return config('integrations.wirexGaming.previous_context_id');
     }
 
     /**
+     * @param $serverPid
      * @param $uid
      * @return int
      */
-    public static function parseUid($uid)
+    public static function parseUid($serverPid, $uid)
     {
-        $previousContextId = config('integrations.wirexGaming.previous_context_id');
+        $previousContextId = self::getConfigPid($serverPid);
+        if (empty($previousContextId)) {
+            throw new ApiHttpException(
+                409,
+                'Config error',
+                CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR)
+            );
+        }
         return ($uid - $previousContextId) >> 16;
     }
 

@@ -88,11 +88,19 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
         if (config('integrations.wirexGaming.use_secure_request', true)) {
             $this->isSecureRequest();
         }
-
         $dataPrefix = $this->getRequestDataPrefix();
 
         $configClientPid = config('integrations.wirexGaming.client_pid');
-        $configServerPid = config('integrations.wirexGaming.server_pid');
+
+        $partnersConfig = config('integrations.wirexGaming.partners_config');
+        if ($partnersConfig) {
+            $requestServerPid = $request->input($dataPrefix . 'serverPid');
+            $partnersConfig = collect($partnersConfig);
+            $partnerConfig = $partnersConfig->where('server_pid', '=', $requestServerPid)->first();
+            $configServerPid = $partnerConfig ? $requestServerPid : null;
+        } else {
+            $configServerPid = config('integrations.wirexGaming.server_pid');
+        }
 
         if ($configClientPid == $request->input($dataPrefix . 'clientPid')
             && $configServerPid == $request->input($dataPrefix . 'serverPid')
@@ -123,6 +131,7 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
 
     /**
      * @param array $errors
+     * @throws \iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException
      */
     public function response(array $errors)
     {
