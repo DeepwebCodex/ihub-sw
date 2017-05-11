@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-echo "--- Preparing config.."
-chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache
-
 cp ./.env.example ./.env
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.bet/g" \
        -e "s/^APP_ENV=local/APP_ENV=production/g" \
@@ -67,14 +64,5 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.bet/g" \
        -e "s/^DYNAMIC_SCHEDULER_API_PASSWORD=\"password\"/DYNAMIC_SCHEDULER_API_PASSWORD=\"gBEWPkx4yGDCZj0P\"/g" \
         \
        ./.env
-
-echo "--- Installing composer.."
-echo ">> composer install"
-composer install
-
-echo "--- Optimizing project.."
-
-echo ">> php artisan route:cache"
-php artisan route:cache
 
 cat /root/ihub/env.ihub >> .env

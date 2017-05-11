@@ -119,7 +119,7 @@ test_feature:
   <<: *template_compile_n_test
   script:
     - bash ./run/dev/make-configs.sh
-    - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images
     - composer install --optimize-autoloader
     - php artisan migrate
     - ./vendor/bin/codecept run
@@ -131,7 +131,7 @@ test_on_dev_conf_prod_env_prod:
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
     - bash ./run/prod/make-configs-for-tests.sh
-    - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images
     - composer install
     - ./vendor/bin/codecept run
   only:
@@ -171,9 +171,11 @@ compile_prod:
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTPS_PROXY_FOR_PROD
     - rm -rf .env .env.testing ./tests .git
-    - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images
     - bash ./run/prod/decode.sh
+    - bash ./run/prod/make-configs.sh
     - composer install --optimize-autoloader
+    - php artisan route:cache
     - rm -rf ./run/prod/make-configs.sh
   cache:
     key: $CI_BUILD_REF_NAME
