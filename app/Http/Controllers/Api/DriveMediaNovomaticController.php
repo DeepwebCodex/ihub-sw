@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\DriveMediaNovomaticProdObjectIdMap;
 use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 use App\Components\Integrations\DriveMediaNovomatic\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomatic\NovomaticHelper;
@@ -117,7 +118,7 @@ class DriveMediaNovomaticController extends BaseApiController
         foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
-                0,
+                DrivemediaNovomaticProdObjectIdMap::getObjectId($request->input('tradeId')),
                 $user->id,
                 $user->getCurrency(),
                 ($transaction['type'] === 'bet' ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT),

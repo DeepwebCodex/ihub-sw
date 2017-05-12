@@ -1,6 +1,8 @@
 <?php
 
-use DriveMedia\TestUser;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 
 class DriveMediaNovomaticBorderlineApiCest
 {
@@ -12,15 +14,17 @@ class DriveMediaNovomaticBorderlineApiCest
 
     const BET_AMOUNT = '0.01';
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var  Params */
+    private $params;
 
     public function _before() {
-        $this->testUser = new TestUser();
+        $this->params = new Params('DriveMediaNovomatic');
     }
 
     public function testGetBalanceUserNotFound(ApiTester $I)
     {
+        $this->mockAccountManager($I, (new AccountManagerMock())->userNotFound(41234123412343434)->get());
+
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
@@ -49,7 +53,7 @@ class DriveMediaNovomaticBorderlineApiCest
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
             'sign' => '123'
         ];
 
@@ -64,13 +68,14 @@ class DriveMediaNovomaticBorderlineApiCest
 
     public function testWriteBetUserNotFound(ApiTester $I)
     {
+        $this->mockAccountManager($I, (new AccountManagerMock())->userNotFound(41234123412343434)->get());
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
             'login' => '41234123412343434--1---5--127-0-0-1',
             'bet' => '0.00',
             'winLose' => '0.01',
-            'tradeId' => md5(microtime()),
+            'tradeId' => $this->params->getTradeId(),
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
             'matrix' => '[]',
@@ -93,10 +98,10 @@ class DriveMediaNovomaticBorderlineApiCest
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
             'bet' => '0.00',
             'winLose' => '0.01',
-            'tradeId' => md5(microtime()),
+            'tradeId' => $this->params->getTradeId(),
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
             'matrix' => '[]',
@@ -123,7 +128,7 @@ class DriveMediaNovomaticBorderlineApiCest
             'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'bet' => '0.00',
             'winLose' => '0.01',
-            'tradeId' => md5(microtime()),
+            'tradeId' => $this->params->getTradeId(),
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
             'matrix' => '[]',
@@ -140,4 +145,13 @@ class DriveMediaNovomaticBorderlineApiCest
             'error' => 'internal_error'
         ]);
     }*/
+
+
+    private function mockAccountManager(\ApiTester $I, $mock)
+    {
+        if ($this->params->enableMock) {
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
+    }
 }

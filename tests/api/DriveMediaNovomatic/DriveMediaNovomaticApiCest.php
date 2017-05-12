@@ -1,6 +1,8 @@
 <?php
 
-use DriveMedia\TestUser;
+use iHubGrid\Accounting\ExternalServices\AccountManager;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 
 class DriveMediaNovomaticApiCest
 {
@@ -10,21 +12,21 @@ class DriveMediaNovomaticApiCest
 
     const TEST_GAME_ID = 132;
 
-    const BET_AMOUNT = '0.01';
-
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var  Params */
+    private $params;
 
     public function _before() {
-        $this->testUser = new TestUser();
+        $this->params = new Params('DriveMediaNovomatic');
     }
 
     public function testGetBalance(ApiTester $I)
     {
+        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
         $this->addSignatureToRequestData($requestData);
 
@@ -33,8 +35,8 @@ class DriveMediaNovomaticApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login' => $this->testUser->getUserId(),
-            'balance' => (string)round($this->testUser->getBalance(), 2),
+            'login' => $this->params->login,
+            'balance' => (string)round($this->params->balance, 2),
             'status' => 'success',
             'error' => ''
         ]);
@@ -49,13 +51,18 @@ class DriveMediaNovomaticApiCest
 
     public function testBet(ApiTester $I)
     {
+        $this->mockAccountManager($I,
+            (new AccountManagerMock())
+            ->bet($this->params->object_id, $this->params->amount)
+            ->get());
+
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => $this->testUser->getUserId(),
-            'bet' => self::BET_AMOUNT,
-            'winLose' => '-' . self::BET_AMOUNT,
-            'tradeId' => md5(microtime()),
+            'login' => $this->params->login,
+            'bet' => $this->params->amount,
+            'winLose' => '-' . $this->params->amount,
+            'tradeId' => $this->params->getTradeId(),
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
         ];
@@ -66,8 +73,8 @@ class DriveMediaNovomaticApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login' => $this->testUser->getUserId(),
-            'balance' => (string)round($this->testUser->getBalance() - self::BET_AMOUNT, 2),
+            'login' => $this->params->login,
+            'balance' => (string)round($this->params->balance - $this->params->amount, 2),
             'status' => 'success',
             'error' => ''
         ]);
@@ -75,13 +82,19 @@ class DriveMediaNovomaticApiCest
 
     public function testMethodBetWin(ApiTester $I)
     {
+        $this->mockAccountManager($I,
+            (new AccountManagerMock())
+                ->bet($this->params->object_id, $this->params->amount)
+                ->win($this->params->object_id, $this->params->amount)
+                ->get());
+
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => $this->testUser->getUserId(),
-            'bet' => self::BET_AMOUNT,
-            'winLose' => self::BET_AMOUNT,
-            'tradeId' => md5(microtime()),
+            'login' => $this->params->login,
+            'bet' => $this->params->amount,
+            'winLose' => $this->params->amount,
+            'tradeId' => $this->params->getTradeId(),
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
             'matrix' => '[]',
@@ -94,10 +107,18 @@ class DriveMediaNovomaticApiCest
         $I->sendPOST(self::URI, $requestData);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
-            'login' => $this->testUser->getUserId(),
-            'balance' => (string)round($this->testUser->getBalance() - (float)self::BET_AMOUNT + (float)self::BET_AMOUNT, 2),
+            'login' => $this->params->login,
+            'balance' => (string)round($this->params->balance - (float)$this->params->amount + (float)$this->params->amount, 2),
             'status' => 'success',
             'error' => ''
         ]);
+    }
+
+    private function mockAccountManager(\ApiTester $I, $mock)
+    {
+        if ($this->params->enableMock) {
+            $I->getApplication()->instance(AccountManager::class, $mock);
+            $I->haveInstance(AccountManager::class, $mock);
+        }
     }
 }
