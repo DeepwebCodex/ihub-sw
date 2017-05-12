@@ -58,6 +58,9 @@ class DriveMediaNovomaticDeluxeCest {
         $I->assertNotEmpty($res->error);
     }
 
+    /**
+     * @skip
+     */
     public function testBet(ApiTester $I) {
         $packet = $this->testData->getBetPacket();
         $I->sendPOST('/nvmd', $packet);
@@ -80,6 +83,9 @@ class DriveMediaNovomaticDeluxeCest {
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testWin(ApiTester $I) {
         $packet = $this->testData->getWinPacket();
         $I->sendPOST('/nvmd', $packet);
@@ -101,6 +107,9 @@ class DriveMediaNovomaticDeluxeCest {
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testDuplicate(ApiTester $I) {
         $packet = $this->testData->getBetPacket();
         $I->sendPOST('/nvmd', $packet);

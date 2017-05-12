@@ -24,12 +24,14 @@ class GameSessionService
      * Create session
      *
      * @param array $sessionData
-     * @param $algorithm
+     * @param string $algorithm
+     * @param string $definedReferenceId
+     *
      * @return string
      */
-    public function create(array $sessionData, $algorithm = 'sha512'): string
+    public function create(array $sessionData, $algorithm = 'sha512', string $definedReferenceId = null): string
     {
-        return $this->processCreate($sessionData, $sessionData, $algorithm, true);
+        return $this->processCreate($sessionData, $sessionData, $algorithm, true, $definedReferenceId);
     }
 
     /**
@@ -39,19 +41,23 @@ class GameSessionService
      * @param $useTimeInAlgorithm
      * @return string
      */
-    protected function processCreate(array $context, array $sessionData, $algorithm, $useTimeInAlgorithm)
+    protected function processCreate(array $context, array $sessionData, $algorithm, $useTimeInAlgorithm, string $definedReferenceId)
     {
-        $referenceId = $this->makeReferenceId($context);
+        $referenceId = $definedReferenceId ?? $this->makeReferenceId($context);
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
         $referenceStoreItem->read();
         $sessionId = $referenceStoreItem->getSessionId();
 
-        if (SessionStoreItem::existsBySessionId($sessionId)) {
+        if ($sessionId && SessionStoreItem::existsBySessionId($sessionId)) {
             $this->start($sessionId);
             return $sessionId;
         }
 
-        $sessionId = $this->makeSessionId($context, $algorithm, $useTimeInAlgorithm);
+        if (!$definedReferenceId) {
+            $sessionId = $this->makeSessionId($context, $algorithm, $useTimeInAlgorithm);
+        } else {
+            $sessionId = $this->generateReferenceId($definedReferenceId);
+        }
 
         $this->sessionStoreItem = SessionStoreItem::create($sessionId, $sessionData, $referenceId);
         ReferenceStoreItem::create($referenceId, $sessionId);
@@ -59,6 +65,14 @@ class GameSessionService
         $this->sessionStarted = true;
 
         return $sessionId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->sessionStoreItem->getData();
     }
 
     /**
@@ -97,6 +111,11 @@ class GameSessionService
         $referenceStoreItem->prolong();
     }
 
+    public function generateReferenceId($definedReference)
+    {
+        return ReferenceStoreItem::getStorageKey($definedReference);
+    }
+
     /**
      * Make session id
      *
@@ -118,9 +137,9 @@ class GameSessionService
      * @param string $algorithm
      * @return string
      */
-    public function createWithContext(array $context, array $sessionData, $algorithm = 'sha512'): string
+    public function createWithContext(array $context, array $sessionData, $algorithm = 'sha512', $useTimeInAlgorithm = false, $definedReferenceId = null): string
     {
-        return $this->processCreate($context, $sessionData, $algorithm, false);
+        return $this->processCreate($context, $sessionData, $algorithm, $useTimeInAlgorithm, $definedReferenceId);
     }
 
     /**

@@ -38,6 +38,11 @@ class GameSessionsMock
         $game_session->shouldReceive('get')->withArgs(['game_id'])->andReturn(Params::GAME_ID);
         $game_session->shouldReceive('regenerate')->andReturn("e4fda8473f68894a11c99acc25ecca11");
         $game_session->shouldReceive('prolong');
+        $game_session->shouldReceive('store')->once();
+        $game_session->shouldReceive('getData')->once();
+        $game_session->shouldReceive('create')->once();
+        $game_session->shouldReceive('getStorageKey')->once()->withAnyArgs()->andReturn('e4fda8473f68894a11c99acc25ecca11');
+        $game_session->shouldReceive('generateReferenceId')->once()->withAnyArgs()->andReturn('e4fda8473f68894a11c99acc25ecca11');
 
         return $game_session;
     }

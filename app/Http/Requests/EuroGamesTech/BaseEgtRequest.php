@@ -28,15 +28,9 @@ class BaseEgtRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-        $config_user = config('integrations.egt.UserName');
-        $config_password = config('integrations.egt.Password');
-
-        if($config_user == $request->input('UserName') && $config_password == $request->input('Password'))
-        {
-            return true;
-        }
-
-        return false;
+        return
+            config('integrations.egt.UserName') == $request->input('UserName') &&
+            config('integrations.egt.Password') == $request->input('Password');
     }
 
     public function failedAuthorization()

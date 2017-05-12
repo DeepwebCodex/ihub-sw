@@ -51,6 +51,9 @@ class DriveMediaPlaytechBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBetWin2(ApiTester $I)
     {
         $request = [
@@ -83,6 +86,9 @@ class DriveMediaPlaytechBorderlineApiCest
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testMethodBetWin3(ApiTester $I)
     {
         $request = [

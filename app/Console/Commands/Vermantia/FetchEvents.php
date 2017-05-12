@@ -46,7 +46,7 @@ class FetchEvents extends BaseEventCommand
         /*
          *  Self run every 1 hour TODO::remove after full featured Scheduler is completed
          */
-        (new DynamicSchedulerService())->addTask(new FetchEventsTask($this->hours), Carbon::now()->addHours(1));
+        //(new DynamicSchedulerService())->addTask(new FetchEventsTask($this->hours), Carbon::now()->addHours(1));
 
         $eventData = app('VermantiaGameService')->getUpcomingEvents($this->hours);
 
