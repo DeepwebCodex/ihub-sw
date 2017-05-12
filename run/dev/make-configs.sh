@@ -48,6 +48,8 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
         \
        -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
        -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
+       -e "s/^API_ACCOUNT_ROH_HOST_59_-59=example.com/API_ACCOUNT_ROH_HOST=de2cs01d.dev.favorit/g" \
+       -e "s/^API_ACCOUNT_ROH_PORT_59_-59=6666/API_ACCOUNT_ROH_PORT=10007/g" \
        -e "s/^API_ACCOUNT_SESSION_HOST=example.com/API_ACCOUNT_SESSION_HOST=e-proxy.dev/g" \
        -e "s/^API_ACCOUNT_SESSION_PORT=6666/API_ACCOUNT_SESSION_PORT=8061/g" \
        -e "s/^API_ACCOUNT_OP_HOST=example.com/API_ACCOUNT_OP_HOST=e-proxy.dev/g" \
@@ -127,6 +129,8 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
         \
        -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
        -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
+       -e "s/^API_ACCOUNT_ROH_HOST_59_-59=example.com/API_ACCOUNT_ROH_HOST=de2cs01d.dev.favorit/g" \
+       -e "s/^API_ACCOUNT_ROH_PORT_59_-59=6666/API_ACCOUNT_ROH_PORT=10007/g" \
        -e "s/^API_ACCOUNT_SESSION_HOST=example.com/API_ACCOUNT_SESSION_HOST=e-proxy.dev/g" \
        -e "s/^API_ACCOUNT_SESSION_PORT=6666/API_ACCOUNT_SESSION_PORT=8061/g" \
        -e "s/^API_ACCOUNT_OP_HOST=example.com/API_ACCOUNT_OP_HOST=de2ef01d.dev.favorit/g" \
