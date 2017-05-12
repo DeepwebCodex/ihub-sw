@@ -39,6 +39,7 @@ class GameSessionService
      * @param array $sessionData
      * @param $algorithm
      * @param $useTimeInAlgorithm
+     * @param string $definedReferenceId
      * @return string
      */
     protected function processCreate(array $context, array $sessionData, $algorithm, $useTimeInAlgorithm, string $definedReferenceId)
@@ -135,11 +136,12 @@ class GameSessionService
      * @param array $context
      * @param array $sessionData
      * @param string $algorithm
+     * @param string $definedReferenceId
      * @return string
      */
-    public function createWithContext(array $context, array $sessionData, $algorithm = 'sha512', $useTimeInAlgorithm = false, $definedReferenceId = null): string
+    public function createWithContext(array $context, array $sessionData, $algorithm = 'sha512', string $definedReferenceId = null): string
     {
-        return $this->processCreate($context, $sessionData, $algorithm, $useTimeInAlgorithm, $definedReferenceId);
+        return $this->processCreate($context, $sessionData, $algorithm, false, $definedReferenceId);
     }
 
     /**
