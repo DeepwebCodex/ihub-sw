@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-echo "--- Preparing config.."
-chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache
-
 cp ./.env.example ./.env
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^APP_ENV=local/APP_ENV=dev/g" \
@@ -153,11 +150,3 @@ echo "" >> ./.env.testing
 echo "TEST_USER_ID=1555" >> ./.env.testing
 echo "TEST_PARTNER_ID=1" >> ./.env.testing
 echo "TEST_CASHEDESK=-5" >> ./.env.testing
-
-echo "--- Installing composer.."
-echo ">> composer install"
-composer install
-
-echo "--- Running migrate.."
-echo ">> php artisan migrate"
-php artisan migrate
