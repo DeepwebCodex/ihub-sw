@@ -29,7 +29,7 @@ class GameSessionService
      *
      * @return string
      */
-    public function create(array $sessionData, $algorithm = 'sha512', string $definedReferenceId = null): string
+    public function create(array $sessionData, $algorithm = 'sha512', $definedReferenceId = null): string
     {
         return $this->processCreate($sessionData, $sessionData, $algorithm, true, $definedReferenceId);
     }
@@ -42,7 +42,7 @@ class GameSessionService
      * @param string $definedReferenceId
      * @return string
      */
-    protected function processCreate(array $context, array $sessionData, $algorithm, $useTimeInAlgorithm, string $definedReferenceId)
+    protected function processCreate(array $context, array $sessionData, $algorithm, $useTimeInAlgorithm, $definedReferenceId)
     {
         $referenceId = $definedReferenceId ?? $this->makeReferenceId($context);
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
@@ -139,7 +139,7 @@ class GameSessionService
      * @param string $definedReferenceId
      * @return string
      */
-    public function createWithContext(array $context, array $sessionData, $algorithm = 'sha512', string $definedReferenceId = null): string
+    public function createWithContext(array $context, array $sessionData, $algorithm = 'sha512', $definedReferenceId = null): string
     {
         return $this->processCreate($context, $sessionData, $algorithm, false, $definedReferenceId);
     }
