@@ -812,11 +812,11 @@
         },
         {
             "name": "ihub-grid/packages/accounting",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git",
-                "reference": "4daad11358455ff34da2bf97748f19105da474d7"
+                "reference": "9a5ec1a6d6c0145588cdf5ac79f21e50ebe85920"
             },
             "require": {
                 "ihub-grid/packages/error-handler": "~1.0",
@@ -852,7 +852,7 @@
                 "accounting",
                 "ihub-grid"
             ],
-            "time": "2017-05-12T14:43:01+00:00"
+            "time": "2017-05-12T15:16:00+00:00"
         },
         {
             "name": "ihub-grid/packages/dynamic-scheduler",
