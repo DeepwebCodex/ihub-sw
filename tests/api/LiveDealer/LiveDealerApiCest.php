@@ -132,7 +132,7 @@ class LiveDealerApiCest
         $bet = $this->testBet($I);
         $this->data->setAmount(0.00);
 
-        $request = $this->data->win($bet['i_gameid']);
+        $request = $this->data->win($bet['i_actionid']);
         $I->sendPOST($this->action, json_encode($request));
         $this->getResponseOk($I, true);
         $this->data->resetAmount();
@@ -161,7 +161,7 @@ class LiveDealerApiCest
         $I->sendPOST($this->action, json_encode($bet));
 
         $balanceBefore = $this->testUser->getBalance();
-        $request = $this->data->win($bet['i_gameid']);
+        $request = $this->data->win($bet['i_actionid']);
         $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore + $this->data->getAmount(), $response['balance']);
@@ -176,7 +176,7 @@ class LiveDealerApiCest
         $win = $this->testWin($I);
 
         $balanceBefore = $this->testUser->getBalance();
-        $request = $this->data->win($win['i_gameid'], $win['tid']);
+        $request = $this->data->win($win['i_actionid'], $win['tid']);
 
         $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);

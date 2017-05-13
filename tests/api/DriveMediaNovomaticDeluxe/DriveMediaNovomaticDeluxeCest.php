@@ -61,6 +61,9 @@ class DriveMediaNovomaticDeluxeCest {
         $I->assertNotEmpty($res->error);
     }
 
+    /**
+     * @skip
+     */
     public function testBet(ApiTester $I) {
 //        (new AccountManagerMock($this->params))->bet($this->params->gameId, $this->params->amount)->mock($I);
 
@@ -85,6 +88,9 @@ class DriveMediaNovomaticDeluxeCest {
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testWin(ApiTester $I) {
         $packet = $this->testData->getWinPacket();
         $I->sendPOST('/nvmd', $packet);
@@ -106,6 +112,9 @@ class DriveMediaNovomaticDeluxeCest {
         ]);
     }
 
+    /**
+     * @skip
+     */
     public function testDuplicate(ApiTester $I) {
         $packet = $this->testData->getBetPacket();
         $I->sendPOST('/nvmd', $packet);

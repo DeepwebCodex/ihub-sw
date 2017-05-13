@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-echo "--- Preparing config.."
-chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache
-
 cp ./.env.example ./.env
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^APP_ENV=local/APP_ENV=dev/g" \
@@ -79,6 +76,9 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^API_MYSTERION_SID=sid/API_MYSTERION_SID=ihub/g" \
        -e "s/^API_MYSTERION_SKEY=skey/API_MYSTERION_SKEY=HeuHG0mjZTLkrdW9M2EjPy8O6GutHS7zgWy9Z6r4maJCombZNBh2AuK1tkwbjNih/g" \
         \
+       -e "s/^DYNAMIC_SCHEDULER_API_LOGIN=login/DYNAMIC_SCHEDULER_API_LOGIN=dynamic_scheduler_api_login/g" \
+       -e "s/^DYNAMIC_SCHEDULER_API_PASSWORD=\"password\"/DYNAMIC_SCHEDULER_API_PASSWORD=\"gBEWPkx4yGDCZj0P\"/g" \
+        \
        ./.env
 
 cp ./.env.example ./.env.testing
@@ -141,17 +141,12 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^GAME_SESSION_STORAGE_KEY_PREFIX=game_session_storage_key_prefix/GAME_SESSION_STORAGE_KEY_PREFIX=game_sessions/g" \
        -e "s/^GAME_SESSION_STORAGE_TTL=900/GAME_SESSION_STORAGE_TTL=900/g" \
         \
+       -e "s/^DYNAMIC_SCHEDULER_API_LOGIN=login/DYNAMIC_SCHEDULER_API_LOGIN=dynamic_scheduler_api_login/g" \
+       -e "s/^DYNAMIC_SCHEDULER_API_PASSWORD=\"password\"/DYNAMIC_SCHEDULER_API_PASSWORD=\"gBEWPkx4yGDCZj0P\"/g" \
+        \
        ./.env.testing
 
 echo "" >> ./.env.testing
 echo "TEST_USER_ID=1555" >> ./.env.testing
 echo "TEST_PARTNER_ID=1" >> ./.env.testing
 echo "TEST_CASHEDESK=-5" >> ./.env.testing
-
-echo "--- Installing composer.."
-echo ">> composer install"
-composer install
-
-echo "--- Running migrate.."
-echo ">> php artisan migrate"
-php artisan migrate

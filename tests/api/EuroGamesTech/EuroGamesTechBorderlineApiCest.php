@@ -2,11 +2,13 @@
 
 namespace api\EuroGamesTech;
 
+use App\Components\Integrations\GameSession\GameSessionService;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\Accounting\Users\IntegrationUser;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use \EuroGamesTech\TestData;
 use \EuroGamesTech\TestUser;
+use Testing\GameSessionsMock;
 
 
 class EuroGamesTechBorderlineApiCest
@@ -30,6 +32,10 @@ class EuroGamesTechBorderlineApiCest
         $I->disableMiddleware();
         $I->mockAccountManager($I, config('integrations.egt.service_id'));
         $this->testUser = IntegrationUser::get(env('TEST_USER_ID'), config('integrations.egt.service_id'), 'egt');
+        $I->getApplication()
+            ->instance(GameSessionService::class, GameSessionsMock::getMock());
+        $I->haveInstance(GameSessionService::class,
+            GameSessionsMock::getMock());
     }
 
     public function _after()
