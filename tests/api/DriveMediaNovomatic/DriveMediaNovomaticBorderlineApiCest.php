@@ -23,7 +23,7 @@ class DriveMediaNovomaticBorderlineApiCest
 
     public function testGetBalanceUserNotFound(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->userNotFound(41234123412343434)->get());
+        (new AccountManagerMock($this->params))->userNotFound(41234123412343434)->mock($I);
 
         $requestData = [
             'cmd' => 'getBalance',
@@ -68,7 +68,7 @@ class DriveMediaNovomaticBorderlineApiCest
 
     public function testWriteBetUserNotFound(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->userNotFound(41234123412343434)->get());
+        (new AccountManagerMock($this->params))->userNotFound(41234123412343434)->mock($I);
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
@@ -145,13 +145,4 @@ class DriveMediaNovomaticBorderlineApiCest
             'error' => 'internal_error'
         ]);
     }*/
-
-
-    private function mockAccountManager(\ApiTester $I, $mock)
-    {
-        if ($this->params->enableMock) {
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
-    }
 }

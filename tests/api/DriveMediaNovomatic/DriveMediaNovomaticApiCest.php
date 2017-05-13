@@ -21,7 +21,7 @@ class DriveMediaNovomaticApiCest
 
     public function testGetBalance(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+        (new AccountManagerMock($this->params))->mock($I);
 
         $requestData = [
             'cmd' => 'getBalance',
@@ -51,10 +51,9 @@ class DriveMediaNovomaticApiCest
 
     public function testBet(ApiTester $I)
     {
-        $this->mockAccountManager($I,
-            (new AccountManagerMock())
-            ->bet($this->params->object_id, $this->params->amount)
-            ->get());
+        (new AccountManagerMock($this->params))
+        ->bet($this->params->object_id, $this->params->amount)
+        ->mock($I);
 
         $requestData = [
             'cmd' => 'writeBet',
@@ -82,11 +81,10 @@ class DriveMediaNovomaticApiCest
 
     public function testMethodBetWin(ApiTester $I)
     {
-        $this->mockAccountManager($I,
-            (new AccountManagerMock())
-                ->bet($this->params->object_id, $this->params->amount)
-                ->win($this->params->object_id, $this->params->amount)
-                ->get());
+        (new AccountManagerMock($this->params))
+            ->bet($this->params->object_id, $this->params->amount)
+            ->win($this->params->object_id, $this->params->amount)
+            ->mock($I);
 
         $requestData = [
             'cmd' => 'writeBet',
@@ -112,13 +110,5 @@ class DriveMediaNovomaticApiCest
             'status' => 'success',
             'error' => ''
         ]);
-    }
-
-    private function mockAccountManager(\ApiTester $I, $mock)
-    {
-        if ($this->params->enableMock) {
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
     }
 }

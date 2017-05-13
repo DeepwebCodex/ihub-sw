@@ -3,6 +3,7 @@
 namespace Testing\DriveMedia;
 //namespace tests\_support\Mocks\GameArt;
 
+use iHubGrid\Accounting\ExternalServices\AccountManager;
 use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Testing\AccountManagerBaseMock;
@@ -12,9 +13,9 @@ class AccountManagerMock
     const BET = 1;
     const WIN = 0;
 
-    public function __construct()
+    public function __construct($params)
     {
-        $this->params = new Params('DriveMediaNovomatic');
+        $this->params = $params;
         $this->mock = (new AccountManagerBaseMock($this->params))->getMock();
     }
 
@@ -131,5 +132,13 @@ class AccountManagerMock
             "amount" => $amount,
             "currency" => $this->params->currency
         ]);
+    }
+
+    public function mock(\ApiTester $I)
+    {
+        if ($this->params->enableMock) {
+            $I->getApplication()->instance(AccountManager::class, $this->mock);
+            $I->haveInstance(AccountManager::class, $this->mock);
+        }
     }
 }

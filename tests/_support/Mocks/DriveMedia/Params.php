@@ -15,7 +15,7 @@ class Params
     public $jackpot_amount = 3;
     public $currency = 'EUR';
     public $balance = 100.34;
-    public $game_id = 123;
+    public $gameId = 123;
 
     public $tradeId = 'dbe5314a6b376ba901721a4c9bc0f4d4';
     public $object_id;
