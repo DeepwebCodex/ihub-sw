@@ -42,7 +42,7 @@ class CodeMapping extends CodeMappingBase
                 'meanings' => []
             ],
             StatusCode::INSUFFICIENT_FUNDS => [
-                'message' => 'Insufficient funds',
+                'message' => 'Player has insufficient funds',
                 'map' => [],
                 'attribute' => null,
                 'meanings' => []
