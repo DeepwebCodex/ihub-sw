@@ -38,14 +38,15 @@ class AccountManagerMock
             ->withArgs(
                 $this->getPendingParams($object_id, $amount, self::BET))
             ->andReturn(
-                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET,
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
                     $this->params->bet_operation_id, $this->params->balance - $amount));
 
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs(
                 $this->getCompletedParams($object_id, self::BET, $this->params->bet_operation_id, $amount))
             ->andReturn(
-                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $this->params->bet_operation_id, $this->params->balance - $amount));
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $object_id,
+                    $this->params->bet_operation_id, $this->params->balance - $amount));
 
         return $this;
     }
@@ -58,13 +59,13 @@ class AccountManagerMock
                 $this->getPendingParams($object_id, $amount, self::WIN))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN,
-                    $this->params->win_operation_id, $this->params->balance + $amount));
+                    $object_id, $this->params->win_operation_id, $this->params->balance + $amount));
 
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs(
                 $this->getCompletedParams($object_id, self::WIN, $this->params->win_operation_id, $amount))
             ->andReturn(
-                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $this->params->win_operation_id, $this->params->balance));
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->params->win_operation_id, $this->params->balance + $amount));
 
         return $this;
     }
@@ -103,7 +104,7 @@ class AccountManagerMock
         ];
     }
 
-    private function returnOk($status, $direction, $operation_id, $balance)
+    private function returnOk($status, $direction, $object_id, $operation_id, $balance)
     {
         return [
             "operation_id"          => $operation_id,
@@ -113,7 +114,7 @@ class AccountManagerMock
             "partner_id"            => $this->params->partnerId,
             "move"                  => $direction,
             "status"                => $status,
-            "object_id"             => $this->params->object_id,
+            "object_id"             => $object_id,
             "currency"              => $this->params->currency,
             "deposit_rest"          => $balance,
         ];

@@ -1,6 +1,6 @@
 <?php
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
+use App\Models\DriveMediaNovomaticProdObjectIdMap;
 use Testing\DriveMedia\AccountManagerMock;
 use Testing\DriveMedia\Params;
 
@@ -51,17 +51,22 @@ class DriveMediaNovomaticApiCest
 
     public function testBet(ApiTester $I)
     {
+        $bet = 0.01;
+        $winLose = 0.01;
+        $tradeId = md5(microtime());
+        $objectId = DriveMediaNovomaticProdObjectIdMap::getObjectId($tradeId);
+
         (new AccountManagerMock($this->params))
-        ->bet($this->params->object_id, $this->params->amount)
+        ->bet($objectId, $this->params->amount)
         ->mock($I);
 
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
             'login' => $this->params->login,
-            'bet' => $this->params->amount,
-            'winLose' => '-' . $this->params->amount,
-            'tradeId' => $this->params->getTradeId(),
+            'bet' => (string)$bet,
+            'winLose' => '-' . $winLose,
+            'tradeId' => $tradeId,
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
         ];
@@ -81,18 +86,23 @@ class DriveMediaNovomaticApiCest
 
     public function testMethodBetWin(ApiTester $I)
     {
+        $bet = 0.01;
+        $winLose = 0.01;
+        $tradeId = md5(microtime());
+        $objectId = DriveMediaNovomaticProdObjectIdMap::getObjectId($tradeId);
+
         (new AccountManagerMock($this->params))
-            ->bet($this->params->object_id, $this->params->amount)
-            ->win($this->params->object_id, $this->params->amount)
+            ->bet($objectId, $this->params->amount)
+            ->win($objectId, $this->params->amount)
             ->mock($I);
 
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
             'login' => $this->params->login,
-            'bet' => $this->params->amount,
-            'winLose' => $this->params->amount,
-            'tradeId' => $this->params->getTradeId(),
+            'bet' => $bet,
+            'winLose' => $winLose,
+            'tradeId' => $tradeId,
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
             'matrix' => '[]',
@@ -106,7 +116,7 @@ class DriveMediaNovomaticApiCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'login' => $this->params->login,
-            'balance' => (string)round($this->params->balance - (float)$this->params->amount + (float)$this->params->amount, 2),
+            'balance' => (string)round($this->params->balance + $winLose, 2),
             'status' => 'success',
             'error' => ''
         ]);
