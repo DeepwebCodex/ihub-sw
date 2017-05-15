@@ -1,8 +1,7 @@
 <?php
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
-
-use Testing\DriveMediaAmatic\AccountManagerMock;
+use App\Models\DriveMediaAmaticProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
 use Testing\DriveMediaAmatic\Params;
 
 class DriveMediaAmaticApiCest
@@ -23,7 +22,7 @@ class DriveMediaAmaticApiCest
 
     public function testMethodBalance(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+        (new AccountManagerMock($this->params))->mock($I);
 
         $request = [
             'space' => $this->space,
@@ -49,15 +48,20 @@ class DriveMediaAmaticApiCest
 
     public function testMethodBet(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->bet()->get());
+        $tradeId = (string)microtime();
+        $objectId = DriveMediaAmaticProdObjectIdMap::getObjectId($tradeId);
+        $bet = 0.1;
+        $winLose = -0.1;
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $bet)->mock($I);
 
         $request = [
             'space'     => $this->space,
             'login'     => $this->params->login,
             'cmd'       => 'writeBet',
-            'bet'       => $this->params->amount,
-            'winLose'   => -$this->params->amount,
-            'tradeId'   => $this->params->getTradeId(),
+            'bet'       => $bet,
+            'winLose'   => -$winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'bet',
             'gameId'    => '183',
             'matrix'    => '[6,5,3,6,1,8,7,5,4]',
@@ -74,17 +78,9 @@ class DriveMediaAmaticApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance - $this->params->amount)),
+            'balance'   => money_format('%i', ($this->params->balance + $bet)),
             'status'    => 'success',
             'error'     => ''
         ]);
-    }
-
-    private function mockAccountManager(\ApiTester $I, $mock)
-    {
-        if($this->params->enableMock) {
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
-use Testing\DriveMediaAmatic\AccountManagerMock;
+use App\Models\DriveMediaAmaticProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
 use Testing\DriveMediaAmatic\Params;
 
 class DriveMediaAmaticBorderlineApiCest
@@ -22,7 +22,7 @@ class DriveMediaAmaticBorderlineApiCest
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+        (new AccountManagerMock($this->params))->mock($I);
 
         $request = [
             'space'     => $this->space,
@@ -54,15 +54,20 @@ class DriveMediaAmaticBorderlineApiCest
 
     public function testMethodBetWin(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->bet()->win()->get());
+        $tradeId = (string)microtime();
+        $objectId = DriveMediaAmaticProdObjectIdMap::getObjectId($tradeId);
+        $bet = 0.1;
+        $winLose = 0.1;
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $winLose)->mock($I);
 
         $request = [
             'space'     => $this->space,
             'login'     => $this->params->login,
             'cmd'       => 'writeBet',
-            'bet'       => $this->params->amount,
-            'winLose'   => $this->params->amount,
-            'tradeId'   => $this->params->getTradeId(),
+            'bet'       => $bet,
+            'winLose'   => $winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'bet',
             'gameId'    => '183',
             'matrix'    => '[6,5,3,6,1,8,7,5,4]',
@@ -79,7 +84,7 @@ class DriveMediaAmaticBorderlineApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance)),
+            'balance'   => money_format('%i', ($this->params->balance + $winLose)),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -125,13 +130,5 @@ class DriveMediaAmaticBorderlineApiCest
             'status'    => 'fail',
             'error'     => 'internal_error'
         ]);
-    }
-
-    private function mockAccountManager(\ApiTester $I, $mock)
-    {
-        if($this->params->enableMock) {
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
     }
 }
