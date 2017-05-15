@@ -27,7 +27,6 @@ class AddWithdrawRequest extends BaseRequest
         return [
             $prefix . 'accountEntryDetailed.accountEntry.amount' => 'bail|required',
             $prefix . 'partyOriginatingUid' => 'bail|required|numeric',
-            $prefix . 'relatedTransUid' => 'bail|required|numeric',
             $prefix . 'sessionToken' => 'bail|required|string',
             $prefix . 'transactionUid' => 'bail|required|numeric',
         ];
