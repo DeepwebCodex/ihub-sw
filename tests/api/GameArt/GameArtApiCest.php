@@ -1,9 +1,8 @@
 <?php
 namespace tests\api\GameArt;
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
 use iHubGrid\Accounting\Users\IntegrationUser;
-use Testing\GameArt\AccountManagerMock;
+use Testing\DriveMedia\AccountManagerMock;
 use Testing\GameArt\Params;
 
 class GameArtApiCest
@@ -21,7 +20,7 @@ class GameArtApiCest
 
     public function testBalance(\ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+        (new AccountManagerMock($this->params))->mock($I);
 
         $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
@@ -51,23 +50,22 @@ class GameArtApiCest
 
     }
 
-    public function testBet(\ApiTester $I) {
-
-        $this->mockAccountManager($I,
-            (new AccountManagerMock())
-                ->bet()
-                ->get());
+    public function testBet(\ApiTester $I)
+    {
+        $amount = 0.10;
+        $roundId = substr(time(), 1, 9);
+        (new AccountManagerMock($this->params))->bet($roundId, $amount)->mock($I);
 
         $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
         $request = [
             'action' => 'debit',
             'action_type' => 'BET',
-            'round_id' => $this->params->getObjectId(),
+            'round_id' => $roundId,
             'remote_id' => $this->params->userId,
-            'amount' => $this->params->amount,
+            'amount' => $amount,
             'game_id' => 34,
-            'transaction_id' => $this->params->getTransactionId(),
+            'transaction_id' => substr(time(), 1, 9),
             'remote_data' => json_encode([
                 'partner_id' => $this->params->partnerId,
                 'cashdesk_id' => $this->params->cashdeskId,
@@ -87,7 +85,7 @@ class GameArtApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status'    => '200',
-            'balance'   => self::toFloat($testUser->getBalanceInCents() - 10),
+            'balance'   => self::toFloat($testUser->getBalanceInCents() - 100 * $amount),
         ]);
     }
 
@@ -96,13 +94,4 @@ class GameArtApiCest
         $balance /= 100;
         return number_format($balance, 2, '.', '');
     }
-
-    private function mockAccountManager(\ApiTester $I, $mock)
-    {
-        if($this->params->enableMock) {
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
-    }
-
 }

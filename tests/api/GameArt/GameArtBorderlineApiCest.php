@@ -2,8 +2,7 @@
 
 namespace tests\api\GameArt;
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
-use Testing\GameArt\AccountManagerMock;
+use Testing\DriveMedia\AccountManagerMock;
 use Testing\GameArt\Params;
 
 class GameArtBorderlineApiCest
@@ -23,11 +22,12 @@ class GameArtBorderlineApiCest
 
     public function testMethodUserNotFound(\ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->userNotFound()->get());
+        $wrongUserId = 234234565465465454;
+        (new AccountManagerMock($this->params))->userNotFound($wrongUserId)->mock($I);
 
         $request = [
             'action' => 'balance',
-            'remote_id' => $this->params->wrongUserId,
+            'remote_id' => $wrongUserId,
             'remote_data' => json_encode([
                 'partner_id' => $this->params->partnerId,
                 'cashdesk_id' => $this->params->cashdeskId,
@@ -84,7 +84,7 @@ class GameArtBorderlineApiCest
 
     public function testMethodWinWithoutBet(\ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+        (new AccountManagerMock($this->params))->mock($I);
 
         $request = [
             'action' => 'credit',
@@ -116,13 +116,4 @@ class GameArtBorderlineApiCest
             'msg'       => 'Bet was not placed',
         ]);
     }
-
-    private function mockAccountManager(\ApiTester $I, $mock)
-    {
-        if($this->params->enableMock) {
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
-    }
-
 }
