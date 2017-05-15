@@ -1,7 +1,7 @@
 <?php
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
-use Testing\DriveMediaAristocrat\AccountManagerMock;
+use App\Models\DriveMediaAristocratProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
 use Testing\DriveMediaAristocrat\Params;
 
 class DriveMediaAristocratApiCest
@@ -24,7 +24,7 @@ class DriveMediaAristocratApiCest
 
     public function testMethodBalance(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+        (new AccountManagerMock($this->params))->mock($I);
 
         $request = [
             'space' => $this->space,
@@ -50,14 +50,19 @@ class DriveMediaAristocratApiCest
 
     public function testMethodBet(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->bet()->get());
+        $tradeId = (string)rand(1111111111111,9999999999999).'_'.rand(111111111,999999999);
+        $objectId = DriveMediaAristocratProdObjectIdMap::getObjectId($tradeId);
+        $bet = 0.05;
+        $winLose = -0.05;
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->mock($I);
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
             'login'     => $this->params->login,
             'bet'       => (string)$this->params->amount,
             'winLose'   => (string)$this->params->winLose,
-            'tradeId'   => $this->params->getTradeId(),
+            'tradeId'   => $tradeId,
             'betInfo'   => 'Bet',
             'gameId'    => '123',
             'matrix'    => 'EAGLE,DINGO,BOAR,BOAR,BOAR,;TEN,JACK,KING,QUEEN,TEN,;DINGO,BOAR,DINGO,DINGO,SCATTER,;',
@@ -75,17 +80,9 @@ class DriveMediaAristocratApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', $this->params->balance - $this->params->amount + $this->params->winLose),
+            'balance'   => money_format('%i', $this->params->balance - $bet),
             'status'    => 'success',
             'error'     => ''
         ]);
-    }
-
-    private function mockAccountManager(\ApiTester $I, $mock)
-    {
-        if($this->params->enableMock) {
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
     }
 }
