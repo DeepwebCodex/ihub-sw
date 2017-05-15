@@ -51,6 +51,15 @@ class AccountManagerMock
         return $this;
     }
 
+    public function betExceeded($object_id, $amount)
+    {
+        $this->mock->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($object_id, $amount, self::BET))
+            ->andThrow(new GenericApiHttpException(400, '{"code":1027,"message":""}', [], null, [], 1027));
+
+        return $this;
+    }
 
     public function win($object_id, $amount)
     {
@@ -89,6 +98,19 @@ class AccountManagerMock
      */
     private function getPendingParams($object_id, $amount, $direction, $status = TransactionRequest::STATUS_PENDING)
     {
+//        dump([
+//            $status,
+//            $this->params->serviceId,
+//            $this->params->cashdeskId,
+//            $this->params->userId,
+//            $amount,
+//            $this->params->currency,
+//            $direction,
+//            $object_id,
+//            $this->getComment($object_id, $amount, $direction),
+//            $this->params->partnerId,
+//            $this->params->userIP,
+//        ]);
         return [
             $status,
             $this->params->serviceId,
