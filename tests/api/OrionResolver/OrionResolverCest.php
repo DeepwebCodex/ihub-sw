@@ -5,6 +5,8 @@ namespace api\OrionResolver;
 use ApiTester;
 use Illuminate\Support\Facades\Artisan;
 use Orion\TestData;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\Orion\Params;
 
 class OrionResolverCest
 {
@@ -13,6 +15,7 @@ class OrionResolverCest
 
     function __construct()
     {
+        $this->params = new Params();
         $this->testData = new TestData();
     }
 
@@ -55,6 +58,7 @@ class OrionResolverCest
 
     public function testCommitWhenLostRowId(ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
         $this->testData->initMockWhenLostRowId($I);
         Artisan::call('orion:commit');
         $output = Artisan::output();
@@ -63,6 +67,7 @@ class OrionResolverCest
     
     public function testEndGameWhenRowIdWithMinus(ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
         $this->testData->initMockEndGameWhenRowIdWithMinus($I);
         Artisan::call('orion:endgame');
         $output = Artisan::output();
@@ -71,6 +76,7 @@ class OrionResolverCest
     
     public function testCommitWithoutBet(ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
         $this->testData->initMockCommitWithoutBet($I);
         Artisan::call('orion:commit');
         $output = Artisan::output();
