@@ -1,7 +1,7 @@
 <?php
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
-use Testing\DriveMediaIgrosoft\AccountManagerMock;
+use App\Models\DriveMediaIgrosoftProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
 use Testing\DriveMediaIgrosoft\Params;
 
 class DriveMediaIgrosoftApiCest
@@ -21,7 +21,7 @@ class DriveMediaIgrosoftApiCest
 
     public function testMethodBalance(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+        (new AccountManagerMock($this->params))->mock($I);
 
         $request = [
             'cmd'   => 'getBalance',
@@ -47,16 +47,23 @@ class DriveMediaIgrosoftApiCest
 
     public function testMethodBetWin(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->bet()->win()->get());
         $tradeId = md5(time());
+        $amount = 0.10;
+        $winLose = -0.10;
+        $winLose2 = 0.50;
+        $objectId = DriveMediaIgrosoftProdObjectIdMap::getObjectId($tradeId);
+        (new AccountManagerMock($this->params))
+            ->bet($objectId, $amount)
+            ->win($objectId, $winLose2)
+            ->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
             'login'     => $this->params->login,
-            'bet'       => (string)$this->params->amount,
-            'winLose'   => (string)$this->params->winLose,
-            'tradeId'   => $this->params->getTradeId(),
+            'bet'       => (string)$amount,
+            'winLose'   => (string)$winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'SpinNormal',
             'gameId'    => '183',
             'matrix'    => '7,8,6,;8,7,2,;2,8,7,;3,8,7,;6,7,8,;',
@@ -74,7 +81,7 @@ class DriveMediaIgrosoftApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance - $this->params->amount)),
+            'balance'   => money_format('%i', ($this->params->balance - $amount)),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -84,9 +91,9 @@ class DriveMediaIgrosoftApiCest
             'cmd'       => 'writeBet',
             'space'     => $this->space,
             'login'     => $this->params->login,
-            'bet'       => (string)$this->params->amount,
-            'winLose'   => (string)$this->params->winLose,
-            'tradeId'   => $this->params->getTradeId(),
+            'bet'       => '0.0',
+            'winLose'   => (string)$winLose2,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'CollectWin',
             'gameId'    => '183',
             'matrix'    => '7,8,6,;8,7,2,;2,8,7,;3,8,7,;6,7,8,;',
@@ -104,18 +111,9 @@ class DriveMediaIgrosoftApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            //TODO:
-//            'balance'   => money_format('%i', ($this->params->balance - $this->params->amount + $this->params->winLose)),
+            'balance'   => money_format('%i', ($this->params->balance + $winLose2)),
             'status'    => 'success',
             'error'     => ''
         ]);
-    }
-
-    private function mockAccountManager(\ApiTester $I, $mock)
-    {
-        if($this->params->enableMock) {
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
     }
 }

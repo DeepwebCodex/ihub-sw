@@ -1,7 +1,6 @@
 <?php
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
-use Testing\DriveMediaIgrosoft\AccountManagerMock;
+use Testing\DriveMedia\AccountManagerMock;
 use Testing\DriveMediaIgrosoft\Params;
 
 class DriveMediaIgrosoftBorderlineApiCest
@@ -22,7 +21,7 @@ class DriveMediaIgrosoftBorderlineApiCest
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
-        $this->mockAccountManager($I, (new AccountManagerMock())->get());
+        (new AccountManagerMock($this->params))->mock($I);
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
@@ -93,13 +92,5 @@ class DriveMediaIgrosoftBorderlineApiCest
             'status'    => 'fail',
             'error'     => 'internal_error'
         ]);
-    }
-
-    private function mockAccountManager(\ApiTester $I, $mock)
-    {
-        if($this->params->enableMock) {
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
     }
 }
