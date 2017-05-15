@@ -151,7 +151,9 @@ class DriveMediaNovomaticDeluxeCest {
         $I->assertNotEmpty($res->error);
     }
 
-
+    /**
+     * @skip
+     */
     public function testCaseFloat(ApiTester $I) {
 
         $packet = $this->testData->getFloatPacket();
