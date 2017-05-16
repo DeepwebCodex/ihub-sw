@@ -1,36 +1,40 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
-
-use DriveMedia\TestUser;
+use App\Models\DriveMediaAristocratProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMediaAristocrat\Params;
 
 class DriveMediaAristocratBorderlineApiCest
 {
     private $key;
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var  Params */
+    private $params;
 
     public function _before() {
         $this->key = config('integrations.DriveMediaAristocrat.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaAristocrat.spaces.FUN.id');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params();
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBetWin(ApiTester $I)
     {
+        $tradeId = (string)rand(1111111111111,9999999999999).'_'.rand(111111111,999999999);
+        $objectId = DriveMediaAristocratProdObjectIdMap::getObjectId($tradeId);
+        $bet = 0.05;
+        $winLose = -0.03;
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $bet + $winLose)->mock($I);
+
         $request = [
             'cmd' => 'writeBet',
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
-            'bet' => '0.05',
-            'winLose' => '-0.03',
-            'tradeId' => (string)rand(1111111111111,9999999999999).'_'.rand(111111111,999999999),
+            'login' => $this->params->login,
+            'bet' => (string)$bet,
+            'winLose' => (string)$winLose,
+            'tradeId' => $tradeId,
             'betInfo' => 'Bet',
             'gameId' => '125',
             'matrix' => 'EAGLE,DINGO,BOAR,BOAR,BOAR,;TEN,JACK,KING,QUEEN,TEN,;DINGO,BOAR,DINGO,DINGO,SCATTER,;',
@@ -47,21 +51,18 @@ class DriveMediaAristocratBorderlineApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', $this->testUser->getBalance() - 0.05 + 0.02),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $this->params->balance + $bet + $winLose),
             'status'    => 'success',
             'error'     => ''
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodWrongSign(ApiTester $I)
     {
         $request = [
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
             'cmd'   => 'getBalance',
         ];
 
@@ -79,15 +80,12 @@ class DriveMediaAristocratBorderlineApiCest
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodSpaceNotFound(ApiTester $I)
     {
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1',
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
@@ -103,5 +101,4 @@ class DriveMediaAristocratBorderlineApiCest
             'error'     => 'internal_error'
         ]);
     }
-
 }

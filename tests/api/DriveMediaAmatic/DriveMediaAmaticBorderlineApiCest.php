@@ -1,33 +1,32 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
-
-use DriveMedia\TestUser;
+use App\Models\DriveMediaAmaticProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMediaAmatic\Params;
 
 class DriveMediaAmaticBorderlineApiCest
 {
     private $key;
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var  Params */
+    private $params;
 
     public function _before()
     {
         $this->key = config('integrations.DriveMediaAmatic.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaAmatic.spaces.FUN.id');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params();
     }
 
-    /**
-     * @skip
-     */
     public function testMethodWinWithoutBet(ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $request = [
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
+            'login'     => $this->params->login,
             'cmd'       => 'writeBet',
             'bet'       => '0.0',
             'winLose'   => '0.1',
@@ -52,18 +51,23 @@ class DriveMediaAmaticBorderlineApiCest
         ]);
     }
 
-    /**
-     * @skip
-     */
+
     public function testMethodBetWin(ApiTester $I)
     {
+        $tradeId = (string)microtime();
+        $objectId = DriveMediaAmaticProdObjectIdMap::getObjectId($tradeId);
+        $bet = 0.1;
+        $winLose = 0.1;
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $winLose)->mock($I);
+
         $request = [
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
+            'login'     => $this->params->login,
             'cmd'       => 'writeBet',
-            'bet'       => '0.1',
-            'winLose'   => '0.1',
-            'tradeId'   => (string)microtime(),
+            'bet'       => $bet,
+            'winLose'   => $winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'bet',
             'gameId'    => '183',
             'matrix'    => '[6,5,3,6,1,8,7,5,4]',
@@ -79,21 +83,18 @@ class DriveMediaAmaticBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 0.1 + 0.1)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', ($this->params->balance + $winLose)),
             'status'    => 'success',
             'error'     => ''
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodWrongSign(ApiTester $I)
     {
         $request = [
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
             'cmd'   => 'getBalance',
         ];
 
@@ -109,15 +110,12 @@ class DriveMediaAmaticBorderlineApiCest
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodSpaceNotFound(ApiTester $I)
     {
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1',
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
@@ -133,5 +131,4 @@ class DriveMediaAmaticBorderlineApiCest
             'error'     => 'internal_error'
         ]);
     }
-
 }

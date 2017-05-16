@@ -61,22 +61,9 @@ class ProcessNovomatic extends BaseSeamlessWalletProcessor implements Transactio
         return $this->responseData;
     }
 
-    /**
-     * @param string $tradeId
-     * @return int
-     */
-    protected function getObjectIdMap(string $tradeId): int
-    {
-        if (app()->environment() === 'production') {
-            return DriveMediaNovomaticProdObjectIdMap::getObjectId($tradeId);
-        }
-        return hexdec(substr(md5($tradeId), 0, 15));
-    }
-
     protected function setRequestObjectId()
     {
         if ($this->request->transaction_type === TransactionRequest::TRANS_BET) {
-            $this->request->object_id = $this->getObjectIdMap($this->request->foreign_id);
             return;
         }
         $betTransaction = Transactions::getLastBetByUser(

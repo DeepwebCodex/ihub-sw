@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Components\Integrations\DriveMedia\CodeMapping;
 use App\Components\Integrations\DriveMedia\Amatic\AmaticHelper;
 use App\Components\Transactions\Strategies\DriveMedia\ProcessAmatic;
+use App\Models\DriveMediaAmaticProdObjectIdMap;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\Accounting\Users\IntegrationUser;
@@ -41,6 +42,7 @@ class DriveMediaAmaticController extends BaseApiController
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 
+        /** @see AmaticValidation */
         Validator::extend('validate_space', 'App\Http\Requests\Validation\DriveMedia\AmaticValidation@validateSpace');
         Validator::extend('validate_sign', 'App\Http\Requests\Validation\DriveMedia\AmaticValidation@validateSign');
     }
@@ -91,7 +93,7 @@ class DriveMediaAmaticController extends BaseApiController
         foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
-                0,
+                DriveMediaAmaticProdObjectIdMap::getObjectId($request->input('tradeId')),
                 $user->id,
                 $user->getCurrency(),
                 ($transaction['type'] == "bet" ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT),
