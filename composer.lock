@@ -812,11 +812,11 @@
         },
         {
             "name": "ihub-grid/packages/accounting",
-            "version": "1.0.4",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git",
-                "reference": "32c20daf6beef8ad560e42253f1fdb3b177658e3"
+                "reference": "c7ed17f711dfaac135ffb4950788daf0fecf461b"
             },
             "require": {
                 "ihub-grid/packages/error-handler": "~1.0",
@@ -852,7 +852,7 @@
                 "accounting",
                 "ihub-grid"
             ],
-            "time": "2017-05-16T18:37:31+00:00"
+            "time": "2017-04-20T12:36:09+00:00"
         },
         {
             "name": "ihub-grid/packages/dynamic-scheduler",
@@ -946,11 +946,11 @@
         },
         {
             "name": "ihub-grid/packages/seamless-wallet-core",
-            "version": "1.0.4",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git",
-                "reference": "79e72f2dbaf3e99aeedd1f66adf3cc9ed6410d92"
+                "reference": "a891cc24b9ad81cd81bfd40ba7fe3d774388858f"
             },
             "require": {
                 "danielstjules/stringy": "~2.3",
@@ -987,7 +987,7 @@
                 "ihub-grid",
                 "seamless-wallet-core"
             ],
-            "time": "2017-05-12T14:42:03+00:00"
+            "time": "2017-04-27T16:00:54+00:00"
         },
         {
             "name": "kozz/laravel-guzzle-provider",
@@ -1047,16 +1047,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.4.23",
+            "version": "v5.4.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "ad82327705658dbf5f0ce72805caa950dfbe150d"
+                "reference": "fc5c7a18644f231bcb8d02f4ec2f3a2517f5015d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/ad82327705658dbf5f0ce72805caa950dfbe150d",
-                "reference": "ad82327705658dbf5f0ce72805caa950dfbe150d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/fc5c7a18644f231bcb8d02f4ec2f3a2517f5015d",
+                "reference": "fc5c7a18644f231bcb8d02f4ec2f3a2517f5015d",
                 "shasum": ""
             },
             "require": {
@@ -1172,7 +1172,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-05-11T20:10:35+00:00"
+            "time": "2017-05-08T21:45:45+00:00"
         },
         {
             "name": "league/flysystem",
@@ -3002,12 +3002,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "f8522cd0b196591a0e2cc23e4c92af51af733fb9"
+                "reference": "53c29accd8f6a2288b65c04fffe00bed98d9e8a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/f8522cd0b196591a0e2cc23e4c92af51af733fb9",
-                "reference": "f8522cd0b196591a0e2cc23e4c92af51af733fb9",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/53c29accd8f6a2288b65c04fffe00bed98d9e8a7",
+                "reference": "53c29accd8f6a2288b65c04fffe00bed98d9e8a7",
                 "shasum": ""
             },
             "require": {
@@ -3019,7 +3019,7 @@
                 "guzzlehttp/psr7": "~1.0",
                 "php": ">=5.4.0 <8.0",
                 "phpunit/php-code-coverage": ">=2.2.4 <6.0",
-                "phpunit/phpunit": ">4.8.20 <6.0",
+                "phpunit/phpunit": ">4.8.20 <7.0",
                 "phpunit/phpunit-mock-objects": ">2.3 <5.0",
                 "sebastian/comparator": ">1.1 <3.0",
                 "sebastian/diff": "^1.4",
@@ -3088,7 +3088,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2017-05-11T23:48:05+00:00"
+            "time": "2017-05-11T00:49:38+00:00"
         },
         {
             "name": "codeception/specify",
@@ -3411,12 +3411,12 @@
             "version": "0.9.9",
             "source": {
                 "type": "git",
-                "url": "https://github.com/padraic/mockery.git",
+                "url": "https://github.com/mockery/mockery.git",
                 "reference": "6fdb61243844dc924071d3404bb23994ea0b6856"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/6fdb61243844dc924071d3404bb23994ea0b6856",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/6fdb61243844dc924071d3404bb23994ea0b6856",
                 "reference": "6fdb61243844dc924071d3404bb23994ea0b6856",
                 "shasum": ""
             },

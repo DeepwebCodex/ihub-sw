@@ -38,6 +38,7 @@ class NetEntertainmentApiCest
         $this->testUser = new TestUser();
         $this->data = new TestData('netEntertainment');
         $this->action = '/netent';
+        $this->objectIdKey = 'i_gameid';
     }
 
     public function _before(\ApiTester $I, Scenario $s)
@@ -133,7 +134,7 @@ class NetEntertainmentApiCest
         $bet = $this->testBet($I);
         $this->data->setAmount(0.00);
 
-        $request = $this->data->win($bet['i_gameid']);
+        $request = $this->data->win($bet[$this->objectIdKey]);
         $I->sendPOST($this->action, json_encode($request));
         $this->getResponseOk($I, true);
         $this->data->resetAmount();
@@ -162,7 +163,7 @@ class NetEntertainmentApiCest
         $I->sendPOST($this->action, json_encode($bet));
 
         $balanceBefore = $this->testUser->getBalance();
-        $request = $this->data->win($bet['i_gameid']);
+        $request = $this->data->win($bet[$this->objectIdKey]);
         $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertEquals($balanceBefore + $this->data->getAmount(), $response['balance']);
@@ -177,7 +178,7 @@ class NetEntertainmentApiCest
         $win = $this->testWin($I);
 
         $balanceBefore = $this->testUser->getBalance();
-        $request = $this->data->win($win['i_gameid'], $win['tid']);
+        $request = $this->data->win($win[$this->objectIdKey], $win['tid']);
 
         $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);

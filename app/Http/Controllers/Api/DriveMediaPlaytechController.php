@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Components\Integrations\DriveMedia\CodeMapping;
 use App\Components\Integrations\DriveMedia\Playtech\PlaytechHelper;
 use App\Components\Transactions\Strategies\DriveMedia\ProcessPlaytech;
+use App\Models\DriveMediaPlaytechProdObjectIdMap;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\Accounting\Users\IntegrationUser;
@@ -89,7 +90,7 @@ class DriveMediaPlaytechController extends BaseApiController
         foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
-                0,
+                DrivemediaPlaytechProdObjectIdMap::getObjectId($request->input('tradeId')),
                 $user->id,
                 $user->getCurrency(),
                 ($transaction['type'] == "bet" ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT),

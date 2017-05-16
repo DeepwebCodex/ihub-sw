@@ -47,7 +47,7 @@ class CodeMapping extends CodeMappingBase
             ],
 
             StatusCode::BAD_OPERATION_ORDER => [
-                'message' => 'there is no DEBIT with provided i_gameid',
+                'message' => 'there is no DEBIT with provided i_actionid',
                 'map'       => [],
                 'attribute' => null,
                 'meanings'  => [self::TOKEN]

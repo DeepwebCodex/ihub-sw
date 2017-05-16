@@ -1,31 +1,32 @@
 <?php
 
-use DriveMedia\TestUser;
+use App\Models\DriveCasinoProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 
 class DriveCasinoApiCest
 {
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var Params  */
+    private $params;
 
     public function _before()
     {
         $this->space = config('integrations.drivecasino.spaces.FUN.id');
         $this->key = config('integrations.drivecasino.spaces.FUN.key');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params('drivecasino');
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBalance(ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
@@ -37,25 +38,27 @@ class DriveCasinoApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', $this->testUser->getBalance()),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $this->params->balance),
             'status'    => 'success',
             'error'     => ''
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBet(ApiTester $I)
     {
+        $tradeId = md5(microtime());
+        $objectId = DriveCasinoProdObjectIdMap::getObjectId($tradeId);
+        $bet = 1;
+        $winLose = -1;
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->mock($I);
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => 1,
-            'winLose'   => -1,
-            'tradeId'   => md5(microtime()),
+            'login'     => $this->params->login,
+            'bet'       => $bet,
+            'winLose'   => $winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'bet',
             'gameId'    => '183',
             'matrix'    => 0,
@@ -72,8 +75,8 @@ class DriveCasinoApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 1)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', ($this->params->balance - $bet)),
             'status'    => 'success',
             'error'     => ''
         ]);

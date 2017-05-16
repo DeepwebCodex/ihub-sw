@@ -39,18 +39,18 @@ variables:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
     - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa || true
 
 .template_compile_n_test: &template_compile_n_test
   <<: *template_dev
   <<: *template_add_ssh_auth
   stage: test
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
-  cache:
-    key: $CI_BUILD_REF_NAME
-    untracked: true
-    paths:
-      - ./vendor
+#  cache:
+#    key: $CI_BUILD_REF_NAME
+#    untracked: true
+#    paths:
+#      - ./vendor
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
@@ -118,16 +118,22 @@ fail_build_for_incorrect_branches:
 test_feature:
   <<: *template_compile_n_test
   script:
-    - bash ./run/dev/install-rancher.sh
+    - bash ./run/dev/make-configs.sh
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
+    - composer install --optimize-autoloader
+    - php artisan migrate
     - ./vendor/bin/codecept run
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
-test_on_dev_conf_prod_env_prod:
+test_on_dev_conf_prod:
   <<: *template_compile_n_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
-    - bash ./run/prod/tests.sh
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
+    - bash ./run/prod/make-configs-for-tests.sh
+    - composer install --optimize-autoloader
+    - ./vendor/bin/codecept run --fail-fast
   only:
     - master
     - tags
@@ -138,8 +144,10 @@ compile_dev:
   stage: compile_project
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   script:
-    - rm -rf .env .env.testing .git
-    - bash ./run/dev/install-rancher.sh
+    - bash ./run/dev/make-configs.sh
+    - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images || true
+    - composer install --optimize-autoloader
+    - php artisan migrate
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
@@ -162,9 +170,12 @@ compile_prod:
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTPS_PROXY_FOR_PROD
     - rm -rf .env .env.testing ./tests .git
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - bash ./run/prod/decode.sh
-    - bash ./run/prod/install-rancher.sh
-    - rm -rf ./run/prod/install-rancher.sh
+    - bash ./run/prod/make-configs.sh
+    - composer install --optimize-autoloader
+    - php artisan route:cache
+    - rm -rf ./run/prod/make-configs.sh
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
@@ -202,12 +213,12 @@ manual_deploy_to_servers_system_prod:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 
-manual_deploy_to_servers_pre_prod:
-  <<: *template_deploy_prod
-  script:
-    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+#manual_deploy_to_servers_pre_prod:
+#  <<: *template_deploy_prod
+#  script:
+#    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
+#    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+#    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 
 manual_deploy_to_servers_all_prod:
   <<: *template_deploy_prod
