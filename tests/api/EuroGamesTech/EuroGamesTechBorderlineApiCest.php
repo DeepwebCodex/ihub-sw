@@ -30,7 +30,11 @@ class EuroGamesTechBorderlineApiCest
     {
         $this->options = config('integrations.egt');
         $I->disableMiddleware();
-        $I->mockAccountManager($I, config('integrations.egt.service_id'));
+
+        if(env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true) {
+            $I->mockAccountManager($I, config('integrations.egt.service_id'));
+        }
+
         $this->testUser = IntegrationUser::get(env('TEST_USER_ID'), config('integrations.egt.service_id'), 'egt');
         $I->getApplication()
             ->instance(GameSessionService::class, GameSessionsMock::getMock());
@@ -146,7 +150,8 @@ class EuroGamesTechBorderlineApiCest
         $bet = $this->data->bet();
         $I->sendPOST('/egt/Withdraw', $bet);
 
-        $request = $this->data->win();
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), config('integrations.egt.service_id'), 'egt');
+        $request = $this->data->win($bet['GameNumber']);
         $request['Amount'] = 0;
 
         /*Transactions::create([
@@ -178,7 +183,7 @@ class EuroGamesTechBorderlineApiCest
         $I->expect('min required items in response');
         $I->seeXmlResponseIncludes("<ErrorCode>1000</ErrorCode>");
         $I->seeXmlResponseIncludes("<ErrorMessage>OK</ErrorMessage>");
-        $I->seeXmlResponseIncludes("<Balance>{$this->testUser->getBalanceInCents()}</Balance>");
+        $I->seeXmlResponseIncludes("<Balance>{$testUser->getBalanceInCents()}</Balance>");
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
@@ -191,7 +196,7 @@ class EuroGamesTechBorderlineApiCest
 
     public function testMultiWin(\ApiTester $I)
     {
-        $request = $this->data->betWin(false);
+        $request = $this->data->betWin();
         $balanceBefore = $this->testUser->getBalanceInCents();
 
 

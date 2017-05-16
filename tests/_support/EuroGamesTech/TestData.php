@@ -6,7 +6,7 @@ use Testing\Params;
 
 class TestData
 {
-    const IS_MOCK = true;
+    private $isMock;
 
     private $userId;
     private $currency;
@@ -17,6 +17,8 @@ class TestData
 
     public function __construct()
     {
+        $this->isMock = env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true;
+
         $this->userId = (int)env('TEST_USER_ID');
         $this->currency = Params::CURRENCY;
         $this->amount_backup =
@@ -104,6 +106,6 @@ class TestData
 
     private function getObjectId()
     {
-        return (self::IS_MOCK) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
+        return ($this->isMock) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
     }
 }
