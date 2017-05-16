@@ -25,9 +25,11 @@ class DriveMediaPlaytechBorderlineApiCest
         $objectId = DriveMediaPlaytechProdObjectIdMap::getObjectId($tradeId);
         $bet = 2.00;
         $winLose = 5.8;
+        $balance = $this->params->getBalance();
+
         (new AccountManagerMock($this->params))
-            ->bet($objectId, $bet)
-            ->win($objectId, $bet + $winLose)
+            ->bet($objectId, $bet, $balance - $bet)
+            ->win($objectId, $bet + $winLose, $balance - $bet)
             ->mock($I);
 
         $request = [
@@ -54,7 +56,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance + $bet + $winLose)),
+            'balance'   => money_format('%i', $balance + $winLose),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -66,9 +68,11 @@ class DriveMediaPlaytechBorderlineApiCest
         $objectId = DriveMediaPlaytechProdObjectIdMap::getObjectId($tradeId);
         $bet = 240.0;
         $winLose = -180.0;
+        $balance = $this->params->getBalance();
+
         (new AccountManagerMock($this->params))
             ->bet($objectId, $bet)
-            ->win($objectId, $bet + $winLose)
+            ->win($objectId, $bet + $winLose, $balance - $bet)
             ->mock($I);
 
         $request = [
@@ -95,7 +99,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance + $bet + $winLose)),
+            'balance'   => money_format('%i', $balance + $winLose),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -107,9 +111,11 @@ class DriveMediaPlaytechBorderlineApiCest
         $objectId = DriveMediaPlaytechProdObjectIdMap::getObjectId($tradeId);
         $bet = 360.0;
         $winLose = 90.0;
+        $balance = $this->params->getBalance();
+
         (new AccountManagerMock($this->params))
             ->bet($objectId, $bet)
-            ->win($objectId, $bet + $winLose)
+            ->win($objectId, $bet + $winLose, $balance - $bet)
             ->mock($I);
 
         $request = [
@@ -136,7 +142,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance + $bet + $winLose)),
+            'balance'   => money_format('%i', ($balance + $winLose)),
             'status'    => 'success',
             'error'     => ''
         ]);

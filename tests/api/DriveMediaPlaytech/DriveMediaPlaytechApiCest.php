@@ -21,6 +21,8 @@ class DriveMediaPlaytechApiCest
 
     public function testMethodBalance(ApiTester $I)
     {
+        $balance = $this->params->getBalance();
+
         (new AccountManagerMock($this->params))->mock($I);
 
         $request = [
@@ -39,7 +41,7 @@ class DriveMediaPlaytechApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', $this->params->balance),
+            'balance'   => money_format('%i', $balance),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -51,7 +53,9 @@ class DriveMediaPlaytechApiCest
         $objectId = DriveMediaPlaytechProdObjectIdMap::getObjectId($tradeId);
         $bet = 1.0;
         $winLose = -1.0;
-        (new AccountManagerMock($this->params))->bet($objectId, $bet)->mock($I);
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance)->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',
@@ -76,7 +80,7 @@ class DriveMediaPlaytechApiCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance - $bet)),
+            'balance'   => money_format('%i', $balance - $bet),
             'status'    => 'success',
             'error'     => ''
         ]);
