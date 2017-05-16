@@ -61,8 +61,11 @@ class AccountManagerMock
         return $this;
     }
 
-    public function win($object_id, $amount)
+    public function win($object_id, $amount, $balance = null)
     {
+        if(!$balance){
+            $balance = $this->params->balance;
+        }
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
                 $this->getPendingParams($object_id, $amount, self::WIN))
@@ -74,7 +77,7 @@ class AccountManagerMock
             ->withArgs(
                 $this->getCompletedParams($object_id, self::WIN, $this->params->win_operation_id, $amount))
             ->andReturn(
-                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->params->win_operation_id, $this->params->balance + $amount));
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->params->win_operation_id, $balance + $amount));
 
         return $this;
     }

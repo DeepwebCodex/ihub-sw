@@ -60,8 +60,8 @@ class DriveMediaAmaticApiCest
             'space'     => $this->space,
             'login'     => $this->params->login,
             'cmd'       => 'writeBet',
-            'bet'       => $bet,
-            'winLose'   => -$winLose,
+            'bet'       => (string)$bet,
+            'winLose'   => (string)$winLose,
             'tradeId'   => $tradeId,
             'betInfo'   => 'bet',
             'gameId'    => '183',
@@ -79,7 +79,7 @@ class DriveMediaAmaticApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($balance + $bet)),
+            'balance'   => money_format('%i', ($balance - $bet)),
             'status'    => 'success',
             'error'     => ''
         ]);
