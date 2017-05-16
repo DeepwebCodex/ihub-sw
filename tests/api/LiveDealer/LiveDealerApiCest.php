@@ -43,7 +43,10 @@ class LiveDealerApiCest
 
     public function _before(\ApiTester $I, Scenario $s)
     {
-        $I->mockAccountManager($I, config('integrations.liveDealer.service_id'));
+        if(env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true) {
+            $I->mockAccountManager($I, config('integrations.liveDealer.service_id'));
+        }
+
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
