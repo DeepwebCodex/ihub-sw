@@ -26,9 +26,13 @@ class Params
 
     const IDEMPOTENCY_OBJECT_ID = 2341;
 
-    public $enableMock = 1;
+    public $enableMock;
     public $userId;
 
+    public function __construct()
+    {
+        $this->enableMock = env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true;
+    }
 
     public function getObjectId($case = null)
     {

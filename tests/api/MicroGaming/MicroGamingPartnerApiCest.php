@@ -258,9 +258,12 @@ class MicroGamingPartnerApiCest
 
         //$this->sendAndCheckPlayRequestSeveralTimes($I, $request, $userBalance - $this->params->getAmount());
 
-        // second time user balance must be the same, but it is no way to mock getBalance() twice in single mock object
         $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance - $this->params->getAmount());
-        $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance);
+
+        //TODO: second time user balance must be the same, but it is no way to mock getBalance() twice in single mock object
+        if(!$this->params->enableMock) {
+            $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance - $this->params->getAmount());
+        }
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
