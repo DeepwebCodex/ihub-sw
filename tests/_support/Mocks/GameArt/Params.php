@@ -35,8 +35,8 @@ class Params
     {
         $this->enableMock = env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true;
         $this->userId = (int)env('TEST_USER_ID');
-        $this->cashdeskId = 1; //(int)env('TEST_CASHEDESK');
-        $this->partnerId = 1; //(int)env('TEST_PARTNER_ID');
+        $this->cashdeskId = (int)env('TEST_CASHEDESK');
+        $this->partnerId = (int)env('TEST_PARTNER_ID');
         $this->serviceId = (int)config('integrations.gameart.service_id');
         $this->options = config('integrations.gameart');
     }
