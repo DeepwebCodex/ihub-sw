@@ -217,8 +217,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
-        //TODO fix response code
-//        $I->seeResponseCodeIs(404);
+        $I->seeResponseCodeIs(404);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status'    => 'fail',

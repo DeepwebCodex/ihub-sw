@@ -26,7 +26,7 @@ class AccountManagerMock
 
     public function userNotFound($wrongUserId)
     {
-        $this->mock->shouldReceive('getUserInfo')->with($wrongUserId)->andThrow(new GenericApiHttpException(500, '', ['code' => 1024, 'message' => 'Account not found.']));
+        $this->mock->shouldReceive('getUserInfo')->with($wrongUserId)->andThrow(new GenericApiHttpException(404, '', ['code' => 1024, 'message' => 'Account not found.']));
 
         return $this;
     }
