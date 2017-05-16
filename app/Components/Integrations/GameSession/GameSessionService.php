@@ -29,10 +29,22 @@ class GameSessionService
      *
      * @return string
      */
-    public function create(array $sessionData, $algorithm = 'sha512', string $definedReferenceId = null): string
+    public function create(array $sessionData, $algorithm = 'sha512', $definedReferenceId = null): string
     {
-        $referenceId = $definedReferenceId ?? $this->makeReferenceId($sessionData);
+        return $this->processCreate($sessionData, $sessionData, $algorithm, true, $definedReferenceId);
+    }
 
+    /**
+     * @param array $context
+     * @param array $sessionData
+     * @param $algorithm
+     * @param $useTimeInAlgorithm
+     * @param string $definedReferenceId
+     * @return string
+     */
+    protected function processCreate(array $context, array $sessionData, $algorithm, $useTimeInAlgorithm, $definedReferenceId)
+    {
+        $referenceId = $definedReferenceId ?? $this->makeReferenceId($context);
         $referenceStoreItem = new ReferenceStoreItem($referenceId);
         $referenceStoreItem->read();
         $sessionId = $referenceStoreItem->getSessionId();
@@ -43,7 +55,7 @@ class GameSessionService
         }
 
         if (!$definedReferenceId) {
-            $sessionId = $this->makeSessionId($sessionData, $algorithm);
+            $sessionId = $this->makeSessionId($context, $algorithm, $useTimeInAlgorithm);
         } else {
             $sessionId = $this->generateReferenceId($definedReferenceId);
         }
@@ -110,13 +122,40 @@ class GameSessionService
      *
      * @param array $data
      * @param string $algorithm
+     * @param bool $useTimeInAlgorithm
      * @return string
      */
-    protected function makeSessionId(array $data, $algorithm = 'sha512'): string
+    protected function makeSessionId(array $data, $algorithm = 'sha512', $useTimeInAlgorithm = true): string
     {
         $sessionKey = implode('', array_values($data));
-        $time = microtime(true);
+        $time = $useTimeInAlgorithm ? microtime(true) : '';
         return hash_hmac($algorithm, $sessionKey . $time, $this->getConfigOption('storage_secret'));
+    }
+
+    /**
+     * @param array $context
+     * @param array $sessionData
+     * @param string $algorithm
+     * @param string $definedReferenceId
+     * @return string
+     */
+    public function createWithContext(array $context, array $sessionData, $algorithm = 'sha512', $definedReferenceId = null): string
+    {
+        return $this->processCreate($context, $sessionData, $algorithm, false, $definedReferenceId);
+    }
+
+    /**
+     * @param array $context
+     * @param string $algorithm
+     * @return string
+     * @throws \App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist
+     */
+    public function getSessionIdByContext(array $context, $algorithm = 'sha512'): string
+    {
+        $sessionId = $this->makeSessionId($context, $algorithm, false);
+        $sessionStoreItem = new SessionStoreItem($sessionId);
+        $sessionStoreItem->checkExists();
+        return $sessionId;
     }
 
     /**
