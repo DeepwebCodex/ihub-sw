@@ -3,16 +3,6 @@
 return [
 
     'api' => [
-        'amqp' => [
-            'host' => env('API_AMQP_HOST', 'de2ef01d.dev.favorit'),
-            'port' => env('API_AMQP_PORT', 10102),
-        ],
-
-        'amqp_old' => [
-            'host' => env('API_AMQP_HOST', 'de2of01d.dev.favorit'),
-            'port' => env('API_AMQP_PORT', 8001),
-        ],
-
         'mysterion' => [
             'is_enabled' => env('API_MYSTERION_IS_ENABLED', false),
             'host' => env('API_MYSTERION_HOST'),

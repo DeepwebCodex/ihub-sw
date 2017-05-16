@@ -162,12 +162,10 @@ return [
         \iHubGrid\ErrorHandler\ErrorHandlerServiceProvider::class,
         \iHubGrid\SeamlessWalletCore\SeamlessWalletCoreServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
-        \App\Providers\AmqpServiceProvider::class,
         \App\Providers\GameSessionServiceProvider::class,
         \App\Providers\QueueRabbitMQServiceProvider::class,
         \iHubGrid\ErrorHandler\Providers\GuzzleServiceProvider::class,
-        \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class,
-        \App\Providers\VermantiaGameServiceProvider::class
+        \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class
     ],
 
     /*
