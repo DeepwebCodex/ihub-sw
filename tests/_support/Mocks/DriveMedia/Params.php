@@ -3,7 +3,7 @@
 
 namespace Testing\DriveMedia;
 
-use App\Models\DriveMediaAmaticProdObjectIdMap;
+use iHubGrid\Accounting\Users\IntegrationUser;
 
 class Params
 {
@@ -35,7 +35,8 @@ class Params
 
     public function __construct($integration)
     {
-        $this->enableMock = true;
+        $this->enableMock = env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true;
+
         $this->login = (int)env('TEST_USER_ID') . '--1---5--127-0-0-1';
         $this->userId = (int)env('TEST_USER_ID');
         $this->cashdeskId = (int)env('TEST_CASHEDESK');
@@ -50,5 +51,14 @@ class Params
         }
 
         return md5(microtime());
+    }
+
+    public function getBalance()
+    {
+        if ($this->enableMock) {
+            return $this->balance;
+        }
+
+        return IntegrationUser::get($this->userId, 0, 'tests')->getBalance();
     }
 }

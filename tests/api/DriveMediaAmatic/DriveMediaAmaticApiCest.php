@@ -40,7 +40,7 @@ class DriveMediaAmaticApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', $this->params->balance),
+            'balance'   => money_format('%i', $this->params->getBalance()),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -55,6 +55,7 @@ class DriveMediaAmaticApiCest
 
         (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $bet)->mock($I);
 
+        $balance = $this->params->getBalance();
         $request = [
             'space'     => $this->space,
             'login'     => $this->params->login,
@@ -78,7 +79,7 @@ class DriveMediaAmaticApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance + $bet)),
+            'balance'   => money_format('%i', ($balance + $bet)),
             'status'    => 'success',
             'error'     => ''
         ]);

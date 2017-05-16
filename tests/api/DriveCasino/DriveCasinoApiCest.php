@@ -39,7 +39,7 @@ class DriveCasinoApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', $this->params->balance),
+            'balance'   => money_format('%i', $this->params->getBalance()),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -52,6 +52,8 @@ class DriveCasinoApiCest
         $bet = 1;
         $winLose = -1;
         (new AccountManagerMock($this->params))->bet($objectId, $bet)->mock($I);
+
+        $balance = $this->params->getBalance();
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
@@ -76,7 +78,7 @@ class DriveCasinoApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance - $bet)),
+            'balance'   => money_format('%i', ($balance - $bet)),
             'status'    => 'success',
             'error'     => ''
         ]);
