@@ -5,7 +5,6 @@ namespace App\Components\Transactions\Strategies\NetEntertainment;
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\StatusCode;
 use App\Components\Transactions\Strategies\Fundist\ProcessFundist;
-use App\Models\NetEntertainmentObjectIdMap;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
@@ -24,10 +23,9 @@ class ProcessNetEntertainment extends ProcessFundist
      * @return array|null
      * @throws ApiHttpException
      */
-    protected function process(TransactionRequest $request)
+    protected function process(TransactionRequest $request): array
     {
         $this->request = $request;
-        $this->setRequestObjectId();
         if ($this->request->amount == 0) {
             return $this->processZeroAmountTransaction();
         }
@@ -66,26 +64,5 @@ class ProcessNetEntertainment extends ProcessFundist
             );
         }
         return $this->responseData;
-    }
-
-    protected function setRequestObjectId()
-    {
-        if ($this->request->transaction_type === TransactionRequest::TRANS_BET) {
-            //KOLOK: для ставок object_id и foreign_id поменяны местами, чтобы прокинуть i_actionid
-            list($gameId, $actionId) = explode(':', $this->request->foreign_id);
-            $this->request->foreign_id = $this->request->object_id;
-            $this->request->object_id = $this->getObjectIdMap($gameId, $actionId);
-            return;
-        }
-    }
-
-    /**
-     * @param int $gameId
-     * @param string $actionId
-     * @return int
-     */
-    protected function getObjectIdMap(int $gameId, string $actionId): int
-    {
-        return NetEntertainmentObjectIdMap::getObjectId($gameId, $actionId);
     }
 }

@@ -6,6 +6,7 @@ use App\Components\Integrations\Fundist\ApiValidation;
 use App\Components\Integrations\Fundist\Balance;
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\StatusCode;
+use App\Components\Integrations\NetEntertainment\NetEntertainmentHelper;
 use App\Components\Transactions\Strategies\NetEntertainment\ProcessNetEntertainment;
 use App\Http\Requests\Fundist\BetRequest;
 use App\Http\Requests\Fundist\WinRequest;
@@ -65,16 +66,15 @@ class NetEntertainmentController extends FundistController
             )
             ->checkCurrency($user);
 
-        //KOLOK: object_id и foreign_id поменяны местами, чтобы прокинуть i_actionid
         $transactionRequest = new TransactionRequest(
             $serviceId,
-            (int)$request->input('tid'),
+            NetEntertainmentHelper::getObjectIdMap((int)$request->input('i_gameid'), $request->input('i_actionid')),
             $user->id,
             $request->input('currency'),
             TransactionRequest::D_WITHDRAWAL,
             $request->input('amount'),
             TransactionRequest::TRANS_BET,
-            $this->getObjectId($request->input($this->objectIdKey)) . ':' . $request->input('i_actionid'),
+            $request->input('tid'),
             $this->gameId,
             $this->partnerId,
             $this->cashdeskId,
