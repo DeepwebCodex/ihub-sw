@@ -2,14 +2,15 @@
 
 namespace WirexGaming;
 
-use Testing\Params;
+use Testing\DriveMedia\Params;
 
 class TestData
 {
     private $options;
 
-    public function __construct()
+    public function __construct(Params $params)
     {
+        $this->params = $params;
         $this->options = config('integrations.wirexGaming');
     }
 
@@ -24,7 +25,7 @@ class TestData
 
     protected function getUserUid()
     {
-        return $this->makeUid(env('TEST_USER_ID'));
+        return $this->makeUid($this->params->userId);
     }
 
     /**
@@ -104,7 +105,7 @@ class TestData
                         'accountEntryDetailed' => [
                             'accountEntry' => [
                                 'amount' => $amount,
-                                'currency' => Params::CURRENCY,
+                                'currency' => $this->params->currency,
                             ]
                         ]
                     ],
@@ -154,7 +155,7 @@ class TestData
                         'accountEntryDetailed' => [
                             'accountEntry' => [
                                 'amount' => $amount,
-                                'currency' => Params::CURRENCY,
+                                'currency' => $this->params->currency,
                             ]
                         ]
                     ],

@@ -36,8 +36,8 @@ class WirexGamingApiCest
 
     public function _before(\ApiTester $I)
     {
-        $this->data = new TestData();
         $this->params = new Params('wirexGaming');
+        $this->data = new TestData($this->params);
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
@@ -79,6 +79,7 @@ class WirexGamingApiCest
 
     public function testGetAvailableBalance(\ApiTester $I)
     {
+        $balance = $this->params->getBalance();
         (new AccountManagerMock($this->params))->mock($I);
 
         $request = $this->data->getAvailableBalance();
@@ -89,6 +90,7 @@ class WirexGamingApiCest
         $I->canSeeResponseIsXml();
         $I->seeXmlResponseIncludes('<status>OK</status>');
         $I->seeXmlResponseIncludes('<code>0</code>');
+        $I->seeXmlResponseIncludes("<balance>$balance</balance>");
     }
 
     public function testAddWithdrawEntry(\ApiTester $I)
@@ -96,7 +98,13 @@ class WirexGamingApiCest
         $transactionUid = $this->data->makeTransactionUid();
         $amount = 1;
         $request = $this->data->addWithdrawEntry($transactionUid, $amount);
-        (new AccountManagerMock($this->params))->bet($transactionUid, $amount)->mock($I);
+        $balance = $this->params->getBalance();
+        $newBalance = $balance - $amount;
+
+        (new AccountManagerMock($this->params))
+            ->bet($transactionUid, $amount, $newBalance)
+            ->mock($I);
+
 
         $I->disableMiddleware();
         $I->sendPOST('/wirex', $request);
@@ -104,6 +112,7 @@ class WirexGamingApiCest
         $I->canSeeResponseIsXml();
         $I->seeXmlResponseIncludes('<status>OK</status>');
         $I->seeXmlResponseIncludes('<code>0</code>');
+        $I->seeXmlResponseIncludes('<balance>'.$newBalance.'</balance>');
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
@@ -120,6 +129,7 @@ class WirexGamingApiCest
         $betTransactionUid = $this->data->makeTransactionUid();
         $amount = 1;
         $requestBet = $this->data->addWithdrawEntry($betTransactionUid, $amount);
+
         (new AccountManagerMock($this->params))
             ->bet($betTransactionUid, $amount)
             ->win($betTransactionUid, $amount)
@@ -152,11 +162,15 @@ class WirexGamingApiCest
     {
         // bet
         $betTransactionUid = $this->data->makeTransactionUid();
-        $amount = 1;
-        $requestBet = $this->data->addWithdrawEntry($betTransactionUid, $amount);
+        $bet = 2;
+        $win = 5;
+        $requestBet = $this->data->addWithdrawEntry($betTransactionUid, $bet);
+        $balance = $this->params->getBalance();
+        $newBalance = $balance - $bet + $win;
+
         (new AccountManagerMock($this->params))
-            ->bet($betTransactionUid, $amount)
-            ->win($betTransactionUid, $amount)
+            ->bet($betTransactionUid, $bet)
+            ->win($betTransactionUid, $win, $balance - $bet + $win)
             ->mock($I);
 
         $I->disableMiddleware();
@@ -164,8 +178,7 @@ class WirexGamingApiCest
 
         // win
         $winTransactionUid = $this->data->makeTransactionUid();
-        $winAmount = 1;
-        $request = $this->data->addDepositEntry($winTransactionUid, $betTransactionUid, $winAmount);
+        $request = $this->data->addDepositEntry($winTransactionUid, $betTransactionUid, $win);
 
         $I->disableMiddleware();
         $I->sendPOST('/wirex', $request);
@@ -173,6 +186,7 @@ class WirexGamingApiCest
         $I->canSeeResponseIsXml();
         $I->seeXmlResponseIncludes('<status>OK</status>');
         $I->seeXmlResponseIncludes('<code>0</code>');
+        $I->seeXmlResponseIncludes('<balance>'.$newBalance.'</balance>');
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
