@@ -41,7 +41,7 @@ class BetGamesApiCest
 
     public function _before(\ApiTester $I, Scenario $s)
     {
-        if(env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true) {
+        if(env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true) {
             $I->mockAccountManager($I, config('integrations.betGames.service_id'));
         }
 

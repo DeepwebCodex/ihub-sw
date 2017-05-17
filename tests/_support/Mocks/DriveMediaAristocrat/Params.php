@@ -31,7 +31,7 @@ class Params
 
     public function __construct()
     {
-        $this->enableMock = env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true;
+        $this->enableMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
 
         $this->login = (int)env('TEST_USER_ID') . '--1---5--127-0-0-1';
         $this->userId = (int)env('TEST_USER_ID');

@@ -142,6 +142,23 @@ test_on_dev_conf_prod:
     - master
     - tags
 
+test_on_dev_conf_prod_e2e:
+  <<: *template_compile_n_test
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  allow_failure: true
+  script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
+    - bash ./run/prod/make-configs-for-tests-mocks-off.sh
+    - composer install --optimize-autoloader
+    - ./vendor/bin/codecept run --fail-fast
+  when: manual
+  only:
+    - master
+    - tags
+    - dev
+
 compile_dev:
   <<: *template_dev
   <<: *template_add_ssh_auth

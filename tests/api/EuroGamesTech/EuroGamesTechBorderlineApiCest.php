@@ -31,7 +31,7 @@ class EuroGamesTechBorderlineApiCest
         $this->options = config('integrations.egt');
         $I->disableMiddleware();
 
-        if(env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true) {
+        if(env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true) {
             $I->mockAccountManager($I, config('integrations.egt.service_id'));
         }
 

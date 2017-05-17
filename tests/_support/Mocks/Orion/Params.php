@@ -15,7 +15,7 @@ class Params
 
     public function __construct()
     {
-        $this->enableMock = env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true;
+        $this->enableMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
         $this->userId = 10;
         $this->balance = 1000.34;
         $this->currency = 'EUR';
