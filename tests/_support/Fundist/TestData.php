@@ -18,7 +18,7 @@ class TestData
 
     public function __construct(string $integration)
     {
-        $this->isMock = env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true;
+        $this->isMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
 
         $this->userId = (int)env('TEST_USER_ID') . '_' . Params::CURRENCY;
         $this->currency = Params::CURRENCY;

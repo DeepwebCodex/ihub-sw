@@ -30,7 +30,7 @@ class TestData
 
         $this->partnerId = (int)env('TEST_PARTNER_ID');
         $this->cashdeskId = (int)env('TEST_CASHEDESK');
-        $this->isMock = env('ENABLE_ACCOUNT_MANAGER_MOCK') ?? true;
+        $this->isMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
     }
 
     public function notFound()
