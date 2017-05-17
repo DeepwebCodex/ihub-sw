@@ -5,7 +5,7 @@ namespace App\Components\Transactions\Strategies\NetEntertainment;
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\StatusCode;
 use App\Components\Transactions\Strategies\Fundist\ProcessFundist;
-use App\Models\NetentertainmentObjectIdMap;
+use App\Models\NetEntertainmentObjectIdMap;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
@@ -68,6 +68,17 @@ class ProcessNetEntertainment extends ProcessFundist
         return $this->responseData;
     }
 
+    protected function setRequestObjectId()
+    {
+        if ($this->request->transaction_type === TransactionRequest::TRANS_BET) {
+            //KOLOK: для ставок object_id и foreign_id поменяны местами, чтобы прокинуть i_actionid
+            list($gameId, $actionId) = explode(':', $this->request->foreign_id);
+            $this->request->foreign_id = $this->request->object_id;
+            $this->request->object_id = $this->getObjectIdMap($gameId, $actionId);
+            return;
+        }
+    }
+
     /**
      * @param int $gameId
      * @param string $actionId
@@ -76,39 +87,5 @@ class ProcessNetEntertainment extends ProcessFundist
     protected function getObjectIdMap(int $gameId, string $actionId): int
     {
         return NetEntertainmentObjectIdMap::getObjectId($gameId, $actionId);
-    }
-
-    protected function setRequestObjectId()
-    {
-        if ($this->request->transaction_type === TransactionRequest::TRANS_BET) {
-            list($gameId, $actionId) = explode(':', $this->request->object_id);
-            $this->request->object_id = $this->getObjectIdMap($gameId, $actionId);
-            return;
-        }
-
-        $gameId = $this->request->object_id;
-        $betObjectId = NetEntertainmentObjectIdMap::findObjectIdByGameId($gameId);
-
-        $betTransaction = Transactions::getBetTransaction(
-            $this->request->service_id,
-            $this->request->user_id,
-            $betObjectId,
-            $this->request->partner_id
-        );
-        if (!$betTransaction) {
-            throw new ApiHttpException(
-                Response::HTTP_OK,
-                null,
-                CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER)
-            );
-        }
-        if ($betTransaction->user_id != $this->request->user_id
-            || $betTransaction->currency != $this->request->currency
-        ) {
-            throw new ApiHttpException(Response::HTTP_OK, null, [
-                'code' => StatusCode::TRANSACTION_MISMATCH,
-            ]);
-        }
-        $this->request->object_id = $betTransaction->object_id;
     }
 }

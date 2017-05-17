@@ -9,7 +9,7 @@ use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Codeception\Scenario;
-use \Fundist\TestData;
+use \NetEntertainment\TestData;
 use \Fundist\TestUser;
 use Symfony\Component\HttpFoundation\Response;
 use App\Components\Integrations\GameSession\GameSessionService;
@@ -43,7 +43,6 @@ class NetEntertainmentApiCest
 
     public function _before(\ApiTester $I, Scenario $s)
     {
-        $I->mockAccountManager($I, config('integrations.netEntertainment.service_id'));
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
@@ -155,8 +154,6 @@ class NetEntertainmentApiCest
         $I->assertEquals($balanceBefore, $response['balance']);
     }
 
-
-
     public function testWin(\ApiTester $I)
     {
         $bet = $this->data->bet();
@@ -264,7 +261,7 @@ class NetEntertainmentApiCest
 
     protected function getUniqueNumber()
     {
-        return time() + mt_rand(1, 10000);
+        return time() + random_int(1, 10000);
     }
 
     private function mock($class)

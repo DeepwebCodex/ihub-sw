@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Components\Integrations\Fundist\ApiValidation;
 use App\Components\Integrations\Fundist\Balance;
+use App\Components\Integrations\Fundist\CodeMapping;
+use App\Components\Integrations\Fundist\StatusCode;
 use App\Components\Transactions\Strategies\NetEntertainment\ProcessNetEntertainment;
 use App\Http\Requests\Fundist\BetRequest;
 use App\Http\Requests\Fundist\WinRequest;
+use App\Models\NetEntertainmentObjectIdMap;
 use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Http\Response;
@@ -60,15 +65,16 @@ class NetEntertainmentController extends FundistController
             )
             ->checkCurrency($user);
 
+        //KOLOK: object_id и foreign_id поменяны местами, чтобы прокинуть i_actionid
         $transactionRequest = new TransactionRequest(
             $serviceId,
-            $this->getObjectId($request->input($this->objectIdKey)) . ':' . $request->input('i_actionid'),
+            (int)$request->input('tid'),
             $user->id,
             $request->input('currency'),
             TransactionRequest::D_WITHDRAWAL,
             $request->input('amount'),
             TransactionRequest::TRANS_BET,
-            $request->input('tid'),
+            $this->getObjectId($request->input($this->objectIdKey)) . ':' . $request->input('i_actionid'),
             $this->gameId,
             $this->partnerId,
             $this->cashdeskId,
@@ -86,15 +92,45 @@ class NetEntertainmentController extends FundistController
     /**
      * @param WinRequest $request
      * @return Response
+     * @throws \iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException
      */
     public function win(WinRequest $request)
     {
         $serviceId = $this->getOption('service_id');
         $user = IntegrationUser::get($request->input('userId'), $serviceId, $this->integration);
 
+        $gameId = $this->getObjectId($request->input($this->objectIdKey));
+        $betObjectId = NetEntertainmentObjectIdMap::findObjectIdByGameId($gameId);
+        if (!$betObjectId) {
+            throw new ApiHttpException(
+                Response::HTTP_OK,
+                null,
+                CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER)
+            );
+        }
+        $betTransaction = Transactions::getBetTransaction(
+            $serviceId,
+            $user->id,
+            $betObjectId
+        );
+        if (!$betTransaction) {
+            throw new ApiHttpException(
+                Response::HTTP_OK,
+                null,
+                CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER)
+            );
+        }
+        if ($betTransaction->user_id != $user->id
+            || $betTransaction->currency != $request->input('currency')
+        ) {
+            throw new ApiHttpException(Response::HTTP_OK, null, [
+                'code' => StatusCode::TRANSACTION_MISMATCH,
+            ]);
+        }
+
         $transactionRequest = new TransactionRequest(
             $serviceId,
-            $this->getObjectId($request->input($this->objectIdKey)),
+            $betTransaction->object_id,
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
