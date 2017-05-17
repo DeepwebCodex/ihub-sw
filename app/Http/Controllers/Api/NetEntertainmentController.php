@@ -81,7 +81,7 @@ class NetEntertainmentController extends FundistController
             app('GameSession')->get('userIp')
         );
         $transaction = new TransactionHandler($transactionRequest, $user);
-        $response = $transaction->handle(new ProcessNetEntertainment());
+        $response = $transaction->handle(app(ProcessNetEntertainment::class));
 
         return $this->responseOk([
             'tid' => $request->input('tid'),
@@ -144,7 +144,7 @@ class NetEntertainmentController extends FundistController
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
-        $response = $transaction->handle(new ProcessNetEntertainment());
+        $response = $transaction->handle(app(ProcessNetEntertainment::class));
 
         return $this->responseOk([
             'tid' => $request->input('tid'),

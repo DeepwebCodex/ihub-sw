@@ -4,7 +4,7 @@ namespace api\NetEntertainment;
 
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\StatusCode;
-use App\Components\Transactions\Strategies\Fundist\ProcessFundist;
+use App\Components\Transactions\Strategies\NetEntertainment\ProcessNetEntertainment;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
@@ -240,7 +240,7 @@ class NetEntertainmentApiCest
     /** fail in runtime */
     public function testFailPending(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessFundist::class);
+        $mock = $this->mock(ProcessNetEntertainment::class);
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
         $request = $this->data->bet();
@@ -251,7 +251,7 @@ class NetEntertainmentApiCest
 
     public function testFailDb(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessFundist::class);
+        $mock = $this->mock(ProcessNetEntertainment::class);
         $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
         $request = $this->data->bet();
         $I->sendPOST($this->action, json_encode($request));
