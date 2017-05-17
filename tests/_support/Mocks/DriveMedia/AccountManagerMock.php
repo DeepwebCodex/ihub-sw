@@ -26,27 +26,31 @@ class AccountManagerMock
 
     public function userNotFound($wrongUserId)
     {
-        $this->mock->shouldReceive('getUserInfo')->with($wrongUserId)->andThrow(new GenericApiHttpException(500, '', ['code' => 1024, 'message' => 'Account not found.']));
+        $this->mock->shouldReceive('getUserInfo')->with($wrongUserId)->andThrow(new GenericApiHttpException(404, '', ['code' => 1024, 'message' => 'Account not found.']));
 
         return $this;
     }
 
 
-    public function bet($object_id, $amount)
+    public function bet($object_id, $amount, $balance = null)
     {
+        if(is_null($balance)){
+            $balance = $this->params->balance;
+        }
+
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
                 $this->getPendingParams($object_id, $amount, self::BET))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
-                    $this->params->bet_operation_id, $this->params->balance - $amount));
+                    $this->params->bet_operation_id, $balance - $amount));
 
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs(
                 $this->getCompletedParams($object_id, self::BET, $this->params->bet_operation_id, $amount))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $object_id,
-                    $this->params->bet_operation_id, $this->params->balance - $amount));
+                    $this->params->bet_operation_id, $balance - $amount));
 
         return $this;
     }
@@ -61,20 +65,23 @@ class AccountManagerMock
         return $this;
     }
 
-    public function win($object_id, $amount)
+    public function win($object_id, $amount, $balance = null)
     {
+        if(is_null($balance)){
+            $balance = $this->params->balance;
+        }
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
                 $this->getPendingParams($object_id, $amount, self::WIN))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN,
-                    $object_id, $this->params->win_operation_id, $this->params->balance + $amount));
+                    $object_id, $this->params->win_operation_id, $balance + $amount));
 
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs(
                 $this->getCompletedParams($object_id, self::WIN, $this->params->win_operation_id, $amount))
             ->andReturn(
-                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->params->win_operation_id, $this->params->balance + $amount));
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->params->win_operation_id, $balance + $amount));
 
         return $this;
     }

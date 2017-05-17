@@ -4,6 +4,7 @@
 namespace Testing\DriveMediaAristocrat;
 
 use App\Models\DriveMediaAristocratProdObjectIdMap;
+use iHubGrid\Accounting\Users\IntegrationUser;
 
 class Params
 {
@@ -30,7 +31,8 @@ class Params
 
     public function __construct()
     {
-        $this->enableMock = true;
+        $this->enableMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
+
         $this->login = (int)env('TEST_USER_ID') . '--1---5--127-0-0-1';
         $this->userId = (int)env('TEST_USER_ID');
         $this->cashdeskId = (int)env('TEST_CASHEDESK');
@@ -47,5 +49,15 @@ class Params
         }
 
         return (string)rand(1111111111111,9999999999999).'_'.rand(111111111,999999999);
+    }
+
+
+    public function getBalance()
+    {
+        if ($this->enableMock) {
+            return $this->balance;
+        }
+
+        return IntegrationUser::get($this->userId, 0, 'tests')->getBalance();
     }
 }

@@ -21,6 +21,8 @@ class DriveMediaIgrosoftApiCest
 
     public function testMethodBalance(ApiTester $I)
     {
+        $balance = $this->params->getBalance();
+
         (new AccountManagerMock($this->params))->mock($I);
 
         $request = [
@@ -39,7 +41,7 @@ class DriveMediaIgrosoftApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', $this->params->balance),
+            'balance'   => money_format('%i', $balance),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -48,20 +50,22 @@ class DriveMediaIgrosoftApiCest
     public function testMethodBetWin(ApiTester $I)
     {
         $tradeId = md5(time());
-        $amount = 0.10;
+        $bet = 0.10;
         $winLose = -0.10;
         $winLose2 = 0.50;
         $objectId = DriveMediaIgrosoftProdObjectIdMap::getObjectId($tradeId);
+        $balance = $this->params->getBalance();
+
         (new AccountManagerMock($this->params))
-            ->bet($objectId, $amount)
-            ->win($objectId, $winLose2)
+            ->bet($objectId, $bet)
+            ->win($objectId, $winLose2, $balance - $bet)
             ->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
             'login'     => $this->params->login,
-            'bet'       => (string)$amount,
+            'bet'       => (string)$bet,
             'winLose'   => (string)$winLose,
             'tradeId'   => $tradeId,
             'betInfo'   => 'SpinNormal',
@@ -81,7 +85,7 @@ class DriveMediaIgrosoftApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance - $amount)),
+            'balance'   => money_format('%i', $balance - $bet),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -111,7 +115,7 @@ class DriveMediaIgrosoftApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance + $winLose2)),
+            'balance'   => money_format('%i', $balance - $bet + $winLose2),
             'status'    => 'success',
             'error'     => ''
         ]);

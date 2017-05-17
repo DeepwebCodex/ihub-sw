@@ -41,7 +41,9 @@ class BetGamesApiCest
 
     public function _before(\ApiTester $I, Scenario $s)
     {
-        $I->mockAccountManager($I, config('integrations.betGames.service_id'));
+        if(env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true) {
+            $I->mockAccountManager($I, config('integrations.betGames.service_id'));
+        }
 
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
@@ -152,7 +154,7 @@ class BetGamesApiCest
 
         $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
-        $I->assertEquals($balanceBefore - $this->data->getAmount(), $response['params']['balance_after']);
+        $I->assertEquals((int)($balanceBefore - $this->data->getAmount()), $response['params']['balance_after']);
 
         $this->isRecord($I, $request, 'bet');
 
@@ -169,7 +171,7 @@ class BetGamesApiCest
 
         $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
-        $I->assertEquals($balanceBefore + $this->data->getAmount(), $response['params']['balance_after']);
+        $I->assertEquals((int)($balanceBefore + $this->data->getAmount()), $response['params']['balance_after']);
 
         $this->isRecord($I, $request, 'win');
 

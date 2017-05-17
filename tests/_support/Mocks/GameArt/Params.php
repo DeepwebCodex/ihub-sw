@@ -3,9 +3,11 @@
 
 namespace Testing\GameArt;
 
+use iHubGrid\Accounting\Users\IntegrationUser;
+
 class Params
 {
-    public $enableMock = true;
+    public $enableMock;
 
     public $big_amount = 1000000;
     public $amount = 0.10;
@@ -31,9 +33,10 @@ class Params
 
     public function __construct()
     {
+        $this->enableMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
         $this->userId = (int)env('TEST_USER_ID');
-        $this->cashdeskId = 1; //(int)env('TEST_CASHEDESK');
-        $this->partnerId = 1; //(int)env('TEST_PARTNER_ID');
+        $this->cashdeskId = (int)env('TEST_CASHEDESK');
+        $this->partnerId = (int)env('TEST_PARTNER_ID');
         $this->serviceId = (int)config('integrations.gameart.service_id');
         $this->options = config('integrations.gameart');
     }
@@ -60,5 +63,14 @@ class Params
     private function getUniqueId(): int
     {
         return round(microtime(true)) + mt_rand(1, 10000);
+    }
+
+    public function getBalance()
+    {
+        if ($this->enableMock) {
+            return $this->balance;
+        }
+
+        return IntegrationUser::get($this->userId, 0, 'tests')->getBalance();
     }
 }

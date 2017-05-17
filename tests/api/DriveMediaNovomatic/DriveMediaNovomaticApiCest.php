@@ -21,6 +21,8 @@ class DriveMediaNovomaticApiCest
 
     public function testGetBalance(ApiTester $I)
     {
+        $balance = $this->params->getBalance();
+
         (new AccountManagerMock($this->params))->mock($I);
 
         $requestData = [
@@ -36,7 +38,7 @@ class DriveMediaNovomaticApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login' => $this->params->login,
-            'balance' => (string)round($this->params->balance, 2),
+            'balance' => (string)round($balance, 2),
             'status' => 'success',
             'error' => ''
         ]);
@@ -52,12 +54,13 @@ class DriveMediaNovomaticApiCest
     public function testBet(ApiTester $I)
     {
         $bet = 0.01;
-        $winLose = 0.01;
+        $winLose = -0.01;
         $tradeId = md5(microtime());
         $objectId = DriveMediaNovomaticProdObjectIdMap::getObjectId($tradeId);
+        $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
-        ->bet($objectId, $this->params->amount)
+        ->bet($objectId, $bet)
         ->mock($I);
 
         $requestData = [
@@ -65,7 +68,7 @@ class DriveMediaNovomaticApiCest
             'space' => self::TEST_SPACE,
             'login' => $this->params->login,
             'bet' => (string)$bet,
-            'winLose' => '-' . $winLose,
+            'winLose' => (string)$winLose,
             'tradeId' => $tradeId,
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
@@ -78,7 +81,7 @@ class DriveMediaNovomaticApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login' => $this->params->login,
-            'balance' => (string)round($this->params->balance - $this->params->amount, 2),
+            'balance' => (string)round($balance - $bet, 2),
             'status' => 'success',
             'error' => ''
         ]);
@@ -90,10 +93,11 @@ class DriveMediaNovomaticApiCest
         $winLose = 0.01;
         $tradeId = md5(microtime());
         $objectId = DriveMediaNovomaticProdObjectIdMap::getObjectId($tradeId);
+        $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
-            ->bet($objectId, $this->params->amount)
-            ->win($objectId, $this->params->amount)
+            ->bet($objectId, $bet)
+            ->win($objectId, $winLose, $balance - $bet)
             ->mock($I);
 
         $requestData = [
@@ -116,7 +120,7 @@ class DriveMediaNovomaticApiCest
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'login' => $this->params->login,
-            'balance' => (string)round($this->params->balance + $winLose, 2),
+            'balance' => (string)round($balance - $bet + $winLose, 2),
             'status' => 'success',
             'error' => ''
         ]);

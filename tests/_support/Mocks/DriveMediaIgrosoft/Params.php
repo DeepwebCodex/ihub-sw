@@ -4,6 +4,7 @@
 namespace Testing\DriveMediaIgrosoft;
 
 use App\Models\DriveMediaIgrosoftProdObjectIdMap;
+use iHubGrid\Accounting\Users\IntegrationUser;
 
 class Params
 {
@@ -32,7 +33,7 @@ class Params
 
     public function __construct()
     {
-        $this->enableMock = true;
+        $this->enableMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
         $this->login = (int)env('TEST_USER_ID') . '--1---5--127-0-0-1';
         $this->userId = (int)env('TEST_USER_ID');
         $this->cashdeskId = (int)env('TEST_CASHEDESK');
@@ -49,5 +50,14 @@ class Params
         }
 
         return md5(time());
+    }
+
+    public function getBalance()
+    {
+        if ($this->enableMock) {
+            return $this->balance;
+        }
+
+        return IntegrationUser::get($this->userId, 0, 'tests')->getBalance();
     }
 }
