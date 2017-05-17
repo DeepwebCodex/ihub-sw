@@ -3,11 +3,11 @@
 namespace api\WirexGaming;
 
 use App\Components\Integrations\GameSession\GameSessionService;
-use iHubGrid\Accounting\Users\IntegrationUser;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 use Testing\GameSessionsMock;
-use Testing\Params;
 use WirexGaming\TestData;
 
 /**
@@ -21,7 +21,8 @@ class WirexGamingApiCest
      */
     private $data;
 
-    private $betTransactionUid;
+    /** @var Params  */
+    private $params;
 
     /**
      * @param $oid
@@ -36,7 +37,7 @@ class WirexGamingApiCest
     public function _before(\ApiTester $I)
     {
         $this->data = new TestData();
-        $I->mockAccountManager($I, config('integrations.wirexGaming.service_id'));
+        $this->params = new Params('wirexGaming');
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
@@ -64,7 +65,7 @@ class WirexGamingApiCest
 
     public function testGetUserData(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        (new AccountManagerMock($this->params))->mock($I);
 
         $request = $this->data->getUserData();
 
@@ -78,6 +79,8 @@ class WirexGamingApiCest
 
     public function testGetAvailableBalance(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $request = $this->data->getAvailableBalance();
 
         $I->disableMiddleware();
@@ -90,12 +93,10 @@ class WirexGamingApiCest
 
     public function testAddWithdrawEntry(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
-        //$transactionUid = $this->data->makeTransactionUid();
-        $transactionUid = Params::OBJECT_ID;
-
-        $request = $this->data->addWithdrawEntry();
+        $transactionUid = $this->data->makeTransactionUid();
+        $amount = 1;
+        $request = $this->data->addWithdrawEntry($transactionUid, $amount);
+        (new AccountManagerMock($this->params))->bet($transactionUid, $amount)->mock($I);
 
         $I->disableMiddleware();
         $I->sendPOST('/wirex', $request);
@@ -113,18 +114,23 @@ class WirexGamingApiCest
         ]);
     }
 
-    /**
-     * @param \ApiTester $I
-     * @skip
-     */
     public function testRollbackWithdraw(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        // bet
+        $betTransactionUid = $this->data->makeTransactionUid();
+        $amount = 1;
+        $requestBet = $this->data->addWithdrawEntry($betTransactionUid, $amount);
+        (new AccountManagerMock($this->params))
+            ->bet($betTransactionUid, $amount)
+            ->win($betTransactionUid, $amount)
+            ->mock($I);
 
-        //$transactionUid = $this->data->makeTransactionUid();
-        $transactionUid = Params::OBJECT_ID;
+        $I->disableMiddleware();
+        $I->sendPOST('/wirex', $requestBet);
 
-        $request = $this->data->rollbackWithdraw($this->betTransactionUid);
+        // rollback
+        $rollbackTransactionUid = $this->data->makeTransactionUid();
+        $request = $this->data->rollbackWithdraw($rollbackTransactionUid, $betTransactionUid, $amount);
 
         $I->disableMiddleware();
         $I->sendPOST('/wirex', $request);
@@ -135,7 +141,7 @@ class WirexGamingApiCest
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
-            'foreign_id' => $transactionUid,
+            'foreign_id' => $rollbackTransactionUid,
             'transaction_type' => TransactionRequest::TRANS_REFUND,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_DEPOSIT
@@ -144,14 +150,22 @@ class WirexGamingApiCest
 
     public function testAddDepositEntry(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        // bet
+        $betTransactionUid = $this->data->makeTransactionUid();
+        $amount = 1;
+        $requestBet = $this->data->addWithdrawEntry($betTransactionUid, $amount);
+        (new AccountManagerMock($this->params))
+            ->bet($betTransactionUid, $amount)
+            ->win($betTransactionUid, $amount)
+            ->mock($I);
 
-        $this->testAddWithdrawEntry($I);
+        $I->disableMiddleware();
+        $I->sendPOST('/wirex', $requestBet);
 
-        //$transactionUid = $this->data->makeTransactionUid();
-        $transactionUid = Params::OBJECT_ID;
-
-        $request = $this->data->addDepositEntry($this->betTransactionUid);
+        // win
+        $winTransactionUid = $this->data->makeTransactionUid();
+        $winAmount = 1;
+        $request = $this->data->addDepositEntry($winTransactionUid, $betTransactionUid, $winAmount);
 
         $I->disableMiddleware();
         $I->sendPOST('/wirex', $request);
@@ -162,7 +176,7 @@ class WirexGamingApiCest
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
-            'foreign_id' => $transactionUid,
+            'foreign_id' => $winTransactionUid,
             'transaction_type' => TransactionRequest::TRANS_WIN,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_DEPOSIT

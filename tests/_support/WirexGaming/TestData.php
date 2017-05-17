@@ -87,10 +87,8 @@ class TestData
         ];
     }
 
-    public function addWithdrawEntry()
+    public function addWithdrawEntry($transactionUid, $amount)
     {
-        $transactionUid = $this->makeTransactionUid();
-
         return [
             'S:Body' => [
                 'ns2:addWithdrawEntry' => [
@@ -101,11 +99,11 @@ class TestData
                         'contextId' => 0,
                         'sourceContextId' => 0,
                         'partyOriginatingUid' => $this->getUserUid(),
-                        'transactionUid' => Params::OBJECT_ID, // $transactionUid,
+                        'transactionUid' => $transactionUid,
                         'sessionToken' => '123',
                         'accountEntryDetailed' => [
                             'accountEntry' => [
-                                'amount' => Params::AMOUNT,
+                                'amount' => $amount,
                                 'currency' => Params::CURRENCY,
                             ]
                         ]
@@ -115,10 +113,8 @@ class TestData
         ];
     }
 
-    public function rollbackWithdraw($betTransactionUid)
+    public function rollbackWithdraw($transactionUid, $betTransactionUid, $amount)
     {
-        $transactionUid = $this->makeTransactionUid();
-
         return [
             'S:Body' => [
                 'ns2:rollBackWithdraw' => [
@@ -129,20 +125,18 @@ class TestData
                         'contextId' => 0,
                         'originatingPid' => 0,
                         'partyOriginatingUid' => $this->getUserUid(),
-                        'transactionUid' => Params::OBJECT_ID, // $transactionUid,
-                        'relatedTransUid' => Params::OBJECT_ID, // $betTransactionUid,
+                        'transactionUid' => $transactionUid,
+                        'relatedTransUid' => $betTransactionUid,
                         'sessionToken' => '123',
-                        'amount' => Params::AMOUNT,
+                        'amount' => $amount,
                     ],
                 ]
             ],
         ];
     }
 
-    public function addDepositEntry($betTransactionUid)
+    public function addDepositEntry($transactionUid, $betTransactionUid, $amount)
     {
-        $transactionUid = $this->makeTransactionUid();
-
         return [
             'S:Body' => [
                 'ns2:addDepositEntry' => [
@@ -154,12 +148,12 @@ class TestData
                         'sourceContextId' => 0,
                         'originatingPid' => 0,
                         'partyOriginatingUid' => $this->getUserUid(),
-                        'transactionUid' => Params::OBJECT_ID, // $transactionUid,
-                        'relatedTransUid' => Params::OBJECT_ID, // $betTransactionUid,
+                        'transactionUid' => $transactionUid,
+                        'relatedTransUid' => $betTransactionUid,
                         'sessionToken' => '123',
                         'accountEntryDetailed' => [
                             'accountEntry' => [
-                                'amount' => Params::WIN_AMOUNT,
+                                'amount' => $amount,
                                 'currency' => Params::CURRENCY,
                             ]
                         ]
