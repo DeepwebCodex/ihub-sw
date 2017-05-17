@@ -49,9 +49,11 @@ class EuroGamesTechController extends BaseApiController
 
     public function authenticate(AuthRequest $request)
     {
-        $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
-
         app('GameSession')->create(app('GameSession')->getData(), 'md5', EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+
+        app('AccountManager')->selectAccounting(app('GameSession')->get('partner_id'), app('GameSession')->get('cashdesk_id'));
+
+        $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
         EgtHelper::checkInputCurrency($user->getCurrency(), EgtHelper::getCurrencyFromPortalCode($request->input('PortalCode')));
 
@@ -62,6 +64,11 @@ class EuroGamesTechController extends BaseApiController
 
     public function getPlayerBalance(PlayerBalanceRequest $request)
     {
+        $sessionId = app('GameSession')->generateReferenceId(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
+        app('GameSession')->start($sessionId);
+
+        app('AccountManager')->selectAccounting(app('GameSession')->get('partner_id'), app('GameSession')->get('cashdesk_id'));
+
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
         EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
@@ -75,6 +82,8 @@ class EuroGamesTechController extends BaseApiController
     {
         $sessionId = app('GameSession')->generateReferenceId(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
         app('GameSession')->start($sessionId);
+
+        app('AccountManager')->selectAccounting(app('GameSession')->get('partner_id'), app('GameSession')->get('cashdesk_id'));
 
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 
@@ -105,13 +114,9 @@ class EuroGamesTechController extends BaseApiController
 
     public function deposit(DepositRequest $request)
     {
-        $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
-
-        EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
-
         $betTransaction = Transactions::getBetTransaction(
             $this->getOption('service_id'),
-            $user->id,
+            $request->input('PlayerId'),
             $request->input('GameNumber')
         );
 
@@ -119,6 +124,12 @@ class EuroGamesTechController extends BaseApiController
             throw new ApiHttpException(500, "Bet was not placed",
                 CodeMapping::getByMeaning(CodeMappingBase::SERVER_ERROR));
         }
+
+        app('AccountManager')->selectAccounting($betTransaction->partner_id, $betTransaction->cashdesk);
+
+        $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
+
+        EgtHelper::checkInputCurrency($user->getCurrency(), $request->input('Currency'));
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -147,6 +158,8 @@ class EuroGamesTechController extends BaseApiController
     {
         $sessionId = app('GameSession')->generateReferenceId(EgtHelper::SESSION_PREFIX . $request->input('SessionId'));
         app('GameSession')->start($sessionId);
+
+        app('AccountManager')->selectAccounting(app('GameSession')->get('partner_id'), app('GameSession')->get('cashdesk_id'));
 
         $user = IntegrationUser::get($request->input('PlayerId'), $this->getOption('service_id'), 'egt');
 

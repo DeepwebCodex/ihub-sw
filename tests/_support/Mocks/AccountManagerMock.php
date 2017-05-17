@@ -214,6 +214,7 @@ class AccountManagerMock
 
         $accountManager->shouldReceive('getFreeOperationId')->withNoArgs()->andReturn($this->getUniqueId());
         $accountManager->shouldReceive('getOperations')->withAnyArgs()->andReturn(null);
+        $accountManager->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
 
 
         return $accountManager;
