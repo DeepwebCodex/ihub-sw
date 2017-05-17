@@ -60,8 +60,9 @@ class DriveCasinoBorderlineApiCest
         $winLose1 = -1;
         $bet2 = 0;
         $winLose2 = 5;
-        (new AccountManagerMock($this->params))->bet($objectId, $bet1)->win($objectId, $winLose2)->mock($I);
         $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet1, $balance - $bet1)->win($objectId, $winLose2, $balance + $winLose2)->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',

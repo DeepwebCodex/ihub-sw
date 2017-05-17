@@ -57,8 +57,8 @@ class DriveMediaIgrosoftApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
-            ->bet($objectId, $bet)
-            ->win($objectId, $winLose2, $balance - $bet)
+            ->bet($objectId, $bet, $balance - $bet)
+            ->win($objectId, $winLose2, $balance - $bet + $winLose2)
             ->mock($I);
 
         $request = [

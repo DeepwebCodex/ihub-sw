@@ -89,7 +89,7 @@ class MrSlottyBorderlineApiCest
 
         (new AccountManagerMock($this->params))
             ->bet($objectId, MrSlottyHelper::amountCentsToWhole($amount))
-            ->win($objectId, MrSlottyHelper::amountCentsToWhole($win), $balance - $amount/100)
+            ->win($objectId, MrSlottyHelper::amountCentsToWhole($win), $balance - $amount/100 + $win/100)
             ->mock($I);
 
         $request = [
@@ -134,8 +134,8 @@ class MrSlottyBorderlineApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
-            ->bet($objectId, $amount/100)
-            ->win($objectId, $win/100, $balance - $amount/100)
+            ->bet($objectId, $amount/100, $balance - $amount/100)
+            ->win($objectId, $win/100, $balance - $amount/100 + $win/100)
             ->mock($I);
 
 

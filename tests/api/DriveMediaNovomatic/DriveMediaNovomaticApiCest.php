@@ -60,7 +60,7 @@ class DriveMediaNovomaticApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
-        ->bet($objectId, $bet)
+        ->bet($objectId, $bet, $balance - $bet)
         ->mock($I);
 
         $requestData = [
@@ -97,7 +97,7 @@ class DriveMediaNovomaticApiCest
 
         (new AccountManagerMock($this->params))
             ->bet($objectId, $bet)
-            ->win($objectId, $winLose, $balance - $bet)
+            ->win($objectId, $winLose, $balance - $bet + $winLose)
             ->mock($I);
 
         $requestData = [
