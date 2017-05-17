@@ -85,11 +85,13 @@ class MrSlottyBorderlineApiCest
         $objectId = MrSlottyHelper::getObjectId($roundId);
         $amount = 100;
         $win = 200;
+        $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
             ->bet($objectId, MrSlottyHelper::amountCentsToWhole($amount))
-            ->win($objectId, MrSlottyHelper::amountCentsToWhole($win))
+            ->win($objectId, MrSlottyHelper::amountCentsToWhole($win), $balance - $amount/100 + $win/100)
             ->mock($I);
+
         $request = [
             'action'   => 'bet_win',
             'amount' => $amount,
@@ -118,7 +120,7 @@ class MrSlottyBorderlineApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status' => 200,
-            'balance' => 100 * ($this->params->balance + MrSlottyHelper::amountCentsToWhole($win)),
+            'balance' => 100 * $balance - $amount + $win,
             'currency' => $this->params->currency
         ]);
     }
@@ -129,10 +131,11 @@ class MrSlottyBorderlineApiCest
         $objectId = MrSlottyHelper::getObjectId($round_id);
         $amount = 100;
         $win = 200;
+        $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
-            ->bet($objectId, MrSlottyHelper::amountCentsToWhole($amount))
-            ->win($objectId, MrSlottyHelper::amountCentsToWhole($win))
+            ->bet($objectId, $amount/100, $balance - $amount/100)
+            ->win($objectId, $win/100, $balance - $amount/100 + $win/100)
             ->mock($I);
 
 
@@ -162,7 +165,7 @@ class MrSlottyBorderlineApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status' => 200,
-            'balance' => 100 * ($this->params->balance - MrSlottyHelper::amountCentsToWhole($amount)),
+            'balance' => 100 * $balance - $amount,
             'currency' => $this->params->currency
         ]);
 
@@ -193,7 +196,7 @@ class MrSlottyBorderlineApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status' => 200,
-            'balance' => 100 * ($this->params->balance + MrSlottyHelper::amountCentsToWhole($win)),
+            'balance' => 100 * $balance - $amount + $win,
             'currency' => $this->params->currency
         ]);
     }

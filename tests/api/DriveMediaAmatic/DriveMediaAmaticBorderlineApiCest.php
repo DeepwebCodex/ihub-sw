@@ -59,7 +59,9 @@ class DriveMediaAmaticBorderlineApiCest
         $bet = 0.1;
         $winLose = 0.1;
 
-        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $winLose)->mock($I);
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $winLose, $balance)->mock($I);
 
         $request = [
             'space'     => $this->space,
@@ -84,7 +86,7 @@ class DriveMediaAmaticBorderlineApiCest
 
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', ($this->params->balance + $winLose)),
+            'balance'   => money_format('%i', ($balance)),
             'status'    => 'success',
             'error'     => ''
         ]);

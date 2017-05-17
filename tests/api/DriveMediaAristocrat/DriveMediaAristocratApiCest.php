@@ -26,6 +26,7 @@ class DriveMediaAristocratApiCest
     {
         (new AccountManagerMock($this->params))->mock($I);
 
+        $balance = $this->params->getBalance();
         $request = [
             'space' => $this->space,
             'login' => $this->params->login,
@@ -42,7 +43,7 @@ class DriveMediaAristocratApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', $this->params->balance),
+            'balance'   => money_format('%i', $balance),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -54,14 +55,16 @@ class DriveMediaAristocratApiCest
         $objectId = DriveMediaAristocratProdObjectIdMap::getObjectId($tradeId);
         $bet = 0.05;
         $winLose = -0.05;
-        (new AccountManagerMock($this->params))->bet($objectId, $bet)->mock($I);
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance - $bet)->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
             'login'     => $this->params->login,
-            'bet'       => (string)$this->params->amount,
-            'winLose'   => (string)$this->params->winLose,
+            'bet'       => (string)$bet,
+            'winLose'   => (string)$winLose,
             'tradeId'   => $tradeId,
             'betInfo'   => 'Bet',
             'gameId'    => '123',
@@ -80,7 +83,7 @@ class DriveMediaAristocratApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', $this->params->balance - $bet),
+            'balance'   => money_format('%i', $balance - $bet),
             'status'    => 'success',
             'error'     => ''
         ]);

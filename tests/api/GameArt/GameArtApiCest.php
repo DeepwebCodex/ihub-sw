@@ -54,7 +54,9 @@ class GameArtApiCest
     {
         $amount = 0.10;
         $roundId = substr(time(), 1, 9);
-        (new AccountManagerMock($this->params))->bet($roundId, $amount)->mock($I);
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($roundId, $amount, $balance - $amount)->mock($I);
 
         $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
@@ -85,7 +87,7 @@ class GameArtApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status'    => '200',
-            'balance'   => self::toFloat($testUser->getBalanceInCents() - 100 * $amount),
+            'balance'   => self::toFloat(100 * $balance - 100 * $amount),
         ]);
     }
 

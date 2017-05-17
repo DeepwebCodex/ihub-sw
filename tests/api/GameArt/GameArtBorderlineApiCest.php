@@ -43,8 +43,7 @@ class GameArtBorderlineApiCest
         $request = array_merge($request, $key);
 
         $I->sendGET($this->params->action, $request);
-        //TODO: fix 404 response code with AM mock
-//        $I->seeResponseCodeIs(404);
+        $I->seeResponseCodeIs(404);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status'    => '500',

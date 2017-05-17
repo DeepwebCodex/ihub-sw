@@ -20,6 +20,7 @@ class MrSlottyApiCest
 
     public function testMethodBalance(ApiTester $I)
     {
+        $balance = $this->params->getBalance();
         (new AccountManagerMock($this->params))->mock($I);
         $request = [
             'action'   => 'balance',
@@ -37,7 +38,7 @@ class MrSlottyApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status' => 200,
-            'balance' => 100 * $this->params->balance,
+            'balance' => 100 * $balance,
             'currency' => $this->params->currency
         ]);
     }
@@ -47,8 +48,12 @@ class MrSlottyApiCest
         $roundId = (string)time() . random_int(0, 9);
         $objectId = MrSlottyHelper::getObjectId($roundId);
         $amount = 100;
+        $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($objectId, MrSlottyHelper::amountCentsToWhole($amount))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->bet($objectId, $amount/100, $balance - $amount/100)
+            ->mock($I);
+
         $request = [
             'action'   => 'bet',
             'amount' => $amount,
@@ -75,7 +80,7 @@ class MrSlottyApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status' => 200,
-            'balance' => 100 * $this->params->balance - 100,
+            'balance' => 100 * $balance - $amount,
             'currency' => $this->params->currency
         ]);
     }

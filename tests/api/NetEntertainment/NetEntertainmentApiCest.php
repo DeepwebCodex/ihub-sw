@@ -43,6 +43,10 @@ class NetEntertainmentApiCest
 
     public function _before(\ApiTester $I, Scenario $s)
     {
+        if(env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true) {
+            $I->mockAccountManager($I, config('integrations.netEntertainment.service_id'));
+        }
+
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());

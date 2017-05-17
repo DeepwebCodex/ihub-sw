@@ -25,8 +25,9 @@ class DriveMediaAristocratBorderlineApiCest
         $objectId = DriveMediaAristocratProdObjectIdMap::getObjectId($tradeId);
         $bet = 0.05;
         $winLose = -0.03;
+        $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $bet + $winLose)->mock($I);
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $bet + $winLose, $balance + $winLose)->mock($I);
 
         $request = [
             'cmd' => 'writeBet',
@@ -52,7 +53,7 @@ class DriveMediaAristocratBorderlineApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'login'     => $this->params->login,
-            'balance'   => money_format('%i', $this->params->balance + $bet + $winLose),
+            'balance'   => money_format('%i', $balance + $winLose),
             'status'    => 'success',
             'error'     => ''
         ]);

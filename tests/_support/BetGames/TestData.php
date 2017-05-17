@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\Response;
 
 class TestData
 {
-    const IS_MOCK = true;
+    private $isMock;
     const AMOUNT = 10;
     /**
      * @var IntegrationUser
@@ -30,6 +30,7 @@ class TestData
 
         $this->partnerId = (int)env('TEST_PARTNER_ID');
         $this->cashdeskId = (int)env('TEST_CASHEDESK');
+        $this->isMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
     }
 
     public function notFound()
@@ -220,6 +221,6 @@ class TestData
 
     private function getObjectId()
     {
-        return (self::IS_MOCK) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
+        return ($this->isMock) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
     }
 }
