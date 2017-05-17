@@ -31,6 +31,10 @@ class GameArtController extends BaseApiController
 
     public function index(Request $request)
     {
+        if (!$request->has('action')) {
+            return app()->call([$this, 'error'], $request->all());
+        }
+
         $method = GameArtHelper::mapMethod($request->input('action'));
         if (method_exists($this, $method)) {
             return app()->call([$this, $method], $request->all());
