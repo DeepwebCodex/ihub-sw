@@ -1,30 +1,34 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
-
-use DriveMedia\TestUser;
+use App\Models\DriveMediaPlaytechProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 
 class DriveMediaPlaytechApiCest
 {
     private $key;
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var Params  */
+    private $params;
 
     public function _before() {
         $this->key = config('integrations.DriveMediaPlaytech.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaPlaytech.spaces.FUN.id');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params('DriveMediaPlaytech');
     }
 
     public function testMethodBalance(ApiTester $I)
     {
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->mock($I);
+
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
@@ -36,8 +40,8 @@ class DriveMediaPlaytechApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', $this->testUser->getBalance()),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $balance),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -45,13 +49,21 @@ class DriveMediaPlaytechApiCest
 
     public function testMethodBet(ApiTester $I)
     {
+        $tradeId = md5(microtime());
+        $objectId = DriveMediaPlaytechProdObjectIdMap::getObjectId($tradeId);
+        $bet = 1.0;
+        $winLose = -1.0;
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance - $bet)->mock($I);
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => '1.0',
-            'winLose'   => '-1.0',
-            'tradeId'   => md5(microtime()),
+            'login'     => $this->params->login,
+            'bet'       => (string)$bet,
+            'winLose'   => (string)$winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'spin',
             'gameId'    => '183',
             'matrix'    => '[]',
@@ -67,8 +79,8 @@ class DriveMediaPlaytechApiCest
         $I->sendPOST('/playtech', $request);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 1.0)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $balance - $bet),
             'status'    => 'success',
             'error'     => ''
         ]);

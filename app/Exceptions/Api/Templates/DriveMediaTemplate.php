@@ -22,6 +22,10 @@ class DriveMediaTemplate implements IExceptionTemplate
      */
     public function mapping($item, $statusCode, $isApiException)
     {
+        if(isset($item['message'])){
+            app('AppLog')->error($item['message']);
+        }
+
         $this->item = $item;
 
         $code = (int)$this->useElement('code', StatusCode::INTERNAL_SERVER_ERROR);

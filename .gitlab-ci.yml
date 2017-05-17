@@ -46,11 +46,11 @@ variables:
   <<: *template_add_ssh_auth
   stage: test
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
-  cache:
-    key: $CI_BUILD_REF_NAME
-    untracked: true
-    paths:
-      - ./vendor
+#  cache:
+#    key: $CI_BUILD_REF_NAME
+#    untracked: true
+#    paths:
+#      - ./vendor
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
@@ -118,6 +118,8 @@ fail_build_for_incorrect_branches:
 test_feature:
   <<: *template_compile_n_test
   script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - bash ./run/dev/make-configs.sh
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - composer install --optimize-autoloader
@@ -130,6 +132,8 @@ test_on_dev_conf_prod:
   <<: *template_compile_n_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - bash ./run/prod/make-configs-for-tests.sh
     - composer install --optimize-autoloader
@@ -138,12 +142,31 @@ test_on_dev_conf_prod:
     - master
     - tags
 
+test_on_dev_conf_prod_e2e:
+  <<: *template_compile_n_test
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  allow_failure: true
+  script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
+    - bash ./run/prod/make-configs-for-tests-mocks-off.sh
+    - composer install --optimize-autoloader
+    - ./vendor/bin/codecept run --fail-fast
+  when: manual
+  only:
+    - master
+    - tags
+    - dev
+
 compile_dev:
   <<: *template_dev
   <<: *template_add_ssh_auth
   stage: compile_project
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - bash ./run/dev/make-configs.sh
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images || true
     - composer install --optimize-autoloader

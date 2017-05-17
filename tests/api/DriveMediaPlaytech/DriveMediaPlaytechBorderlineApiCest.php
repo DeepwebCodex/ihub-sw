@@ -1,33 +1,44 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
-
-use DriveMedia\TestUser;
+use App\Models\DriveMediaPlaytechProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 
 class DriveMediaPlaytechBorderlineApiCest
 {
     private $key;
     private $space;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var Params  */
+    private $params;
 
     public function _before() {
         $this->key = config('integrations.DriveMediaPlaytech.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaPlaytech.spaces.FUN.id');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params('DriveMediaPlaytech');
     }
 
     public function testMethodBetWin(ApiTester $I)
     {
+        $tradeId = md5(microtime());
+        $objectId = DriveMediaPlaytechProdObjectIdMap::getObjectId($tradeId);
+        $bet = 2.00;
+        $winLose = 5.8;
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))
+            ->bet($objectId, $bet, $balance - $bet)
+            ->win($objectId, $bet + $winLose, $balance + $winLose)
+            ->mock($I);
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => '2.00',
-            'winLose'   => '5.8',
-            'tradeId'   => md5(microtime()),
+            'login'     => $this->params->login,
+            'bet'       => (string)$bet,
+            'winLose'   => (string)$winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'spin',
             'gameId'    => '183',
             'matrix'    => '[]',
@@ -44,25 +55,33 @@ class DriveMediaPlaytechBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 2.0 + 7.8)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $balance + $winLose),
             'status'    => 'success',
             'error'     => ''
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBetWin2(ApiTester $I)
     {
+        $tradeId = md5(microtime());
+        $objectId = DriveMediaPlaytechProdObjectIdMap::getObjectId($tradeId);
+        $bet = 240.0;
+        $winLose = -180.0;
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))
+            ->bet($objectId, $bet)
+            ->win($objectId, $bet + $winLose, $balance + $winLose)
+            ->mock($I);
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => '240.0',
-            'winLose'   => '-180.0',
-            'tradeId'   => md5(microtime()),
+            'login'     => $this->params->login,
+            'bet'       => (string)$bet,
+            'winLose'   => (string)$winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'spin',
             'gameId'    => '183',
             'matrix'    => '[]',
@@ -79,25 +98,33 @@ class DriveMediaPlaytechBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 240.0 + 60.0)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $balance + $winLose),
             'status'    => 'success',
             'error'     => ''
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBetWin3(ApiTester $I)
     {
+        $tradeId = md5(microtime());
+        $objectId = DriveMediaPlaytechProdObjectIdMap::getObjectId($tradeId);
+        $bet = 360.0;
+        $winLose = 90.0;
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))
+            ->bet($objectId, $bet)
+            ->win($objectId, $bet + $winLose, $balance + $winLose)
+            ->mock($I);
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => '360.0',
-            'winLose'   => '90.0',
-            'tradeId'   => md5(microtime()),
+            'login'     => $this->params->login,
+            'bet'       => (string)$bet,
+            'winLose'   => (string)$winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'spin',
             'gameId'    => '183',
             'matrix'    => '[]',
@@ -114,8 +141,8 @@ class DriveMediaPlaytechBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 360.0 + 450.0)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', ($balance + $winLose)),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -123,10 +150,12 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
+            'login'     => $this->params->login,
             'bet'       => '0.00',
             'winLose'   => '0.10',
             'tradeId'   => md5(microtime()),
@@ -156,7 +185,7 @@ class DriveMediaPlaytechBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [
@@ -175,10 +204,11 @@ class DriveMediaPlaytechBorderlineApiCest
 
     public function testMethodUserNotFound(ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->userNotFound(3485789345789345)->mock($I);
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1805',
-            'login' => "348578934578934570702728--1--1--127-0-0-1",
+            'login' => "3485789345789345--1--1--127-0-0-1",
         ];
 
         $request = array_merge($request, [
@@ -200,7 +230,7 @@ class DriveMediaPlaytechBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1',
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
         $request = array_merge($request, [

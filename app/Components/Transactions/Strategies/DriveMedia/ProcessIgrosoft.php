@@ -6,7 +6,6 @@ use App\Components\Integrations\DriveMedia\CodeMapping;
 use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
 use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
-use App\Models\DriveMediaIgrosoftProdObjectIdMap;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
@@ -18,11 +17,7 @@ class ProcessIgrosoft extends BaseSeamlessWalletProcessor implements Transaction
     {
         $this->request = $request;
 
-        if($this->request->transaction_type == TransactionRequest::TRANS_BET)
-        {
-            $this->request->object_id = $this->getObjectIdMap($this->request->foreign_id);
-
-        } else {
+        if ($this->request->transaction_type != TransactionRequest::TRANS_BET) {
             $betTransaction = Transactions::getLastBetByUserWithForeignId($this->request->service_id, $this->request->user_id, $this->request->partner_id, $this->request->game_id, $this->request->foreign_id);
             if(!$betTransaction) {
                 throw new ApiHttpException(200, null, ($this->codeMapping)::getByMeaning(CodeMapping::SERVER_ERROR));
@@ -64,15 +59,4 @@ class ProcessIgrosoft extends BaseSeamlessWalletProcessor implements Transaction
         return $this->responseData;
 
     }
-
-    protected function getObjectIdMap(string $trade_id):int
-    {
-        if(app()->environment() == 'production')
-        {
-            return DriveMediaIgrosoftProdObjectIdMap::getObjectId($trade_id);
-        }
-
-        return hexdec(substr(md5($trade_id), 0, 15));
-    }
-
 }

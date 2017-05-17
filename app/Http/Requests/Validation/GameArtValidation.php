@@ -19,7 +19,9 @@ class GameArtValidation
         $key = $query['key'];
         unset($query['key']);
         $currency = json_decode($query['remote_data'], true)['currency'];
-
+        if(!isset(config('integrations.gameart')[$currency])){
+         throw new ApiHttpException(500, "Invalid currency", CodeMapping::getByMeaning(CodeMapping::INVALID_KEY));   
+        }
         if($key != hash('sha1', config('integrations.gameart')[$currency] . http_build_query($query))) {
             throw new ApiHttpException(500, "Invalid key", CodeMapping::getByMeaning(CodeMapping::INVALID_KEY));
         }
