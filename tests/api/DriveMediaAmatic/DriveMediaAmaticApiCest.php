@@ -52,10 +52,10 @@ class DriveMediaAmaticApiCest
         $objectId = DriveMediaAmaticProdObjectIdMap::getObjectId($tradeId);
         $bet = 0.1;
         $winLose = -0.1;
-
-        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $bet)->mock($I);
-
         $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance - $bet)->win($objectId, $bet, $balance - $bet)->mock($I);
+
         $request = [
             'space'     => $this->space,
             'login'     => $this->params->login,

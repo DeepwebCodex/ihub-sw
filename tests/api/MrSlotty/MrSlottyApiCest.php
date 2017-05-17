@@ -51,8 +51,9 @@ class MrSlottyApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
-            ->bet($objectId, MrSlottyHelper::amountCentsToWhole($amount))
+            ->bet($objectId, $amount/100, $balance - $amount/100)
             ->mock($I);
+
         $request = [
             'action'   => 'bet',
             'amount' => $amount,

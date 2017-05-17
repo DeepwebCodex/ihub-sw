@@ -29,7 +29,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
         (new AccountManagerMock($this->params))
             ->bet($objectId, $bet, $balance - $bet)
-            ->win($objectId, $bet + $winLose, $balance - $bet)
+            ->win($objectId, $bet + $winLose, $balance + $winLose)
             ->mock($I);
 
         $request = [
@@ -72,7 +72,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
         (new AccountManagerMock($this->params))
             ->bet($objectId, $bet)
-            ->win($objectId, $bet + $winLose, $balance - $bet)
+            ->win($objectId, $bet + $winLose, $balance + $winLose)
             ->mock($I);
 
         $request = [
@@ -115,7 +115,7 @@ class DriveMediaPlaytechBorderlineApiCest
 
         (new AccountManagerMock($this->params))
             ->bet($objectId, $bet)
-            ->win($objectId, $bet + $winLose, $balance - $bet)
+            ->win($objectId, $bet + $winLose, $balance + $winLose)
             ->mock($I);
 
         $request = [

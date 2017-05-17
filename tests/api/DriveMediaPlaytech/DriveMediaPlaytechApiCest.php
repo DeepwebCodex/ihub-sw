@@ -55,7 +55,7 @@ class DriveMediaPlaytechApiCest
         $winLose = -1.0;
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance)->mock($I);
+        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance - $bet)->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',

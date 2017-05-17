@@ -61,7 +61,7 @@ class DriveMediaAmaticBorderlineApiCest
 
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $winLose, $balance - $bet)->mock($I);
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $winLose, $balance)->mock($I);
 
         $request = [
             'space'     => $this->space,

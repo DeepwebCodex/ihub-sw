@@ -27,7 +27,7 @@ class DriveMediaAristocratBorderlineApiCest
         $winLose = -0.03;
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $bet + $winLose, $balance - $bet)->mock($I);
+        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $bet + $winLose, $balance + $winLose)->mock($I);
 
         $request = [
             'cmd' => 'writeBet',

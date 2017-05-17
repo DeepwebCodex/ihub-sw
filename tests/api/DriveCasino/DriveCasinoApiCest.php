@@ -51,9 +51,10 @@ class DriveCasinoApiCest
         $objectId = DriveCasinoProdObjectIdMap::getObjectId($tradeId);
         $bet = 1;
         $winLose = -1;
-        (new AccountManagerMock($this->params))->bet($objectId, $bet)->mock($I);
-
         $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance - $bet)->mock($I);
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
