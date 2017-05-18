@@ -265,6 +265,7 @@ build_docker_image_prod:
 
 deploy_to_servers_dev:
   <<: *template_deploy_dev
+  <<: *template_newrelic_deploy_dev
   script:
     - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_DEV_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_DEV_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
@@ -272,7 +273,6 @@ deploy_to_servers_dev:
 
 manual_deploy_to_servers_system_prod:
   <<: *template_deploy_prod
-  <<: *template_newrelic_deploy_dev
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
