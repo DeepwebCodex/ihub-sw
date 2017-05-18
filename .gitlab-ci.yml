@@ -242,9 +242,9 @@ deploy_to_servers_dev:
       -d
       "{
       \"deployment\": {
-      \"revision\": \"${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
+      \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
       \"changelog\": \"\",
-      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/icms/pipelines/${CI_PIPELINE_ID}\",
+      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
       \"user\": \"${GITLAB_USER_EMAIL}\"
       }
       }"
@@ -281,9 +281,9 @@ manual_deploy_to_servers_all_prod:
       -d
       "{
       \"deployment\": {
-      \"revision\": \"${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
+      \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
       \"changelog\": \"\",
-      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/icms/pipelines/${CI_PIPELINE_ID}\",
+      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
       \"user\": \"${GITLAB_USER_EMAIL}\"
       }
       }"
