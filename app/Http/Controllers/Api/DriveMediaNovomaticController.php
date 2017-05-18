@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\DriveMediaNovomaticProdObjectIdMap;
 use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 use App\Components\Integrations\DriveMediaNovomatic\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomatic\NovomaticHelper;
@@ -30,6 +31,7 @@ class DriveMediaNovomaticController extends BaseApiController
 
     const NODE = 'DriveMediaNovomatic';
 
+    /** @var string  */
     public static $exceptionTemplate = DriveMediaNovomaticTemplate::class;
 
     /**
@@ -61,6 +63,7 @@ class DriveMediaNovomaticController extends BaseApiController
         if (method_exists($this, $method)) {
             return app()->call([$this, $method], $request->all());
         }
+
         return app()->call([$this, 'error'], $request->all());
     }
 
@@ -71,12 +74,10 @@ class DriveMediaNovomaticController extends BaseApiController
      */
     protected function validateCurrentCurrency(UserInterface $user, string $space)
     {
-        if (app()->environment() !== 'production') {
-            return;
-        }
         $userCurrency = $user->getCurrency();
-        $requestCurrency = $this->options['spaces'][$space]['currency'];
-        if ($userCurrency !== $requestCurrency) {
+        $userSpace = $this->options['spaces'][$userCurrency]['id'];
+
+        if($userSpace !== $space) {
             $this->error();
         }
     }
@@ -117,7 +118,7 @@ class DriveMediaNovomaticController extends BaseApiController
         foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
-                0,
+                DrivemediaNovomaticProdObjectIdMap::getObjectId($request->input('tradeId')),
                 $user->id,
                 $user->getCurrency(),
                 ($transaction['type'] === 'bet' ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT),

@@ -6,7 +6,7 @@ use Testing\Params;
 
 class TestData
 {
-    const IS_MOCK = true;
+    private $isMock;
 
     private $userId;
     private $currency;
@@ -17,6 +17,8 @@ class TestData
 
     public function __construct()
     {
+        $this->isMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
+
         $this->userId = (int)env('TEST_USER_ID');
         $this->currency = Params::CURRENCY;
         $this->amount_backup =
@@ -26,27 +28,27 @@ class TestData
         $this->bigAmount = Params::BIG_AMOUNT * 100;
     }
 
-    public function authenticate($simple = true)
+    public function authenticate()
     {
-        return $this->basic($simple);
+        return $this->basic();
     }
 
-    public function getBalance($simple = true)
+    public function getBalance()
     {
-        return array_merge($this->basic($simple), [
+        return array_merge($this->basic(), [
             'Currency' => $this->currency,
             'GameId' => random_int(1, 500),
         ]);
     }
 
-    public function bet($simple = true)
+    public function bet()
     {
-        return array_merge($this->transaction($simple), ['Reason' => 'ROUND_BEGIN']);
+        return array_merge($this->transaction(), ['Reason' => 'ROUND_BEGIN']);
     }
 
-    public function win($gameNumber = null, $simple = true)
+    public function win($gameNumber = null)
     {
-        $data = array_merge($this->transaction($simple), ['Reason' => 'ROUND_END']);
+        $data = array_merge($this->transaction(), ['Reason' => 'ROUND_END']);
         if ($gameNumber) {
             $data['GameNumber'] = $gameNumber;
         }
@@ -54,16 +56,16 @@ class TestData
         return $data;
     }
 
-    public function betWin($simple = true)
+    public function betWin()
     {
-        return array_merge($this->transaction($simple), [
+        return array_merge($this->transaction(), [
             'WinAmount' => $this->winAmount,
             'Reason' => 'ROUND_END']);
     }
 
-    public function betLost($simple = true)
+    public function betLost()
     {
-        return array_merge($this->transaction($simple), [
+        return array_merge($this->transaction(), [
             'WinAmount' => 0,
             'Reason' => 'ROUND_END']);
     }
@@ -79,34 +81,21 @@ class TestData
     }
 
 
-    private function basic($simple = true)
+    private function basic()
     {
-        return array_merge($this->getCompoundId($simple), [
+        return [
+            'PlayerId' => $this->userId,
             'UserName' => config('integrations.egt.UserName'),
             'Password' => config('integrations.egt.Password'),
             'PortalCode' => $this->currency,
-            'SessionId' => md5(str_random())
-        ]);
+            'SessionId' => Params::SESSION_ID, //md5(str_random())
+            'DefenceCode' => Params::DEFENCE_CODE
+        ];
     }
 
-    private function getCompoundId($simple = true)
+    private function transaction()
     {
-        $data = [];
-        if ($simple === true) {
-            $data['PlayerId'] = $this->userId;
-        } else {
-            $data['PlayerId'] = $this->userId;
-            $data['PartnerId'] = env('TEST_PARTNER_ID');
-            $data['CashdeskId'] = env('TEST_CASHEDESK');
-            $data['UserIp']     = '127.0.0.1';
-        }
-
-        return $data;
-    }
-
-    private function transaction($simple = true)
-    {
-        return array_merge($this->basic($simple), [
+        return array_merge($this->basic(), [
             'Currency' => $this->currency,
             'GameId' => random_int(1, 500),
             'TransferId' => md5(str_random()),
@@ -117,6 +106,6 @@ class TestData
 
     private function getObjectId()
     {
-        return (self::IS_MOCK) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
+        return ($this->isMock) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
     }
 }

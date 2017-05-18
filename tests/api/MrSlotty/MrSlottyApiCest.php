@@ -1,27 +1,31 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
+
+use App\Components\Integrations\MrSlotty\MrSlottyHelper;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\MrSlotty\Params;
 
 class MrSlottyApiCest
 {
     private $options;
-    private $cashDeskId = 1;
-    private $partnerId = 1;
-    private $userIp = "127.0.0.1";
+
+    /** @var Params  */
+    private $params;
 
     public function _before()
     {
         $this->options = config('integrations.mrslotty');
+        $this->params = new Params('mrslotty');
     }
 
     public function testMethodBalance(ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-
+        $balance = $this->params->getBalance();
+        (new AccountManagerMock($this->params))->mock($I);
         $request = [
             'action'   => 'balance',
-            'player_id' => (string)$testUser->id,
-            'currency' => $testUser->getCurrency(),
+            'player_id' => (string)$this->params->userId,
+            'currency' => $this->params->currency,
         ];
         ksort($request);
 
@@ -34,28 +38,35 @@ class MrSlottyApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status' => 200,
-            'balance' => $testUser->getBalanceInCents(),
-            'currency' => $testUser->getCurrency()
+            'balance' => 100 * $balance,
+            'currency' => $this->params->currency
         ]);
     }
 
     public function testMethodBet(ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $roundId = (string)time() . random_int(0, 9);
+        $objectId = MrSlottyHelper::getObjectId($roundId);
+        $amount = 100;
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))
+            ->bet($objectId, $amount/100, $balance - $amount/100)
+            ->mock($I);
 
         $request = [
             'action'   => 'bet',
-            'amount' => 100,
-            'player_id' => (string)$testUser->id,
+            'amount' => $amount,
+            'player_id' => (string)$this->params->userId,
             'transaction_id' => (string)time(),
-            'currency' => $testUser->getCurrency(),
+            'currency' => $this->params->currency,
             'type' => 'spin',
             'game_id' => 'game_name',
-            'round_id' => (string)time() . random_int(0, 9),
+            'round_id' => $roundId,
             'extra' => http_build_query([
-                'cashdesk_id' => $this->cashDeskId,
-                'partner_id' => $this->partnerId,
-                'user_ip' => $this->userIp
+                'cashdesk_id' => $this->params->cashdeskId,
+                'partner_id' => $this->params->partnerId,
+                'user_ip' => $this->params->userIP
             ])
         ];
         ksort($request);
@@ -69,28 +80,31 @@ class MrSlottyApiCest
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
             'status' => 200,
-            'balance' => $testUser->getBalanceInCents() - 100,
-            'currency' => $testUser->getCurrency()
+            'balance' => 100 * $balance - $amount,
+            'currency' => $this->params->currency
         ]);
     }
 
     public function testNoMoney(ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $roundId = (string)time() . random_int(0, 9);
+        $objectId = MrSlottyHelper::getObjectId($roundId);
+        $amount = 1000000000000000000;
+        (new AccountManagerMock($this->params))->betExceeded($objectId, MrSlottyHelper::amountCentsToWhole($amount))->mock($I);
 
         $request = [
             'action'   => 'bet',
-            'amount' => 1000000000000000000,
-            'player_id' => (string)$testUser->id,
+            'amount' => $amount,
+            'player_id' => (string)$this->params->userId,
             'transaction_id' => (string)time(),
-            'currency' => $testUser->getCurrency(),
+            'currency' => $this->params->currency,
             'type' => 'spin',
             'game_id' => 'game_name',
-            'round_id' => (string)time() . random_int(0, 9),
+            'round_id' => $roundId,
             'extra' => http_build_query([
-                'cashdesk_id' => $this->cashDeskId,
-                'partner_id' => $this->partnerId,
-                'user_ip' => $this->userIp
+                'cashdesk_id' => $this->params->cashdeskId,
+                'partner_id' => $this->params->partnerId,
+                'user_ip' => $this->params->userIP
             ])
         ];
         ksort($request);

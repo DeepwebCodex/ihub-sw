@@ -5,23 +5,33 @@ namespace App\Http\Controllers\Api;
 use App\Components\Integrations\DriveMedia\CodeMapping;
 use App\Components\Integrations\DriveMedia\DriveCasino\DriveCasinoHelper;
 use App\Components\Transactions\Strategies\DriveMedia\ProcessDriveCasino;
-use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
-use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
-use iHubGrid\Accounting\Users\IntegrationUser;
-use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Exceptions\Api\Templates\DriveMediaTemplate;
 use App\Http\Requests\DriveMedia\DriveCasino\BalanceRequest;
 use App\Http\Requests\DriveMedia\DriveCasino\PlayRequest;
-use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
+use App\Models\DriveCasinoProdObjectIdMap;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
+use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
+/**
+ * Class DriveCasinoController
+ * @package App\Http\Controllers\Api
+ */
 class DriveCasinoController extends BaseApiController
 {
+    /** @var string  */
     public static $exceptionTemplate = DriveMediaTemplate::class;
 
+    /**
+     * DriveCasinoController constructor.
+     * @param JsonApiFormatter $formatter
+     */
     public function __construct(JsonApiFormatter $formatter)
     {
         parent::__construct($formatter);
@@ -32,12 +42,18 @@ class DriveCasinoController extends BaseApiController
         $this->middleware('input.json')->except(['error']);
         $this->middleware('input.dm.parselogin')->except(['error']);
 
+        Validator::extend('validate_space', 'App\Http\Requests\Validation\DriveMedia\DriveCasinoValidation@validateSpace');
         Validator::extend('validate_sign', 'App\Http\Requests\Validation\DriveMedia\DriveCasinoValidation@validateSign');
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
         $method = DriveCasinoHelper::mapMethod($request->input('cmd'));
+
         if (method_exists($this, $method)) {
             return app()->call([$this, $method], $request->all());
         }
@@ -45,9 +61,15 @@ class DriveCasinoController extends BaseApiController
         return app()->call([$this, 'error'], $request->all());
     }
 
+    /**
+     * @param BalanceRequest $request
+     * @return Response
+     */
     public function balance(BalanceRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveCasino');
+
+        DriveCasinoHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         return $this->respondOk(200, null, [
             'login' => $request->input('login'),
@@ -55,25 +77,22 @@ class DriveCasinoController extends BaseApiController
         ]);
     }
 
+    /**
+     * @param PlayRequest $request
+     * @return Response
+     */
     public function bet(PlayRequest $request)
     {
         $user = IntegrationUser::get($request->input('userId'), $this->getOption('service_id'), 'DriveCasino');
 
-        if(app()->environment() == 'production')
-        {
-            if($user->getActiveWallet()->currency != $this->getOption($request->input('space'))['currency'])
-            {
-                $this->error();
-            }
-        }
+        DriveCasinoHelper::checkCurrency($user->getActiveWallet()->currency, $request->input('space'));
 
         $transactions = DriveCasinoHelper::getTransactions($request->input('bet'), $request->input('winLose'));
 
-        foreach ($transactions as $key => $transaction)
-        {
+        foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
-                0,
+                DriveCasinoProdObjectIdMap::getObjectId($request->input('tradeId')),
                 $user->id,
                 $user->getCurrency(),
                 ($transaction['type'] == "bet" ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT),
@@ -90,8 +109,7 @@ class DriveCasinoController extends BaseApiController
 
             $transactionResponse = $transactionHandler->handle(new ProcessDriveCasino());
 
-            if($key == 0 && sizeof($transactions) == 2)
-            {
+            if($key == 0 && sizeof($transactions) == 2) {
                 $user->updateBalance($transactionResponse->getBalanceInCents());
             }
         }
@@ -107,6 +125,12 @@ class DriveCasinoController extends BaseApiController
         throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR));
     }
 
+    /**
+     * @param int $statusCode
+     * @param string|null $message
+     * @param array $payload
+     * @return Response
+     */
     public function respondOk($statusCode = Response::HTTP_OK, string $message = null, array $payload = [])
     {
         $payload = array_merge($payload, [

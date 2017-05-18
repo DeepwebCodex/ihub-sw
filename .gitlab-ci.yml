@@ -16,13 +16,9 @@ variables:
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
   CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-master
   CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-dev
-  CONTAINER_IHUB_CODE_IMAGE: $CI_REGISTRY/integrations/ihub-grid/ihub-sw:$CI_BUILD_REF_NAME
+  CONTAINER_CODE_IMAGE: $CI_REGISTRY/integrations/ihub-grid/ihub-sw:$CI_BUILD_REF_NAME
 
 
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
 #====================== templates ======================#
 .template_dev: &template_dev
   tags:
@@ -43,18 +39,18 @@ variables:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
     - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa || true
 
 .template_compile_n_test: &template_compile_n_test
   <<: *template_dev
   <<: *template_add_ssh_auth
   stage: test
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
-  cache:
-    key: $CI_BUILD_REF_NAME
-    untracked: true
-    paths:
-      - ./vendor
+#  cache:
+#    key: $CI_BUILD_REF_NAME
+#    untracked: true
+#    paths:
+#      - ./vendor
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
@@ -62,31 +58,48 @@ variables:
       - ./tests/_output
       - ./storage/logs
       - ./.env.testing
-    expire_in: 1 day
+    expire_in: 1 hour
 
+# build_docker_image
 .template_build_docker_image: &template_build_docker_image
   stage: build_docker_image
   image: docker:latest
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
     - rm -rf .git .gitlab-ci.yml .gitignore .env.example ./run
-    - docker build -t $CONTAINER_IHUB_CODE_IMAGE .
-    - docker push $CONTAINER_IHUB_CODE_IMAGE
+    - docker build -t $CONTAINER_CODE_IMAGE .
+    - docker push $CONTAINER_CODE_IMAGE
 
-.template_build_docker_image: &template_build_docker_image_dev
+.template_build_docker_image_dev: &template_build_docker_image_dev
   <<: *template_dev
   <<: *template_build_docker_image
 
-.template_build_docker_image: &template_build_docker_image_prod
+.template_build_docker_image_prod: &template_build_docker_image_prod
   <<: *template_prod
   <<: *template_build_docker_image
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
-#====================== templates ======================#
+# END build_docker_image
 
+# deploy_to_servers
+.template_deploy: &template_deploy
+  stage: deploy_to_servers
+  image: $RANCHER_REST_WRAPPER_IMAGE
 
+.template_deploy_dev: &template_deploy_dev
+  <<: *template_dev
+  <<: *template_deploy
+  only:
+    - dev
+
+.template_deploy_prod: &template_deploy_prod
+  <<: *template_prod
+  <<: *template_deploy
+  only:
+    - tags
+    - master
+  when: manual
+# END deploy_to_servers
+
+#====================== templates ======================#
 
 fail_build_for_incorrect_branches:
   tags:
@@ -102,22 +115,49 @@ fail_build_for_incorrect_branches:
     - master
     - tags
 
-test_features:
+test_feature:
   <<: *template_compile_n_test
   script:
-    - bash ./run/dev/install-rancher.sh
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - bash ./run/dev/make-configs.sh
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
+    - composer install --optimize-autoloader
+    - php artisan migrate
     - ./vendor/bin/codecept run
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
-test_on_dev_conf_prod_env_prod:
+test_on_dev_conf_prod:
   <<: *template_compile_n_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
-    - bash ./run/prod/tests.sh
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
+    - bash ./run/prod/make-configs-for-tests.sh
+    - composer install --optimize-autoloader
+    - ./vendor/bin/codecept run --fail-fast
   only:
     - master
     - tags
+
+test_on_dev_conf_prod_e2e:
+  <<: *template_compile_n_test
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  allow_failure: true
+  script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
+    - bash ./run/prod/make-configs-for-tests-mocks-off.sh
+    - composer install --optimize-autoloader
+    - ./vendor/bin/codecept run --fail-fast
+  when: manual
+  only:
+    - master
+    - tags
+    - dev
 
 compile_dev:
   <<: *template_dev
@@ -125,8 +165,12 @@ compile_dev:
   stage: compile_project
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   script:
-    - rm -rf .env .env.testing .git
-    - bash ./run/dev/install-rancher.sh
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - bash ./run/dev/make-configs.sh
+    - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images || true
+    - composer install --optimize-autoloader
+    - php artisan migrate
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
@@ -135,7 +179,7 @@ compile_dev:
     paths:
       - ./vendor
       - ./
-    expire_in: 1 day
+    expire_in: 1 hour
   only:
     - dev
 
@@ -145,12 +189,16 @@ compile_prod:
   stage: compile_project
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
+    - git log --oneline $(git for-each-ref --sort=taggerdate --format '%(tag)' | tail -1)..HEAD | grep ".* Merge branch '[a-zA-Z]\{1,6\}-[0-9]\{1,4\}-.*' into 'master'" || true
     - export http_proxy=$HTTP_PROXY_FOR_PROD
-    - export https_proxy=$HTTP_PROXY_FOR_PROD
+    - export https_proxy=$HTTPS_PROXY_FOR_PROD
     - rm -rf .env .env.testing ./tests .git
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - bash ./run/prod/decode.sh
-    - bash ./run/prod/install-rancher.sh
-    - rm -rf ./run/prod/install-rancher.sh
+    - bash ./run/prod/make-configs.sh
+    - composer install --optimize-autoloader
+    - php artisan route:cache
+    - rm -rf ./run/prod/make-configs.sh
   cache:
     key: $CI_BUILD_REF_NAME
     paths:
@@ -159,7 +207,7 @@ compile_prod:
     paths:
       - ./vendor
       - ./
-    expire_in: 1 day
+    expire_in: 1 hour
   only:
     - master
     - tags
@@ -176,39 +224,33 @@ build_docker_image_prod:
     - tags
 
 deploy_to_servers_dev:
-  <<: *template_dev
-  stage: deploy_to_servers
-  image: $RANCHER_REST_WRAPPER_IMAGE
+  <<: *template_deploy_dev
   script:
     - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_DEV_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_DEV_SECRET_KEY
-    - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-    - upgrade --environment dev-ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-  only:
-    - dev
+    - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment dev-ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 
-manual_deploy_to_system_servers_prod:
-  <<: *template_prod
-  <<: *template_add_ssh_auth
-  stage: deploy_to_servers
-  image: $RANCHER_REST_WRAPPER_IMAGE
+manual_deploy_to_servers_system_prod:
+  <<: *template_deploy_prod
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-    - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-  only:
-    - tags
-    - master
-  when: manual
+    - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 
-manual_deploy_to_all_servers_prod:
-  <<: *template_prod
-  <<: *template_add_ssh_auth
-  stage: deploy_to_servers
-  image: $RANCHER_REST_WRAPPER_IMAGE
+#manual_deploy_to_servers_pre_prod:
+#  <<: *template_deploy_prod
+#  script:
+#    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
+#    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+#    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+
+manual_deploy_to_servers_all_prod:
+  <<: *template_deploy_prod
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-    - upgrade --environment ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-    - upgrade --environment ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
-    - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_IHUB_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+#    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+#    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   only:
     - tags
-  when: manual

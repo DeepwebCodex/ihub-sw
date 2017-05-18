@@ -7,7 +7,7 @@ use Testing\Params;
 
 class TestData
 {
-    const IS_MOCK = true;
+    private $isMock;
 
     private $userId;
     private $currency;
@@ -18,6 +18,8 @@ class TestData
 
     public function __construct(string $integration)
     {
+        $this->isMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
+
         $this->userId = (int)env('TEST_USER_ID') . '_' . Params::CURRENCY;
         $this->currency = Params::CURRENCY;
         $this->amount_backup =
@@ -49,10 +51,6 @@ class TestData
             'type' => 'balance',
             'userid' => $this->userId,
             'currency' => $this->currency,
-            'i_gameid' => $this->game_id,
-            'i_extparam' => '2323',
-            'i_gamedesc' => '3434',
-            'i_actionid' => '4545',
         ];
         $params['hmac'] = (new Hmac($params, $this->integration))->get();
 
@@ -68,6 +66,7 @@ class TestData
             'userid' => $this->userId,
             'currency' => $this->currency,
             'amount' => $this->amount,
+            'i_actionid' => $game_number ?? 'D' . $this->getUniqueNumber(),
             'i_gameid' => $game_number ?? $this->getUniqueNumber(),
             'i_extparam' => '',
             'i_gamedesc' => '',
@@ -86,6 +85,7 @@ class TestData
             'userid' => $this->userId,
             'currency' => $this->currency,
             'amount' => $this->amount,
+            'i_actionid' => $game_number ?? 'C' . $this->getUniqueNumber(),
             'i_gameid' => $game_number ?? $this->getUniqueNumber(),
             'i_extparam' => '',
             'i_gamedesc' => '',
@@ -124,7 +124,7 @@ class TestData
     protected function getUniqueNumber()
     {
 
-        return (self::IS_MOCK) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
+        return ($this->isMock) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
     }
 
 

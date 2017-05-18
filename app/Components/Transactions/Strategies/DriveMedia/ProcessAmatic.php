@@ -6,25 +6,22 @@ use App\Components\Integrations\DriveMedia\CodeMapping;
 use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
 use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
-use App\Models\DriveMediaAmaticProdObjectIdMap;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 
 class ProcessAmatic extends BaseSeamlessWalletProcessor implements TransactionProcessorInterface
 {
-    protected $CodeMapping = CodeMapping::class;
+    protected $codeMapping = CodeMapping::class;
 
     protected function process(TransactionRequest $request)
     {
         $this->request = $request;
 
-        if($this->request->transaction_type == TransactionRequest::TRANS_BET)
+        if($this->request->transaction_type != TransactionRequest::TRANS_BET)
         {
-            $this->request->object_id = $this->getObjectIdMap($this->request->foreign_id);
-        } else {
             $betTransaction = Transactions::getLastBetByUser($this->request->service_id, $this->request->user_id, $this->request->partner_id, $this->request->game_id);
             if(!$betTransaction) {
-                throw new ApiHttpException(200, null, ($this->CodeMapping)::getByMeaning(CodeMapping::SERVER_ERROR));
+                throw new ApiHttpException(200, null, ($this->codeMapping)::getByMeaning(CodeMapping::SERVER_ERROR));
             }
 
             $this->request->object_id = $betTransaction->object_id;
@@ -61,15 +58,5 @@ class ProcessAmatic extends BaseSeamlessWalletProcessor implements TransactionPr
         }
 
         return $this->responseData;
-    }
-
-    protected function getObjectIdMap(string $trade_id):int
-    {
-        if(app()->environment() == 'production')
-        {
-            return DriveMediaAmaticProdObjectIdMap::getObjectId($trade_id);
-        }
-
-        return hexdec(substr(md5($trade_id), 0, 15));
     }
 }

@@ -1,34 +1,47 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
+use App\Models\DriveMediaPlaytechProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 
 class DriveMediaPlaytechApiCest
 {
-    private $options;
+    private $key;
+    private $space;
+
+    /** @var Params  */
+    private $params;
 
     public function _before() {
-        $this->options = config('integrations.DriveMediaPlaytech');
+        $this->key = config('integrations.DriveMediaPlaytech.spaces.FUN.key');
+        $this->space = config('integrations.DriveMediaPlaytech.spaces.FUN.id');
+
+        $this->params = new Params('DriveMediaPlaytech');
     }
 
     public function testMethodBalance(ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->mock($I);
 
         $request = [
             'cmd'   => 'getBalance',
-            'space' => '1805',
-            'login' => "{$testUser->id}--1--1--127-0-0-1",
+            'space' => $this->space,
+            'login' => $this->params->login,
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options['1805']['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'balance'   => money_format('%i', $testUser->getBalance()),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $balance),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -36,15 +49,21 @@ class DriveMediaPlaytechApiCest
 
     public function testMethodBet(ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $tradeId = md5(microtime());
+        $objectId = DriveMediaPlaytechProdObjectIdMap::getObjectId($tradeId);
+        $bet = 1.0;
+        $winLose = -1.0;
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance - $bet)->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',
-            'space'     => '1805',
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'bet'       => '1.0',
-            'winLose'   => '-1.0',
-            'tradeId'   => md5(microtime()),
+            'space'     => $this->space,
+            'login'     => $this->params->login,
+            'bet'       => (string)$bet,
+            'winLose'   => (string)$winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'spin',
             'gameId'    => '183',
             'matrix'    => '[]',
@@ -52,15 +71,16 @@ class DriveMediaPlaytechApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options['1805']['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/playtech', $request);
         $I->seeResponseCodeIs(200);
-
         $I->seeResponseContainsJson([
-            'login'     => "{$testUser->id}--1--1--127-0-0-1",
-            'balance'   => money_format('%i', ($testUser->getBalance() - 1.0)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $balance - $bet),
             'status'    => 'success',
             'error'     => ''
         ]);

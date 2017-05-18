@@ -19,10 +19,7 @@ class ProcessPlaytech extends BaseSeamlessWalletProcessor implements Transaction
     {
         $this->request = $request;
 
-        if($this->request->transaction_type == TransactionRequest::TRANS_BET)
-        {
-            $this->request->object_id = $this->getObjectIdMap($this->request->foreign_id);
-        } else {
+        if ($this->request->transaction_type != TransactionRequest::TRANS_BET) {
             $betTransaction = Transactions::getLastBetByUser($this->request->service_id, $this->request->user_id, $this->request->partner_id, $this->request->game_id);
             if(!$betTransaction) {
                 throw new ApiHttpException(200, null, ($this->codeMapping)::getByMeaning(CodeMapping::SERVER_ERROR));
@@ -64,15 +61,4 @@ class ProcessPlaytech extends BaseSeamlessWalletProcessor implements Transaction
         return $this->responseData;
 
     }
-
-    protected function getObjectIdMap(string $trade_id):int
-    {
-        if(app()->environment() == 'production')
-        {
-            return DriveMediaPlaytechProdObjectIdMap::getObjectId($trade_id);
-        }
-
-        return hexdec(substr(md5($trade_id), 0, 15));
-    }
-
 }

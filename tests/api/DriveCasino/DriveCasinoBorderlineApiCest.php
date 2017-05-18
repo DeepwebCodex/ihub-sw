@@ -1,28 +1,31 @@
 <?php
 
-use DriveMedia\TestUser;
+use App\Models\DriveCasinoProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 
 class DriveCasinoBorderlineApiCest
 {
-    private $options;
+    private $key;
     private $space;
 
-    /** @var  \DriveMedia\TestUser $testUser */
-    private $testUser;
+    /** @var Params  */
+    private $params;
 
     public function _before() {
-        $this->options = config('integrations.drivecasino');
-        $this->space = "1812";
+        $this->space = config('integrations.drivecasino.spaces.FUN.id');
+        $this->key = config('integrations.drivecasino.spaces.FUN.key');
 
-        $this->testUser = new TestUser();
+        $this->params = new Params('drivecasino');
     }
 
     public function testMethodZeroWin(ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
+            'login'     => $this->params->login,
             'bet'       => 0,
             'winLose'   => 0,
             'tradeId'   => md5(time()),
@@ -33,15 +36,17 @@ class DriveCasinoBorderlineApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options[$this->space]['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/drivecasino', $request);
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance())),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', ($this->params->getBalance())),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -50,13 +55,21 @@ class DriveCasinoBorderlineApiCest
     public function testMethodBetWin(ApiTester $I)
     {
         $tradeId = md5(time());
+        $objectId = DriveCasinoProdObjectIdMap::getObjectId($tradeId);
+        $bet1 = 1;
+        $winLose1 = -1;
+        $bet2 = 0;
+        $winLose2 = 5;
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet1, $balance - $bet1)->win($objectId, $winLose2, $balance + $winLose2)->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => 1,
-            'winLose'   => -1,
+            'login'     => $this->params->login,
+            'bet'       => $bet1,
+            'winLose'   => $winLose1,
             'tradeId'   => $tradeId,
             'betInfo'   => 'bet',
             'gameId'    => '183',
@@ -65,25 +78,29 @@ class DriveCasinoBorderlineApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options[$this->space]['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
+
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/drivecasino', $request);
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 1)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', ($balance - $bet1)),
             'status'    => 'success',
             'error'     => ''
         ]);
 
         //WIN
+        $balance = $this->params->getBalance();
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => 0,
-            'winLose'   => 5,
+            'login'     => $this->params->login,
+            'bet'       => $bet2,
+            'winLose'   => $winLose2,
             'tradeId'   => $tradeId,
             'betInfo'   => 'win',
             'gameId'    => '183',
@@ -92,15 +109,17 @@ class DriveCasinoBorderlineApiCest
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options[$this->space]['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/drivecasino', $request);
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', ($this->testUser->getBalance() - 1 + 5)),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', ($balance + $winLose2)),
             'status'    => 'success',
             'error'     => ''
         ]);
@@ -108,21 +127,28 @@ class DriveCasinoBorderlineApiCest
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
+        $tradeId = md5(microtime());
+        $objectId = DriveCasinoProdObjectIdMap::getObjectId($tradeId);
+        $bet = 0;
+        $winLose = 2;
+        (new AccountManagerMock($this->params))->mock($I);
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => 0,
-            'winLose'   => 2,
-            'tradeId'   => md5(microtime()),
+            'login'     => $this->params->login,
+            'bet'       => (string)$bet,
+            'winLose'   => (string)$winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'win',
-            'gameId'    => (string)hexdec(substr(md5(microtime()), 0, 5)),
+            'gameId'    => (string)$objectId,
             'matrix'    => 0,
             'WinLines'  => 0,
             'date'      => time(),
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5($this->options[$this->space]['key'].http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/drivecasino', $request);
@@ -139,10 +165,12 @@ class DriveCasinoBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
         ];
 
-        $request = array_merge($request, ['sign'  => strtoupper(md5(http_build_query($request)))]);
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5(http_build_query($request)))
+        ]);
 
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/drivecasino', $request);
@@ -151,6 +179,28 @@ class DriveCasinoBorderlineApiCest
         $I->seeResponseContainsJson([
             'status'    => 'fail',
             'error'     => 'error_sign'
+        ]);
+    }
+
+    public function testMethodSpaceNotFound(ApiTester $I)
+    {
+        $request = [
+            'cmd'   => 'getBalance',
+            'space' => '1',
+            'login' => $this->params->login,
+        ];
+
+        $request = array_merge($request, [
+            'sign'  => strtoupper(md5($this->key . http_build_query($request)))
+        ]);
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/drivecasino', $request);
+        $I->seeResponseCodeIs(500);
+        $I->canSeeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'status'    => 'fail',
+            'error'     => 'internal_error'
         ]);
     }
 

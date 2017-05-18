@@ -30,7 +30,8 @@ abstract class FundistController extends BaseApiController
 
     public static $exceptionTemplate = FundistTemplate::class;
 
-    protected $integration;
+    private $integration;
+    private $objectIdKey;
     private $userId;
     private $partnerId;
     private $cashdeskId;
@@ -44,11 +45,13 @@ abstract class FundistController extends BaseApiController
     {
         parent::__construct($formatter);
 
-        $this->integration = $this->setIntegration();
+        $this->integration = $this->getIntegration();
+        $this->objectIdKey = $this->getObjectIdKey();
+
         $this->options = config('integrations.' . $this->integration);
 
+        $this->middleware('input.json');
         $this->middleware('check.ip:' . $this->integration);
-//        $this->middleware('input.json')->except(['error']);
         $this->middleware('input.fundist.parsePlayerIdOnOffline');
 
         Hmac::$INTEGRATION = $this->integration;
@@ -60,7 +63,11 @@ abstract class FundistController extends BaseApiController
         Validator::extend('check_method', 'App\Http\Requests\Validation\FundistValidation@checkMethod');
     }
 
-    abstract protected function setIntegration();
+    abstract protected function getIntegration();
+
+    abstract protected function getObjectIdKey();
+
+    abstract protected function getObjectId($objectId):int;
 
     /**
      * @param BaseRequest $request
@@ -109,7 +116,7 @@ abstract class FundistController extends BaseApiController
 
         $transactionRequest = new TransactionRequest(
             $service_id,
-            $request->input('i_gameid'),
+            $this->getObjectId($request->input($this->objectIdKey)),
             $user->id,
             $request->input('currency'),
             TransactionRequest::D_WITHDRAWAL,
@@ -138,7 +145,7 @@ abstract class FundistController extends BaseApiController
         $betTransaction = Transactions::getBetTransaction(
             $this->getOption('service_id'),
             $user->id,
-            $request->input('i_gameid')
+            $this->getObjectId($request->input($this->objectIdKey))
         );
         if (is_null($betTransaction)) {
             throw new ApiHttpException(Response::HTTP_OK, null, [
@@ -156,7 +163,7 @@ abstract class FundistController extends BaseApiController
 
         $transactionRequest = new TransactionRequest(
             $service_id,
-            $request->input('i_gameid'),
+            $this->getObjectId($request->input($this->objectIdKey)),
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,

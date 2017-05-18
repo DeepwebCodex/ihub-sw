@@ -26,7 +26,10 @@ class EuroGamesTechApiCest
     public function _before(\ApiTester $I)
     {
         $I->disableMiddleware();
-        $I->mockAccountManager($I, config('integrations.egt.service_id'));
+
+        if(env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true) {
+            $I->mockAccountManager($I, config('integrations.egt.service_id'));
+        }
 
         $this->testUser = IntegrationUser::get(env('TEST_USER_ID'), config('integrations.egt.service_id'), 'egt');
         $I->getApplication()
@@ -55,7 +58,7 @@ class EuroGamesTechApiCest
 
     public function testMethodAuthenticateCompoundId(\ApiTester $I)
     {
-        $request = $this->data->authenticate(false);
+        $request = $this->data->authenticate();
 
         $this->dataAuthenticate($I, $request);
     }
@@ -82,7 +85,7 @@ class EuroGamesTechApiCest
 
     public function testMethodGetPlayerBalanceCompoundId(\ApiTester $I)
     {
-        $request = $this->data->getBalance(false);
+        $request = $this->data->getBalance();
 
         $this->dataGetPlayerBalance($I, $request);
     }
@@ -107,7 +110,7 @@ class EuroGamesTechApiCest
 
     public function testMethodWithdrawCompoundId(\ApiTester $I)
     {
-        $request = $this->data->bet(false);
+        $request = $this->data->bet();
 
         $this->dataWithdraw($I, $request);
     }
@@ -145,16 +148,18 @@ class EuroGamesTechApiCest
 
     public function testMethodDepositCompoundId(\ApiTester $I)
     {
-        $request = $this->data->bet(false);
+        $request = $this->data->bet();
         $this->dataWithdraw($I, $request);
-        $request = $this->data->win($request['GameNumber'], false);
+        $request = $this->data->win($request['GameNumber']);
 
         $this->dataDeposit($I, $request);
     }
 
     private function dataDeposit(\ApiTester $I, $request)
     {
-        $balance = $this->testUser->getBalanceInCents();
+        $testUser = IntegrationUser::get(env('TEST_USER_ID'), config('integrations.egt.service_id'), 'egt');
+
+        $balance = $testUser->getBalanceInCents();
 
         $I->sendPOST('/egt/Deposit', $request);
 
@@ -177,7 +182,7 @@ class EuroGamesTechApiCest
 
     public function testWithdrawAndDepositCompoundId(\ApiTester $I)
     {
-        $request = $this->data->betWin(false);
+        $request = $this->data->betWin();
 
         $this->dataWithdrawAndDeposit($I, $request);
     }
@@ -214,14 +219,14 @@ class EuroGamesTechApiCest
 
     public function testWithdrawAndDepositLost(\ApiTester $I)
     {
-        $request = $this->data->betLost(false);
+        $request = $this->data->betLost();
 
         $this->dataWithdrawAndDepositLost($I, $request);
     }
 
     public function testWithdrawAndDepositLostCompoundId(\ApiTester $I)
     {
-        $request = $this->data->betLost(false);
+        $request = $this->data->betLost();
 
         $this->dataWithdrawAndDepositLost($I, $request);
     }

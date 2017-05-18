@@ -8,14 +8,18 @@
 
 namespace Testing;
 
-
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Mockery;
 
+/**
+ * Class GameSessionsMock
+ * @package Testing
+ */
 class GameSessionsMock
 {
-    public static function getMock(){
+    public static function getMock()
+    {
         /** @var Mockery\Mock $game_session */
         $game_session = Mockery::mock(GameSessionService::class);
 
@@ -26,12 +30,19 @@ class GameSessionsMock
         $game_session->shouldReceive('get')->withArgs(['currency'])->andReturn("EUR");
         $game_session->shouldReceive('get')->withArgs(['userIp'])->andReturn("127.0.0.1");
 
+        $game_session->shouldReceive('getSessionIdByContext')->andReturn("e4fda8473f68894a11c99acc25ecca11");
+
         $game_session->shouldReceive('get')->withArgs(['partner_id'])->andReturn(env('TEST_PARTNER_ID'));
 
         $game_session->shouldReceive('get')->withArgs(['cashdesk_id'])->andReturn(env('TEST_CASHEDESK'));
         $game_session->shouldReceive('get')->withArgs(['game_id'])->andReturn(Params::GAME_ID);
         $game_session->shouldReceive('regenerate')->andReturn("e4fda8473f68894a11c99acc25ecca11");
         $game_session->shouldReceive('prolong');
+        $game_session->shouldReceive('store')->once();
+        $game_session->shouldReceive('getData')->once();
+        $game_session->shouldReceive('create')->once();
+        $game_session->shouldReceive('getStorageKey')->once()->withAnyArgs()->andReturn('e4fda8473f68894a11c99acc25ecca11');
+        $game_session->shouldReceive('generateReferenceId')->once()->withAnyArgs()->andReturn('e4fda8473f68894a11c99acc25ecca11');
 
         return $game_session;
     }

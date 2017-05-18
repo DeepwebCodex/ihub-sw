@@ -14,7 +14,6 @@ class FundistApiFormatter extends JsonApiFormatter
      */
     public function formatException(\Exception $exception)
     {
-
         list($payload, $statusCode) = array_values($this->transformException($exception));
 
         $codes = [

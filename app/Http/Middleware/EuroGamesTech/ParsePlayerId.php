@@ -17,9 +17,9 @@ class ParsePlayerId
     {
         $playerDataRaw = explode('_', $request->input('PlayerId', ''));
 
-        // parse format "playerId_partnerId_cashdeskId"
+        // parse format "playerId_partnerId_cashdeskId_userIP"
         $playerData = [
-            'PlayerId'   => array_get($playerDataRaw, 0, null),
+            'PlayerId'   => rtrim(array_get($playerDataRaw, 0, null), '_'), // Hack for big integer user id on staging env ('_')
             'PartnerId'  => array_get($playerDataRaw, 1, null),
             'CashdeskId' => array_get($playerDataRaw, 2, null),
             'UserIp'     => array_get($playerDataRaw, 3, null)

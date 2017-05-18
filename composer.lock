@@ -812,11 +812,11 @@
         },
         {
             "name": "ihub-grid/packages/accounting",
-            "version": "1.0.1",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git",
-                "reference": "4bf86b43e35ac51e956dd17ebc8ce3b50ac2dec5"
+                "reference": "32c20daf6beef8ad560e42253f1fdb3b177658e3"
             },
             "require": {
                 "ihub-grid/packages/error-handler": "~1.0",
@@ -852,7 +852,7 @@
                 "accounting",
                 "ihub-grid"
             ],
-            "time": "2017-04-20T12:36:09+00:00"
+            "time": "2017-05-16T18:37:31+00:00"
         },
         {
             "name": "ihub-grid/packages/dynamic-scheduler",
@@ -899,11 +899,11 @@
         },
         {
             "name": "ihub-grid/packages/error-handler",
-            "version": "1.0.5",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/error-handler.git",
-                "reference": "7b89ae1a4e97af60c18b9c749c7c2ebac95199b1"
+                "reference": "e928e92a2afd86d0c04ed35a2d3da1265bf1ba99"
             },
             "require": {
                 "danielstjules/stringy": "~2.3",
@@ -942,15 +942,15 @@
                 "error-handler",
                 "ihub-grid"
             ],
-            "time": "2017-04-26T08:07:47+00:00"
+            "time": "2017-05-10T15:32:20+00:00"
         },
         {
             "name": "ihub-grid/packages/seamless-wallet-core",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git",
-                "reference": "a891cc24b9ad81cd81bfd40ba7fe3d774388858f"
+                "reference": "79e72f2dbaf3e99aeedd1f66adf3cc9ed6410d92"
             },
             "require": {
                 "danielstjules/stringy": "~2.3",
@@ -987,7 +987,7 @@
                 "ihub-grid",
                 "seamless-wallet-core"
             ],
-            "time": "2017-04-27T16:00:54+00:00"
+            "time": "2017-05-12T14:42:03+00:00"
         },
         {
             "name": "kozz/laravel-guzzle-provider",
@@ -1047,16 +1047,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.4.21",
+            "version": "v5.4.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "2ed668f96d1a6ca42f50d5c87ee9ceecfc0a6eee"
+                "reference": "ad82327705658dbf5f0ce72805caa950dfbe150d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/2ed668f96d1a6ca42f50d5c87ee9ceecfc0a6eee",
-                "reference": "2ed668f96d1a6ca42f50d5c87ee9ceecfc0a6eee",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/ad82327705658dbf5f0ce72805caa950dfbe150d",
+                "reference": "ad82327705658dbf5f0ce72805caa950dfbe150d",
                 "shasum": ""
             },
             "require": {
@@ -1172,7 +1172,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-04-28T15:40:01+00:00"
+            "time": "2017-05-11T20:10:35+00:00"
         },
         {
             "name": "league/flysystem",
@@ -1884,16 +1884,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.7",
+            "version": "v5.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "56db4ed32a6d5c9824c3ecc1d2e538f663f47eb4"
+                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/56db4ed32a6d5c9824c3ecc1d2e538f663f47eb4",
-                "reference": "56db4ed32a6d5c9824c3ecc1d2e538f663f47eb4",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/9a06dc570a0367850280eefd3f1dc2da45aef517",
+                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517",
                 "shasum": ""
             },
             "require": {
@@ -1934,7 +1934,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2017-04-20T17:32:18+00:00"
+            "time": "2017-05-01T15:54:03+00:00"
         },
         {
             "name": "symfony/console",
@@ -3002,12 +3002,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "2d97e0ab0372cb87bfef1a1485db8dc102c436cb"
+                "reference": "f8522cd0b196591a0e2cc23e4c92af51af733fb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/2d97e0ab0372cb87bfef1a1485db8dc102c436cb",
-                "reference": "2d97e0ab0372cb87bfef1a1485db8dc102c436cb",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/f8522cd0b196591a0e2cc23e4c92af51af733fb9",
+                "reference": "f8522cd0b196591a0e2cc23e4c92af51af733fb9",
                 "shasum": ""
             },
             "require": {
@@ -3019,7 +3019,7 @@
                 "guzzlehttp/psr7": "~1.0",
                 "php": ">=5.4.0 <8.0",
                 "phpunit/php-code-coverage": ">=2.2.4 <6.0",
-                "phpunit/phpunit": ">4.8.20 <7.0",
+                "phpunit/phpunit": ">4.8.20 <6.0",
                 "phpunit/phpunit-mock-objects": ">2.3 <5.0",
                 "sebastian/comparator": ">1.1 <3.0",
                 "sebastian/diff": "^1.4",
@@ -3088,7 +3088,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2017-04-30T22:14:07+00:00"
+            "time": "2017-05-11T23:48:05+00:00"
         },
         {
             "name": "codeception/specify",
