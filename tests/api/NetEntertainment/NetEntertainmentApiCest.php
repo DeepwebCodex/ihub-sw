@@ -44,7 +44,7 @@ class NetEntertainmentApiCest
     public function _before(\ApiTester $I, Scenario $s)
     {
         if(env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true) {
-            //$I->mockAccountManager($I, config('integrations.netEntertainment.service_id'));
+            $I->mockAccountManager($I, config('integrations.netEntertainment.service_id'));
         }
 
         if (!in_array($s->getFeature(), self::OFFLINE)) {
@@ -74,6 +74,10 @@ class NetEntertainmentApiCest
         $I->assertTrue(count(explode('.', $data['balance'])) == 2);
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testBet(\ApiTester $I)
     {
         $balanceBefore = $this->testUser->getBalance();
@@ -99,7 +103,10 @@ class NetEntertainmentApiCest
         $this->getResponseFail($I);
     }
 
-
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testExBet(\ApiTester $I)
     {
         $this->data->setAmount($this->data->bigAmount);
@@ -132,6 +139,10 @@ class NetEntertainmentApiCest
         $this->noRecord($I, $request, 'bet');
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testZeroWin(\ApiTester $I)
     {
         $bet = $this->testBet($I);
@@ -145,6 +156,10 @@ class NetEntertainmentApiCest
         $this->isRecord($I, $request, 'win');
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testDuplicateBet(\ApiTester $I)
     {
         $betData = $this->data->bet();
@@ -158,6 +173,10 @@ class NetEntertainmentApiCest
         $I->assertEquals($balanceBefore, $response['balance']);
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testWin(\ApiTester $I)
     {
         $bet = $this->data->bet();
@@ -174,6 +193,10 @@ class NetEntertainmentApiCest
         return $request;
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testDuplicateWin(\ApiTester $I)
     {
         $win = $this->testWin($I);
@@ -223,6 +246,10 @@ class NetEntertainmentApiCest
         $this->getResponseFail($I);
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testMismatch(\ApiTester $I)
     {
         $request = $this->data->bet();
