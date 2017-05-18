@@ -17,6 +17,8 @@ variables:
   CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-master
   CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-dev
   CONTAINER_CODE_IMAGE: $CI_REGISTRY/integrations/ihub-grid/ihub-sw:$CI_BUILD_REF_NAME
+  NEWRELIC_DEPLOYMENT_API_KEY: 72add31ff74c0f5d4e8fc61ba1c38ac38bdb0e6dc9f226e
+  NEWRELIC_DEPLOYMENT_APP_ID: 42805419
 
 
 #====================== templates ======================#
@@ -226,9 +228,23 @@ build_docker_image_prod:
 deploy_to_servers_dev:
   <<: *template_deploy_dev
   script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_DEV_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_DEV_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment dev-ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - curl -X POST 'https://api.newrelic.com/v2/applications/$NEWRELIC_DEPLOYMENT_APP_ID/deployments.json' \
+           -H 'X-Api-Key:$NEWRELIC_DEPLOYMENT_API_KEY' -i \
+           -H 'Content-Type: application/json' \
+           -d \
+      '{
+        "deployment": {
+          "revision": "$CI_COMMIT_REF_NAME-$CI_PIPELINE_ID",
+          "changelog": "",
+          "description": "https://gitlab.favorit/integrations/ihub-grid/icms/pipelines/$CI_PIPELINE_ID",
+          "user": "$GITLAB_USER_EMAIL"
+        }
+      }'
 
 manual_deploy_to_servers_system_prod:
   <<: *template_deploy_prod
