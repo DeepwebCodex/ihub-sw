@@ -62,6 +62,10 @@ class TestData
 
     public function getPacketSession()
     {
+        $accoutManagerMock = new AccountManagerMock($this->protocol, $this->I);
+        $accoutManagerMock->getUserInfo([])->getMock();
+        $this->user = new TestUser();
+        
         $data = [
             'token' => $this->getToken(),
         ];
