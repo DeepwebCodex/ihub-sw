@@ -24,18 +24,22 @@ use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * Class FundistController
+ * @package App\Http\Controllers\Api
+ */
 abstract class FundistController extends BaseApiController
 {
     use MetaDataTrait;
 
     public static $exceptionTemplate = FundistTemplate::class;
 
-    private $integration;
-    private $objectIdKey;
-    private $userId;
-    private $partnerId;
-    private $cashdeskId;
-    private $gameId;
+    protected $integration;
+    protected $objectIdKey;
+    protected $userId;
+    protected $partnerId;
+    protected $cashdeskId;
+    protected $gameId;
 
     /**
      * FundistController constructor.
@@ -190,7 +194,7 @@ abstract class FundistController extends BaseApiController
         return $this->responseOk();
     }
 
-    private function responseOk(array $params = [], $prolong = true)
+    protected function responseOk(array $params = [], $prolong = true)
     {
         $view = array_merge([
             'status' => 'OK',

@@ -4,12 +4,12 @@ namespace api\NetEntertainment;
 
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\StatusCode;
-use App\Components\Transactions\Strategies\Fundist\ProcessFundist;
+use App\Components\Transactions\Strategies\NetEntertainment\ProcessNetEntertainment;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Codeception\Scenario;
-use \Fundist\TestData;
+use \NetEntertainment\TestData;
 use \Fundist\TestUser;
 use Symfony\Component\HttpFoundation\Response;
 use App\Components\Integrations\GameSession\GameSessionService;
@@ -74,6 +74,10 @@ class NetEntertainmentApiCest
         $I->assertTrue(count(explode('.', $data['balance'])) == 2);
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testBet(\ApiTester $I)
     {
         $balanceBefore = $this->testUser->getBalance();
@@ -99,7 +103,10 @@ class NetEntertainmentApiCest
         $this->getResponseFail($I);
     }
 
-
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testExBet(\ApiTester $I)
     {
         $this->data->setAmount($this->data->bigAmount);
@@ -132,6 +139,10 @@ class NetEntertainmentApiCest
         $this->noRecord($I, $request, 'bet');
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testZeroWin(\ApiTester $I)
     {
         $bet = $this->testBet($I);
@@ -145,6 +156,10 @@ class NetEntertainmentApiCest
         $this->isRecord($I, $request, 'win');
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testDuplicateBet(\ApiTester $I)
     {
         $betData = $this->data->bet();
@@ -158,8 +173,10 @@ class NetEntertainmentApiCest
         $I->assertEquals($balanceBefore, $response['balance']);
     }
 
-
-
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testWin(\ApiTester $I)
     {
         $bet = $this->data->bet();
@@ -176,6 +193,10 @@ class NetEntertainmentApiCest
         return $request;
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testDuplicateWin(\ApiTester $I)
     {
         $win = $this->testWin($I);
@@ -225,6 +246,10 @@ class NetEntertainmentApiCest
         $this->getResponseFail($I);
     }
 
+    /**
+     * @param \ApiTester $I
+     * @skip
+     */
     public function testMismatch(\ApiTester $I)
     {
         $request = $this->data->bet();
@@ -246,7 +271,7 @@ class NetEntertainmentApiCest
     /** fail in runtime */
     public function testFailPending(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessFundist::class);
+        $mock = $this->mock(ProcessNetEntertainment::class);
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
         $request = $this->data->bet();
@@ -257,7 +282,7 @@ class NetEntertainmentApiCest
 
     public function testFailDb(\ApiTester $I)
     {
-        $mock = $this->mock(ProcessFundist::class);
+        $mock = $this->mock(ProcessNetEntertainment::class);
         $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
         $request = $this->data->bet();
         $I->sendPOST($this->action, json_encode($request));
@@ -267,7 +292,7 @@ class NetEntertainmentApiCest
 
     protected function getUniqueNumber()
     {
-        return time() + mt_rand(1, 10000);
+        return time() + random_int(1, 10000);
     }
 
     private function mock($class)
