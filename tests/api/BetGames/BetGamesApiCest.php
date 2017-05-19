@@ -13,6 +13,8 @@ use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use \BetGames\TestData;
 use \BetGames\TestUser;
 use Codeception\Scenario;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 use Testing\GameSessionsMock;
 
 /**
@@ -33,18 +35,18 @@ class BetGamesApiCest
     /** @var TestUser */
     private $testUser;
 
+    /** @var Params  */
+    private $params;
+
     public function __construct()
     {
         $this->testUser = new TestUser();
-        $this->data = new TestData();
+        $this->params = new Params('betGames');
+        $this->data = new TestData($this->params);
     }
 
     public function _before(\ApiTester $I, Scenario $s)
     {
-        if(env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true) {
-            $I->mockAccountManager($I, config('integrations.betGames.service_id'));
-        }
-
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
@@ -82,12 +84,14 @@ class BetGamesApiCest
 
     public function testFailPending(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
 
         $mock = $this->mock(ProcessBetGames::class);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
 
-        $request = $this->data->bet();
+        $request = $this->data->bet(100);
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::UNKNOWN);
         $this->noRecord($I, $request, 'bet');
@@ -95,10 +99,14 @@ class BetGamesApiCest
 
     public function testFailCompleted(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $mock = $this->mock(ProcessBetGames::class);
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         $mock->shouldReceive('runCompleted')->once()->withAnyArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
-        $request = $this->data->bet();
+
+        $bet = 100;
+        $request = $this->data->bet($bet);
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::UNKNOWN);
         $this->noRecord($I, $request, 'bet');
@@ -106,9 +114,11 @@ class BetGamesApiCest
 
     public function testFailDb(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $mock = $this->mock(ProcessBetGames::class);
         $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
-        $request = $this->data->bet();
+        $request = $this->data->bet(1);
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::UNKNOWN);
         $this->noRecord($I, $request, 'bet');
@@ -116,9 +126,11 @@ class BetGamesApiCest
 
     public function testAccount(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $I->sendPOST('/bg/favbet/', $this->data->account());
         $response = $this->getResponseOk($I);
-        $I->assertEquals($this->testUser->getUser()->id, $response['params']['user_id']);
+        $I->assertEquals($this->params->userId, $response['params']['user_id']);
     }
 
     public function testRefreshToken(\ApiTester $I)
@@ -141,20 +153,27 @@ class BetGamesApiCest
 
     public function testGetBalance(\ApiTester $I)
     {
+        $balance = $this->params->getBalance();
+        (new AccountManagerMock($this->params))->mock($I);
+
         $request = $this->data->getBalance();
         $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertNotNull($response['params']['balance']);
+        $I->assertEquals(100 * $balance, $response['params']['balance']);
     }
 
     public function testBet(\ApiTester $I)
     {
-        $balanceBefore = $this->testUser->getBalanceInCents();
-        $request = $this->data->bet();
+        $balance = $this->params->getBalance();
+        $bet = 3;
+        $request = $this->data->bet($bet);
+
+        (new AccountManagerMock($this->params))->bet($request['params']['bet_id'], $bet/100, $balance - $bet/100)->mock($I);
 
         $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
-        $I->assertEquals((int)($balanceBefore - $this->data->getAmount()), $response['params']['balance_after']);
+        $I->assertEquals((int)(100 * $balance) - $bet, $response['params']['balance_after']);
 
         $this->isRecord($I, $request, 'bet');
 
@@ -165,48 +184,79 @@ class BetGamesApiCest
     {
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
-        $bet = $this->execBet($I);
-        $balanceBefore = $this->testUser->getBalanceInCents();
-        $request = $this->data->win($bet['params']['bet_id']);
 
-        $I->sendPOST('/bg/favbet/', $request);
+        $balance = $this->params->getBalance();
+        $bet = 3;
+        $win = 4;
+        $betRequest = $this->data->bet($bet);
+
+        (new AccountManagerMock($this->params))
+            ->bet($betRequest['params']['bet_id'], $bet/100, $balance - $bet/100)
+            ->win($betRequest['params']['bet_id'], $win/100, $balance - $bet/100 + $win/100)
+            ->mock($I);
+
+        $I->sendPOST('/bg/favbet/', $betRequest);
+
+        $winRequest = $this->data->win($win, $betRequest['params']['bet_id']);
+
+        $I->sendPOST('/bg/favbet/', $winRequest);
         $response = $this->getResponseOk($I);
-        $I->assertEquals((int)($balanceBefore + $this->data->getAmount()), $response['params']['balance_after']);
+        $I->assertEquals((int)(100 * $balance) - $bet + $win, $response['params']['balance_after']);
 
-        $this->isRecord($I, $request, 'win');
+        $this->isRecord($I, $winRequest, 'win');
 
-        return $request;
+        return $winRequest;
     }
 
     public function testDuplicateBet(\ApiTester $I)
     {
-        $bet = $this->testBet($I);
-        $balanceBefore = $this->testUser->getBalanceInCents();
-        $request = $this->data->bet(null, $bet['params']['transaction_id']);
+        $balance = $this->params->getBalance();
+        $bet1 = 3;
+        $bet2 = 4;
+        $betRequest = $this->data->bet($bet1);
 
-        $I->sendPOST('/bg/favbet/', $request);
+        (new AccountManagerMock($this->params))
+            ->bet($betRequest['params']['bet_id'], $bet1/100, $balance - $bet1/100)
+            ->mock($I);
+
+        $I->sendPOST('/bg/favbet/', $betRequest);
+
+        $betRequest2 = $this->data->bet($bet2, null, $betRequest['params']['transaction_id']);
+        $I->sendPOST('/bg/favbet/', $betRequest2);
+
         $response = $this->getResponseOk($I);
         $I->assertEquals(1, $response['params']['already_processed']);
-        $I->assertEquals($balanceBefore, $response['params']['balance_after']);
+        //TODO: balance for mock
+//        $I->assertEquals(100 * ($balance - $bet1/100), $response['params']['balance_after']);
     }
 
     public function testDuplicateWin(\ApiTester $I)
     {
         $win = $this->testWin($I);
-
-        $balanceBefore = $this->testUser->getBalanceInCents();
-        $request = $this->data->win($win['params']['bet_id'], $win['params']['transaction_id']);
+        $amount = 4;
+        $request = $this->data->win($amount, $win['params']['bet_id'], $win['params']['transaction_id']);
 
         $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertEquals(1, $response['params']['already_processed']);
-        $I->assertEquals($balanceBefore, $response['params']['balance_after']);
+        //TODO: balance for mock
+//        $I->assertEquals($balanceBefore, $response['params']['balance_after']);
     }
 
     public function testNoBet(\ApiTester $I)
     {
+        $balance = $this->params->getBalance();
+        $bet = 3;
+        $win = 4;
+        $betRequest = $this->data->bet($bet);
+
+        (new AccountManagerMock($this->params))
+            ->bet($betRequest['params']['bet_id'], $bet/100, $balance - $bet/100)
+            ->win($betRequest['params']['bet_id'], $win/100, $balance - $bet/100 + $win/100)
+            ->mock($I);
+
         $balanceBefore = $this->testUser->getBalanceInCents();
-        $request = $this->data->win();
+        $request = $this->data->win($win, $betRequest['params']['bet_id']);
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::BAD_OPERATION_ORDER);
         $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
@@ -216,13 +266,19 @@ class BetGamesApiCest
 
     public function testMultiWin(\ApiTester $I)
     {
-        $win = $this->testWin($I);
-        $request = $this->data->win($win['params']['bet_id']);
-        $balanceBefore = $this->testUser->getBalanceInCents();
+        $win1Request = $this->testWin($I);
+        $balance = $this->params->getBalance();
+        $amount = 10;
+        $request = $this->data->win($amount, $win1Request['params']['bet_id']);
+
+        (new AccountManagerMock($this->params))
+            ->win($win1Request['params']['bet_id'], 1/100, $balance)
+            ->mock($I);
+
         $I->sendPOST('/bg/favbet/', $request);
         $response = $this->getResponseOk($I);
         $I->assertEquals(1, $response['params']['already_processed']);
-        $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
+        $I->assertEquals((int)(100 * $balance), $response['params']['balance_after']);
 
         //TODO: fix it
 //        $this->noRecord($I, $request, 'win');
@@ -230,40 +286,48 @@ class BetGamesApiCest
 
     public function testExBet(\ApiTester $I)
     {
-        $this->data->setAmount($this->data->bigAmount);
-        $request = $this->data->bet();
-        $balanceBefore = $this->testUser->getBalanceInCents();
+        $bet = 100000000000000;
+        $request = $this->data->bet($bet);
+
+        (new AccountManagerMock($this->params))
+            ->betExceeded($request['params']['bet_id'], $bet/100)
+            ->mock($I);
 
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::INSUFFICIENT_FUNDS);
-        $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
-        $this->data->resetAmount();
-
         $this->noRecord($I, $request, 'bet');
     }
 
     public function testZeroBet(\ApiTester $I)
     {
-        $this->data->setAmount(0);
+        (new AccountManagerMock($this->params))->mock($I);
 
-        $request = $this->data->bet();
+        $request = $this->data->bet(0);
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
-        $this->data->resetAmount();
 
         $this->noRecord($I, $request, 'bet');
     }
 
     public function testZeroWin(\ApiTester $I)
     {
-        $bet = $this->testBet($I);
-        $this->data->setAmount(0);
+        $bet = 3;
+        $balance = $this->params->getBalance();
+        $betRequest = $this->data->bet($bet);
 
-        $request = $this->data->win($bet['params']['bet_id']);
+        (new AccountManagerMock($this->params))
+            ->bet($betRequest['params']['bet_id'], $bet/100, $balance - $bet/100)
+            ->mock($I);
+
+        // bet
+        $I->sendPOST('/bg/favbet/', $betRequest);
+
+        // win
+        $winAmount = 0;
+        $request = $this->data->win($winAmount, $betRequest['params']['bet_id']);
         $I->sendPOST('/bg/favbet/', $request);
-        $this->getResponseOk($I);
-        $this->data->resetAmount();
 
+        $this->getResponseOk($I);
         $this->isRecord($I, $request, 'win');
     }
 
@@ -271,8 +335,8 @@ class BetGamesApiCest
 
     public function testWrongAmountBet(\ApiTester $I)
     {
-        $this->data->setAmount(-100);
-        $request = $this->data->bet();
+        $bet = -100;
+        $request = $this->data->bet($bet);
 
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
@@ -283,7 +347,7 @@ class BetGamesApiCest
 
     public function testWrongSignature(\ApiTester $I)
     {
-        $data = $this->data->bet();
+        $data = $this->data->bet(1);
         $data['signature'] = '123';
         $I->sendPOST('/bg/favbet/', $data);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
@@ -298,7 +362,7 @@ class BetGamesApiCest
 
     public function testWrongParams(\ApiTester $I)
     {
-        $data = $this->data->bet();
+        $data = $this->data->bet(1);
         unset($data['params']['amount']);
         $I->sendPOST('/bg/favbet/', $data);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
@@ -324,7 +388,8 @@ class BetGamesApiCest
 
     private function execBet(\ApiTester $I)
     {
-        $request = $this->data->bet();
+        $bet = 3;
+        $request = $this->data->bet($bet);
         $I->sendPOST('/bg/favbet/', $request);
 
         return $request;

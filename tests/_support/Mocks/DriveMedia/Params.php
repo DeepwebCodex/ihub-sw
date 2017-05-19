@@ -15,7 +15,7 @@ class Params
     public $win_amount = 2;
     public $jackpot_amount = 3;
     public $currency = 'EUR';
-    public $balance = 1000.34;
+    public $balance = 1000.00;
     public $gameId = 123;
 
     public $tradeId = 'dbe5314a6b376ba901721a4c9bc0f4d4';
@@ -60,5 +60,10 @@ class Params
         }
 
         return IntegrationUser::get($this->userId, 0, 'tests')->getBalance();
+    }
+
+    public function getBalanceInCents():int
+    {
+        return 100 * $this->getBalance();
     }
 }
