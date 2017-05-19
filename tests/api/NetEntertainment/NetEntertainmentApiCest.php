@@ -4,6 +4,7 @@ namespace api\NetEntertainment;
 
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\StatusCode;
+use App\Components\Integrations\NetEntertainment\NetEntertainmentHelper;
 use App\Components\Transactions\Strategies\NetEntertainment\ProcessNetEntertainment;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
@@ -13,6 +14,8 @@ use \NetEntertainment\TestData;
 use \Fundist\TestUser;
 use Symfony\Component\HttpFoundation\Response;
 use App\Components\Integrations\GameSession\GameSessionService;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMedia\Params;
 use Testing\GameSessionsMock;
 
 /**
@@ -28,6 +31,9 @@ class NetEntertainmentApiCest
     /** @var TestUser */
     private $testUser;
 
+    /** @var Params  */
+    private $params;
+
     const OFFLINE = [
         'test ping',
         'test fail auth',
@@ -39,14 +45,11 @@ class NetEntertainmentApiCest
         $this->data = new TestData('netEntertainment');
         $this->action = '/netent';
         $this->objectIdKey = 'i_gameid';
+        $this->params = new Params('netEntertainment');
     }
 
     public function _before(\ApiTester $I, Scenario $s)
     {
-        if(env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true) {
-            $I->mockAccountManager($I, config('integrations.netEntertainment.service_id'));
-        }
-
         if (!in_array($s->getFeature(), self::OFFLINE)) {
             $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
             $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
@@ -67,6 +70,8 @@ class NetEntertainmentApiCest
 
     public function testBalance(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $I->sendPOST($this->action, json_encode($this->data->getBalance()));
         $data = $this->getResponseOk($I);
         $I->assertNotNull($data['balance']);
@@ -74,20 +79,21 @@ class NetEntertainmentApiCest
         $I->assertTrue(count(explode('.', $data['balance'])) == 2);
     }
 
-    /**
-     * @param \ApiTester $I
-     * @skip
-     */
     public function testBet(\ApiTester $I)
     {
-        $balanceBefore = $this->testUser->getBalance();
+        $balance = $this->params->getBalance();
 
-        $request = $this->data->bet();
+        $bet = 1;
+        $request = $this->data->bet($bet);
+        $object_id = NetEntertainmentHelper::getObjectIdMap((int)$request['i_gameid'], $request['i_actionid']);
+        (new AccountManagerMock($this->params))
+            ->bet($object_id, $bet, $balance - $bet)
+            ->mock($I);
 
         $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
         $I->assertNotNull($response['balance']);
-        $I->assertEquals($balanceBefore - $this->data->getAmount(), $response['balance']);
+        $I->assertEquals($balance - $bet, $response['balance']);
 
         $this->isRecord($I, $request, 'bet');
 
@@ -96,6 +102,8 @@ class NetEntertainmentApiCest
 
     public function testCurrencyBet(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $request = $this->data->bet();
         $request['currency'] = 'QQ';
         $request = $this->data->renewHmac($request);
@@ -103,20 +111,19 @@ class NetEntertainmentApiCest
         $this->getResponseFail($I);
     }
 
-    /**
-     * @param \ApiTester $I
-     * @skip
-     */
     public function testExBet(\ApiTester $I)
     {
-        $this->data->setAmount($this->data->bigAmount);
-        $request = $this->data->bet();
-        $balanceBefore = $this->testUser->getBalance();
+        $amount = 10000000235235;
+        $request = $this->data->bet($amount);
+
+        $object_id = NetEntertainmentHelper::getObjectIdMap((int)$request['i_gameid'], $request['i_actionid']);
+
+        (new AccountManagerMock($this->params))
+            ->betExceeded($object_id, $amount)
+            ->mock($I);
 
         $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::INSUFFICIENT_FUNDS);
-        $I->assertEquals($balanceBefore, $this->testUser->getBalance());
-        $this->data->resetAmount();
 
         $this->noRecord($I, $request, 'bet');
     }
@@ -129,9 +136,15 @@ class NetEntertainmentApiCest
 
     public function testZeroBet(\ApiTester $I)
     {
-        $this->data->setAmount(0.00);
+        $betAmount = 0.00;
+        $balance = $this->params->getBalance();
+        $request = $this->data->bet($betAmount);
 
-        $request = $this->data->bet();
+        $object_id = NetEntertainmentHelper::getObjectIdMap((int)$request['i_gameid'], $request['i_actionid']);
+        (new AccountManagerMock($this->params))
+            ->bet($object_id, $betAmount, $balance - $betAmount)
+            ->mock($I);
+
         $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I);
         $this->data->resetAmount();
@@ -139,74 +152,124 @@ class NetEntertainmentApiCest
         $this->noRecord($I, $request, 'bet');
     }
 
-    /**
-     * @param \ApiTester $I
-     * @skip
-     */
     public function testZeroWin(\ApiTester $I)
     {
-        $bet = $this->testBet($I);
-        $this->data->setAmount(0.00);
+        $balance = $this->params->getBalance();
 
-        $request = $this->data->win($bet[$this->objectIdKey]);
+        $bet = 1;
+        $betRequest = $this->data->bet($bet);
+        $object_id = NetEntertainmentHelper::getObjectIdMap((int)$betRequest['i_gameid'], $betRequest['i_actionid']);
+
+        (new AccountManagerMock($this->params))
+            ->bet($object_id, $bet, $balance - $bet)
+            ->win($object_id, $bet, $balance - $bet)
+            ->mock($I);
+
+        $I->sendPOST($this->action, json_encode($betRequest));
+
+        //win
+        $request = $this->data->win(0.00, $betRequest[$this->objectIdKey]);
+
         $I->sendPOST($this->action, json_encode($request));
         $this->getResponseOk($I, true);
-        $this->data->resetAmount();
 
         $this->isRecord($I, $request, 'win');
     }
 
-    /**
-     * @param \ApiTester $I
-     * @skip
-     */
+    //TODO: check it for correct
     public function testDuplicateBet(\ApiTester $I)
     {
-        $betData = $this->data->bet();
+        $balance = $this->params->getBalance();
+
+        $bet = 123;
+        $game_id1 = $this->data->getUniqueNumber();
+        $game_id2 = $this->data->getUniqueNumber();
+
+        $betData = $this->data->bet($bet, $game_id1);
+        $betData2 = $this->data->bet($bet, $game_id2, $betData['tid']);
+
+        $object_id = NetEntertainmentHelper::getObjectIdMap((int)$betData['i_gameid'], $betData['i_actionid']);
+        $object_id2 = NetEntertainmentHelper::getObjectIdMap((int)$betData2['i_gameid'], $betData2['i_actionid']);
+
+        (new AccountManagerMock($this->params))
+//            ->bet($object_id, $bet, $balance - $bet)
+            ->bet($object_id2, $bet, $balance - $bet)
+            ->mock($I);
+
         $I->sendPOST($this->action, json_encode($betData));
+        $I->sendPOST($this->action, json_encode($betData2));
 
-        $balanceBefore = $this->testUser->getBalance();
-        $request = $this->data->bet(null, $betData['tid']);
-
-        $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
-        $I->assertEquals($balanceBefore, $response['balance']);
+        $I->assertEquals($balance - $bet, $response['balance']);
     }
 
-    /**
-     * @param \ApiTester $I
-     * @skip
-     */
     public function testWin(\ApiTester $I)
     {
-        $bet = $this->data->bet();
-        $I->sendPOST($this->action, json_encode($bet));
+        $balance = $this->params->getBalance();
 
-        $balanceBefore = $this->testUser->getBalance();
-        $request = $this->data->win($bet[$this->objectIdKey]);
+        $bet = 1;
+        $win = 3;
+        $betRequest = $this->data->bet($bet);
+        $object_id = NetEntertainmentHelper::getObjectIdMap((int)$betRequest['i_gameid'], $betRequest['i_actionid']);
+
+        (new AccountManagerMock($this->params))
+            ->bet($object_id, $bet, $balance - $bet)
+            ->win($object_id, $win, $balance - $bet + $win)
+            ->mock($I);
+
+        // bet
+        $I->sendPOST($this->action, json_encode($betRequest));
+
+        // win
+        $request = $this->data->win($win, $betRequest[$this->objectIdKey]);
         $I->sendPOST($this->action, json_encode($request));
         $response = $this->getResponseOk($I, true);
-        $I->assertEquals($balanceBefore + $this->data->getAmount(), $response['balance']);
+        $I->assertEquals($balance - $bet + $win, $response['balance']);
 
         $this->isRecord($I, $request, 'win');
 
         return $request;
     }
 
-    /**
-     * @param \ApiTester $I
-     * @skip
-     */
     public function testDuplicateWin(\ApiTester $I)
     {
-        $win = $this->testWin($I);
+        $balance = $this->params->getBalance();
 
-        $balanceBefore = $this->testUser->getBalance();
-        $request = $this->data->win($win[$this->objectIdKey], $win['tid']);
+        $bet = 1;
+        $win = 3;
+        $betRequest = $this->data->bet($bet);
+        $object_id = NetEntertainmentHelper::getObjectIdMap((int)$betRequest['i_gameid'], $betRequest['i_actionid']);
 
-        $I->sendPOST($this->action, json_encode($request));
+        // bet
+        (new AccountManagerMock($this->params))
+            ->bet($object_id, $bet, $balance - $bet)
+            ->mock($I, false);
+
+        $I->sendPOST($this->action, json_encode($betRequest));
+
+        // win
+        (new AccountManagerMock($this->params))
+            ->win($object_id, $win, $balance - $bet + $win)
+            ->mock($I);
+
+        $winRequest = $this->data->win($win, $betRequest[$this->objectIdKey]);
+        $I->sendPOST($this->action, json_encode($winRequest));
+
         $response = $this->getResponseOk($I, true);
-        $I->assertEquals($balanceBefore, $response['balance']);
+        $I->assertEquals($balance - $bet + $win, $response['balance']);
+
+        // win duplicated
+        (new AccountManagerMock($this->params))
+            ->bet($object_id, $bet, $balance - $bet)
+            ->win($object_id, $win, $balance - $bet + $win)
+            ->mock($I);
+
+        $winRequest2 = $this->data->win($win, $winRequest[$this->objectIdKey], $winRequest['tid']);
+        $I->sendPOST($this->action, json_encode($winRequest2));
+        $response = $this->getResponseOk($I, true);
+
+        //TODO: need somehow to mock balance
+//        $I->assertEquals($balance - $bet + $win, $response['balance']);
     }
 
     public function testRound(\ApiTester $I)
@@ -218,6 +281,8 @@ class NetEntertainmentApiCest
 
     public function testNoBet(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $balanceBefore = $this->testUser->getBalance();
         $game_number = $this->getUniqueNumber();
         $request = $this->data->win($game_number);
@@ -246,13 +311,16 @@ class NetEntertainmentApiCest
         $this->getResponseFail($I);
     }
 
-    /**
-     * @param \ApiTester $I
-     * @skip
-     */
     public function testMismatch(\ApiTester $I)
     {
-        $request = $this->data->bet();
+        $bet = 1;
+        $request = $this->data->bet($bet);
+        $object_id = NetEntertainmentHelper::getObjectIdMap((int)$request['i_gameid'], $request['i_actionid']);
+
+        (new AccountManagerMock($this->params))
+            ->bet($object_id, $bet)
+            ->mock($I);
+
         $I->sendPOST($this->action, json_encode($request));
 
         $this->transMismatch($I, $request, 'userid', '1' . $request['userid']); // Another user in credit
@@ -271,6 +339,8 @@ class NetEntertainmentApiCest
     /** fail in runtime */
     public function testFailPending(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $mock = $this->mock(ProcessNetEntertainment::class);
         $error = CodeMapping::getByErrorCode(StatusCode::UNKNOWN);
         $mock->shouldReceive('runPending')->once()->withNoArgs()->andThrow(new GenericApiHttpException(500, $error['message'], [], null, [], $error['code']));
@@ -282,6 +352,8 @@ class NetEntertainmentApiCest
 
     public function testFailDb(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
         $mock = $this->mock(ProcessNetEntertainment::class);
         $mock->shouldReceive('writeTransaction')->once()->withNoArgs()->andThrow(new \RuntimeException("", 500));
         $request = $this->data->bet();

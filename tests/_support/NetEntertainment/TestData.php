@@ -54,7 +54,7 @@ class TestData
         return $params;
     }
 
-    public function bet($game_number = null, $transferId = null)
+    public function bet($amount = 1, $game_number = null, $transferId = null)
     {
         $transfer_id = ($transferId) ? $transferId : time() + random_int(1000, 2000);
         $params = [
@@ -62,7 +62,7 @@ class TestData
             'tid' => '' . $transfer_id,
             'userid' => $this->userId,
             'currency' => $this->currency,
-            'amount' => $this->amount,
+            'amount' => $amount,
             'i_actionid' => $game_number ?? 'D' . $this->getUniqueNumber(),
             'i_gameid' => $game_number ?? $this->getUniqueNumber(),
             'i_extparam' => '',
@@ -73,7 +73,7 @@ class TestData
         return $params;
     }
 
-    public function win($game_number = null, $transferId = null)
+    public function win($amount, $game_number = null, $transferId = null)
     {
         $transfer_id = ($transferId) ? $transferId : time() + random_int(2000, 3000);
         $params = [
@@ -81,7 +81,7 @@ class TestData
             'tid' => '' . $transfer_id,
             'userid' => $this->userId,
             'currency' => $this->currency,
-            'amount' => $this->amount,
+            'amount' => $amount,
             'i_actionid' => $game_number ?? 'C' . $this->getUniqueNumber(),
             'i_gameid' => $game_number ?? $this->getUniqueNumber(),
             'i_extparam' => '',
@@ -100,9 +100,9 @@ class TestData
         return $params;
     }
 
-    protected function getUniqueNumber()
+    public function getUniqueNumber()
     {
-        return (self::IS_MOCK) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
+        return time() + mt_rand(1, 10000);
     }
 
     public function authFailed()
