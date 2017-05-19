@@ -43,14 +43,14 @@ class AccountManagerMock
                 $this->getPendingParams($object_id, $amount, self::BET))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
-                    $this->params->bet_operation_id, $balance));
+                    $this->params->bet_operation_id, $amount, $balance));
 
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs(
                 $this->getCompletedParams($object_id, self::BET, $this->params->bet_operation_id, $amount))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $object_id,
-                    $this->params->bet_operation_id, $balance));
+                    $this->params->bet_operation_id, $amount, $balance));
 
         return $this;
     }
@@ -75,13 +75,13 @@ class AccountManagerMock
                 $this->getPendingParams($object_id, $amount, self::WIN))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN,
-                    $object_id, $this->params->win_operation_id, $balance));
+                    $object_id, $this->params->win_operation_id, $amount, $balance));
 
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs(
                 $this->getCompletedParams($object_id, self::WIN, $this->params->win_operation_id, $amount))
             ->andReturn(
-                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->params->win_operation_id, $balance));
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->params->win_operation_id, $amount, $balance));
 
         return $this;
     }
@@ -133,7 +133,7 @@ class AccountManagerMock
         ];
     }
 
-    private function returnOk($status, $direction, $object_id, $operation_id, $balance)
+    private function returnOk($status, $direction, $object_id, $operation_id, $amount, $balance)
     {
         return [
             "operation_id"          => $operation_id,
@@ -144,6 +144,7 @@ class AccountManagerMock
             "move"                  => $direction,
             "status"                => $status,
             "object_id"             => $object_id,
+            "amount"                => $amount,
             "currency"              => $this->params->currency,
             "deposit_rest"          => $balance,
         ];
@@ -164,11 +165,13 @@ class AccountManagerMock
         ]);
     }
 
-    public function mock(\ApiTester $I)
+    public function mock(\ApiTester $I, $keepMock = true)
     {
         if ($this->params->enableMock) {
             $I->getApplication()->instance(AccountManager::class, $this->mock);
-            $I->haveInstance(AccountManager::class, $this->mock);
+            if ($keepMock) {
+                $I->haveInstance(AccountManager::class, $this->mock);
+            }
         }
     }
 }

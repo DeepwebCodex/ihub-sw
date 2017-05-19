@@ -22,8 +22,12 @@ class AccountManagerBaseMock
         $this->params = $params;
     }
 
-    public function getMock()
+    public function getMock($balance = null)
     {
+        if(is_null($balance)){
+            $balance = $this->params->balance;
+        }
+
         /** @var Mockery\Mock $accountManager */
         $accountManager = Mockery::mock(AccountManager::class);
 
@@ -36,10 +40,12 @@ class AccountManagerBaseMock
                             "__record"  => "wallet",
                             "currency"  => $this->params->currency,
                             "is_active" => 1,
-                            "deposit"   => $this->params->balance,
+                            "deposit"   => $balance,
                         ],
                     ],
                     "user_services" => $this->getServices(),
+                    "first_name"    => "Апаропао",
+                    "last_name"     => "Паопаопаопао",
                 ]
             );
 
