@@ -102,43 +102,6 @@ variables:
   when: manual
 # END deploy_to_servers
 
-.template_newrelic_deploy_dev: &template_newrelic_deploy_dev
-  after_script:
-    - export http_proxy=$HTTP_PROXY_FOR_DEV
-    - export https_proxy=$HTTPS_PROXY_FOR_DEV
-    - apk add --update curl
-    - >-
-      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_DEV}/deployments.json"
-      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
-      -H 'Content-Type: application/json'
-      -d
-      "{
-      \"deployment\": {
-      \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
-      \"changelog\": \"\",
-      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
-      \"user\": \"${GITLAB_USER_EMAIL}\"
-      }
-      }"
-
-.template_newrelic_deploy_prod: &template_newrelic_deploy_prod
-  after_script:
-    - export http_proxy=$HTTP_PROXY_FOR_PROD
-    - export https_proxy=$HTTPS_PROXY_FOR_PROD
-    - apk add --update curl
-    - >-
-      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_PROD}/deployments.json"
-      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
-      -H 'Content-Type: application/json'
-      -d
-      "{
-      \"deployment\": {
-      \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
-      \"changelog\": \"\",
-      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
-      \"user\": \"${GITLAB_USER_EMAIL}\"
-      }
-      }"
 #====================== templates ======================#
 
 fail_build_for_incorrect_branches:
@@ -265,11 +228,26 @@ build_docker_image_prod:
 
 deploy_to_servers_dev:
   <<: *template_deploy_dev
-  <<: *template_newrelic_deploy_dev
   script:
     - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_DEV_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_DEV_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment dev-ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - apk add --update curl
+    - >-
+      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_DEV}/deployments.json"
+      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
+      -H 'Content-Type: application/json'
+      -d
+      "{
+      \"deployment\": {
+      \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
+      \"changelog\": \"\",
+      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
+      \"user\": \"${GITLAB_USER_EMAIL}\"
+      }
+      }"
 
 manual_deploy_to_servers_system_prod:
   <<: *template_deploy_prod
@@ -277,22 +255,28 @@ manual_deploy_to_servers_system_prod:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 
-#manual_deploy_to_servers_pre_prod:
-#  <<: *template_deploy_prod
-#  script:
-#    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-#    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-#    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-
 manual_deploy_to_servers_all_prod:
   <<: *template_deploy_prod
-  <<: *template_newrelic_deploy_prod
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-#    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-#    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - export http_proxy=$HTTP_PROXY_FOR_PROD
+    - export https_proxy=$HTTPS_PROXY_FOR_PROD
+    - apk add --update curl
+    - >-
+      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_PROD}/deployments.json"
+      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
+      -H 'Content-Type: application/json'
+      -d
+      "{
+      \"deployment\": {
+      \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
+      \"changelog\": \"\",
+      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
+      \"user\": \"${GITLAB_USER_EMAIL}\"
+      }
+      }"
   only:
     - tags
