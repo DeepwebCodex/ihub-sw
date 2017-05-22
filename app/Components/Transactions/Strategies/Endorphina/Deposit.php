@@ -25,10 +25,6 @@ class Deposit extends TransactionProcessor
     protected function process(TransactionRequest $request)
     {
         $this->request = $request;
-        if ($this->request->amount == 0) {
-            $this->request->foreign_id = "zeroWin-" . CommonSerial::getSerial();
-            return $this->processZeroAmountTransaction();
-        }
 
         $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
 
@@ -39,7 +35,18 @@ class Deposit extends TransactionProcessor
                 throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::BAD_ORDER));
             }
             $this->request->object_id = $transactionBet->object_id;
+            if ($this->request->amount == 0) {
+                $this->request->foreign_id = "zeroWin-" . CommonSerial::getSerial();
+                return $this->processZeroAmountTransaction();
+            }
+        } else {
+            if ($this->request->amount == 0) {
+                return $this->processZeroAmountTransaction();
+            }
         }
+
+
+
 
         return parent::make($lastRecord);
     }

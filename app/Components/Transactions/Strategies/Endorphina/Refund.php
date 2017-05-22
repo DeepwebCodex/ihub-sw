@@ -30,7 +30,7 @@ class Refund extends TransactionProcessor
             if (!$transactionBet) {
                 $operationId = app('AccountManager')->getFreeOperationId();
                 Transactions::create([
-                    'object_id' => $operationId,
+                    'object_id' => 0,
                     'foreign_id' => $this->request->foreign_id,
                     'transaction_type' => $this->request->transaction_type,
                     'game_id' => $this->request->game_id,
@@ -38,7 +38,7 @@ class Refund extends TransactionProcessor
                     'user_id' => $this->request->user_id,
                     'operation_id' => $operationId,
                     'service_id' => $this->request->service_id,
-                    'amount' => $this->request->amount,
+                    'amount' => 0,
                     'move' => $this->request->direction,
                     'partner_id' => $this->request->partner_id,
                     'cashdesk' => $this->request->cashdesk_id,
