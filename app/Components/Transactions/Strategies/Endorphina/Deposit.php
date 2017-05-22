@@ -35,14 +35,12 @@ class Deposit extends TransactionProcessor
                 throw new ApiHttpException(500, null, CodeMapping::getByErrorCode(StatusCode::BAD_ORDER));
             }
             $this->request->object_id = $transactionBet->object_id;
-            
-            if ($this->request->amount == 0) {
-                $this->request->foreign_id = "zeroWin-" . CommonSerial::getSerial();
-                return $this->processZeroAmountTransaction();
-            }
         }
 
-
+        if ($this->request->amount == 0) {
+            $this->request->foreign_id = "zeroWin-" . CommonSerial::getSerial();
+            return $this->processZeroAmountTransaction();
+        }
 
 
         return parent::make($lastRecord);
