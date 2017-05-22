@@ -812,11 +812,11 @@
         },
         {
             "name": "ihub-grid/packages/accounting",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git",
-                "reference": "32c20daf6beef8ad560e42253f1fdb3b177658e3"
+                "reference": "50bcc3d82fa6bf43dc1341b5a25e744a28e67aa3"
             },
             "require": {
                 "ihub-grid/packages/error-handler": "~1.0",
@@ -852,7 +852,7 @@
                 "accounting",
                 "ihub-grid"
             ],
-            "time": "2017-05-16T18:37:31+00:00"
+            "time": "2017-05-22T16:08:13+00:00"
         },
         {
             "name": "ihub-grid/packages/dynamic-scheduler",
@@ -3002,12 +3002,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "f8522cd0b196591a0e2cc23e4c92af51af733fb9"
+                "reference": "5772d454190ef9cdf3e67b05c6711c69dde92700"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/f8522cd0b196591a0e2cc23e4c92af51af733fb9",
-                "reference": "f8522cd0b196591a0e2cc23e4c92af51af733fb9",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/5772d454190ef9cdf3e67b05c6711c69dde92700",
+                "reference": "5772d454190ef9cdf3e67b05c6711c69dde92700",
                 "shasum": ""
             },
             "require": {
@@ -3088,7 +3088,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2017-05-11T23:48:05+00:00"
+            "time": "2017-05-20T23:11:03+00:00"
         },
         {
             "name": "codeception/specify",
@@ -3973,16 +3973,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.19",
+            "version": "5.7.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "69c4f49ff376af2692bad9cebd883d17ebaa98a1"
+                "reference": "3cb94a5f8c07a03c8b7527ed7468a2926203f58b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/69c4f49ff376af2692bad9cebd883d17ebaa98a1",
-                "reference": "69c4f49ff376af2692bad9cebd883d17ebaa98a1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3cb94a5f8c07a03c8b7527ed7468a2926203f58b",
+                "reference": "3cb94a5f8c07a03c8b7527ed7468a2926203f58b",
                 "shasum": ""
             },
             "require": {
@@ -4000,7 +4000,7 @@
                 "phpunit/php-timer": "^1.0.6",
                 "phpunit/phpunit-mock-objects": "^3.2",
                 "sebastian/comparator": "^1.2.4",
-                "sebastian/diff": "~1.2",
+                "sebastian/diff": "^1.4.3",
                 "sebastian/environment": "^1.3.4 || ^2.0",
                 "sebastian/exporter": "~2.0",
                 "sebastian/global-state": "^1.1",
@@ -4051,7 +4051,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-04-03T02:22:27+00:00"
+            "time": "2017-05-22T07:42:55+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4223,23 +4223,23 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "1.4.1",
+            "version": "1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "13edfd8706462032c2f52b4b862974dd46b71c9e"
+                "reference": "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/13edfd8706462032c2f52b4b862974dd46b71c9e",
-                "reference": "13edfd8706462032c2f52b4b862974dd46b71c9e",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/7f066a26a962dbe58ddea9f72a4e82874a3975a4",
+                "reference": "7f066a26a962dbe58ddea9f72a4e82874a3975a4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8"
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0"
             },
             "type": "library",
             "extra": {
@@ -4271,7 +4271,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2015-12-08T07:14:41+00:00"
+            "time": "2017-05-22T07:24:03+00:00"
         },
         {
             "name": "sebastian/environment",
