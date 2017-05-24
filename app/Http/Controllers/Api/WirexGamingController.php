@@ -206,13 +206,16 @@ class WirexGamingController extends BaseApiController
         $userId = WirexGamingHelper::parseUid($this->data['serverPid'], $userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
+        $requestCurrency = array_get($this->data, 'accountEntryDetailed.accountEntry.currency');
+        WirexGamingHelper::checkRequestCurrency($user->getCurrency(), $requestCurrency);
+
         $transactionUid = $this->data['transactionUid'];
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
             $transactionUid,
             $user->id,
-            $user->getCurrency(),
+            $requestCurrency,
             TransactionRequest::D_WITHDRAWAL,
             array_get($this->data, 'accountEntryDetailed.accountEntry.amount'),
             TransactionRequest::TRANS_BET,
@@ -281,7 +284,7 @@ class WirexGamingController extends BaseApiController
             $betTransaction->client_ip
         );
 
-        $transactionResponse = WirexGamingHelper::handleTransaction($transactionRequest, $user);
+        WirexGamingHelper::handleTransaction($transactionRequest, $user);
 
         return $this->respondOk(200, '', [
             'relatedTransUid' => $this->data['relatedTransUid'],
@@ -298,13 +301,16 @@ class WirexGamingController extends BaseApiController
         $userId = WirexGamingHelper::parseUid($this->data['serverPid'], $userUid);
         $user = IntegrationUser::get($userId, $this->getOption('service_id'), 'wirexGaming');
 
+        $requestCurrency = array_get($this->data, 'accountEntryDetailed.accountEntry.currency');
+        WirexGamingHelper::checkRequestCurrency($user->getCurrency(), $requestCurrency);
+
         $transactionUid = $this->data['transactionUid'];
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
             $this->data['relatedTransUid'],
             $user->id,
-            $user->getCurrency(),
+            $requestCurrency,
             TransactionRequest::D_DEPOSIT,
             array_get($this->data, 'accountEntryDetailed.accountEntry.amount'),
             TransactionRequest::TRANS_WIN,
