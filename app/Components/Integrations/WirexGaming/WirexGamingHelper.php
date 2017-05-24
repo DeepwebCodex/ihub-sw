@@ -47,12 +47,13 @@ class WirexGamingHelper
     }
 
     /**
-     * @param $userCurrency
+     * @param string $userCurrency
+     * @param string $requestCurrency
      * @throws \iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException
      */
-    public static function checkSessionCurrency($userCurrency)
+    public static function checkRequestCurrency(string $userCurrency, string $requestCurrency)
     {
-        if ($userCurrency != \app('GameSession')->get('currency')) {
+        if ($userCurrency !== $requestCurrency) {
             throw new ApiHttpException(
                 409,
                 'Currency mismatch',
