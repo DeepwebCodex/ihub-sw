@@ -56,31 +56,7 @@ return [
             'prefix' => '',
             'sslmode' => 'prefer',
             'schema' => 'ihub',
-        ],
-        'line' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST_LINE', ''),
-            'port' => env('DB_PORT_LINE', ''),
-            'database' => 'line',
-            'username' => env('DB_USERNAME_LINE', ''),
-            'password' => env('DB_PASSWORD_LINE', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
-        'trans' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST_TRANS', ''),
-            'port' => env('DB_PORT_TRANS', ''),
-            'database' => 'trans',
-            'username' => env('DB_USERNAME_TRANS', ''),
-            'password' => env('DB_PASSWORD_TRANS', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'trans',
-            'sslmode' => 'prefer',
-        ],
+        ]
     ],
 
     /*

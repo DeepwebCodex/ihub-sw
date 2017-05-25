@@ -19,18 +19,6 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^DB_USERNAME=pgsql/DB_USERNAME=u_ihub/g" \
        -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"​/g" \
         \
-       -e "s/^DB_HOST_LINE=example.com/DB_HOST_LINE=de2db02d.dev.favorit/g" \
-       -e "s/^DB_PORT_LINE=5432/DB_PORT_LINE=5432/g" \
-       -e "s/^DB_DATABASE_LINE=db/DB_DATABASE_LINE=line/g" \
-       -e "s/^DB_USERNAME_LINE=pgsql/DB_USERNAME_LINE=g_develop/g" \
-       -e "s/^DB_PASSWORD_LINE=pgsql/DB_PASSWORD_LINE=hb8g7t34fbv09to/g" \
-        \
-       -e "s/^DB_HOST_TRANS=example.com/DB_HOST_TRANS=de2db02d.dev.favorit/g" \
-       -e "s/^DB_PORT_TRANS=5432/DB_PORT_TRANS=5432/g" \
-       -e "s/^DB_DATABASE_TRANS=db/DB_DATABASE_TRANS=trans/g" \
-       -e "s/^DB_USERNAME_TRANS=pgsql/DB_USERNAME_TRANS=g_develop/g" \
-       -e "s/^DB_PASSWORD_TRANS=pgsql/DB_PASSWORD_TRANS=hb8g7t34fbv09to/g" \
-        \
        -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=integrations_hub/g" \
        -e "s/^REDIS_HOST=example.com/REDIS_HOST=de2red01d.dev.favorit/g" \
        -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
@@ -101,18 +89,6 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^DB_DATABASE=db/DB_DATABASE=ihub/g" \
        -e "s/^DB_USERNAME=pgsql/DB_USERNAME=u_ihub/g" \
        -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"​/g" \
-        \
-       -e "s/^DB_HOST_LINE=example.com/DB_HOST_LINE=de2db02d.dev.favorit/g" \
-       -e "s/^DB_PORT_LINE=5432/DB_PORT_LINE=5432/g" \
-       -e "s/^DB_DATABASE_LINE=db/DB_DATABASE_LINE=line/g" \
-       -e "s/^DB_USERNAME_LINE=pgsql/DB_USERNAME_LINE=g_develop/g" \
-       -e "s/^DB_PASSWORD_LINE=pgsql/DB_PASSWORD_LINE=hb8g7t34fbv09to/g" \
-        \
-       -e "s/^DB_HOST_TRANS=example.com/DB_HOST_TRANS=de2db02d.dev.favorit/g" \
-       -e "s/^DB_PORT_TRANS=5432/DB_PORT_TRANS=5432/g" \
-       -e "s/^DB_DATABASE_TRANS=db/DB_DATABASE_TRANS=trans/g" \
-       -e "s/^DB_USERNAME_TRANS=pgsql/DB_USERNAME_TRANS=g_develop/g" \
-       -e "s/^DB_PASSWORD_TRANS=pgsql/DB_PASSWORD_TRANS=hb8g7t34fbv09to/g" \
         \
        -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=integrations_hub/g" \
        -e "s/^REDIS_HOST=example.com/REDIS_HOST=de2red01d.dev.favorit/g" \
