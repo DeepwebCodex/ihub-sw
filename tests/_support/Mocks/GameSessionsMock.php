@@ -8,14 +8,18 @@
 
 namespace Testing;
 
-
 use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\GameSession\GameSessionService;
 use Mockery;
 
+/**
+ * Class GameSessionsMock
+ * @package Testing
+ */
 class GameSessionsMock
 {
-    public static function getMock(){
+    public static function getMock()
+    {
         /** @var Mockery\Mock $game_session */
         $game_session = Mockery::mock(GameSessionService::class);
 
@@ -25,6 +29,8 @@ class GameSessionsMock
         $game_session->shouldReceive('get')->withArgs(['created'])->andReturn(time());
         $game_session->shouldReceive('get')->withArgs(['currency'])->andReturn("EUR");
         $game_session->shouldReceive('get')->withArgs(['userIp'])->andReturn("127.0.0.1");
+
+        $game_session->shouldReceive('getSessionIdByContext')->andReturn("e4fda8473f68894a11c99acc25ecca11");
 
         $game_session->shouldReceive('get')->withArgs(['partner_id'])->andReturn(env('TEST_PARTNER_ID'));
 

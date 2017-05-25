@@ -17,6 +17,9 @@ variables:
   CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-master
   CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/integrations/ihub-grid/ihub-sw-infrastructure:php-fpm-dev
   CONTAINER_CODE_IMAGE: $CI_REGISTRY/integrations/ihub-grid/ihub-sw:$CI_BUILD_REF_NAME
+  NEWRELIC_DEPLOYMENT_API_KEY: "72add31ff74c0f5d4e8fc61ba1c38ac38bdb0e6dc9f226e"
+  NEWRELIC_DEPLOYMENT_APP_ID_DEV: "44669872"
+  NEWRELIC_DEPLOYMENT_APP_ID_PROD: "42805419"
 
 
 #====================== templates ======================#
@@ -118,6 +121,8 @@ fail_build_for_incorrect_branches:
 test_feature:
   <<: *template_compile_n_test
   script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - bash ./run/dev/make-configs.sh
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - composer install --optimize-autoloader
@@ -130,6 +135,8 @@ test_on_dev_conf_prod:
   <<: *template_compile_n_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - bash ./run/prod/make-configs-for-tests.sh
     - composer install --optimize-autoloader
@@ -138,12 +145,31 @@ test_on_dev_conf_prod:
     - master
     - tags
 
+test_on_dev_conf_prod_e2e:
+  <<: *template_compile_n_test
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  allow_failure: true
+  script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
+    - bash ./run/prod/make-configs-for-tests-mocks-off.sh
+    - composer install --optimize-autoloader
+    - ./vendor/bin/codecept run --fail-fast
+  when: manual
+  only:
+    - master
+    - tags
+    - dev
+
 compile_dev:
   <<: *template_dev
   <<: *template_add_ssh_auth
   stage: compile_project
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - bash ./run/dev/make-configs.sh
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache && chmod -R 777 ./public/images || true
     - composer install --optimize-autoloader
@@ -206,19 +232,28 @@ deploy_to_servers_dev:
     - export RANCHER_URL=$RANCHER_DEV_URL && export RANCHER_ACCESS_KEY=$RANCHER_DEV_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_DEV_SECRET_KEY
     - upgrade --environment dev-ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment dev-ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - apk add --update curl
+    - >-
+      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_DEV}/deployments.json"
+      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
+      -H 'Content-Type: application/json'
+      -d
+      "{
+      \"deployment\": {
+      \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
+      \"changelog\": \"\",
+      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
+      \"user\": \"${GITLAB_USER_EMAIL}\"
+      }
+      }"
 
 manual_deploy_to_servers_system_prod:
   <<: *template_deploy_prod
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-
-#manual_deploy_to_servers_pre_prod:
-#  <<: *template_deploy_prod
-#  script:
-#    - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
-#    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-#    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 
 manual_deploy_to_servers_all_prod:
   <<: *template_deploy_prod
@@ -227,7 +262,21 @@ manual_deploy_to_servers_all_prod:
     - upgrade --environment ihub --stack ihub --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack ihub --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack ihub --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-#    - upgrade --environment ihub --stack ihub --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-#    - upgrade --environment ihub --stack ihub --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - export http_proxy=$HTTP_PROXY_FOR_PROD
+    - export https_proxy=$HTTPS_PROXY_FOR_PROD
+    - apk add --update curl
+    - >-
+      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_PROD}/deployments.json"
+      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
+      -H 'Content-Type: application/json'
+      -d
+      "{
+      \"deployment\": {
+      \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
+      \"changelog\": \"\",
+      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
+      \"user\": \"${GITLAB_USER_EMAIL}\"
+      }
+      }"
   only:
     - tags

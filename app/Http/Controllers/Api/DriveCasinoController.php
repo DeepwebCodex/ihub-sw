@@ -8,6 +8,7 @@ use App\Components\Transactions\Strategies\DriveMedia\ProcessDriveCasino;
 use App\Exceptions\Api\Templates\DriveMediaTemplate;
 use App\Http\Requests\DriveMedia\DriveCasino\BalanceRequest;
 use App\Http\Requests\DriveMedia\DriveCasino\PlayRequest;
+use App\Models\DriveCasinoProdObjectIdMap;
 use iHubGrid\Accounting\Users\IntegrationUser;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
@@ -91,7 +92,7 @@ class DriveCasinoController extends BaseApiController
         foreach ($transactions as $key => $transaction) {
             $transactionRequest = new TransactionRequest(
                 $this->getOption('service_id'),
-                0,
+                DriveCasinoProdObjectIdMap::getObjectId($request->input('tradeId')),
                 $user->id,
                 $user->getCurrency(),
                 ($transaction['type'] == "bet" ? TransactionRequest::D_WITHDRAWAL : TransactionRequest::D_DEPOSIT),

@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\Response;
 
 class TestData
 {
-    const IS_MOCK = true;
+    private $isMock;
     const AMOUNT = 10;
     /**
      * @var IntegrationUser
@@ -30,6 +30,7 @@ class TestData
 
         $this->partnerId = (int)env('TEST_PARTNER_ID');
         $this->cashdeskId = (int)env('TEST_CASHEDESK');
+        $this->isMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
     }
 
     public function notFound()
@@ -135,14 +136,34 @@ class TestData
         return $this->basic('get_balance');
     }
 
-    public function bet($bet_id = null, $trans_id = null)
+    public function bet($amount, $bet_id = null, $trans_id = null)
     {
-        return $this->transaction('transaction_bet_payin', $bet_id, $trans_id);
+        $params = [
+            'amount' => $amount,
+            'currency' => $this->currency,
+            'bet_id' => $bet_id ?? $this->getObjectId(),
+            'transaction_id' => $trans_id ?? $this->getObjectId(), //md5(str_random()),
+            'retrying' => 0,
+            'game' => gen_uid(),
+        ];
+
+        return $this->basic('transaction_bet_payin', $params);
     }
 
-    public function win($bet_id = null, $trans_id = null)
+    public function win($amount, $bet_id = null, $trans_id = null)
     {
-        return $this->transaction('transaction_bet_payout', $bet_id, $trans_id, $this->userId);
+        $params = [
+            'amount' => $amount,
+            'currency' => $this->currency,
+            'bet_id' => $bet_id ?? $this->getObjectId(),
+            'transaction_id' => $trans_id ?? $this->getObjectId(), //md5(str_random()),
+            'retrying' => 0,
+            'game' => gen_uid(),
+            'player_id' => $this->userId
+        ];
+
+        return $this->basic('transaction_bet_payout', $params);
+
     }
 
     public function setAmount($amount)
@@ -186,22 +207,6 @@ class TestData
         return $this->setSignature($data);
     }
 
-    private function transaction($method, $bet_id = null, $trans_id = null, $player_id = null)
-    {
-        $params = [
-            'amount' => $this->amount,
-            'currency' => $this->currency,
-            'bet_id' => $bet_id ?? $this->getObjectId(),
-            'transaction_id' => $trans_id ?? $this->getObjectId(), //md5(str_random()),
-            'retrying' => 0,
-            'game' => gen_uid(),
-        ];
-        if ($player_id) {
-            $params['player_id'] = $player_id;
-        }
-        return $this->basic($method, $params);
-    }
-
     private function setSignature($input)
     {
         $data = $input;
@@ -220,6 +225,6 @@ class TestData
 
     private function getObjectId()
     {
-        return (self::IS_MOCK) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
+        return ($this->isMock) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
     }
 }

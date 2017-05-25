@@ -1,32 +1,35 @@
 <?php
 
-use iHubGrid\Accounting\Users\IntegrationUser;
-
-use DriveMedia\TestUser;
+use App\Models\DriveMediaAristocratProdObjectIdMap;
+use Testing\DriveMedia\AccountManagerMock;
+use Testing\DriveMediaAristocrat\Params;
 
 class DriveMediaAristocratApiCest
 {
     private $key;
     private $space;
+    private $route;
 
-    /** @var  TestUser $testUser */
-    private $testUser;
+    /** @var  Params */
+    private $params;
+
 
     public function _before() {
         $this->key = config('integrations.DriveMediaAristocrat.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaAristocrat.spaces.FUN.id');
+        $this->route = '/aristocrat';
 
-        $this->testUser = new TestUser();
+        $this->params = new Params();
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBalance(ApiTester $I)
     {
+        (new AccountManagerMock($this->params))->mock($I);
+
+        $balance = $this->params->getBalance();
         $request = [
             'space' => $this->space,
-            'login' => $this->testUser->getUserId(),
+            'login' => $this->params->login,
             'cmd'   => 'getBalance',
         ];
 
@@ -39,25 +42,30 @@ class DriveMediaAristocratApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', $this->testUser->getBalance()),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $balance),
             'status'    => 'success',
             'error'     => ''
         ]);
     }
 
-    /**
-     * @skip
-     */
     public function testMethodBet(ApiTester $I)
     {
+        $tradeId = (string)rand(1111111111111,9999999999999).'_'.rand(111111111,999999999);
+        $objectId = DriveMediaAristocratProdObjectIdMap::getObjectId($tradeId);
+        $bet = 0.05;
+        $winLose = -0.05;
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance - $bet)->mock($I);
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->testUser->getUserId(),
-            'bet'       => '0.05',
-            'winLose'   => '-0.05',
-            'tradeId'   => (string)rand(1111111111111,9999999999999).'_'.rand(111111111,999999999),
+            'login'     => $this->params->login,
+            'bet'       => (string)$bet,
+            'winLose'   => (string)$winLose,
+            'tradeId'   => $tradeId,
             'betInfo'   => 'Bet',
             'gameId'    => '123',
             'matrix'    => 'EAGLE,DINGO,BOAR,BOAR,BOAR,;TEN,JACK,KING,QUEEN,TEN,;DINGO,BOAR,DINGO,DINGO,SCATTER,;',
@@ -74,8 +82,8 @@ class DriveMediaAristocratApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->testUser->getUserId(),
-            'balance'   => money_format('%i', $this->testUser->getBalance() - 0.05),
+            'login'     => $this->params->login,
+            'balance'   => money_format('%i', $balance - $bet),
             'status'    => 'success',
             'error'     => ''
         ]);
