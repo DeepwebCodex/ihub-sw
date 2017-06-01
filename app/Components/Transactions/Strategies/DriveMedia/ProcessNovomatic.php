@@ -8,7 +8,6 @@ use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
 use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
-use App\Models\DriveMediaNovomaticProdObjectIdMap;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 
 /**

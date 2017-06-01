@@ -4,7 +4,6 @@ namespace App\Components\Transactions\Strategies\Endorphina;
 
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\StatusCode;
-use App\Models\CommonSerial;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;

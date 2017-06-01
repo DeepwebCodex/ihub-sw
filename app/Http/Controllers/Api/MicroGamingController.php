@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\MicroGamingApiFormatter;
 use App\Components\Integrations\MicroGaming\CodeMapping;
-use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
+use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\MicroGaming\MicroGamingHelper;
 use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
 use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;

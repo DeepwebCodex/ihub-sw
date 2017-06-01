@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\MicroGaming;
 
-use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
+use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\MicroGaming\CodeMapping;
 use App\Components\Integrations\MicroGaming\StatusCode;
 use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;

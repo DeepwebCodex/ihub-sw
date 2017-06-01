@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Validation;
 
-use App\Components\Integrations\GameSession\TokenControl\TokenControl;
+use iHubGrid\SeamlessWalletCore\GameSession\TokenControl\TokenControl;
 use App\Components\Integrations\MicroGaming\CodeMapping;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 

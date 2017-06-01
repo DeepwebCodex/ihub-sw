@@ -5,7 +5,7 @@ namespace api\Endorphina;
 use ApiTester;
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\StatusCode;
-use App\Components\Integrations\GameSession\GameSessionService;
+use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use Codeception\Scenario;
 use Endorphina\TestData;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;

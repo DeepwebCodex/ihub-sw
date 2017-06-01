@@ -162,10 +162,11 @@ return [
         \iHubGrid\ErrorHandler\ErrorHandlerServiceProvider::class,
         \iHubGrid\SeamlessWalletCore\SeamlessWalletCoreServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
-        \App\Providers\GameSessionServiceProvider::class,
+        \iHubGrid\SeamlessWalletCore\Providers\GameSessionServiceProvider::class,
         \App\Providers\QueueRabbitMQServiceProvider::class,
         \iHubGrid\ErrorHandler\Providers\GuzzleServiceProvider::class,
-        \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class
+        \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class,
+        \iHubGrid\EuroGamesTech\EuroGamesTechServiceProvider::class
     ],
 
     /*

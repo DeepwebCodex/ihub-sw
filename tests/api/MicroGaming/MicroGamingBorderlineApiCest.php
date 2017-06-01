@@ -7,7 +7,7 @@ use iHubGrid\Accounting\Users\IntegrationUser;
 use App\Models\MicroGamingObjectIdMap;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Carbon\Carbon;
-use App\Components\Integrations\GameSession\GameSessionService;
+use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
 use Testing\MicroGaming\AccountManagerMock;
 use Testing\MicroGaming\Params;

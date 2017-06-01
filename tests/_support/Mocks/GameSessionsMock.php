@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: doom_sentinel
- * Date: 10/6/16
- * Time: 3:46 PM
- */
 
 namespace Testing;
 
-use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
-use App\Components\Integrations\GameSession\GameSessionService;
+use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
+use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use Mockery;
 
 /**

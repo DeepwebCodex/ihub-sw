@@ -4,6 +4,7 @@ namespace App\Components\Formatters;
 
 use Exception;
 use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 
 

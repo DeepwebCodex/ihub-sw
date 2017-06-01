@@ -101,13 +101,6 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
-    ],
-
-    'api' => [
-        'game_session' => [
-            'login' => env('GAME_SESSION_API_LOGIN'),
-            'password' => env('GAME_SESSION_API_PASSWORD'),
-        ]
     ]
 
 ];
