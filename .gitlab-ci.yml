@@ -19,8 +19,8 @@ variables:
   GITLAB_PROJECT_PATH: "integrations/ihub-grid"
   GITLAB_PROJECT_NAME: "ihub-sw"
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
-  CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:php-supervisor-master
-  CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:php-supervisor-dev
+  CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:php-fpm-master
+  CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:php-fpm-dev
   CONTAINER_CODE_IMAGE: $CI_REGISTRY/$GITLAB_PROJECT_PATH/$GITLAB_PROJECT_NAME:$CI_BUILD_REF_NAME
   NEWRELIC_DEPLOYMENT_API_KEY: "72add31ff74c0f5d4e8fc61ba1c38ac38bdb0e6dc9f226e"
   NEWRELIC_DEPLOYMENT_APP_ID_DEV: "44669872"
@@ -164,7 +164,6 @@ test_on_dev_conf_prod_e2e:
     - bash ./run/prod/make-configs-for-tests-mocks-off.sh
     - composer install --optimize-autoloader
     - ./vendor/bin/codecept run
-#  when: manual
   allow_failure: true
   only:
     - master
@@ -253,7 +252,7 @@ deploy_to_servers_dev:
       \"deployment\": {
       \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
       \"changelog\": \"\",
-      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
+      \"description\": \"https://gitlab.favorit/$GITLAB_PROJECT_PATH/$GITLAB_PROJECT_NAME/pipelines/${CI_PIPELINE_ID}\",
       \"user\": \"${GITLAB_USER_EMAIL}\"
       }
       }"
@@ -271,6 +270,7 @@ manual_deploy_to_servers_all_prod:
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTPS_PROXY_FOR_PROD
     - apk add --update curl
@@ -283,7 +283,7 @@ manual_deploy_to_servers_all_prod:
       \"deployment\": {
       \"revision\": \"${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}\",
       \"changelog\": \"\",
-      \"description\": \"https://gitlab.favorit/integrations/ihub-grid/ihub-sw/pipelines/${CI_PIPELINE_ID}\",
+      \"description\": \"https://gitlab.favorit/$GITLAB_PROJECT_PATH/$GITLAB_PROJECT_NAME/pipelines/${CI_PIPELINE_ID}\",
       \"user\": \"${GITLAB_USER_EMAIL}\"
       }
       }"
