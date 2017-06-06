@@ -163,8 +163,9 @@ test_on_dev_conf_prod_e2e:
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache && chmod -Rf 777 ./public/images || true
     - bash ./run/prod/make-configs-for-tests-mocks-off.sh
     - composer install --optimize-autoloader
-    - ./vendor/bin/codecept run --fail-fast
-  when: manual
+    - ./vendor/bin/codecept run
+#  when: manual
+  allow_failure: true
   only:
     - master
     - tags
