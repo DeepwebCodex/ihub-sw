@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Validation\DriveMedia;
 
-use App\Components\Integrations\DriveMedia\StatusCode;
 use Illuminate\Support\Facades\Request;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use App\Components\Integrations\DriveMedia\CodeMapping;

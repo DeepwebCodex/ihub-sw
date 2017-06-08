@@ -2,7 +2,7 @@
 
 namespace api\WirexGaming;
 
-use App\Components\Integrations\GameSession\GameSessionService;
+use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Testing\DriveMedia\AccountManagerMock;

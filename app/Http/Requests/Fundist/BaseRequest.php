@@ -6,7 +6,7 @@ use App\Components\Integrations\Fundist\ApiMethod;
 use App\Components\Integrations\Fundist\CodeMapping;
 use App\Components\Integrations\Fundist\Hmac;
 use App\Components\Integrations\Fundist\StatusCode;
-use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
+use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;

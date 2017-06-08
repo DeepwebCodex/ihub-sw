@@ -4,7 +4,7 @@ namespace App\Http\Requests\Endorphina;
 
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\StatusCode;
-use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
+use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
 use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;

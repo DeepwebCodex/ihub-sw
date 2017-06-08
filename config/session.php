@@ -174,12 +174,6 @@ return [
     |
     */
 
-    'http_only' => true,
-
-    'game_session' => [
-        'storage_secret' => env('GAME_SESSION_STORAGE_SECRET'),
-        'storage_key_prefix' => env('REDIS_PREFIX', 'app') . ':' . env('GAME_SESSION_STORAGE_KEY_PREFIX', 'game_sessions'),
-        'ttl' => env('GAME_SESSION_STORAGE_TTL', 900)
-    ]
+    'http_only' => true
 
 ];

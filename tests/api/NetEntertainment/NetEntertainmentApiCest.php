@@ -13,7 +13,7 @@ use Codeception\Scenario;
 use \NetEntertainment\TestData;
 use \Fundist\TestUser;
 use Symfony\Component\HttpFoundation\Response;
-use App\Components\Integrations\GameSession\GameSessionService;
+use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use Testing\DriveMedia\AccountManagerMock;
 use Testing\DriveMedia\Params;
 use Testing\GameSessionsMock;

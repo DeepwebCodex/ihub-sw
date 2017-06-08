@@ -3,7 +3,7 @@
 namespace Endorphina;
 
 use App\Components\Integrations\Endorphina\Sign;
-use App\Components\Users\IntegrationUser;
+use iHubGrid\Accounting\Users\IntegrationUser;
 use Helper\TestUser;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use Testing\AccountManager\AccountManagerMock;

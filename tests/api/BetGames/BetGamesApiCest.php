@@ -5,7 +5,7 @@ namespace api\BetGames;
 use App\Components\Integrations\BetGames\CodeMapping;
 use App\Components\Integrations\BetGames\Signature;
 use App\Components\Integrations\BetGames\StatusCode;
-use App\Components\Integrations\GameSession\GameSessionService;
+use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;

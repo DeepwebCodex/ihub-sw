@@ -5,7 +5,7 @@ namespace Helper;
 // all public methods declared in helper class will be available in $I
 
 use iHubGrid\Accounting\ExternalServices\AccountManager;
-use App\Components\Integrations\GameSession\GameSessionService;
+use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use Testing\AccountManagerMock;
 use Testing\GameSessionsMock;
 use Testing\Params;

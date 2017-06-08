@@ -6,10 +6,8 @@ use App\Components\Integrations\DriveMediaNovomaticDeluxe\CodeMapping;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\Sign;
 use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
-use function array_get;
 
 /**
  * Class NovomaticDeluxeValidation

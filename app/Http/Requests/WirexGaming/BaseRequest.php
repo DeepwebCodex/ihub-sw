@@ -2,7 +2,7 @@
 
 namespace App\Http\WirexGaming;
 
-use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
+use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\WirexGaming\CodeMapping;
 use App\Components\Integrations\WirexGaming\StatusCode;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
