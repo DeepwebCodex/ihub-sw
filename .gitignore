@@ -17,3 +17,4 @@ tests/_output/*
 /tests/_support/_generated/
 
 /run/prod/make-configs.sh
+/composer.lock

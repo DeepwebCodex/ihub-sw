@@ -28,31 +28,31 @@
     ],
     "require": {
         "php": ">=5.6.4",
-        "laravel/framework": "5.4.*",
-        "predis/predis": "~1.0",
-        "filp/whoops": "~1.0",
-        "kozz/laravel-guzzle-provider": "~6.0",
-        "Nathanmac/Parser": "4.*",
-        "spatie/laravel-fractal": "^1.9",
-        "danielstjules/stringy": "~2.3",
-        "doctrine/dbal": "^2.5",
-        "ihub-grid/packages/dynamic-scheduler": "1.*",
-        "ihub-grid/packages/accounting": "1.*",
-        "ihub-grid/packages/error-handler": "1.*",
-        "ihub-grid/packages/seamless-wallet-core": "1.*",
-        "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*"
+        "laravel/framework": "^5.4",
+        "ihub-grid/packages/dynamic-scheduler": "^1.0",
+        "ihub-grid/packages/accounting": "^1.0",
+        "ihub-grid/packages/error-handler": "^1.0",
+        "ihub-grid/packages/seamless-wallet-core": "1.0",
+        "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.0",
+        "predis/predis": "~1",
+        "filp/whoops": "~2",
+        "kozz/laravel-guzzle-provider": "~6",
+        "Nathanmac/Parser": "~4",
+        "spatie/laravel-fractal": "~4",
+        "danielstjules/stringy": "~2",
+        "doctrine/dbal": "~2"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7",
-        "codeception/codeception": "2.2.x-dev",
-        "codeception/specify": "*",
-        "codeception/verify": "*",
-        "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*",
-        "barryvdh/laravel-ide-helper": "^2.0",
-        "flow/jsonpath": "^0.3.4"
+        "fzaninotto/faker": "~1",
+        "mockery/mockery": "~0",
+        "phpunit/phpunit": "~6",
+        "codeception/codeception": "~2",
+        "codeception/specify": "~0",
+        "codeception/verify": "~0",
+        "symfony/css-selector": "~3",
+        "symfony/dom-crawler": "~3",
+        "barryvdh/laravel-ide-helper": "~2",
+        "flow/jsonpath": "~0"
     },
     "autoload": {
         "classmap": [
@@ -72,16 +72,11 @@
         }
     },
     "scripts": {
-        "post-create-project-cmd": [
-            "php artisan key:generate"
-        ],
         "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
+            "Illuminate\\Foundation\\ComposerScripts::postInstall"
         ],
         "post-update-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-            "php artisan optimize"
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate"
         ]
     },
     "config": {
