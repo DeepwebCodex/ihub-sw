@@ -27,28 +27,25 @@
         }
     ],
     "require": {
-        "php": ">=5.6.4",
-        "laravel/framework": "^5.4",
+        "php": ">=7.1.0",
+        "laravel/framework": "5.4.*",
         "ihub-grid/packages/dynamic-scheduler": "^1.0",
         "ihub-grid/packages/accounting": "^1.0",
         "ihub-grid/packages/error-handler": "^1.0",
-        "ihub-grid/packages/seamless-wallet-core": "1.0",
-        "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.0",
+        "ihub-grid/packages/seamless-wallet-core": "^1.0",
+        "ihub-grid/packages/seamless-wallets/euro-games-tech": "^1.0",
         "predis/predis": "~1",
-        "filp/whoops": "~2",
+        "filp/whoops": "~1",
         "kozz/laravel-guzzle-provider": "~6",
         "Nathanmac/Parser": "~4",
-        "spatie/laravel-fractal": "~4",
+        "spatie/laravel-fractal": "~1",
         "danielstjules/stringy": "~2",
         "doctrine/dbal": "~2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1",
         "mockery/mockery": "~0",
-        "phpunit/phpunit": "~6",
         "codeception/codeception": "~2",
-        "codeception/specify": "~0",
-        "codeception/verify": "~0",
         "symfony/css-selector": "~3",
         "symfony/dom-crawler": "~3",
         "barryvdh/laravel-ide-helper": "~2",
@@ -72,11 +69,16 @@
         }
     },
     "scripts": {
+        "post-create-project-cmd": [
+            "php artisan key:generate"
+        ],
         "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall"
+            "Illuminate\\Foundation\\ComposerScripts::postInstall",
+            "php artisan optimize"
         ],
         "post-update-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate"
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "php artisan optimize"
         ]
     },
     "config": {
