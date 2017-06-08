@@ -46,6 +46,8 @@
         "fzaninotto/faker": "~1",
         "mockery/mockery": "~0",
         "codeception/codeception": "~2",
+        "codeception/specify": "~0",
+        "codeception/verify": "~0",
         "symfony/css-selector": "~3",
         "symfony/dom-crawler": "~3",
         "barryvdh/laravel-ide-helper": "~2",
@@ -74,10 +76,12 @@
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
+            "php artisan vendor:publish --tag=tests --force",
             "php artisan optimize"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "php artisan vendor:publish --tag=tests --force",
             "php artisan optimize"
         ]
     },
