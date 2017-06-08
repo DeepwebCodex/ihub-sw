@@ -141,7 +141,6 @@ compile_feature:
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
     - composer install --optimize-autoloader
     - composer update --optimize-autoloader
-    - php artisan optimize
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
@@ -176,7 +175,6 @@ compile_dev:
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache || true
     - composer install --optimize-autoloader
     - composer update --optimize-autoloader
-    - php artisan optimize
 
 migrate_dev:
   <<: *template_dev
@@ -231,7 +229,6 @@ compile_prod:
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache || true
     - composer install --optimize-autoloader
     - composer update --optimize-autoloader
-    - php artisan optimize
     - php artisan route:cache
 
 test_on_dev_configs_prod:
