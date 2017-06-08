@@ -1,7 +1,5 @@
 <?php
 
-
-use App\Components\Formatters\EgtXmlApiFormatter;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
 use App\Components\Formatters\MicroGamingApiFormatter;
@@ -93,30 +91,6 @@ class FormatterTest extends \Codeception\Test\Unit
 
             verify("Is response body is xml", $response->getContent())
                 ->equalsXmlString(Array2Xml::createXML('root', $exitPayload)->saveXML());
-        });
-    }
-
-    public function testEgtXmlFormatter()
-    {
-        $formatter = new EgtXmlApiFormatter();
-
-        $exitPayload = array_merge($this->payload, ['message' => 'Test']);
-        ksort($exitPayload);
-
-        $this->specify("Test exception formatter", function() use($formatter, $exitPayload){
-            /**@var \Illuminate\Http\Response $response*/
-            $response = $formatter->formatResponse(200, "Test", $this->payload);
-
-            verify("Is response body is json", $response->getContent())
-                ->equalsXmlString($formatter->format($exitPayload));
-        });
-
-        $this->specify("Test exception formatter", function() use($formatter, $exitPayload){
-            /**@var \Illuminate\Http\Response $response*/
-            $response = $formatter->formatException(new ApiHttpException(400, "Test", $this->payload));
-
-            verify("Is response body is xml", $response->getContent())
-                ->equalsXmlString($formatter->format($exitPayload));
         });
     }
 

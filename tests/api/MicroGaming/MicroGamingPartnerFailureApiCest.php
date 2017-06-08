@@ -3,7 +3,7 @@ namespace api\MicroGaming;
 
 use iHubGrid\Accounting\ExternalServices\AccountManager;
 use Carbon\Carbon;
-use App\Components\Integrations\GameSession\GameSessionService;
+use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
 use Testing\MicroGaming\AccountManagerMock;
 use Testing\MicroGaming\Params;

@@ -12,7 +12,7 @@ use Codeception\Scenario;
 use \Fundist\TestData;
 use \Fundist\TestUser;
 use Symfony\Component\HttpFoundation\Response;
-use App\Components\Integrations\GameSession\GameSessionService;
+use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use Testing\GameSessionsMock;
 use Testing\Params;
 

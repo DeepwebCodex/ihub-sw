@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "908c3ae39e54c759c0eaa488d1e9f562",
+    "content-hash": "6b8dd7161e26d59191d7ef7f8864ed47",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -947,11 +947,11 @@
         },
         {
             "name": "ihub-grid/packages/seamless-wallet-core",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git",
-                "reference": "9bed1144e1f661cd6770cfe14ec5d5026a3f9593"
+                "reference": "7f3f19efec9d7d3d6b0308e339569303fe2314b4"
             },
             "require": {
                 "danielstjules/stringy": "~2.3",
@@ -969,6 +969,12 @@
             "scripts": {
                 "post-install-cmd": [
                     "php artisan vendor:publish --tag=config --provider=\"iHubGrid\\SeamlessWalletCore\\SeamlessWalletCoreServiceProvider\""
+                ],
+                "post-package-install": [
+                    "php artisan vendor:publish --tag=tests --provider=\"iHubGrid\\SeamlessWalletCore\\SeamlessWalletCoreServiceProvider\" --force"
+                ],
+                "post-package-update": [
+                    "php artisan vendor:publish --tag=tests --provider=\"iHubGrid\\SeamlessWalletCore\\SeamlessWalletCoreServiceProvider\" --force"
                 ]
             },
             "license": [
@@ -988,7 +994,53 @@
                 "ihub-grid",
                 "seamless-wallet-core"
             ],
-            "time": "2017-06-02T09:54:06+00:00"
+            "time": "2017-06-08T13:24:32+00:00"
+        },
+        {
+            "name": "ihub-grid/packages/seamless-wallets/euro-games-tech",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/euro-games-tech.git",
+                "reference": "e17521c9b2ed5086aab94a4cc4783a34f2a21cb2"
+            },
+            "require": {
+                "ihub-grid/packages/seamless-wallet-core": "1.*",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iHubGrid\\EuroGamesTech\\": "src/"
+                }
+            },
+            "scripts": {
+                "post-package-install": [
+                    "php artisan vendor:publish --tag=tests --provider=\"iHubGrid\\EuroGamesTech\\EuroGamesTechServiceProvider\" --force"
+                ],
+                "post-package-update": [
+                    "php artisan vendor:publish --tag=tests --provider=\"iHubGrid\\EuroGamesTech\\EuroGamesTechServiceProvider\" --force"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Integrations team",
+                    "email": "author_email",
+                    "homepage": "ihub.favbet.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5.* euro-games-tech",
+            "homepage": "https://gitlab.favorit/integrations/ihub-grid/packages/seamless-wallets/euro-games-tech",
+            "keywords": [
+                "euro-games-tech",
+                "ihub-grid"
+            ],
+            "time": "2017-06-01T09:18:50+00:00"
         },
         {
             "name": "kozz/laravel-guzzle-provider",

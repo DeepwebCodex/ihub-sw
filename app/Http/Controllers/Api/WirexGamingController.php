@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\WirexGamingApiFormatter;
-use App\Components\Integrations\GameSession\Exceptions\SessionDoesNotExist;
+use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use App\Components\Integrations\WirexGaming\CodeMapping;
 use App\Components\Integrations\WirexGaming\WirexGamingHelper;
 use App\Exceptions\Api\Templates\WirexGamingTemplate;
