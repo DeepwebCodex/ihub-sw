@@ -21,7 +21,7 @@ abstract class TransactionProcessor extends BaseSeamlessWalletProcessor implemen
 
     protected function make(Model $lastRecord = null)
     {
-        $this->request->comment = json_encode($this->request->getComment()); //overade zeo object id
+        $this->request->comment = json_encode($this->request->getComment()); //override zeo object id
         $status = is_object($lastRecord) ? $lastRecord->status : null;
 
         switch ($status) {
