@@ -3,29 +3,21 @@
 namespace Fundist;
 
 use App\Components\Integrations\Fundist\Hmac;
-use Testing\Params;
+use Testing\Accounting\Params;
+
 
 class TestData
 {
-    private $isMock;
+    /** @var Params  */
+    private $params;
 
     private $userId;
-    private $currency;
-    private $amount;
-    private $amount_backup;
-    public $bigAmount;
-    public $gameId;
 
     public function __construct(string $integration)
     {
-        $this->isMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
+        $this->params = new Params('liveDealer');
 
-        $this->userId = (int)env('TEST_USER_ID') . '_' . Params::CURRENCY;
-        $this->currency = Params::CURRENCY;
-        $this->amount_backup =
-        $this->amount = Params::AMOUNT;
-        $this->bigAmount = Params::BIG_AMOUNT;
-        $this->game_id = Params::GAME_ID;
+        $this->userId = (int)env('TEST_USER_ID') . '_' . $this->params->currency;
         $this->integration = $integration;
     }
 
@@ -50,22 +42,21 @@ class TestData
         $params = [
             'type' => 'balance',
             'userid' => $this->userId,
-            'currency' => $this->currency,
+            'currency' => $this->params->currency,
         ];
         $params['hmac'] = (new Hmac($params, $this->integration))->get();
 
         return $params;
     }
 
-    public function bet($game_number = null, $transferId = null)
+    public function bet($amount = null, $game_number = null, $transferId = null)
     {
-        $transfer_id = ($transferId) ? $transferId : md5(time() + rand(1000, 2000));
         $params = [
             'type' => 'debit',
-            'tid' => ''.$transfer_id,
+            'tid' => (string)($transferId ?? md5(time() + rand(1000, 2000))),
             'userid' => $this->userId,
-            'currency' => $this->currency,
-            'amount' => $this->amount,
+            'currency' => $this->params->currency,
+            'amount' => $amount,
             'i_actionid' => $game_number ?? 'D' . $this->getUniqueNumber(),
             'i_gameid' => $game_number ?? $this->getUniqueNumber(),
             'i_extparam' => '',
@@ -76,15 +67,15 @@ class TestData
         return $params;
     }
 
-    public function win($game_number = null, $transferId = null)
+    public function win($amount, $game_number = null, $transferId = null)
     {
         $transfer_id = ($transferId) ? $transferId : md5(time() + rand(2000, 3000));
         $params = [
             'type' => 'credit',
             'tid' => ''.$transfer_id,
             'userid' => $this->userId,
-            'currency' => $this->currency,
-            'amount' => $this->amount,
+            'currency' => $this->params->currency,
+            'amount' => $amount,
             'i_actionid' => $game_number ?? 'C' . $this->getUniqueNumber(),
             'i_gameid' => $game_number ?? $this->getUniqueNumber(),
             'i_extparam' => '',
@@ -123,8 +114,7 @@ class TestData
 
     protected function getUniqueNumber()
     {
-
-        return ($this->isMock) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
+        return time() + mt_rand(1, 10000);
     }
 
 
@@ -146,21 +136,6 @@ class TestData
     public function newToken()
     {
         return $this->basic('request_new_token');
-    }
-
-    public function setAmount($amount)
-    {
-        return $this->amount = $amount;
-    }
-
-    public function getAmount()
-    {
-        return $this->amount;
-    }
-
-    public function resetAmount()
-    {
-        return $this->amount = $this->amount_backup;
     }
 
     private function basic($method)

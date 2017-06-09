@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\DriveMediaIgrosoftProdObjectIdMap;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMediaIgrosoft\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
+use DriveMedia\Helper;
 
 class DriveMediaIgrosoftApiCest
 {
@@ -12,23 +13,29 @@ class DriveMediaIgrosoftApiCest
     /** @var  Params */
     private $params;
 
+    /** @var Helper  */
+    private $helper;
+
     public function _before() {
         $this->key = config('integrations.DriveMediaIgrosoft.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaIgrosoft.spaces.FUN.id');
 
-        $this->params = new Params();
+        $this->params = new Params('DriveMediaIgrosoft');
+        $this->helper = new Helper($this->params);
     }
 
     public function testMethodBalance(ApiTester $I)
     {
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
         ];
 
         $request = array_merge($request, [
@@ -40,7 +47,7 @@ class DriveMediaIgrosoftApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', $balance),
             'status'    => 'success',
             'error'     => ''
@@ -57,6 +64,7 @@ class DriveMediaIgrosoftApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
+            ->userInfo()
             ->bet($objectId, $bet, $balance - $bet)
             ->win($objectId, $winLose2, $balance - $bet + $winLose2)
             ->mock($I);
@@ -64,7 +72,7 @@ class DriveMediaIgrosoftApiCest
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'bet'       => (string)$bet,
             'winLose'   => (string)$winLose,
             'tradeId'   => $tradeId,
@@ -84,7 +92,7 @@ class DriveMediaIgrosoftApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', $balance - $bet),
             'status'    => 'success',
             'error'     => ''
@@ -94,7 +102,7 @@ class DriveMediaIgrosoftApiCest
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'bet'       => '0.0',
             'winLose'   => (string)$winLose2,
             'tradeId'   => $tradeId,
@@ -114,7 +122,7 @@ class DriveMediaIgrosoftApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', $balance - $bet + $winLose2),
             'status'    => 'success',
             'error'     => ''

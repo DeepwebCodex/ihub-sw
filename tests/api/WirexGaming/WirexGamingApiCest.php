@@ -5,8 +5,8 @@ namespace api\WirexGaming;
 use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMedia\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
 use Testing\GameSessionsMock;
 use WirexGaming\TestData;
 
@@ -65,7 +65,9 @@ class WirexGamingApiCest
 
     public function testGetUserData(\ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $request = $this->data->getUserData();
 
@@ -80,7 +82,9 @@ class WirexGamingApiCest
     public function testGetAvailableBalance(\ApiTester $I)
     {
         $balance = $this->params->getBalance();
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $request = $this->data->getAvailableBalance();
 
@@ -102,6 +106,7 @@ class WirexGamingApiCest
         $newBalance = $balance - $amount;
 
         (new AccountManagerMock($this->params))
+            ->userInfo()
             ->bet($transactionUid, $amount, $newBalance)
             ->mock($I);
 
@@ -131,6 +136,7 @@ class WirexGamingApiCest
         $requestBet = $this->data->addWithdrawEntry($betTransactionUid, $amount);
 
         (new AccountManagerMock($this->params))
+            ->userInfo()
             ->bet($betTransactionUid, $amount)
             ->win($betTransactionUid, $amount)
             ->mock($I);
@@ -169,6 +175,7 @@ class WirexGamingApiCest
         $newBalance = $balance - $bet + $win;
 
         (new AccountManagerMock($this->params))
+            ->userInfo()
             ->bet($betTransactionUid, $bet)
             ->win($betTransactionUid, $win, $balance - $bet + $win)
             ->mock($I);

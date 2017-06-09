@@ -1,36 +1,41 @@
 <?php
 namespace api\MicroGaming;
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
 use Carbon\Carbon;
 use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
 use Testing\GameSessionsMock;
-use Testing\MicroGaming\AccountManagerMock;
-use Testing\MicroGaming\Params;
+use MicroGaming\Helper;
 
 class MicroGamingPartnerFailureApiCest
 {
     const URI = '/mg';
 
+    /** @var Params  */
+    private $params;
+
+    /** @var Helper */
+    private $helper;
+
     public function __construct()
     {
-        $this->params = new Params();
+        $this->params = new Params('microgaming');
+        $this->helper = new Helper($this->params);
     }
 
     public function _before(\ApiTester $I)
     {
-        if($this->params->enableMock) {
-            $mock = (new AccountManagerMock())->getMock();
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
-
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
     public function testLoginTokenFailure(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
+
         $token = md5(uniqid('microgaming' . random_int(-99999, 999999)));
         $request = [
             'methodcall' => [

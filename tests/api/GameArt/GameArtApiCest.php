@@ -2,25 +2,28 @@
 namespace tests\api\GameArt;
 
 use iHubGrid\Accounting\Users\IntegrationUser;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\GameArt\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
 
 class GameArtApiCest
 {
     private $options;
     private $currency;
-    private $action;
+    private $action = 'gameart';
 
     /** @var  Params */
     private $params;
 
     public function _before() {
-        $this->params = new Params();
+        $this->params = new Params('gameart');
+        $this->options = config('integrations.gameart');
     }
 
     public function testBalance(\ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
@@ -35,12 +38,12 @@ class GameArtApiCest
             ])
         ];
         $key = [
-            'key' => hash('sha1', $this->params->options[$this->params->currency] . http_build_query($request))
+            'key' => hash('sha1', $this->options[$this->params->currency] . http_build_query($request))
         ];
 
         $request = array_merge($request, $key);
 
-        $I->sendGET($this->params->action, $request);
+        $I->sendGET($this->action, $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
@@ -56,7 +59,10 @@ class GameArtApiCest
         $roundId = substr(time(), 1, 9);
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($roundId, $amount, $balance - $amount)->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->bet($roundId, $amount, $balance - $amount)
+            ->mock($I);
 
         $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
 
@@ -77,12 +83,12 @@ class GameArtApiCest
         ];
 
         $key = [
-            'key' => hash('sha1', $this->params->options[$this->params->currency] . http_build_query($request))
+            'key' => hash('sha1', $this->options[$this->params->currency] . http_build_query($request))
         ];
 
         $request = array_merge($request, $key);
 
-        $I->sendGET($this->params->action, $request);
+        $I->sendGET($this->action, $request);
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([

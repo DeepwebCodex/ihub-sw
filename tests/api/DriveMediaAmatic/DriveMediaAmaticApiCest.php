@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\DriveMediaAmaticProdObjectIdMap;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMediaAmatic\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
+use DriveMedia\Helper;
 
 class DriveMediaAmaticApiCest
 {
@@ -12,21 +13,27 @@ class DriveMediaAmaticApiCest
     /** @var  Params */
     private $params;
 
+    /** @var Helper  */
+    private $helper;
+
     public function _before()
     {
         $this->key = config('integrations.DriveMediaAmatic.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaAmatic.spaces.FUN.id');
 
-        $this->params = new Params();
+        $this->params = new Params('DriveMediaAmatic');
+        $this->helper = new Helper($this->params);
     }
 
     public function testMethodBalance(ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $request = [
             'space' => $this->space,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'cmd'   => 'getBalance',
         ];
 
@@ -39,7 +46,7 @@ class DriveMediaAmaticApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', $this->params->getBalance()),
             'status'    => 'success',
             'error'     => ''
@@ -54,11 +61,14 @@ class DriveMediaAmaticApiCest
         $winLose = -0.1;
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance - $bet)->win($objectId, $bet, $balance - $bet)->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->bet($objectId, $bet, $balance - $bet)->win($objectId, $bet, $balance - $bet)
+            ->mock($I);
 
         $request = [
             'space'     => $this->space,
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'cmd'       => 'writeBet',
             'bet'       => (string)$bet,
             'winLose'   => (string)$winLose,
@@ -78,7 +88,7 @@ class DriveMediaAmaticApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', ($balance - $bet)),
             'status'    => 'success',
             'error'     => ''
