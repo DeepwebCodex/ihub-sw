@@ -7,8 +7,9 @@ use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use DriveMedia\NovomaticDeluxe\TestData;
 use function GuzzleHttp\json_decode;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMedia\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
+use DriveMedia\Helper;
 
 class DriveMediaNovomaticDeluxeCest {
 
@@ -17,9 +18,13 @@ class DriveMediaNovomaticDeluxeCest {
     /** @var Params  */
     private $params;
 
+    /** @var Helper  */
+    private $helper;
+
     public function __construct() {
 
         $this->params = new Params('DriveMediaNovomaticDeluxe');
+        $this->helper = new Helper($this->params);
         $this->testData = new TestData($this->params);
     }
 
@@ -36,7 +41,9 @@ class DriveMediaNovomaticDeluxeCest {
 
     public function testGetBalance(ApiTester $I) {
 
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $packet = $this->testData->getDataGetBalance();
         $I->sendPOST('/nvmd', $packet);
@@ -65,9 +72,13 @@ class DriveMediaNovomaticDeluxeCest {
      * @skip
      */
     public function testBet(ApiTester $I) {
-//        (new AccountManagerMock($this->params))->bet($this->params->gameId, $this->params->amount)->mock($I);
+//        (new AccountManagerMock($this->params))
+//              ->userInfo()
+//              ->bet($this->params->gameId, $this->params->amount)
+//              ->mock($I);
 
         $packet = $this->testData->getBetPacket();
+        $betAmount = 100.23;
         $I->sendPOST('/nvmd', $packet);
         $I->canSeeResponseIsJson();
         $I->canSeeResponseJsonMatchesJsonPath('$.status');
@@ -81,7 +92,7 @@ class DriveMediaNovomaticDeluxeCest {
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
             'operation_id' => $res->operationId,
-            'amount' => $this->params->amount * 100,
+            'amount' => $betAmount * 100,
             'transaction_type' => TransactionRequest::TRANS_BET,
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_WITHDRAWAL

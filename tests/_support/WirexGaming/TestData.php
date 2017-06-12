@@ -2,7 +2,7 @@
 
 namespace WirexGaming;
 
-use Testing\DriveMedia\Params;
+use Testing\Accounting\Params;
 
 class TestData
 {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
+use App\Components\Integrations\LiveDealer\ObjectId;
 
 class LiveDealerController extends FundistController
 {
@@ -16,15 +16,8 @@ class LiveDealerController extends FundistController
         return 'i_actionid';
     }
 
-
     protected function getObjectId($objectId): int
     {
-        $id = ltrim($objectId, "CD");
-        if (!is_numeric($id)) {
-            throw new ApiHttpException('400',
-                "Wrong format i_actionid: " . $objectId);
-        }
-
-        return (int)$id;
+        return ObjectId::get($objectId);
     }
 }

@@ -1,36 +1,35 @@
 <?php
 namespace api\MicroGaming;
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
-use iHubGrid\Accounting\Users\IntegrationUser;
 use App\Models\MicroGamingObjectIdMap;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Carbon\Carbon;
 use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
 use Testing\GameSessionsMock;
-use Testing\MicroGaming\AccountManagerMock;
-use Testing\MicroGaming\Params;
+use MicroGaming\Helper;
 
 class MicroGamingBorderlineApiCest
 {
-    private $gameID;
     private $options;
+
+    /** @var Params  */
+    private $params;
+
+    /** @var Helper */
+    private $helper;
 
     public function __construct()
     {
-        $this->params = new Params();
+        $this->params = new Params('microgaming');
+        $this->helper = new Helper($this->params);
     }
 
     public function _before(\ApiTester $I)
     {
         $this->options = config('integrations.microgaming');
-
-        if($this->params->enableMock) {
-            $mock = (new AccountManagerMock())->getMock();
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
 
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
@@ -38,9 +37,11 @@ class MicroGamingBorderlineApiCest
 
     public function testNoBetWin(\ApiTester $I)
     {
-        $this->gameID = random_int(9900000, 99000000);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $gameID = random_int(9900000, 99000000);
 
         $request = [
             'methodcall' => [
@@ -54,7 +55,7 @@ class MicroGamingBorderlineApiCest
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
                     'playtype' => 'win',
-                    'gameid' => $this->gameID,
+                    'gameid' => $gameID,
                     'actionid' => random_int(9900000, 99000000),
                     'amount' => 10,
                     'gamereference' => str_random(),
@@ -84,9 +85,16 @@ class MicroGamingBorderlineApiCest
 
     public function testStoragePending(\ApiTester $I)
     {
-        $this->gameID = random_int(9900000, 99000000);
+        $balance = $this->params->getBalance();
+        $bet = 100;
+        $gameID = random_int(9900000, 99000000);
+        $objectId = $this->helper->getPreparedObjectId($gameID);
 
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->getFreeOperationId(123)
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->mock($I);
 
         $request = [
             'methodcall' => [
@@ -100,9 +108,9 @@ class MicroGamingBorderlineApiCest
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
                     'playtype' => 'bet',
-                    'gameid' => $this->gameID,
+                    'gameid' => $gameID,
                     'actionid' => random_int(9900000, 99000000),
-                    'amount' => 10,
+                    'amount' => $bet,
                     'gamereference' => str_random(),
                     'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
@@ -111,19 +119,19 @@ class MicroGamingBorderlineApiCest
 
         Transactions::create([
             'operation_id' => $I->grabService('AccountManager')->getFreeOperationId(),
-            'user_id' => env('TEST_USER_ID'),
+            'user_id' => $this->params->userId,
             'service_id' => array_get($this->options, 'service_id'),
-            'amount' => 10/100,
+            'amount' => $bet/100,
             'move'  => TransactionRequest::D_WITHDRAWAL,
-            'partner_id' => env('TEST_PARTNER_ID'),
-            'cashdesk' => env('TEST_CASHEDESK'),
+            'partner_id' => $this->params->partnerId,
+            'cashdesk' => $this->params->cashdeskId,
             'status' => TransactionRequest::STATUS_PENDING,
-            'currency' => $testUser->getCurrency(),
+            'currency' => $this->params->currency,
             'foreign_id' => array_get($request, 'methodcall.call.actionid'),
             'object_id' => MicroGamingObjectIdMap::getObjectId(
-                env('TEST_USER_ID'),
-                $testUser->getCurrency(),
-                $this->gameID
+                $this->params->userId,
+                $this->params->currency,
+                $gameID
             ),
             'transaction_type' => TransactionRequest::TRANS_BET,
             'game_id'       => 0
@@ -157,9 +165,13 @@ class MicroGamingBorderlineApiCest
 
     public function testDuplicateTransaction(\ApiTester $I)
     {
-        $this->gameID = random_int(9900000, 99000000);
+        $gameID = random_int(9900000, 99000000);
+        $balanceInCents = $this->params->getBalanceInCents();
 
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->getFreeOperationId(123)
+            ->mock($I);
 
         $request = [
             'methodcall' => [
@@ -173,7 +185,7 @@ class MicroGamingBorderlineApiCest
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
                     'playtype' => 'bet',
-                    'gameid' => $this->gameID,
+                    'gameid' => $gameID,
                     'actionid' => random_int(9900000, 99000000),
                     'amount' => 10,
                     'gamereference' => str_random(),
@@ -184,19 +196,19 @@ class MicroGamingBorderlineApiCest
 
         Transactions::create([
             'operation_id' => $I->grabService('AccountManager')->getFreeOperationId(),
-            'user_id' => env('TEST_USER_ID'),
+            'user_id' => $this->params->userId,
             'service_id' => array_get($this->options, 'service_id'),
             'amount' => 10/100,
             'move'  => TransactionRequest::D_WITHDRAWAL,
-            'partner_id' => env('TEST_PARTNER_ID'),
-            'cashdesk' => env('TEST_CASHEDESK'),
+            'partner_id' => $this->params->partnerId,
+            'cashdesk' => $this->params->cashdeskId,
             'status' => TransactionRequest::STATUS_COMPLETED,
-            'currency' => $testUser->getCurrency(),
+            'currency' => $this->params->currency,
             'foreign_id' => array_get($request, 'methodcall.call.actionid'),
             'object_id' => MicroGamingObjectIdMap::getObjectId(
-                env('TEST_USER_ID'),
-                $testUser->getCurrency(),
-                $this->gameID
+                $this->params->userId,
+                $this->params->currency,
+                $gameID
             ),
             'transaction_type' => TransactionRequest::TRANS_BET,
             'game_id'       => 0
@@ -217,7 +229,7 @@ class MicroGamingBorderlineApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'play\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$testUser->getBalanceInCents().'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$balanceInCents.'\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
     }
 
@@ -226,10 +238,18 @@ class MicroGamingBorderlineApiCest
      */
      public function testAccountDuplicateTransaction(\ApiTester $I)
     {
-        $gameID = $this->params->getObjectId();
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
+        $bet = 100;
+        $gameID = random_int(9900000, 99000000);
+        $objectId = $this->helper->getPreparedObjectId($gameID);
 
-        $balanceBefore = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests')->getBalanceInCents();
-        $balanceAfter = $balanceBefore - $this->params->getAmount();
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->mock($I);
+
+        $balanceAfter = $balanceInCents - $bet;
 
         $request = [
             'methodcall' => [
@@ -245,7 +265,7 @@ class MicroGamingBorderlineApiCest
                     'playtype' => 'bet',
                     'gameid' => $gameID,
                     'actionid' => random_int(9900000, 99000000),
-                    'amount' => $this->params->getAmount(),
+                    'amount' => $bet,
                     'gamereference' => str_random(),
                     'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
@@ -277,11 +297,22 @@ class MicroGamingBorderlineApiCest
         $I->assertEquals($operationId, $operationId2);
     }
 
+    /** @skip */
     public function testZeroWin(\ApiTester $I)
     {
         $I->disableMiddleware();
-        $balance = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests')->getBalanceInCents();
-        $gameID = $this->params->getObjectId(Params::ZERO_BET_OBJECT_ID);
+
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
+        $bet = 100;
+        $gameID = random_int(9900000, 99000000);
+        $objectId = $this->helper->getPreparedObjectId($gameID);
+
+        (new AccountManagerMock($this->params))
+            ->userInfo($balance - $bet/100)
+            ->getFreeOperationId(123)
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->mock($I);
 
         $request = [
             'methodcall' => [
@@ -309,11 +340,10 @@ class MicroGamingBorderlineApiCest
 
         $requestBet['methodcall']['call']['playtype'] = 'bet';
         $requestBet['methodcall']['call']['gameid'] = $gameID;
-        $requestBet['methodcall']['call']['amount'] = $this->params->getAmount();
+        $requestBet['methodcall']['call']['amount'] = $bet;
         $I->sendPOST('/mg', $requestBet);
 
         // WIN
-        $balanceAfter = $balance - $this->params->getAmount();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
         $I->sendPOST('/mg', $request);
         $I->seeResponseCodeIs(200);
@@ -322,9 +352,7 @@ class MicroGamingBorderlineApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
-
-        //TODO: need work for mock on and off.
-//        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$balanceAfter.'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($balanceInCents - $bet).'\']');
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
@@ -335,17 +363,35 @@ class MicroGamingBorderlineApiCest
         ]);
     }
 
+    /** @skip */
     public function testMultiWin(\ApiTester $I)
     {
-        $gameID = $this->params->getObjectId(Params::MULTI_WIN_OBJECT_ID);
-        $this->playIn($I, $gameID);
+        $gameID = random_int(9900000, 99000000);
 
-        $balance = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests')->getBalanceInCents();
-        $amount = $this->params->getAmount();
-        $jackpot = $this->params->getJackpotAmount();
+        $bet = 300;
+        $win = 400;
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
+        $objectId = $this->helper->getPreparedObjectId($gameID);
 
-        $this->playOut($I, $gameID, $amount, $balance + $amount);
-        $this->playOut($I, $gameID, $jackpot, $balance + $amount + $jackpot);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->win($objectId, $win/100, $balance - $bet/100 + $win/100)
+            ->mock($I);
+
+        $this->playIn($I, $gameID, $bet);
+
+        // win1
+        $this->playOut($I, $gameID, $win, $balanceInCents - $bet + $win);
+
+        // win2
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->win($objectId, $win/100, $balance - $bet/100 + 2*$win/100)
+            ->mock($I);
+
+        $this->playOut($I, $gameID, $win, $balanceInCents - $bet + 2*$win);
     }
 
 
@@ -392,7 +438,7 @@ class MicroGamingBorderlineApiCest
         ]);
     }
 
-    private function playIn(\ApiTester $I, $gameID)
+    private function playIn(\ApiTester $I, $gameID, $bet)
     {
         $request = [
             'methodcall' => [
@@ -408,7 +454,7 @@ class MicroGamingBorderlineApiCest
                     'playtype' => 'bet',
                     'gameid' => $gameID,
                     'actionid' => random_int(9900000, 99000000),
-                    'amount' => $this->params->getAmount(),
+                    'amount' => $bet,
                     'gamereference' => str_random(),
                     'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]

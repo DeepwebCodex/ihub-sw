@@ -2,8 +2,8 @@
 
 
 use App\Components\Integrations\MrSlotty\MrSlottyHelper;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\MrSlotty\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
 
 class MrSlottyApiCest
 {
@@ -21,7 +21,9 @@ class MrSlottyApiCest
     public function testMethodBalance(ApiTester $I)
     {
         $balance = $this->params->getBalance();
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
         $request = [
             'action'   => 'balance',
             'player_id' => (string)$this->params->userId,
@@ -51,6 +53,7 @@ class MrSlottyApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
+            ->userInfo()
             ->bet($objectId, $amount/100, $balance - $amount/100)
             ->mock($I);
 
@@ -90,7 +93,10 @@ class MrSlottyApiCest
         $roundId = (string)time() . random_int(0, 9);
         $objectId = MrSlottyHelper::getObjectId($roundId);
         $amount = 1000000000000000000;
-        (new AccountManagerMock($this->params))->betExceeded($objectId, MrSlottyHelper::amountCentsToWhole($amount))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->betExceeded($objectId, MrSlottyHelper::amountCentsToWhole($amount))
+            ->mock($I);
 
         $request = [
             'action'   => 'bet',

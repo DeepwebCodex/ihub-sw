@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\DriveCasinoProdObjectIdMap;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMedia\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
+use DriveMedia\Helper;
 
 class DriveCasinoApiCest
 {
@@ -11,22 +12,28 @@ class DriveCasinoApiCest
     /** @var Params  */
     private $params;
 
+    /** @var Helper  */
+    private $helper;
+
     public function _before()
     {
         $this->space = config('integrations.drivecasino.spaces.FUN.id');
         $this->key = config('integrations.drivecasino.spaces.FUN.key');
 
         $this->params = new Params('drivecasino');
+        $this->helper = new Helper($this->params);
     }
 
     public function testMethodBalance(ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
         ];
 
         $request = array_merge($request, [
@@ -38,7 +45,7 @@ class DriveCasinoApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', $this->params->getBalance()),
             'status'    => 'success',
             'error'     => ''
@@ -53,12 +60,15 @@ class DriveCasinoApiCest
         $winLose = -1;
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($objectId, $bet, $balance - $bet)->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->bet($objectId, $bet, $balance - $bet)
+            ->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'bet'       => $bet,
             'winLose'   => $winLose,
             'tradeId'   => $tradeId,
@@ -78,7 +88,7 @@ class DriveCasinoApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', ($balance - $bet)),
             'status'    => 'success',
             'error'     => ''

@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\DriveMediaAristocratProdObjectIdMap;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMediaAristocrat\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
+use DriveMedia\Helper;
 
 class DriveMediaAristocratBorderlineApiCest
 {
@@ -12,11 +13,15 @@ class DriveMediaAristocratBorderlineApiCest
     /** @var  Params */
     private $params;
 
+    /** @var Helper  */
+    private $helper;
+
     public function _before() {
         $this->key = config('integrations.DriveMediaAristocrat.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaAristocrat.spaces.FUN.id');
 
-        $this->params = new Params();
+        $this->params = new Params('DriveMediaAristocrat');
+        $this->helper = new Helper($this->params);
     }
 
     public function testMethodBetWin(ApiTester $I)
@@ -27,12 +32,16 @@ class DriveMediaAristocratBorderlineApiCest
         $winLose = -0.03;
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($objectId, $bet)->win($objectId, $bet + $winLose, $balance + $winLose)->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->bet($objectId, $bet)
+            ->win($objectId, $bet + $winLose, $balance + $winLose)
+            ->mock($I);
 
         $request = [
             'cmd' => 'writeBet',
             'space' => $this->space,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'bet' => (string)$bet,
             'winLose' => (string)$winLose,
             'tradeId' => $tradeId,
@@ -52,7 +61,7 @@ class DriveMediaAristocratBorderlineApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', $balance + $winLose),
             'status'    => 'success',
             'error'     => ''
@@ -63,7 +72,7 @@ class DriveMediaAristocratBorderlineApiCest
     {
         $request = [
             'space' => $this->space,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'cmd'   => 'getBalance',
         ];
 
@@ -86,7 +95,7 @@ class DriveMediaAristocratBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1',
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
         ];
 
         $request = array_merge($request, [
