@@ -4,7 +4,6 @@ namespace Testing\AccountManager;
 
 use iHubGrid\Accounting\ExternalServices\AccountManager;
 use Testing\AccountManager\Protocol\ProtocolInterface;
-use Testing\BaseMock;
 
 /**
  * @deprecated

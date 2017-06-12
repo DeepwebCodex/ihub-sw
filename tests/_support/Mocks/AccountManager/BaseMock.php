@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Testing;
+namespace Testing\AccountManager;
 
 use Mockery;
 
