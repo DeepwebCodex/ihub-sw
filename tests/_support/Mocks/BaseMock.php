@@ -11,6 +11,8 @@ namespace Testing;
 use Mockery;
 
 /**
+ * @deprecated
+ *
  * Description of BaseMock
  *
  * @author petroff

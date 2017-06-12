@@ -13,6 +13,7 @@ use Testing\AccountManager\Protocol\v1\ResponseInterface;
 
 
 /**
+ * @deprecated
  *
  * @author petroff
  */

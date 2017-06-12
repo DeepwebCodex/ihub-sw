@@ -7,6 +7,8 @@ use Testing\AccountManager\Protocol\ProtocolInterface;
 use Testing\BaseMock;
 
 /**
+ * @deprecated
+ *
  * Description of AccountManager
  *
  * @author petroff

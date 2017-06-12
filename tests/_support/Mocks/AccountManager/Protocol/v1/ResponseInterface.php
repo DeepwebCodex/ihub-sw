@@ -9,7 +9,7 @@
 namespace Testing\AccountManager\Protocol\v1;
 
 /**
- *
+ * @deprecated
  * @author petroff
  */
 interface ResponseInterface

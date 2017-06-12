@@ -11,6 +11,7 @@ use Testing\AccountManager\Protocol\v1\DefaultParams;
  */
 
 /**
+ * @deprecated
  * Description of ResponseCreateTransaction
  *
  * @author petroff

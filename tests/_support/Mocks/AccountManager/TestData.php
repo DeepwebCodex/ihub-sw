@@ -12,6 +12,7 @@ use Testing\AccountManager\Protocol\v1\DefaultParams;
 use function config;
 use function env;
 
+/** @deprecated  */
 class TestData_v1
 {
 
