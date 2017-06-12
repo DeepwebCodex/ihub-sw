@@ -285,7 +285,7 @@ manual_deploy_to_servers_all_prod:
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-fpm --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
-    - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+#    - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 #    - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-fpm-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
 #    - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service nginx-pre-prod --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - export http_proxy=$HTTP_PROXY_FOR_PROD
