@@ -19,11 +19,11 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^DB_USERNAME=pgsql/DB_USERNAME=u_ihub/g" \
        -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"​/g" \
         \
-       -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=integrations_hub/g" \
        -e "s/^REDIS_HOST=example.com/REDIS_HOST=de2red01d.dev.favorit/g" \
        -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
+       -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=integrations_hub/g" \
         \
-       -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server/g" \
+       -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server.elkr.rancher.internal/g" \
        -e "s/^LOG_RABBIT_PORT=5672/LOG_RABBIT_PORT=5672/g" \
        -e "s/^LOG_RABBIT_USER=log_rabbit/LOG_RABBIT_USER=ihub/g" \
        -e "s/^LOG_RABBIT_PASS=log_rabbit/LOG_RABBIT_PASS=\"8jm7JMBmCsqp\"/g" \
@@ -52,7 +52,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^GAME_SESSION_STORAGE_KEY_PREFIX=game_session_storage_key_prefix/GAME_SESSION_STORAGE_KEY_PREFIX=game_sessions/g" \
        -e "s/^GAME_SESSION_STORAGE_TTL=900/GAME_SESSION_STORAGE_TTL=900/g" \
         \
-       -e "s/^RABBITMQ_HOST=example.com/RABBITMQ_HOST=rabbitmq-server/g" \
+       -e "s/^RABBITMQ_HOST=example.com/RABBITMQ_HOST=rabbitmq-server.elkr.rancher.internal/g" \
        -e "s/^RABBITMQ_PORT=5672/RABBITMQ_PORT=5672/g" \
        -e "s/^RABBITMQ_USER=user/RABBITMQ_USER=ihub/g" \
        -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"8jm7JMBmCsqp\"/g" \
@@ -80,7 +80,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
         \
        -e "s/^SESSION_DRIVER=file/SESSION_DRIVER=redis/g" \
        -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
-       -e "s/^LOG_DRIVER=file/LOG_DRIVER=rabbit/g" \
+       -e "s/^LOG_DRIVER=file/LOG_DRIVER=file/g" \
        -e "s/^BROADCAST_DRIVER=log/BROADCAST_DRIVER=log/g" \
        -e "s/^QUEUE_DRIVER=sync/QUEUE_DRIVER=sync/g" \
         \
@@ -90,11 +90,11 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^DB_USERNAME=pgsql/DB_USERNAME=u_ihub/g" \
        -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"​/g" \
         \
-       -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=integrations_hub/g" \
        -e "s/^REDIS_HOST=example.com/REDIS_HOST=de2red01d.dev.favorit/g" \
        -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
+       -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=integrations_hub/g" \
         \
-       -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server/g" \
+       -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server.elkr.rancher.internal/g" \
        -e "s/^LOG_RABBIT_PORT=5672/LOG_RABBIT_PORT=5672/g" \
        -e "s/^LOG_RABBIT_USER=log_rabbit/LOG_RABBIT_USER=ihub/g" \
        -e "s/^LOG_RABBIT_PASS=log_rabbit/LOG_RABBIT_PASS=\"8jm7JMBmCsqp\"/g" \
