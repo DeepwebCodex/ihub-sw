@@ -74,6 +74,8 @@ variables:
     paths:
       - ./storage/logs
       - ./.env
+      - ./composer.json
+      - ./composer.lock
     expire_in: 1 hour
   script:
     - php artisan migrate
@@ -88,6 +90,8 @@ variables:
       - ./tests/_output
       - ./storage/logs
       - ./.env.testing
+      - ./composer.json
+      - ./composer.lock
     expire_in: 1 hour
   script:
     - ./vendor/bin/codecept run --fail-fast
