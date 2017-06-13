@@ -179,19 +179,6 @@ class AccountManagerMock
      */
     private function getPendingParams($object_id, $amount, $direction, $status = TransactionRequest::STATUS_PENDING)
     {
-//        dump([
-//            $status,
-//            $this->params->serviceId,
-//            $this->params->cashdeskId,
-//            $this->params->userId,
-//            $amount,
-//            $this->params->currency,
-//            $direction,
-//            $object_id,
-//            $this->getComment($amount, $direction),
-//            $this->params->partnerId,
-//            $this->params->userIP,
-//        ]);
         return [
             $status,
             $this->params->serviceId,

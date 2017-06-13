@@ -297,7 +297,6 @@ class MicroGamingBorderlineApiCest
         $I->assertEquals($operationId, $operationId2);
     }
 
-    /** @skip */
     public function testZeroWin(\ApiTester $I)
     {
         $I->disableMiddleware();
@@ -363,7 +362,6 @@ class MicroGamingBorderlineApiCest
         ]);
     }
 
-    /** @skip */
     public function testMultiWin(\ApiTester $I)
     {
         $gameID = random_int(9900000, 99000000);

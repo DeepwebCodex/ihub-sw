@@ -91,15 +91,13 @@ class TestData {
         return json_encode($data);
     }
 
-    public function getBetPacket() {
-        $betAmount = 100.23;
-        $winAmount = -100.23;
+    public function getBetPacket($betAmount, $winAmount) {
         $data = [
             "cmd" => "writeBet",
             "space" => "1808",
             "login" => $this->getLogin(),
             "bet" => $betAmount,
-            "winLose" => -$winAmount,
+            "winLose" => $winAmount,
             "tradeId" => $this->helper->getTradeId(),
             "betInfo" => BetInfo::BET,
             "gameId" => $this->gameId,
@@ -110,9 +108,7 @@ class TestData {
         return json_encode($data);
     }
 
-    public function getWinPacket() {
-        $betAmount = 100.23;
-        $winAmount = 14;
+    public function getWinPacket($betAmount, $winAmount) {
         $data = [
             "cmd" => "writeBet",
             "space" => "1808",
@@ -166,9 +162,7 @@ class TestData {
         return $data;
     }
 
-    public function getFloatPacket() {
-        $betAmount = "1.2";
-        $winAmount = "0.4";
+    public function getFloatPacket($betAmount, $winAmount) {
         $data = [
             "cmd" => "writeBet",
             "space" => "1808",

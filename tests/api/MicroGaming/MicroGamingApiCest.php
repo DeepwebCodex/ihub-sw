@@ -137,7 +137,6 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$this->params->getBalanceInCents().'\']');
     }
 
-    /** @skip */
     public function testMethodPlayIn(\ApiTester $I)
     {
         $balance = $this->params->getBalance();
@@ -197,7 +196,6 @@ class MicroGamingApiCest
         ];
     }
 
-    /** @skip */
     public function testMethodPlayOut(\ApiTester $I)
     {
         $balance = $this->params->getBalance();
