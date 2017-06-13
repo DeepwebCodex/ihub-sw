@@ -83,7 +83,7 @@ class EndorphinaController extends BaseApiController
         $user = $this->prepareUser();
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
-            0,
+            TransactionRequest::PROCEDURAL_OBJECT_ID,
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_WITHDRAWAL,
@@ -109,7 +109,7 @@ class EndorphinaController extends BaseApiController
         $user = $this->prepareUser();
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
-            0,
+            TransactionRequest::PROCEDURAL_OBJECT_ID,
             $user->id,
             $user->getCurrency(),
             TransactionRequest::D_DEPOSIT,
@@ -134,7 +134,18 @@ class EndorphinaController extends BaseApiController
     {
         $user = $this->prepareUser();
         $transactionRequest = new TransactionRequest(
-            $this->getOption('service_id'), 0, $user->id, $user->getCurrency(), TransactionRequest::D_DEPOSIT, TransactionHelper::amountCentsToWhole($request->input('amount')), TransactionRequest::TRANS_REFUND, $request->input('id'), app('GameSession')->get('game_id'), app('GameSession')->get('partner_id'), app('GameSession')->get('cashdesk_id'), app('GameSession')->get('userIp')
+            $this->getOption('service_id'), 
+            TransactionRequest::PROCEDURAL_OBJECT_ID, 
+            $user->id, 
+            $user->getCurrency(), 
+            TransactionRequest::D_DEPOSIT, 
+            TransactionHelper::amountCentsToWhole($request->input('amount')), 
+            TransactionRequest::TRANS_REFUND, 
+            $request->input('id'), 
+            app('GameSession')->get('game_id'), 
+            app('GameSession')->get('partner_id'), 
+            app('GameSession')->get('cashdesk_id'), 
+            app('GameSession')->get('userIp')
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);

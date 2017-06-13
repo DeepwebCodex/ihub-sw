@@ -290,7 +290,7 @@ class EndorphinaApiCest
 
         (new AccountManagerMock($this->params))
             ->userInfo(($balanceInCents - $bet)/100)
-            ->bet(0, $bet/100, $balance - $bet/100)
+            ->bet($objectId, $bet/100, $balance - $bet/100)
             ->mock($I);
 
         // bet
@@ -332,7 +332,7 @@ class EndorphinaApiCest
         // bet
         (new AccountManagerMock($this->params))
             ->userInfo()
-            ->bet(0, $bet/100, $balance - $bet/100)
+            ->bet($objectId, $bet/100, $balance - $bet/100)
             ->mock($I);
 
         $packet = $this->data->getPacketBet($bet, $packetBet['id']);
