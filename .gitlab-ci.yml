@@ -74,6 +74,8 @@ variables:
     paths:
       - ./storage/logs
       - ./.env
+      - ./composer.json
+      - ./composer.lock
     expire_in: 1 hour
   script:
     - php artisan migrate
@@ -88,6 +90,8 @@ variables:
       - ./tests/_output
       - ./storage/logs
       - ./.env.testing
+      - ./composer.json
+      - ./composer.lock
     expire_in: 1 hour
   script:
     - ./vendor/bin/codecept run --fail-fast
@@ -266,6 +270,7 @@ manual_deploy_to_servers_system_prod:
   script:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
+    - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   when: manual
 
 #manual_deploy_to_servers_pre_prod:

@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\DriveMediaNovomaticProdObjectIdMap;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMedia\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
+use DriveMedia\Helper;
 
 class DriveMediaNovomaticApiCest
 {
@@ -12,23 +13,29 @@ class DriveMediaNovomaticApiCest
 
     const TEST_GAME_ID = 132;
 
-    /** @var  Params */
+    /** @var Params  */
     private $params;
+
+    /** @var Helper  */
+    private $helper;
 
     public function _before() {
         $this->params = new Params('DriveMediaNovomatic');
+        $this->helper = new Helper($this->params);
     }
 
     public function testGetBalance(ApiTester $I)
     {
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
         ];
         $this->addSignatureToRequestData($requestData);
 
@@ -37,7 +44,7 @@ class DriveMediaNovomaticApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'balance' => (string)round($balance, 2),
             'status' => 'success',
             'error' => ''
@@ -60,13 +67,14 @@ class DriveMediaNovomaticApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
-        ->bet($objectId, $bet, $balance - $bet)
-        ->mock($I);
+            ->userInfo()
+            ->bet($objectId, $bet, $balance - $bet)
+            ->mock($I);
 
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'bet' => (string)$bet,
             'winLose' => (string)$winLose,
             'tradeId' => $tradeId,
@@ -80,7 +88,7 @@ class DriveMediaNovomaticApiCest
         $I->seeResponseCodeIs(200);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'balance' => (string)round($balance - $bet, 2),
             'status' => 'success',
             'error' => ''
@@ -96,6 +104,7 @@ class DriveMediaNovomaticApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
+            ->userInfo()
             ->bet($objectId, $bet)
             ->win($objectId, $winLose, $balance - $bet + $winLose)
             ->mock($I);
@@ -103,7 +112,7 @@ class DriveMediaNovomaticApiCest
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'bet' => $bet,
             'winLose' => $winLose,
             'tradeId' => $tradeId,
@@ -119,7 +128,7 @@ class DriveMediaNovomaticApiCest
         $I->sendPOST(self::URI, $requestData);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'balance' => (string)round($balance - $bet + $winLose, 2),
             'status' => 'success',
             'error' => ''

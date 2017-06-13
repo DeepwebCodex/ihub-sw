@@ -1,7 +1,8 @@
 <?php
 
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMediaIgrosoft\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
+use DriveMedia\Helper;
 
 class DriveMediaIgrosoftBorderlineApiCest
 {
@@ -12,23 +13,29 @@ class DriveMediaIgrosoftBorderlineApiCest
     /** @var  Params */
     private $params;
 
+    /** @var Helper  */
+    private $helper;
+
     public function _before() {
         $this->key = config('integrations.DriveMediaIgrosoft.spaces.FUN.key');
         $this->space = config('integrations.DriveMediaIgrosoft.spaces.FUN.id');
 
-        $this->params = new Params();
+        $this->params = new Params('DriveMediaIgrosoft');
+        $this->helper = new Helper($this->params);
     }
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'bet'       => '0.00',
             'winLose'   => '0.30',
-            'tradeId'   => $this->params->getTradeId(),
+            'tradeId'   => $this->helper->getTradeId(),
             'betInfo'   => 'CollectWin',
             'gameId'    => (string)hexdec(substr(md5(microtime()), 0, 5)),
             'matrix'    => '7,8,6,;8,7,2,;2,8,7,;3,8,7,;6,7,8,;',
@@ -55,7 +62,7 @@ class DriveMediaIgrosoftBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
         ];
 
         $request = array_merge($request, [
@@ -77,7 +84,7 @@ class DriveMediaIgrosoftBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1',
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
         ];
 
         $request = array_merge($request, [

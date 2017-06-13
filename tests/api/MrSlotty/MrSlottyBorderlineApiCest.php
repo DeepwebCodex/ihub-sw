@@ -1,8 +1,8 @@
 <?php
 
 use App\Components\Integrations\MrSlotty\MrSlottyHelper;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\MrSlotty\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
 
 class MrSlottyBorderlineApiCest
 {
@@ -45,7 +45,9 @@ class MrSlottyBorderlineApiCest
 
     public function testMethodWinWithoutBet(ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
         $request = [
             'action'   => 'win',
             'amount' => 100,
@@ -88,6 +90,7 @@ class MrSlottyBorderlineApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
+            ->userInfo()
             ->bet($objectId, MrSlottyHelper::amountCentsToWhole($amount))
             ->win($objectId, MrSlottyHelper::amountCentsToWhole($win), $balance - $amount/100 + $win/100)
             ->mock($I);
@@ -134,6 +137,7 @@ class MrSlottyBorderlineApiCest
         $balance = $this->params->getBalance();
 
         (new AccountManagerMock($this->params))
+            ->userInfo()
             ->bet($objectId, $amount/100, $balance - $amount/100)
             ->win($objectId, $win/100, $balance - $amount/100 + $win/100)
             ->mock($I);

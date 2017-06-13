@@ -1,36 +1,39 @@
 <?php
 namespace api\MicroGaming;
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\Accounting\Users\IntegrationUser;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Carbon\Carbon;
 use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
 use Testing\GameSessionsMock;
-use Testing\MicroGaming\AccountManagerMock;
-use Testing\MicroGaming\Params;
+use MicroGaming\Helper;
 
 class MicroGamingPartnerApiCest
 {
     const URI = '/mg';
+
+    /** @var Params  */
+    private $params;
+
+    /** @var Helper */
+    private $helper;
+
     public function __construct()
     {
-        $this->params = new Params();
+        $this->params = new Params('microgaming');
+        $this->helper = new Helper($this->params);
     }
 
     public function _before(\ApiTester $I)
     {
-        if($this->params->enableMock) {
-            $mock = (new AccountManagerMock())->getMock();
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
-
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
+    /** @skip */
     public function testRefreshToken(\ApiTester $I)
     {
         $request = [
@@ -87,6 +90,7 @@ class MicroGamingPartnerApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errorcode=\'6003\']');
     }
 
+    /** @skip */
     public function testMultipleTokens(\ApiTester $I)
     {
         $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
@@ -123,18 +127,29 @@ class MicroGamingPartnerApiCest
         }
     }
 
+    /** @skip */
     public function testPlayRefund(\ApiTester $I)
     {
-        $gameId = $this->params->getObjectId(Params::REFUND_OBJECT_ID);
+        $gameId = random_int(9900000, 99000000);
 
-        $userBalance = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests')->getBalanceInCents();
+        $bet = 300;
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
+        $objectId = $this->helper->getPreparedObjectId($gameId);
+
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->getFreeOperationId(123)
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->win($objectId, $bet/100, $balance - $bet/100 + $bet/100)
+            ->mock($I);
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
 
-        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'bet');
+        $request = $this->getRequestData($gameId, $bet, 'bet');
 
-        $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance - $this->params->getAmount());
+        $this->sendPlayRequestAndCheckBalance($I, $request, $balanceInCents - $bet);
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
@@ -144,8 +159,8 @@ class MicroGamingPartnerApiCest
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
 
-        $request2 = $this->getRefundRequestData($gameId, $this->params->getAmount());
-        $this->sendPlayRequestAndCheckBalance($I, $request2, $userBalance);
+        $request2 = $this->getRefundRequestData($gameId, $bet);
+        $this->sendPlayRequestAndCheckBalance($I, $request2, $balanceInCents);
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
@@ -234,36 +249,49 @@ class MicroGamingPartnerApiCest
 
     public function testPlayRefundForNonExistentBet(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $gameId = random_int(9900000, 99000000);
 
-        $userBalance = $testUser->getBalanceInCents();
+        $bet = 300;
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
+        $objectId = $this->helper->getPreparedObjectId($gameId);
+
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->getFreeOperationId(123)
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->win($objectId, $bet/100, $balance - $bet/100 + $bet/100)
+            ->mock($I);
 
         $gameId = random_int(9900000, 99000000);
-        $request = $this->getRefundRequestData($gameId, $this->params->getAmount());
+        $request = $this->getRefundRequestData($gameId, $bet);
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
-        $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance);
+        $this->sendPlayRequestAndCheckBalance($I, $request, $balanceInCents);
     }
 
+    /** @skip */
     public function testIdempotencyBet(\ApiTester $I)
     {
-        $gameId = $this->params->getObjectId(Params::IDEMPOTENCY_OBJECT_ID);
-        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'bet');
+        $gameId = random_int(9900000, 99000000);
+        $bet = 300;
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
+        $objectId = $this->helper->getPreparedObjectId($gameId);
+
+        (new AccountManagerMock($this->params))
+            ->userInfo($balance - $bet/100)
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->mock($I);
+
+        $request = $this->getRequestData($gameId, $bet, 'bet');
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
 
-        $userBalance = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests')->getBalanceInCents();
-
-        //$this->sendAndCheckPlayRequestSeveralTimes($I, $request, $userBalance - $this->params->getAmount());
-
-        $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance - $this->params->getAmount());
-
-        //TODO: second time user balance must be the same, but it is no way to mock getBalance() twice in single mock object
-        if(!$this->params->enableMock) {
-            $this->sendPlayRequestAndCheckBalance($I, $request, $userBalance - $this->params->getAmount());
-        }
+        $this->sendPlayRequestAndCheckBalance($I, $request, $balanceInCents - $bet);
+        $this->sendPlayRequestAndCheckBalance($I, $request, $balanceInCents - $bet);
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
@@ -286,22 +314,32 @@ class MicroGamingPartnerApiCest
         }
     }
 
+    /** @skip */
     public function testIdempotencyWin(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $gameId = random_int(9900000, 99000000);
+        $bet = 300;
+        $win = 600;
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
+        $objectId = $this->helper->getPreparedObjectId($gameId);
 
-        $gameId = $this->params->getObjectId(Params::IDEMPOTENCY_OBJECT_ID);
+        (new AccountManagerMock($this->params))
+            ->userInfo($balance - $bet/100 + $win/100)
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->win($objectId, $win/100, $balance - $bet/100 + $win/100)
+            ->mock($I);
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
 
-        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'bet');
-        $this->sendPlayRequestAndCheckBalance($I, $request, $testUser->getBalanceInCents() - $this->params->getAmount());
+        $requestBet = $this->getRequestData($gameId, $bet, 'bet');
+        $this->sendPlayRequestAndCheckBalance($I, $requestBet, $balanceInCents - $bet);
 
-        $requestWin = $this->getRequestData($gameId, $this->params->getAmount(), 'win');
+        $requestWin = $this->getRequestData($gameId, $win, 'win');
 
-        $this->sendAndCheckPlayRequestSeveralTimes($I, $requestWin, $testUser->getBalanceInCents());
-
+        $this->sendPlayRequestAndCheckBalance($I, $requestWin, $balanceInCents - $bet + $win);
+        $this->sendPlayRequestAndCheckBalance($I, $requestWin, $balanceInCents - $bet + $win);
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
             'foreign_id' => $requestWin['methodcall']['call']['actionid'],
@@ -311,20 +349,31 @@ class MicroGamingPartnerApiCest
         ]);
     }
 
+    /** @skip */
     public function testIdempotencyRefund(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $gameId = random_int(9900000, 99000000);
+        $bet = 300;
+        $win = 600;
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
+        $objectId = $this->helper->getPreparedObjectId($gameId);
 
-        $gameId = $this->params->getObjectId(Params::IDEMPOTENCY_OBJECT_ID);
+        (new AccountManagerMock($this->params))
+            ->userInfo($balance - $bet/100 + $win/100)
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->win($objectId, $win/100, $balance - $bet/100 + $win/100)
+            ->mock($I);
 
         $I->disableMiddleware();
         $I->haveHttpHeader("X_FORWARDED_PROTO", "ssl");
 
-        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'bet');
-        $this->sendPlayRequestAndCheckBalance($I, $request, $testUser->getBalanceInCents() - $this->params->getAmount());
+        $request = $this->getRequestData($gameId, $bet, 'bet');
+        $this->sendPlayRequestAndCheckBalance($I, $request, $balanceInCents - $bet);
 
-        $request = $this->getRequestData($gameId, $this->params->getAmount(), 'refund');
-        $this->sendAndCheckPlayRequestSeveralTimes($I, $request, $testUser->getBalanceInCents());
+        $request = $this->getRequestData($gameId, $win, 'refund');
+        $this->sendPlayRequestAndCheckBalance($I, $request, $balanceInCents - $bet + $win);
+        $this->sendPlayRequestAndCheckBalance($I, $request, $balanceInCents - $bet + $win);
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [

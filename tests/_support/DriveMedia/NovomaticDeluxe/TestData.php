@@ -4,8 +4,9 @@ namespace DriveMedia\NovomaticDeluxe;
 
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\BetInfo;
 use App\Components\Integrations\DriveMediaNovomaticDeluxe\Sign;
+use DriveMedia\Helper;
 use function GuzzleHttp\json_encode;
-use Testing\DriveMedia\Params;
+use Testing\Accounting\Params;
 
 class TestData {
 //    novomatic deluxe
@@ -33,11 +34,18 @@ class TestData {
     /** @var  Params */
     private $params;
 
+    /** @var Helper  */
+    private $helper;
+
     private $amount;
 
-    public function __construct($params) {
+    private $gameId;
+
+    public function __construct(Params $params) {
         $this->params = $params;
         $this->amount = 10;
+        $this->gameId = 123;
+        $this->helper = new Helper($this->params);
     }
 
     public function sign(array $data) {
@@ -90,11 +98,11 @@ class TestData {
             "cmd" => "writeBet",
             "space" => "1808",
             "login" => $this->getLogin(),
-            "bet" => $this->params->amount,
-            "winLose" => -$this->params->amount,
-            "tradeId" => $this->params->getTradeId(),
+            "bet" => $betAmount,
+            "winLose" => -$winAmount,
+            "tradeId" => $this->helper->getTradeId(),
             "betInfo" => BetInfo::BET,
-            "gameId" => $this->params->gameId,
+            "gameId" => $this->gameId,
             "matrix" => 'test matrix',
             "date" => $this->getData()
         ];
@@ -113,7 +121,7 @@ class TestData {
             "winLose" => $winAmount,
             "tradeId" => microtime(),
             "betInfo" => BetInfo::GAMBLE,
-            "gameId" => $this->params->gameId,
+            "gameId" => $this->gameId,
             "matrix" => 'test matrix',
             "date" => $this->getData()
         ];
@@ -130,7 +138,7 @@ class TestData {
             "winLose" => $winAmount,
             "tradeId" => microtime(),
             "betInfo" => $betInfo,
-            "gameId" => $this->params->gameId,
+            "gameId" => $this->gameId,
             "matrix" => 'test matrix',
             "date" => $this->getData()
         ];
@@ -169,7 +177,7 @@ class TestData {
             "winLose" => $winAmount,
             "tradeId" => microtime(),
             "betInfo" => BetInfo::GAMBLE,
-            "gameId" => $this->params->gameId,
+            "gameId" => $this->gameId,
             "matrix" => 'test matrix',
             "date" => $this->getData()
         ];

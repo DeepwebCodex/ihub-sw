@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\DriveCasinoProdObjectIdMap;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMedia\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
+use DriveMedia\Helper;
 
 class DriveCasinoBorderlineApiCest
 {
@@ -12,20 +13,28 @@ class DriveCasinoBorderlineApiCest
     /** @var Params  */
     private $params;
 
+    /** @var Helper  */
+    private $helper;
+
     public function _before() {
         $this->space = config('integrations.drivecasino.spaces.FUN.id');
         $this->key = config('integrations.drivecasino.spaces.FUN.key');
 
         $this->params = new Params('drivecasino');
+        $this->helper = new Helper($this->params);
     }
 
     public function testMethodZeroWin(ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->getFreeOperationId(123)
+            ->mock($I);
+
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'bet'       => 0,
             'winLose'   => 0,
             'tradeId'   => md5(time()),
@@ -45,7 +54,7 @@ class DriveCasinoBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', ($this->params->getBalance())),
             'status'    => 'success',
             'error'     => ''
@@ -62,12 +71,15 @@ class DriveCasinoBorderlineApiCest
         $winLose2 = 5;
         $balance = $this->params->getBalance();
 
-        (new AccountManagerMock($this->params))->bet($objectId, $bet1, $balance - $bet1)->win($objectId, $winLose2, $balance + $winLose2)->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->bet($objectId, $bet1, $balance - $bet1)->win($objectId, $winLose2, $balance + $winLose2)
+            ->mock($I);
 
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'bet'       => $bet1,
             'winLose'   => $winLose1,
             'tradeId'   => $tradeId,
@@ -87,7 +99,7 @@ class DriveCasinoBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', ($balance - $bet1)),
             'status'    => 'success',
             'error'     => ''
@@ -98,7 +110,7 @@ class DriveCasinoBorderlineApiCest
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'bet'       => $bet2,
             'winLose'   => $winLose2,
             'tradeId'   => $tradeId,
@@ -118,7 +130,7 @@ class DriveCasinoBorderlineApiCest
         $I->seeResponseCodeIs(200);
 
         $I->seeResponseContainsJson([
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'balance'   => money_format('%i', ($balance + $winLose2)),
             'status'    => 'success',
             'error'     => ''
@@ -131,11 +143,13 @@ class DriveCasinoBorderlineApiCest
         $objectId = DriveCasinoProdObjectIdMap::getObjectId($tradeId);
         $bet = 0;
         $winLose = 2;
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
         $request = [
             'cmd'       => 'writeBet',
             'space'     => $this->space,
-            'login'     => $this->params->login,
+            'login'     => $this->helper->getLogin(),
             'bet'       => (string)$bet,
             'winLose'   => (string)$winLose,
             'tradeId'   => $tradeId,
@@ -165,7 +179,7 @@ class DriveCasinoBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => $this->space,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
         ];
 
         $request = array_merge($request, [
@@ -187,7 +201,7 @@ class DriveCasinoBorderlineApiCest
         $request = [
             'cmd'   => 'getBalance',
             'space' => '1',
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
         ];
 
         $request = array_merge($request, [

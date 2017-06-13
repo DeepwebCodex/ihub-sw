@@ -1,34 +1,32 @@
 <?php
 namespace api\MicroGaming;
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
-use iHubGrid\Accounting\Users\IntegrationUser;
 use Carbon\Carbon;
 use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
 use Testing\GameSessionsMock;
-use Testing\MicroGaming\AccountManagerMock;
-use Testing\MicroGaming\Params;
+use MicroGaming\Helper;
 
 class MicroGamingApiCest
 {
-    private $gameID;
+    /** @var Params  */
+    private $params;
+
+    /** @var Helper */
+    private $helper;
 
     public function __construct()
     {
-        $this->params = new Params();
+        $this->params = new Params('microgaming');
+        $this->helper = new Helper($this->params);
     }
 
     public function _before(\ApiTester $I)
     {
         $I->disableMiddleware();
-
-        if($this->params->enableMock) {
-            $mock = (new AccountManagerMock())->getMock();
-            $I->getApplication()->instance(AccountManager::class, $mock);
-            $I->haveInstance(AccountManager::class, $mock);
-        }
 
         $I->getApplication()->instance(GameSessionService::class, GameSessionsMock::getMock());
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
@@ -45,7 +43,9 @@ class MicroGamingApiCest
 
     public function testMethodLogIn(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $request = [
             'methodcall' => [
@@ -69,13 +69,15 @@ class MicroGamingApiCest
         $I->canSeeResponseIsXml();
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'login\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$testUser->getBalanceInCents().'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$this->params->getBalanceInCents().'\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
     }
 
     public function testMethodGetBalance(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $request = [
             'methodcall' => [
@@ -100,12 +102,14 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'getbalance\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$testUser->getBalanceInCents().'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$this->params->getBalanceInCents().'\']');
     }
 
     public function testMethodEndGame(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $request = [
             'methodcall' => [
@@ -130,13 +134,22 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'endgame\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$testUser->getBalanceInCents().'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.$this->params->getBalanceInCents().'\']');
     }
 
+    /** @skip */
     public function testMethodPlayIn(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
-        $this->gameID = $this->params->getObjectId();
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
+        $bet = 100;
+        $gameID = $this->helper->getUniqueNumber();
+        $objectId = $this->helper->getPreparedObjectId($gameID);
+
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->mock($I);
 
         $request = [
             'methodcall' => [
@@ -150,9 +163,9 @@ class MicroGamingApiCest
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
                     'playtype' => 'bet',
-                    'gameid' => $this->gameID,
+                    'gameid' => $gameID,
                     'actionid' => random_int(9900000, 99000000),
-                    'amount' => $this->params->getAmount(),
+                    'amount' => $bet,
                     'gamereference' => str_random(),
                     'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
@@ -167,7 +180,7 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()-$this->params->getAmount()).'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($balanceInCents - $bet).'\']');
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [
@@ -176,13 +189,31 @@ class MicroGamingApiCest
             'status' => TransactionRequest::STATUS_COMPLETED,
             'move' => TransactionRequest::D_WITHDRAWAL
         ]);
+
+        return [
+            'objectId' => $objectId,
+            'gameId' => $gameID,
+            'amount' => $bet
+        ];
     }
 
+    /** @skip */
     public function testMethodPlayOut(\ApiTester $I)
     {
-        $this->testMethodPlayIn($I);
+        $balance = $this->params->getBalance();
+        $balanceInCents = $this->params->getBalanceInCents();
 
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        // bet
+        $betData = $this->testMethodPlayIn($I);
+
+        $bet = $betData['amount'];
+        $win = 400;
+
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->bet($betData['objectId'], $bet/100, $balance - $bet/100)
+            ->win($betData['objectId'], $win/100, $balance - $bet/100 + $win/100)
+            ->mock($I);
 
         $request = [
             'methodcall' => [
@@ -196,9 +227,9 @@ class MicroGamingApiCest
                 'call' => [
                     'seq' => '24971455-aecc-4a69-8494-f544d49db3da',
                     'playtype' => 'win',
-                    'gameid' => $this->gameID,
+                    'gameid' => $betData['gameId'],
                     'actionid' => random_int(9900000, 99000000),
-                    'amount' => $this->params->getAmount(),
+                    'amount' => $win,
                     'gamereference' => str_random(),
                     'token' => md5(uniqid('microgaming'.random_int(-99999,999999)))
                 ]
@@ -213,7 +244,7 @@ class MicroGamingApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@exttransactionid');
-        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($testUser->getBalanceInCents()+$this->params->getAmount()).'\']');
+        $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\''.($balanceInCents - $bet + $win).'\']');
 
         $I->expect('Can see record of transaction applied');
         $I->canSeeRecord(Transactions::class, [

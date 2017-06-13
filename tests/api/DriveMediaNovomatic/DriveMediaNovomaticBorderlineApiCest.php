@@ -1,8 +1,8 @@
 <?php
 
-use iHubGrid\Accounting\ExternalServices\AccountManager;
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\DriveMedia\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
+use DriveMedia\Helper;
 
 class DriveMediaNovomaticBorderlineApiCest
 {
@@ -17,13 +17,19 @@ class DriveMediaNovomaticBorderlineApiCest
     /** @var  Params */
     private $params;
 
+    /** @var Helper  */
+    private $helper;
+
     public function _before() {
         $this->params = new Params('DriveMediaNovomatic');
+        $this->helper = new Helper($this->params);
     }
 
     public function testGetBalanceUserNotFound(ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->userNotFound(41234123412343434)->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userNotFound(41234123412343434)
+            ->mock($I);
 
         $requestData = [
             'cmd' => 'getBalance',
@@ -53,7 +59,7 @@ class DriveMediaNovomaticBorderlineApiCest
         $requestData = [
             'cmd' => 'getBalance',
             'space' => self::TEST_SPACE,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'sign' => '123'
         ];
 
@@ -68,14 +74,16 @@ class DriveMediaNovomaticBorderlineApiCest
 
     public function testWriteBetUserNotFound(ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->userNotFound(41234123412343434)->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userNotFound(41234123412343434)
+            ->mock($I);
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
             'login' => '41234123412343434--1---5--127-0-0-1',
             'bet' => '0.00',
             'winLose' => '0.01',
-            'tradeId' => $this->params->getTradeId(),
+            'tradeId' => $this->helper->getTradeId(),
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
             'matrix' => '[]',
@@ -98,10 +106,10 @@ class DriveMediaNovomaticBorderlineApiCest
         $requestData = [
             'cmd' => 'writeBet',
             'space' => self::TEST_SPACE,
-            'login' => $this->params->login,
+            'login' => $this->helper->getLogin(),
             'bet' => '0.00',
             'winLose' => '0.01',
-            'tradeId' => $this->params->getTradeId(),
+            'tradeId' => $this->helper->getTradeId(),
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
             'matrix' => '[]',
@@ -128,7 +136,7 @@ class DriveMediaNovomaticBorderlineApiCest
             'login' => (string)$testUser->id . "--1--1--127-0-0-1",
             'bet' => '0.00',
             'winLose' => '0.01',
-            'tradeId' => $this->params->getTradeId(),
+            'tradeId' => $this->helper->getTradeId(),
             'betInfo' => 'spin',
             'gameId' => self::TEST_GAME_ID,
             'matrix' => '[]',

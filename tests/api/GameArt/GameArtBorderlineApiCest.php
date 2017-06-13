@@ -2,8 +2,8 @@
 
 namespace tests\api\GameArt;
 
-use Testing\DriveMedia\AccountManagerMock;
-use Testing\GameArt\Params;
+use Testing\Accounting\AccountManagerMock;
+use Testing\Accounting\Params;
 
 class GameArtBorderlineApiCest
 {
@@ -12,18 +12,20 @@ class GameArtBorderlineApiCest
 
     /** @var  Params */
     private $params;
-    private $action;
+    private $action = 'gameart';
 
     public function _before() {
-        $this->params = new Params();
-        $this->params->options = config('integrations.gameart');
+        $this->params = new Params('gameart');
+        $this->options = config('integrations.gameart');
 
     }
 
     public function testMethodUserNotFound(\ApiTester $I)
     {
         $wrongUserId = 234234565465465454;
-        (new AccountManagerMock($this->params))->userNotFound($wrongUserId)->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userNotFound($wrongUserId)
+            ->mock($I);
 
         $request = [
             'action' => 'balance',
@@ -37,12 +39,12 @@ class GameArtBorderlineApiCest
         ];
 
         $key = [
-            'key' => hash('sha1', $this->params->options[$this->params->currency] . http_build_query($request))
+            'key' => hash('sha1', $this->options[$this->params->currency] . http_build_query($request))
         ];
 
         $request = array_merge($request, $key);
 
-        $I->sendGET($this->params->action, $request);
+        $I->sendGET($this->action, $request);
         $I->seeResponseCodeIs(404);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
@@ -72,7 +74,7 @@ class GameArtBorderlineApiCest
 
         $request = array_merge($request, $key);
 
-        $I->sendGET($this->params->action, $request);
+        $I->sendGET($this->action, $request);
         $I->seeResponseCodeIs(500);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
@@ -83,7 +85,9 @@ class GameArtBorderlineApiCest
 
     public function testMethodWinWithoutBet(\ApiTester $I)
     {
-        (new AccountManagerMock($this->params))->mock($I);
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $request = [
             'action' => 'credit',
@@ -102,12 +106,12 @@ class GameArtBorderlineApiCest
         ];
 
         $key = [
-            'key' => hash('sha1', $this->params->options[$this->params->currency] . http_build_query($request))
+            'key' => hash('sha1', $this->options[$this->params->currency] . http_build_query($request))
         ];
 
         $request = array_merge($request, $key);
 
-        $I->sendGET($this->params->action, $request);
+        $I->sendGET($this->action, $request);
         $I->seeResponseCodeIs(500);
         $I->canSeeResponseIsJson();
         $I->seeResponseContainsJson([
