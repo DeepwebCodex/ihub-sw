@@ -35,6 +35,10 @@ class MicroGamingPartnerApiCest
 
     public function testRefreshToken(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
+
         $request = [
             'methodcall' => [
                 'name' => 'refreshtoken',
@@ -91,7 +95,11 @@ class MicroGamingPartnerApiCest
 
     public function testMultipleTokens(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $balanceInCents = $this->params->getBalanceInCents();
+
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $count = 3;
         $token = md5(uniqid('microgaming' . random_int(-99999, 999999)));
@@ -120,7 +128,7 @@ class MicroGamingPartnerApiCest
             $I->canSeeResponseIsXml();
             $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'getbalance\']');
             $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
-            $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\'' . $testUser->getBalanceInCents() . '\']');
+            $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\'' . $balanceInCents . '\']');
             $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
         }
     }
