@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Console\Commands\Orion;
 
 use App\Components\Integrations\MicroGaming\Orion\Request\Request;
@@ -17,7 +16,7 @@ trait Operation
 
     public function handleError(array $message, $level, string $module, string $line)
     {
-        app('AppLog')->warning(json_encode($message), '', '', '', 'MicroGaming-Orion');
+        app('AppLog')->{$level}(json_encode($message), '', '', '', 'MicroGaming-Orion-' . $level);
         $this->error('Something went wrong!');
     }
 
@@ -31,8 +30,7 @@ trait Operation
         $this->info('Success.');
     }
 
-    public function make(Request $requestQueueData, Validation $validatorQueueData, $operationsProcessor,
-            Request $requestResolveData, Validation $validatorResolveData)
+    public function make(Request $requestQueueData, Validation $validatorQueueData, $operationsProcessor, Request $requestResolveData, Validation $validatorResolveData)
     {
         $bar = new ProgressBar($this->output);
         try {
@@ -76,8 +74,7 @@ trait Operation
             $logRecords = [
                 'message' => $ex->getMessage()
             ];
-            $this->handleError($logRecords, 'errors', '', $ex->getLine());
+            $this->handleError($logRecords, 'error', '', $ex->getLine());
         }
     }
-
 }
