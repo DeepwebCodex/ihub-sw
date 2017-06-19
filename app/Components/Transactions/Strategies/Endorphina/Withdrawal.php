@@ -35,6 +35,8 @@ class Withdrawal extends TransactionProcessor
         $lastRecord = Transactions::getTransaction($this->request->service_id, $this->request->foreign_id, $this->request->transaction_type, $this->request->partner_id);
         if (!$lastRecord) {
             $this->request->object_id = app('AccountManager')->getFreeOperationId();
+        }else{
+            $this->request->object_id = $lastRecord->object_id;
         }
         return parent::make($lastRecord);
     }
