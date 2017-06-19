@@ -1,5 +1,5 @@
 FROM busybox
 
-VOLUME /www
+VOLUME /ihub
 
-COPY . /www/
+COPY . /ihub/
