@@ -233,9 +233,6 @@ class MicroGamingBorderlineApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
     }
 
-    /**
-     * @skip
-     */
      public function testAccountDuplicateTransaction(\ApiTester $I)
     {
         $balance = $this->params->getBalance();
