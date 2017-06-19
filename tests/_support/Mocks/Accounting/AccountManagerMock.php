@@ -43,6 +43,13 @@ class AccountManagerMock
         return $this;
     }
 
+    public function selectAccounting()
+    {
+        $this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
+
+        return $this;
+    }
+
     public function userInfo($balance = null)
     {
         if(is_null($balance)){
@@ -172,19 +179,6 @@ class AccountManagerMock
      */
     private function getPendingParams($object_id, $amount, $direction, $status = TransactionRequest::STATUS_PENDING)
     {
-//        dump([
-//            $status,
-//            $this->params->serviceId,
-//            $this->params->cashdeskId,
-//            $this->params->userId,
-//            $amount,
-//            $this->params->currency,
-//            $direction,
-//            $object_id,
-//            $this->getComment($amount, $direction),
-//            $this->params->partnerId,
-//            $this->params->userIP,
-//        ]);
         return [
             $status,
             $this->params->serviceId,

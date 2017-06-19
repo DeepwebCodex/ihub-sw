@@ -2,35 +2,18 @@
 
 namespace BetGames;
 
-use iHubGrid\Accounting\Users\IntegrationUser;
 use App\Components\Integrations\BetGames\Signature;
-use Testing\Params;
 use GuzzleHttp\Psr7\Response;
+use Testing\Accounting\Params;
 
 class TestData
 {
-    private $isMock;
-    const AMOUNT = 10;
-    /**
-     * @var IntegrationUser
-     */
-    private $userId;
-    private $currency;
-    private $amount;
-    private $amount_backup;
-    public $bigAmount;
+    /** @var  Params */
+    private $params;
 
-    public function __construct()
+    public function __construct(Params $params)
     {
-        $this->userId = (int)env('TEST_USER_ID');
-        $this->currency = Params::CURRENCY;
-        $this->amount_backup =
-        $this->amount = Params::AMOUNT * 100;
-        $this->bigAmount = Params::BIG_AMOUNT * 100;
-
-        $this->partnerId = (int)env('TEST_PARTNER_ID');
-        $this->cashdeskId = (int)env('TEST_CASHEDESK');
-        $this->isMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
+        $this->params = $params;
     }
 
     public function notFound()
@@ -66,10 +49,10 @@ class TestData
     public function tokenData()
     {
         return  [
-            "user_id" => $this->userId,
+            "user_id" => $this->params->userId,
             "partner_id" => 1,
             "game_id" => 1,
-            "currency" => $this->currency,
+            "currency" => $this->params->currency,
             "unique_id" => time(),
             "cashdesk_id" => -5
         ];
@@ -79,7 +62,7 @@ class TestData
     {
         $data = [
             "partner_id" => 1,
-            "user_id" => $this->userId,
+            "user_id" => $this->params->userId,
             "cashdesk_id" => -5
         ];
 
@@ -140,7 +123,7 @@ class TestData
     {
         $params = [
             'amount' => $amount,
-            'currency' => $this->currency,
+            'currency' => $this->params->currency,
             'bet_id' => $bet_id ?? $this->getObjectId(),
             'transaction_id' => $trans_id ?? $this->getObjectId(), //md5(str_random()),
             'retrying' => 0,
@@ -154,36 +137,21 @@ class TestData
     {
         $params = [
             'amount' => $amount,
-            'currency' => $this->currency,
+            'currency' => $this->params->currency,
             'bet_id' => $bet_id ?? $this->getObjectId(),
             'transaction_id' => $trans_id ?? $this->getObjectId(), //md5(str_random()),
             'retrying' => 0,
             'game' => gen_uid(),
-            'player_id' => $this->userId
+            'player_id' => $this->params->userId
         ];
 
         return $this->basic('transaction_bet_payout', $params);
 
     }
 
-    public function setAmount($amount)
-    {
-        return $this->amount = $amount;
-    }
-
-    public function getAmount()
-    {
-        return $this->amount;
-    }
-
-    public function resetAmount()
-    {
-        return $this->amount = $this->amount_backup;
-    }
-
     public function wrongTime($method, $params = null)
     {
-        $token = Token::create($this->userId, $this->currency);
+        $token = Token::create($this->params->userId, $this->params->currency);
         $data = [
             'method' => $method,
             'token' => $token->get(),
@@ -210,7 +178,7 @@ class TestData
     private function setSignature($input)
     {
         $data = $input;
-        $data['signature'] = (new Signature($input, $this->partnerId, $this->cashdeskId))->getHash();
+        $data['signature'] = (new Signature($input, $this->params->partnerId, $this->params->cashdeskId))->getHash();
 
         return $data;
     }
@@ -219,12 +187,12 @@ class TestData
     {
         unset($input['signature']);
         $data = $input;
-        $data['signature'] = (new Signature($input, $this->partnerId, $this->cashdeskId))->getHash();
+        $data['signature'] = (new Signature($input, $this->params->partnerId, $this->params->cashdeskId))->getHash();
         return $data;
     }
 
     private function getObjectId()
     {
-        return ($this->isMock) ? Params::OBJECT_ID : time() + mt_rand(1, 10000);
+        return time() + mt_rand(1, 10000);
     }
 }

@@ -20,7 +20,7 @@ class CommonSerial extends Model {
     /**
      * {@inheritdoc}
      */
-    public static function getSerial() {
+    public function getSerial() {
         $mapModel = new static();
         $connection = $mapModel->getConnectionName();
         $value = DB::connection($connection)->select("SELECT nextval('common_integration_serial')");

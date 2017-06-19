@@ -36,7 +36,7 @@ class Deposit extends TransactionProcessor
             }
             $this->request->object_id = $transactionBet->object_id;
             if ($this->request->amount == 0) {
-                $this->request->foreign_id = "zeroWin-" . CommonSerial::getSerial();
+                $this->request->foreign_id = "zeroWin-" . app(CommonSerial::class)->getSerial();
                 return $this->processZeroAmountTransaction();
             }
         } else {

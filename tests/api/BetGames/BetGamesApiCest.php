@@ -11,7 +11,6 @@ use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use \BetGames\TestData;
-use \BetGames\TestUser;
 use Codeception\Scenario;
 use Testing\Accounting\AccountManagerMock;
 use Testing\Accounting\Params;
@@ -30,17 +29,14 @@ class BetGamesApiCest
         'test win',
     ];
 
+    /** @var TestData  */
     private $data;
-
-    /** @var TestUser */
-    private $testUser;
 
     /** @var Params  */
     private $params;
 
     public function __construct()
     {
-        $this->testUser = new TestUser();
         $this->params = new Params('betGames');
         $this->data = new TestData($this->params);
     }
@@ -270,11 +266,11 @@ class BetGamesApiCest
             ->win($betRequest['params']['bet_id'], $win/100, $balance - $bet/100 + $win/100)
             ->mock($I);
 
-        $balanceBefore = $this->testUser->getBalanceInCents();
+        $balanceBefore = $this->params->getBalanceInCents();
         $request = $this->data->win($win, $betRequest['params']['bet_id']);
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::BAD_OPERATION_ORDER);
-        $I->assertEquals($balanceBefore, $this->testUser->getBalanceInCents());
+        $I->assertEquals($balanceBefore, $this->params->getBalanceInCents());
 
         $this->noRecord($I, $request, 'win');
     }
@@ -360,7 +356,6 @@ class BetGamesApiCest
 
         $I->sendPOST('/bg/favbet/', $request);
         $this->getResponseFail($I, StatusCode::SIGNATURE);
-        $this->data->resetAmount();
 
         $this->noRecord($I, $request, 'bet');
     }
@@ -424,8 +419,8 @@ class BetGamesApiCest
         $signatureValidation = $this->validateSignature(
             array_get($data, 'signature'),
             $data,
-            $this->data->partnerId,
-            $this->data->cashdeskId
+            $this->params->partnerId,
+            $this->params->cashdeskId
         );
 
         $I->assertTrue($signatureValidation);
@@ -454,8 +449,8 @@ class BetGamesApiCest
         $signatureValidation = $this->validateSignature(
             array_get($data, 'signature'),
             $data,
-            $this->data->partnerId,
-            $this->data->cashdeskId
+            $this->params->partnerId,
+            $this->params->cashdeskId
         );
 
         $I->assertTrue($signatureValidation);

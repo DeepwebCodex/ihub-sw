@@ -17,6 +17,7 @@ use Testing\AccountManager\Protocol\v1\Transaction\ResponseCreateTransaction;
  */
 
 /**
+ * @deprecated
  * Description of ProtocolV1
  *
  * @author petroff
