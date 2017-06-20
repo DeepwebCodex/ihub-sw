@@ -28,6 +28,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \iHubGrid\ErrorHandler\Http\Middleware\SetRequestId::class,
     ];
 
     /**
