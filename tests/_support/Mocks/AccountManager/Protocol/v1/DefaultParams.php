@@ -11,6 +11,7 @@ namespace Testing\AccountManager\Protocol\v1;
 use function env;
 
 /**
+ * @deprecated
  * Description of DefaultParams
  *
  * @author petroff

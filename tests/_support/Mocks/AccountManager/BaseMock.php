@@ -6,11 +6,13 @@
  * and open the template in the editor.
  */
 
-namespace Testing;
+namespace Testing\AccountManager;
 
 use Mockery;
 
 /**
+ * @deprecated
+ *
  * Description of BaseMock
  *
  * @author petroff

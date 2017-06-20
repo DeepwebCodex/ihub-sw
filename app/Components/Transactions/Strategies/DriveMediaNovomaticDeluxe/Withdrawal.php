@@ -28,7 +28,7 @@ class Withdrawal extends TransactionProcessor {
                         $this->request->transaction_type,
                         $this->request->partner_id);
         if (!$lastRecord) {
-            $this->request->object_id = CommonSerial::getSerial();
+            $this->request->object_id = app(CommonSerial::class)->getSerial();
         }
 
         return $this->make($lastRecord);

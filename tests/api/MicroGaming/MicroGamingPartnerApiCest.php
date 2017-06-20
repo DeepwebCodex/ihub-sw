@@ -33,9 +33,12 @@ class MicroGamingPartnerApiCest
         $I->haveInstance(GameSessionService::class, GameSessionsMock::getMock());
     }
 
-    /** @skip */
     public function testRefreshToken(\ApiTester $I)
     {
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
+
         $request = [
             'methodcall' => [
                 'name' => 'refreshtoken',
@@ -90,10 +93,13 @@ class MicroGamingPartnerApiCest
         $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@errorcode=\'6003\']');
     }
 
-    /** @skip */
     public function testMultipleTokens(\ApiTester $I)
     {
-        $testUser = IntegrationUser::get(env('TEST_USER_ID'), 0, 'tests');
+        $balanceInCents = $this->params->getBalanceInCents();
+
+        (new AccountManagerMock($this->params))
+            ->userInfo()
+            ->mock($I);
 
         $count = 3;
         $token = md5(uniqid('microgaming' . random_int(-99999, 999999)));
@@ -122,12 +128,11 @@ class MicroGamingPartnerApiCest
             $I->canSeeResponseIsXml();
             $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse[@name=\'getbalance\']');
             $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@seq=\'24971455-aecc-4a69-8494-f544d49db3da\']');
-            $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\'' . $testUser->getBalanceInCents() . '\']');
+            $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result[@balance=\'' . $balanceInCents . '\']');
             $I->canSeeXmlResponseMatchesXpath('//pkt/methodresponse/result/@token');
         }
     }
 
-    /** @skip */
     public function testPlayRefund(\ApiTester $I)
     {
         $gameId = random_int(9900000, 99000000);
@@ -271,7 +276,6 @@ class MicroGamingPartnerApiCest
         $this->sendPlayRequestAndCheckBalance($I, $request, $balanceInCents);
     }
 
-    /** @skip */
     public function testIdempotencyBet(\ApiTester $I)
     {
         $gameId = random_int(9900000, 99000000);
@@ -314,7 +318,6 @@ class MicroGamingPartnerApiCest
         }
     }
 
-    /** @skip */
     public function testIdempotencyWin(\ApiTester $I)
     {
         $gameId = random_int(9900000, 99000000);
@@ -349,7 +352,6 @@ class MicroGamingPartnerApiCest
         ]);
     }
 
-    /** @skip */
     public function testIdempotencyRefund(\ApiTester $I)
     {
         $gameId = random_int(9900000, 99000000);

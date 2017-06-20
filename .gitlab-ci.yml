@@ -161,10 +161,19 @@ test_feature:
   <<: *template_test
   stage: test_project
   script:
-    - ./vendor/bin/codecept run
+    - ./vendor/bin/codecept run --fail-fast
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
+test_feature_e2e:
+  <<: *template_dev
+  <<: *template_test
+  allow_failure: true
+  script:
+    - bash ./run/prod/make-configs-for-tests-mocks-off.sh
+    - ./vendor/bin/codecept run --fail-fast
+  only:
+    - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 # ====================================== END FEATURE ==============================
 
 # ====================================== DEV ======================================

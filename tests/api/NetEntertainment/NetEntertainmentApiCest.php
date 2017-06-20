@@ -11,7 +11,6 @@ use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use Codeception\Scenario;
 use \NetEntertainment\TestData;
-use \Fundist\TestUser;
 use Symfony\Component\HttpFoundation\Response;
 use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use Testing\Accounting\AccountManagerMock;
@@ -28,9 +27,6 @@ class NetEntertainmentApiCest
     private $data;
     private $action;
 
-    /** @var TestUser */
-    private $testUser;
-
     /** @var Params  */
     private $params;
 
@@ -41,7 +37,6 @@ class NetEntertainmentApiCest
 
     public function __construct()
     {
-        $this->testUser = new TestUser();
         $this->data = new TestData('netEntertainment');
         $this->action = '/netent';
         $this->objectIdKey = 'i_gameid';
@@ -291,12 +286,12 @@ class NetEntertainmentApiCest
             ->userInfo()
             ->mock($I);
 
-        $balanceBefore = $this->testUser->getBalance();
+        $balanceBefore = $this->params->getBalance();
         $game_number = $this->getUniqueNumber();
         $request = $this->data->win($game_number);
         $I->sendPOST($this->action, json_encode($request));
         $this->getResponseFail($I, StatusCode::BAD_OPERATION_ORDER);
-        $I->assertEquals($balanceBefore, $this->testUser->getBalance());
+        $I->assertEquals($balanceBefore, $this->params->getBalance());
 
         $this->noRecord($I, $request, 'win');
     }

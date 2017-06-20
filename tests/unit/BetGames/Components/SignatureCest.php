@@ -3,15 +3,14 @@
 namespace unit\BetGames\Components;
 
 use App\Components\Integrations\BetGames\Signature;
-use BetGames\TestData;
+use Testing\Accounting\Params;
 
 class SignatureCest
 {
     public function __construct()
     {
-        $this->data = new TestData();
+        $this->params = new Params('betGames');
     }
-
 
     /**
      * Data from documentation
@@ -29,7 +28,7 @@ class SignatureCest
         ];
 
         $this->setSecretConfig();
-        $signature = (new Signature($data, $this->data->partnerId, $this->data->cashdeskId));
+        $signature = (new Signature($data, $this->params->partnerId, $this->params->cashdeskId));
         $I->assertEquals($data['signature'], $signature->getHash());
     }
 
@@ -58,7 +57,7 @@ class SignatureCest
         $hash = 'ca9fd88a49f039f5bde952c31247f09a';
 
         $this->setSecretConfig();
-        $signature = (new Signature($data, $this->data->partnerId, $this->data->cashdeskId));
+        $signature = (new Signature($data, $this->params->partnerId, $this->params->cashdeskId));
         $I->assertEquals($hash, $signature->getHash());
     }
 
@@ -88,7 +87,7 @@ class SignatureCest
         $hash = 'ca9fd88a49f039f5bde952c31247f09a';
 
         $this->setSecretConfig();
-        $signature = (new Signature($data, $this->data->partnerId, $this->data->cashdeskId));
+        $signature = (new Signature($data, $this->params->partnerId, $this->params->cashdeskId));
         $I->assertNotEquals($hash, $signature->getHash());
     }
 
