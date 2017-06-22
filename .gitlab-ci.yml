@@ -74,8 +74,6 @@ variables:
     paths:
       - ./storage/logs
       - ./.env
-      - ./composer.json
-      - ./composer.lock
     expire_in: 1 hour
   script:
     - php artisan migrate
@@ -90,8 +88,6 @@ variables:
       - ./tests/_output
       - ./storage/logs
       - ./.env.testing
-      - ./composer.json
-      - ./composer.lock
     expire_in: 1 hour
   script:
     - ./vendor/bin/codecept run --fail-fast
@@ -143,8 +139,8 @@ compile_feature:
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - bash ./run/dev/make-configs.sh
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
+    - rm -rf composer.lock
     - composer install --optimize-autoloader
-    - composer update --optimize-autoloader
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
@@ -159,9 +155,10 @@ migrate_feature:
 test_feature:
   <<: *template_dev
   <<: *template_test
-  stage: test_project
-  script:
-    - ./vendor/bin/codecept run --fail-fast
+  before_script:
+    - export http_proxy=""
+    - export https_proxy=""
+    - bash ./run/dev/make-configs-for-tests.sh
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
@@ -186,8 +183,8 @@ compile_dev:
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - bash ./run/dev/make-configs.sh ${CI_PIPELINE_ID}
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache || true
+    - rm -rf composer.lock
     - composer install --optimize-autoloader
-    - composer update --optimize-autoloader
 
 migrate_dev:
   <<: *template_dev
@@ -240,8 +237,8 @@ compile_prod:
     - bash ./run/prod/decode.sh
     - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache || true
+    - rm -rf composer.lock
     - composer install --optimize-autoloader
-    - composer update --optimize-autoloader
     - php artisan route:cache
 
 test_on_dev_configs_prod:
@@ -249,8 +246,8 @@ test_on_dev_configs_prod:
   <<: *template_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   before_script:
-    - export http_proxy=$HTTP_PROXY_FOR_DEV
-    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - export http_proxy=""
+    - export https_proxy=""
     - bash ./run/prod/make-configs-for-tests.sh
   only:
     - master
@@ -262,8 +259,8 @@ test_on_dev_configs_e2e_prod:
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   allow_failure: true
   before_script:
-    - export http_proxy=$HTTP_PROXY_FOR_DEV
-    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - export http_proxy=""
+    - export https_proxy=""
     - bash ./run/prod/make-configs-for-tests-mocks-off.sh
   only:
     - master
