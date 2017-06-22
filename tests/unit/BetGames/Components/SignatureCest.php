@@ -3,13 +3,14 @@
 namespace unit\BetGames\Components;
 
 use App\Components\Integrations\BetGames\Signature;
-use Testing\Accounting\Params;
+use Testing\UnitParams;
+
 
 class SignatureCest
 {
     public function __construct()
     {
-        $this->params = new Params('betGames');
+        $this->params = new UnitParams();
     }
 
     /**
