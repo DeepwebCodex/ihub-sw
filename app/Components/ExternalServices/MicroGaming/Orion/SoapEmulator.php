@@ -25,7 +25,7 @@ class SoapEmulator
                         'headers' => [
                             'Content-Type' => 'text/xml',
                             'Request-Id' => $request->getUuid(),
-                            'SOAPAction' => Config::get('integrations.microgamingOrion.actionUrl') . $request->getMethod()
+                            'SOAPAction' => Config::get('integrations.microgamingOrion.actionUrl') . $request::REQUEST_NAME
                         ],
                         'body' => $request->getBody(),
                     ],

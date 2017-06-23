@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use Illuminate\Support\Facades\Config;
@@ -8,14 +7,15 @@ use Ramsey\Uuid\Uuid;
 class ManuallyCompleteGame extends Request
 {
 
+    const REQUEST_NAME = "ManuallyCompleteGame";
+
     public function prepare(array $data = [])
     {
         $this->uuid = Uuid::uuid1()->toString();
-        $this->method = "ManuallyCompleteGame";
         $dataValidateComplete = array();
-        foreach ($data as $key => $value) {
+        foreach ($data as $value) {
             $dataValidateComplete['ori:CompleteGameRequest'] [] = [
-                'ori:RowIdLong' => ($value['a:RowId']) ?? $value['a:RowIdLong'],
+                'ori:RowIdLong' => $value['PreparedRowId'],
                 'ori:ServerId' => Config::get('integrations.microgamingOrion.serverId'),
             ];
         }
@@ -36,5 +36,4 @@ class ManuallyCompleteGame extends Request
 
         $this->body = $this->source->create('soapenv:Envelope', $dataTmp);
     }
-
 }

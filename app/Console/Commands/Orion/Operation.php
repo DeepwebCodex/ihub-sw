@@ -30,7 +30,7 @@ trait Operation
         $this->info('Success.');
     }
 
-    public function make(Request $requestQueueData, Validation $validatorQueueData, $operationsProcessor, Request $requestResolveData, Validation $validatorResolveData)
+    public function make(Request $requestQueueData, Validation $validatorQueueData, $operationsProcessor, array $queueRequest)
     {
         $bar = new ProgressBar($this->output);
         try {
@@ -52,9 +52,15 @@ trait Operation
             $this->info("\n");
 
             $this->info("Sending data.");
-            $dataResponse = $requestResolveData->getData($handleCommitRes);
-            $validatorResolveData->validateBaseStructure($dataResponse);
-
+            $dataResponseTotal = [];
+            foreach ($queueRequest as $request) {
+                $packet = $handleCommitRes[$request['requestResolveData']::REQUEST_NAME] ?? [];
+                if ($packet) {
+                    $dataResponse = $request['requestResolveData']->getData($packet);
+                    $request['validatorResolveData']->validateBaseStructure($dataResponse);
+                    $dataResponseTotal[] = $dataResponse;
+                }
+            }
             return $this->handleSuccess($dataResponse, $handleCommitRes);
         } catch (RequestException $re) {
             $bar->finish();

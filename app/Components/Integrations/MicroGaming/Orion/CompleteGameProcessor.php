@@ -1,6 +1,7 @@
 <?php
-
 namespace App\Components\Integrations\MicroGaming\Orion;
+
+use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyCompleteGame;
 
 class CompleteGameProcessor implements IOperationsProcessor
 {
@@ -14,12 +15,14 @@ class CompleteGameProcessor implements IOperationsProcessor
 
     public function make(array $data): array
     {
-        if ($this->bar) {
-            foreach ($data as $key) {
+        $dataReturn = array();
+        foreach ($data as $value) {
+            if ($this->bar) {
                 $this->bar->advance();
             }
+            $value['PreparedRowId'] = $value['a:RowId'];
+            $dataReturn[ManuallyCompleteGame::REQUEST_NAME][] = $value;
         }
-        return $data;
+        return $dataReturn;
     }
-
 }
