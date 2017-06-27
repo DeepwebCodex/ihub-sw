@@ -148,8 +148,8 @@ class EndorphinaApiCest
         $I->assertArrayHasKey('transactionId', $data);
         $I->assertEquals($balanceInCents - $bet, $data['balance']);
         $I->assertGreaterThan(1, $data['transactionId']);
-        //TODO: it some reason, that DB hasn't record. Need explore and fix
-//        $this->isRecord($I, $packet['id'], TransactionRequest::TRANS_WIN);
+        //TODO: it some reason, that DB hasn't record. Need explore and fix. When you push zero transaction foreign-id will be generate random
+        //$this->isRecord($I, $packet['id'], TransactionRequest::TRANS_WIN);
     }
 
     public function testRefund(ApiTester $I)
