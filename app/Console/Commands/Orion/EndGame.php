@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Console\Commands\Orion;
 
 use App\Components\ExternalServices\MicroGaming\Orion\SoapEmulator;
@@ -12,7 +11,8 @@ use App\Http\Requests\Validation\Orion\ManualCompleteValidation;
 use Illuminate\Console\Command;
 use function app;
 
-class EndGame extends Command {
+class EndGame extends Command
+{
 
     use Operation;
 
@@ -35,7 +35,8 @@ class EndGame extends Command {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -44,17 +45,21 @@ class EndGame extends Command {
      *
      * @return mixed
      */
-    public function handle() {
+    public function handle()
+    {
         $sourceProcessor = app(SourceProcessor::class);
         $soapEmul = app(SoapEmulator::class);
 
         $requestQueueData = new GetFailedEndGameQueue($soapEmul, $sourceProcessor);
         $validatorQueueData = app(EndGameValidation::class);
         $operationsProcessor = app(CompleteGameProcessor::class);
-        $requestResolveData = new ManuallyCompleteGame($soapEmul, $sourceProcessor);
-        $validatorResolveData = app(ManualCompleteValidation::class);
-        
-        $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $requestResolveData, $validatorResolveData);
-    }
+        $queueRequest = [
+            [
+                'requestResolveData' => new ManuallyCompleteGame($soapEmul, $sourceProcessor),
+                'validatorResolveData' => app(ManualCompleteValidation::class)
+            ]
+        ];
 
+        $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $queueRequest);
+    }
 }

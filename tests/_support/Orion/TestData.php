@@ -13,12 +13,7 @@ use App\Components\Integrations\MicroGaming\Orion\Request\GetRollbackQueueData;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyCompleteGame;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
-use iHubGrid\ErrorHandler\ThirdParty\Array2Xml;
-use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGaming;
-use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
-use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
-use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
-use iHubGrid\Accounting\Users\IntegrationUser;
+use App\Components\Transactions\Strategies\MicroGaming\ProcessMicroGamingOrion;
 use App\Http\Requests\Validation\Orion\CommitValidation;
 use App\Http\Requests\Validation\Orion\EndGameValidation;
 use App\Http\Requests\Validation\Orion\ManualCompleteValidation;
@@ -29,11 +24,16 @@ use Carbon\Carbon;
 use Codeception\Test\Unit;
 use Exception;
 use Helper\TestUser;
+use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\ThirdParty\Array2Xml;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Support\Facades\Config;
 use Mockery;
 use stdClass;
-use function env;
 use Testing\Accounting\Params;
+use function env;
 
 class TestData extends Unit
 {
@@ -165,7 +165,7 @@ class TestData extends Unit
 
             $transactionHandler = new TransactionHandler($transactionRequest, $user);
 
-            return $transactionHandler->handle(new ProcessMicroGaming());
+            return $transactionHandler->handle(new ProcessMicroGamingOrion($value));
         }
     }
 
@@ -362,17 +362,7 @@ class TestData extends Unit
         return $obj;
     }
 
-    public function operation($obj)
-    {
-        $response = new stdClass();
-        $response->data = $obj->source->getData();
-        $obj->validatorData->validateBaseStructure($response->data);
-        $elements = $obj->validatorData->getData($response->data);
-        $response->finishedDataWin = $obj->operationsProcessor->make($elements);
-        $response->dataResponse = $obj->requestResolveData->getData($response->finishedDataWin);
-        $obj->validationResolveData->validateBaseStructure($response->dataResponse);
-        return $response;
-    }
+    
 
     public function initCommitWithoutBet($testData, $xmlMockB = '')
     {
@@ -443,11 +433,12 @@ the same binding (including security requirements, e.g. Message, Transport, None
             'referenceNumber' => $this->generateUniqId()
         ];
         $xml = $this->generatedXml($testData, 'commit');
+        $xmlEndGame = $this->createXmlEndGame();
         $xmlMockB = $this->generatedXmlManualBet($xml);
         $className = SoapEmulator::class;
         $mock = Mockery::mock($className);
         $mock->shouldReceive('sendRequest')->withArgs([GetCommitQueueData::class])->andReturn($xml);
-        $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyCompleteGame::class])->andReturn($xmlEndGame->qManualCompleteData);
         $I->getApplication()->instance($className, $mock);
         $I->haveInstance($className, $mock);
     }

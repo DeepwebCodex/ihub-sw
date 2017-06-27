@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use Illuminate\Support\Facades\Config;
@@ -8,10 +7,11 @@ use Ramsey\Uuid\Uuid;
 class GetFailedEndGameQueue extends Request
 {
 
+    const REQUEST_NAME = "GetFailedEndGameQueue";
+
     public function prepare(array $data = [])
     {
         $this->uuid = Uuid::uuid1()->toString();
-        $this->method = "GetFailedEndGameQueue";
         $dataTmp = [
             '@attributes' => [
                 'xmlns:soapenv' => 'http://schemas.xmlsoap.org/soap/envelope/',
@@ -30,5 +30,4 @@ class GetFailedEndGameQueue extends Request
 
         $this->body = $this->source->create('soapenv:Envelope', $dataTmp);
     }
-
 }

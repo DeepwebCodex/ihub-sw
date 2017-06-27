@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use Illuminate\Support\Facades\Config;
@@ -8,24 +7,21 @@ use Ramsey\Uuid\Uuid;
 class ManuallyValidateBet extends Request
 {
 
+    const REQUEST_NAME = "ManuallyValidateBet";
+
     public function prepare(array $data = [])
     {
 
         $this->uuid = Uuid::uuid1()->toString();
-        $this->method = "ManuallyValidateBet";
         $dataValidateBet = array();
-        foreach ($data as $key => $value) {
+        foreach ($data as $value) {
             $tmp = [
                 'ori:ExternalReference' => $value['operationId'],
                 'ori:ServerId' => Config::get('integrations.microgamingOrion.serverId'),
                 'ori:UnlockType' => $value['unlockType'],
-                'ori:UserId' => $value['a:UserId']
+                'ori:UserId' => $value['a:UserId'],
+                'ori:RowId' => $value['PreparedRowId']
             ];
-            if ($value['a:RowId']) {
-                $tmp['ori:RowId'] = $value['a:RowId'];
-            } else {
-                $tmp['ori:RowId'] = $value['a:RowIdLong'];
-            }
             $dataValidateBet['ori:ValidteBetRequest'] [] = $tmp;
         }
 
@@ -45,5 +41,4 @@ class ManuallyValidateBet extends Request
 
         $this->body = $this->source->create('soapenv:Envelope', $dataTmp);
     }
-
 }

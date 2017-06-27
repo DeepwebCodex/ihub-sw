@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Components\Integrations\MicroGaming\Orion\Request;
 
 use App\Components\ExternalServices\MicroGaming\Orion\SoapEmulator;
@@ -10,7 +9,6 @@ use function GuzzleHttp\json_encode;
 abstract class Request
 {
 
-    protected $method;
     protected $uuid;
     protected $body;
     protected $soap;
@@ -38,11 +36,6 @@ abstract class Request
         return $this->parse($result);
     }
 
-    public function getMethod(): string
-    {
-        return $this->method;
-    }
-
     public function getUuid(): string
     {
         return $this->uuid;
@@ -58,5 +51,4 @@ abstract class Request
         $resultArray = $this->source->parser($result);
         return $resultArray;
     }
-
 }
