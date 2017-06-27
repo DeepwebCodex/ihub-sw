@@ -68,6 +68,8 @@ variables:
 .template_migrate: &template_migrate
   stage: migrate_database
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
+  variables:
+    GIT_STRATEGY: none
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
@@ -81,6 +83,8 @@ variables:
 .template_test: &template_test
   stage: test_project
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
+  variables:
+    GIT_STRATEGY: none
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
@@ -90,11 +94,15 @@ variables:
       - ./.env.testing
     expire_in: 1 hour
   script:
-    - ./vendor/bin/codecept run --fail-fast
+    - ./vendor/bin/codecept run api
+    - ./vendor/bin/codecept run functional
+    - ./vendor/bin/codecept run unit
 
 .template_build_docker_image: &template_build_docker_image
   stage: build_docker_image
   image: docker:latest
+  variables:
+    GIT_STRATEGY: none
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
     - rm -rf .git .gitlab-ci.yml .gitignore .env.example .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md
@@ -105,11 +113,15 @@ variables:
 .template_deploy: &template_deploy
   stage: deploy_to_servers
   image: $RANCHER_REST_WRAPPER_IMAGE
+  variables:
+    GIT_STRATEGY: none
 
 #====================== END templates ======================#
 
 fail_build_for_incorrect_branches:
   stage: compile_project
+  variables:
+    GIT_STRATEGY: none
   script:
     - echo "======= !!!!! ======= **************** ======= !!!!! ======="
     - echo "======= !!!!! ======= **************** ======= !!!!! ======="
@@ -166,9 +178,10 @@ test_feature_e2e:
   <<: *template_dev
   <<: *template_test
   allow_failure: true
-  script:
+  before_script:
+    - export http_proxy=""
+    - export https_proxy=""
     - bash ./run/prod/make-configs-for-tests-mocks-off.sh
-    - ./vendor/bin/codecept run --fail-fast
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 # ====================================== END FEATURE ==============================
