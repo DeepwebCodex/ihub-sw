@@ -13,9 +13,9 @@ class WinRequest extends BaseRequest
     public function rules()
     {
         return array_merge(parent::rules(), [
-            'currency' => 'bail|sometimes|string',
+            'currency' => 'bail|required|string',
             'game' => 'bail|sometimes|string',
-            'player' => 'bail|sometimes|string',
+            'player' => 'bail|required|string',
             'amount' => 'bail|required|numeric',
             'date' => 'bail|required|numeric',
             'gameId' => 'bail|required|numeric',
