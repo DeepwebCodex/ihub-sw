@@ -106,12 +106,13 @@ class EndorphinaController extends BaseApiController
 
     public function win(WinRequest $request)
     {
-        $user = $this->prepareUser();
+        $service_id = $this->getOption('service_id');
+        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
             TransactionRequest::PROCEDURAL_OBJECT_ID,
             $user->id,
-            $user->getCurrency(),
+            $request->input('currency'),
             TransactionRequest::D_DEPOSIT,
             TransactionHelper::amountCentsToWhole($request->input('amount')),
             TransactionRequest::TRANS_WIN,
@@ -132,12 +133,13 @@ class EndorphinaController extends BaseApiController
 
     public function refund(RefundRequest $request)
     {
-        $user = $this->prepareUser();
+        $service_id = $this->getOption('service_id');
+        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'), 
             TransactionRequest::PROCEDURAL_OBJECT_ID, 
             $user->id, 
-            $user->getCurrency(), 
+            $request->input('currency'),
             TransactionRequest::D_DEPOSIT, 
             TransactionHelper::amountCentsToWhole($request->input('amount')), 
             TransactionRequest::TRANS_REFUND, 
