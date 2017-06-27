@@ -1,8 +1,9 @@
 <?php
-
 namespace App\Components\Integrations\Endorphina;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Request;
+use function app;
 
 /**
  * Description of Sign
@@ -17,7 +18,7 @@ class Sign
         if (isset($data['sign'])) {
             unset($data['sign']);
         }
-        $partnerId = app('GameSession')->get('partner_id') ?? null;
+        $partnerId = app('GameSession')->get('partner_id') ?? Request::route('partnerId');
         $salt = Config::get("integrations.endorphina.partners_config.{$partnerId}.salt");
 
         ksort($data);
@@ -25,5 +26,4 @@ class Sign
         $hash = sha1($str . $salt);
         return strtoupper($hash);
     }
-
 }
