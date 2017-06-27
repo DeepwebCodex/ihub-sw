@@ -1,6 +1,7 @@
 <?php
 namespace App\Components\Integrations\Endorphina;
 
+use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
 use function app;
@@ -18,7 +19,12 @@ class Sign
         if (isset($data['sign'])) {
             unset($data['sign']);
         }
-        $partnerId = app('GameSession')->get('partner_id') ?? Request::route('partnerId');
+        try {
+            $partnerId = app('GameSession')->get('partner_id');
+        } catch (Exception $ex) {
+            $partnerId = Request::route('partnerId');
+        }
+
         $salt = Config::get("integrations.endorphina.partners_config.{$partnerId}.salt");
 
         ksort($data);
