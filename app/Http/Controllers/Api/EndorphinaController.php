@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use function app;
 use function config;
+use Exception;
 
 class EndorphinaController extends BaseApiController
 {
