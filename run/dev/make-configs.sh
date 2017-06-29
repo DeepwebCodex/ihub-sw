@@ -59,7 +59,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^RABBITMQ_PREFIX=/RABBITMQ_PREFIX=\"\"/g" \
        -e "s/^RABBITMQ_MYSTERION_QUEUE=mysterion_transactions/RABBITMQ_MYSTERION_QUEUE=mysterion_transactions/g" \
         \
-       -e "s/^API_MYSTERION_IS_ENABLED=false/API_MYSTERION_IS_ENABLED=true/g" \
+       -e "s/^API_MYSTERION_IS_ENABLED=false/API_MYSTERION_IS_ENABLED=false/g" \
        -e "s/^API_MYSTERION_HOST=example.com/API_MYSTERION_HOST=10.141.11.54/g" \
        -e "s/^API_MYSTERION_PORT=6666/API_MYSTERION_PORT=5000/g" \
        -e "s/^API_MYSTERION_ACTION=action/API_MYSTERION_ACTION=endpoint\//g" \
