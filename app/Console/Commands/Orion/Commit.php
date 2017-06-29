@@ -1,19 +1,22 @@
 <?php
-
 namespace App\Console\Commands\Orion;
 
 use App\Components\ExternalServices\MicroGaming\Orion\SoapEmulator;
 use App\Components\Integrations\MicroGaming\Orion\CommitRollbackProcessor;
 use App\Components\Integrations\MicroGaming\Orion\Request\GetCommitQueueData;
+use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyCompleteGame;
 use App\Components\Integrations\MicroGaming\Orion\Request\ManuallyValidateBet;
 use App\Components\Integrations\MicroGaming\Orion\SourceProcessor;
-use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use App\Console\Commands\Orion\Operation;
 use App\Http\Requests\Validation\Orion\CommitValidation;
+use App\Http\Requests\Validation\Orion\ManualCompleteValidation;
 use App\Http\Requests\Validation\Orion\ManualValidation;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Console\Command;
 use function app;
 
-class Commit extends Command {
+class Commit extends Command
+{
 
     use Operation;
 
@@ -36,7 +39,8 @@ class Commit extends Command {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -45,15 +49,23 @@ class Commit extends Command {
      *
      * @return mixed
      */
-    public function handle() {
+    public function handle()
+    {
         $sourceProcessor = app(SourceProcessor::class);
         $soapEmul = app(SoapEmulator::class);
         $requestQueueData = new GetCommitQueueData($soapEmul, $sourceProcessor);
         $validatorQueueData = app(CommitValidation::class);
-        $requestResolveData = new ManuallyValidateBet($soapEmul, $sourceProcessor);
-        $validatorResolveData = app(ManualValidation::class);
+        $queueRequest = [
+            [
+                'requestResolveData' => new ManuallyValidateBet($soapEmul, $sourceProcessor),
+                'validatorResolveData' => app(ManualValidation::class)
+            ],
+            [
+                'requestResolveData' => new ManuallyCompleteGame($soapEmul, $sourceProcessor),
+                'validatorResolveData' => app(ManualCompleteValidation::class)
+            ]
+        ];
         $operationsProcessor = new CommitRollbackProcessor('CommitQueue', TransactionRequest::TRANS_WIN);
-        $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $requestResolveData, $validatorResolveData);
+        $this->make($requestQueueData, $validatorQueueData, $operationsProcessor, $queueRequest);
     }
-
 }
