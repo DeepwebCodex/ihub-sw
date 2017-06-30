@@ -29,12 +29,11 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
     {
 
         try {
+            app('GameSession')->start(strtolower($request->input('token', '')));
+        } catch (SessionDoesNotExist $e) {
             if ($this instanceof WinRequest || $this instanceof RefundRequest) {
                 return true;
-            } else {
-                app('GameSession')->start(strtolower($request->input('token', '')));
             }
-        } catch (SessionDoesNotExist $e) {
             return false;
         }
 
