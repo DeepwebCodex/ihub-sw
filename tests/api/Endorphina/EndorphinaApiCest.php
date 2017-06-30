@@ -20,11 +20,14 @@ class EndorphinaApiCest
 
     /** @var Params  */
     private $params;
+    private $partUrl;
 
     public function __construct()
     {
         $this->params = new Params('endorphina');
         $this->data = new TestData($this->params);
+        $this->partUrl = '/' . $this->params->partnerId . '/' . $this->params->cashdeskId;
+        //$this->partUrl = '';
     }
 
     public function _before(ApiTester $I)
@@ -35,7 +38,7 @@ class EndorphinaApiCest
 
     public function testMethodNotFound(ApiTester $I)
     {
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/unknownmethod/', []);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/unknownmethod/', []);
         $this->getResponseFail($I, 500, StatusCode::EXTERNAl_INTERNAL_ERROR);
     }
 
@@ -46,7 +49,7 @@ class EndorphinaApiCest
             ->mock($I);
 
         $packet = $this->data->getPacketSession();
-        $I->sendGET('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/session/', $packet);
+        $I->sendGET('/endorphina' . $this->partUrl . '/session/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('player', $data);
         $I->assertArrayHasKey('currency', $data);
@@ -62,7 +65,7 @@ class EndorphinaApiCest
             ->mock($I);
 
         $packet = $this->data->getPacketBalance();
-        $I->sendGET('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/balance/', $packet);
+        $I->sendGET('/endorphina' . $this->partUrl . '/balance/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertEquals($this->params->getBalanceInCents(), $data['balance']);
@@ -82,7 +85,7 @@ class EndorphinaApiCest
             ->mock($I);
 
         $packet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -109,11 +112,11 @@ class EndorphinaApiCest
             ->mock($I);
 
         $packet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $packet = $this->data->getPacketWin($win);
 
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/win/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/win/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
@@ -138,11 +141,11 @@ class EndorphinaApiCest
 
         // bet
         $packetBet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packetBet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packetBet);
 
         // win
         $packet = $this->data->getPacketWin(0);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/win/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/win/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
@@ -168,11 +171,11 @@ class EndorphinaApiCest
 
         // bet
         $packet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         // refund
         $packet = $this->data->getPacketRefund($packet['id'], $bet);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/refund/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/refund/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -197,7 +200,7 @@ class EndorphinaApiCest
             ->mock($I);
 
         $packet = $this->data->getPacketRefundWithoutBet();
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/refund/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/refund/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
@@ -222,11 +225,11 @@ class EndorphinaApiCest
 
         // refund
         $refundPacket = $this->data->getPacketRefundWithoutBet();
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/refund/', $refundPacket);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/refund/', $refundPacket);
 
         // bet
         $packet = $this->data->getPacketBet($bet, $refundPacket['id']);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -248,11 +251,11 @@ class EndorphinaApiCest
 
         // bet
         $packetBet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packetBet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packetBet);
 
         // bet
         $packet = $this->data->getPacketBet($bet, $packetBet['id']);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -276,7 +279,7 @@ class EndorphinaApiCest
 
         // bet
         $packetBet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packetBet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packetBet);
 
         // change transaction status to 'pending'
         $transaction = Transactions::where([
@@ -294,7 +297,7 @@ class EndorphinaApiCest
 
         // bet
         $packet = $this->data->getPacketBet($bet, $packetBet['id']);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -318,7 +321,7 @@ class EndorphinaApiCest
 
         // bet
         $packetBet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packetBet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packetBet);
 
         $transaction = Transactions::where([
                 'foreign_id' => $packetBet['id'],
@@ -335,7 +338,7 @@ class EndorphinaApiCest
             ->mock($I);
 
         $packet = $this->data->getPacketBet($bet, $packetBet['id']);
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -348,7 +351,7 @@ class EndorphinaApiCest
     {
         $packet = $this->data->getPacketBet();
         $packet['sign'] = md5('wrong');
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
         $this->getResponseFail($I, 401, StatusCode::EXTERNAl_ACCESS_DENIED);
     }
 
@@ -356,7 +359,7 @@ class EndorphinaApiCest
     {
         $packet = $this->data->getWrongPacketBet();
 
-        $I->sendPOST('/endorphina/' . $this->params->partnerId . '/' . $this->params->cashdeskId . '/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
         $this->getResponseFail($I, 500, StatusCode::EXTERNAl_INTERNAL_ERROR);
     }
 

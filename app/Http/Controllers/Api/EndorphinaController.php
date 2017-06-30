@@ -108,8 +108,12 @@ class EndorphinaController extends BaseApiController
     }
 
     //This operation can be offline
-    public function win(WinRequest $request, int $partnerId, int $cashdeskId)
+    public function win(WinRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
+        //for Backward compatibility
+        $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
+        $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
+
         $service_id = $this->getOption('service_id');
         $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
         $transactionRequest = new TransactionRequest(
@@ -136,8 +140,12 @@ class EndorphinaController extends BaseApiController
     }
 
     //This operation can be offline
-    public function refund(RefundRequest $request, int $partnerId, int $cashdeskId)
+    public function refund(RefundRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
+        //for Backward compatibility
+        $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
+        $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
+        
         $service_id = $this->getOption('service_id');
         $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
         $transactionRequest = new TransactionRequest(
