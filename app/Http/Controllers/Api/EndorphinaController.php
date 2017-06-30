@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Components\Formatters\EndorphinaApiFormatter;
 use App\Components\Integrations\Endorphina\CodeMapping;
-use App\Components\Integrations\Endorphina\Game;
 use App\Components\Integrations\Endorphina\StatusCode;
 use App\Components\Transactions\Strategies\Endorphina\Deposit;
 use App\Components\Transactions\Strategies\Endorphina\Refund;
@@ -23,8 +22,12 @@ use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use Illuminate\Support\Facades\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
+use function app;
+use function config;
+use Exception;
 
 class EndorphinaController extends BaseApiController
 {
@@ -104,22 +107,28 @@ class EndorphinaController extends BaseApiController
         ]);
     }
 
-    public function win(WinRequest $request)
+    //This operation can be offline
+    public function win(WinRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
-        $user = $this->prepareUser();
+        //for Backward compatibility
+        $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
+        $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
+
+        $service_id = $this->getOption('service_id');
+        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
             TransactionRequest::PROCEDURAL_OBJECT_ID,
             $user->id,
-            $user->getCurrency(),
+            $request->input('currency'),
             TransactionRequest::D_DEPOSIT,
             TransactionHelper::amountCentsToWhole($request->input('amount')),
             TransactionRequest::TRANS_WIN,
             $request->input('id'),
-            app('GameSession')->get('game_id'),
-            app('GameSession')->get('partner_id'),
-            app('GameSession')->get('cashdesk_id'),
-            app('GameSession')->get('userIp')
+            $request->input('game'),
+            $partnerId,
+            $cashdeskId,
+            $this->getIp()
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
@@ -130,22 +139,28 @@ class EndorphinaController extends BaseApiController
         ]);
     }
 
-    public function refund(RefundRequest $request)
+    //This operation can be offline
+    public function refund(RefundRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
-        $user = $this->prepareUser();
+        //for Backward compatibility
+        $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
+        $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
+        
+        $service_id = $this->getOption('service_id');
+        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'), 
             TransactionRequest::PROCEDURAL_OBJECT_ID, 
             $user->id, 
-            $user->getCurrency(), 
+            $request->input('currency'),
             TransactionRequest::D_DEPOSIT, 
             TransactionHelper::amountCentsToWhole($request->input('amount')), 
             TransactionRequest::TRANS_REFUND, 
             $request->input('id'), 
-            app('GameSession')->get('game_id'), 
-            app('GameSession')->get('partner_id'), 
-            app('GameSession')->get('cashdesk_id'), 
-            app('GameSession')->get('userIp')
+            $request->input('game'),
+            $partnerId,
+            $cashdeskId,
+            $this->getIp()
         );
 
         $transaction = new TransactionHandler($transactionRequest, $user);
@@ -155,5 +170,13 @@ class EndorphinaController extends BaseApiController
             'transactionId' => (string)$response->operation_id
         ]);
     }
-
+    
+    private function getIp(): string
+    {
+        try {
+            return app('GameSession')->get('userIp');
+        } catch (Exception $ex) {
+            return Request::ip();
+        }
+    }
 }
