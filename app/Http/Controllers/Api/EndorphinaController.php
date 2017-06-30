@@ -116,8 +116,8 @@ class EndorphinaController extends BaseApiController
         //for Backward compatibility
         $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
         $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
-        $currency = $request->input('currency', $user->getCurrency());
-        $gameId = $request->input('game', app('GameSession')->get('game_id'));
+        $currency = $request->input('currency') ?? $user->getCurrency();
+        $gameId = $request->input('game') ?? app('GameSession')->get('game_id');
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -150,8 +150,8 @@ class EndorphinaController extends BaseApiController
         //for Backward compatibility
         $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
         $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
-        $currency = $request->input('currency', $user->getCurrency());
-        $gameId = $request->input('game', app('GameSession')->get('game_id'));
+        $currency = $request->input('currency') ?? $user->getCurrency();
+        $gameId = $request->input('game') ?? app('GameSession')->get('game_id');
         
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'), 
