@@ -27,7 +27,7 @@ class EndorphinaApiCest
         $this->params = new Params('endorphina');
         $this->data = new TestData($this->params);
         $this->partUrl = '/' . $this->params->partnerId . '/' . $this->params->cashdeskId;
-        //$this->partUrl = '';
+        $this->partUrl = '';
     }
 
     public function _before(ApiTester $I)

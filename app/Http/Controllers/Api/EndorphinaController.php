@@ -110,27 +110,29 @@ class EndorphinaController extends BaseApiController
     //This operation can be offline
     public function win(WinRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
+        $service_id = $this->getOption('service_id');
+        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
+        
         //for Backward compatibility
         $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
         $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
+        $currency = $request->input('currency', $user->getCurrency());
+        $gameId = $request->input('game', app('GameSession')->get('game_id'));
 
-        $service_id = $this->getOption('service_id');
-        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
             TransactionRequest::PROCEDURAL_OBJECT_ID,
             $user->id,
-            $request->input('currency'),
+            $currency,
             TransactionRequest::D_DEPOSIT,
             TransactionHelper::amountCentsToWhole($request->input('amount')),
             TransactionRequest::TRANS_WIN,
             $request->input('id'),
-            $request->input('game'),
+            $gameId,
             $partnerId,
             $cashdeskId,
             $this->getIp()
         );
-
         $transaction = new TransactionHandler($transactionRequest, $user);
         $response = $transaction->handle(new Deposit());
         return $this->respondOk(Response::HTTP_OK, '', [
@@ -142,22 +144,25 @@ class EndorphinaController extends BaseApiController
     //This operation can be offline
     public function refund(RefundRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
+        $service_id = $this->getOption('service_id');
+        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
+        
         //for Backward compatibility
         $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
         $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
+        $currency = $request->input('currency', $user->getCurrency());
+        $gameId = $request->input('game', app('GameSession')->get('game_id'));
         
-        $service_id = $this->getOption('service_id');
-        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'), 
             TransactionRequest::PROCEDURAL_OBJECT_ID, 
             $user->id, 
-            $request->input('currency'),
+            $currency,
             TransactionRequest::D_DEPOSIT, 
             TransactionHelper::amountCentsToWhole($request->input('amount')), 
             TransactionRequest::TRANS_REFUND, 
             $request->input('id'), 
-            $request->input('game'),
+            $gameId,
             $partnerId,
             $cashdeskId,
             $this->getIp()
