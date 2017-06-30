@@ -22,7 +22,7 @@ class Sign
         try {
             $partnerId = app('GameSession')->get('partner_id');
         } catch (Exception $ex) {
-            $partnerId = Request::route('partnerId');
+            $partnerId = Request::route('partnerIdRouter');
         }
 
         $salt = Config::get("integrations.endorphina.partners_config.{$partnerId}.salt");
