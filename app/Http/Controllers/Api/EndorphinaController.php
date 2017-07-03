@@ -111,8 +111,9 @@ class EndorphinaController extends BaseApiController
     public function win(WinRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
         $service_id = $this->getOption('service_id');
-        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
-        
+        $userIdRaw = $request->input('player') ?? app('GameSession')->get('user_id');
+        $user = IntegrationUser::get((int) $userIdRaw, $service_id, 'endorphina');
+
         //for Backward compatibility
         $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
         $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
@@ -145,7 +146,8 @@ class EndorphinaController extends BaseApiController
     public function refund(RefundRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
         $service_id = $this->getOption('service_id');
-        $user = IntegrationUser::get((int) $request->input('player'), $service_id, 'endorphina');
+        $userIdRaw = $request->input('player') ?? app('GameSession')->get('user_id');
+        $user = IntegrationUser::get((int) $userIdRaw, $service_id, 'endorphina');
         
         //for Backward compatibility
         $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
