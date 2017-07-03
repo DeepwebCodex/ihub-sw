@@ -11,6 +11,7 @@ use App\Components\Integrations\BetGames\TransactionMap;
 use iHubGrid\ErrorHandler\Http\Controllers\Api\BaseApiController;
 use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
 use App\Components\Transactions\Strategies\BetGames\ProcessBetGames;
+use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
@@ -337,7 +338,15 @@ class BetGamesController extends BaseApiController
     private function responseOk(string $method, string $token, array $params = [], $prolong = true)
     {
         if($prolong) {
-            app('GameSession')->prolong($token);
+            try {
+                app('GameSession')->prolong($token);
+            } catch (SessionDoesNotExist $e) {
+                throw new ApiHttpException(403, null, [
+                    'code' => StatusCode::TOKEN,
+                    'method' => $method,
+                    'token' => $token,
+                ]);
+            }
         }
 
         $data = $this->prepareResponse($method, $token, $params);
