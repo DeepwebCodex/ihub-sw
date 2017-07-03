@@ -26,6 +26,32 @@ class CommitRollbackProcessor implements IOperationsProcessor
     protected $unlockType;
     protected $transType;
     protected $bar;
+    private $mapCurrency = [
+        'Armenian Dram' => 'AMD',
+        'Azerbaijanian Manat' => 'AZN',
+        'Belarussian Ruble' => 'BYR',
+        'British Pound' => 'GBP',
+        'Croatia Kuna' => 'HRK',
+        'Euro' => 'EUR',
+        'Georgian Lari' => 'GEL',
+        'Hungary Forint' => 'HUF',
+        'Indian Rupee' => 'INR',
+        'Japanese Yen' => 'JPY',
+        'Kazakhstan Tenge' => 'KZT',
+        'Moldovan Leu' => 'MDL',
+        'Nigerian Naira' => 'NGN',
+        'Norwegian Kroner' => 'NOK',
+        'Polish Zloty' => 'PLN',
+        'Romanian new leu' => 'RON',
+        'Russian Ruble' => 'RUB',
+        'Rwandan Franc' => 'RWF',
+        'Somoni' => 'TJS',
+        'Swedish Krona' => 'SEK',
+        'Turkish Lira' => 'TRY',
+        'Ugandan Shilling' => 'UGX',
+        'Ukranian Hryvnia' => 'UAH',
+        'US Dollar' => 'USD'
+    ];
 
     function __construct(string $unlockType, string $transType)
     {
@@ -92,9 +118,12 @@ class CommitRollbackProcessor implements IOperationsProcessor
 
     public function pushOperation(string $typeOperation, array $data, UserInterface $user): TransactionResponse
     {
-
+        $currency = array_get($this->mapCurrency, $data['a:TransactionCurrency']);
+        if (!$currency) {
+            throw new Exception('Cant find currency from currency map');
+        }
         $transactionRequest = new TransactionRequest(
-            Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $data['a:TransactionCurrency'], MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName']
+            Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $currency, MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName']
         );
 
         $transactionHandler = new TransactionHandler($transactionRequest, $user);
