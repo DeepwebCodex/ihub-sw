@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Requests\Validation;
 
 use App\Components\Integrations\Endorphina\CodeMapping;
@@ -17,7 +16,9 @@ class EndorphinaValidation
             return false;
         }
         $all = $request->all();
-
+        if ($request->has('game')) {
+            $all['game'] = urldecode($request->input('game'));
+        }
         unset($all['sign']);
 
 
@@ -38,5 +39,4 @@ class EndorphinaValidation
 
         return true;
     }
-
 }

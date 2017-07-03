@@ -1,5 +1,4 @@
 <?php
-
 namespace api\Endorphina;
 
 use ApiTester;
@@ -15,16 +14,20 @@ use function GuzzleHttp\json_decode;
 
 class EndorphinaApiCest
 {
+
     /** @var TestData  */
     private $data;
 
     /** @var Params  */
     private $params;
+    private $partUrl;
 
     public function __construct()
     {
         $this->params = new Params('endorphina');
         $this->data = new TestData($this->params);
+        $this->partUrl = '/' . $this->params->partnerId . '/' . $this->params->cashdeskId;
+        $this->partUrl = '';
     }
 
     public function _before(ApiTester $I)
@@ -35,7 +38,7 @@ class EndorphinaApiCest
 
     public function testMethodNotFound(ApiTester $I)
     {
-        $I->sendPOST('/endorphina/unknownmethod/', []);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/unknownmethod/', []);
         $this->getResponseFail($I, 500, StatusCode::EXTERNAl_INTERNAL_ERROR);
     }
 
@@ -46,7 +49,7 @@ class EndorphinaApiCest
             ->mock($I);
 
         $packet = $this->data->getPacketSession();
-        $I->sendGET('/endorphina/session/', $packet);
+        $I->sendGET('/endorphina' . $this->partUrl . '/session/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('player', $data);
         $I->assertArrayHasKey('currency', $data);
@@ -62,7 +65,7 @@ class EndorphinaApiCest
             ->mock($I);
 
         $packet = $this->data->getPacketBalance();
-        $I->sendGET('/endorphina/balance/', $packet);
+        $I->sendGET('/endorphina' . $this->partUrl . '/balance/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertEquals($this->params->getBalanceInCents(), $data['balance']);
@@ -78,11 +81,11 @@ class EndorphinaApiCest
         (new AccountManagerMock($this->params))
             ->userInfo()
             ->getFreeOperationId($objectId)
-            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
             ->mock($I);
 
         $packet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -104,16 +107,16 @@ class EndorphinaApiCest
         (new AccountManagerMock($this->params))
             ->userInfo()
             ->getFreeOperationId($objectId)
-            ->bet($objectId, $bet/100, $balance - $bet/100)
-            ->win($objectId, $win/100, $balance - $bet/100 + $win/100)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
+            ->win($objectId, $win / 100, $balance - $bet / 100 + $win / 100)
             ->mock($I);
 
         $packet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $packet = $this->data->getPacketWin($win);
 
-        $I->sendPOST('/endorphina/win/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/win/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
@@ -131,27 +134,26 @@ class EndorphinaApiCest
         $balanceInCents = $this->params->getBalanceInCents();
 
         (new AccountManagerMock($this->params))
-            ->userInfo(($balanceInCents - $bet)/100)
+            ->userInfo(($balanceInCents - $bet) / 100)
             ->getFreeOperationId($objectId)
-            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
             ->mock($I);
 
         // bet
         $packetBet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/bet/', $packetBet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packetBet);
 
         // win
         $packet = $this->data->getPacketWin(0);
-        $I->sendPOST('/endorphina/win/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/win/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
         $I->assertEquals($balanceInCents - $bet, $data['balance']);
         $I->assertGreaterThan(1, $data['transactionId']);
-        //TODO: it some reason, that DB hasn't record. Need explore and fix
-//        $this->isRecord($I, $packet['id'], TransactionRequest::TRANS_WIN);
+        //TODO: it some reason, that DB hasn't record. Need explore and fix. When you push zero transaction foreign-id will be generate random
+        //$this->isRecord($I, $packet['id'], TransactionRequest::TRANS_WIN);
     }
-
 
     public function testRefund(ApiTester $I)
     {
@@ -163,17 +165,17 @@ class EndorphinaApiCest
         (new AccountManagerMock($this->params))
             ->userInfo()
             ->getFreeOperationId($objectId)
-            ->bet($objectId, $bet/100, $balance - $bet/100)
-            ->win($objectId, $bet/100, $balance)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
+            ->win($objectId, $bet / 100, $balance)
             ->mock($I);
 
         // bet
         $packet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         // refund
         $packet = $this->data->getPacketRefund($packet['id'], $bet);
-        $I->sendPOST('/endorphina/refund/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/refund/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -194,11 +196,11 @@ class EndorphinaApiCest
         (new AccountManagerMock($this->params))
             ->userInfo()
             ->getFreeOperationId($objectId)
-            ->win($objectId, $bet/100, $balance)
+            ->win($objectId, $bet / 100, $balance)
             ->mock($I);
 
         $packet = $this->data->getPacketRefundWithoutBet();
-        $I->sendPOST('/endorphina/refund/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/refund/', $packet);
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
         $I->assertArrayHasKey('transactionId', $data);
@@ -217,17 +219,17 @@ class EndorphinaApiCest
         (new AccountManagerMock($this->params))
             ->userInfo()
             ->getFreeOperationId($objectId)
-            ->bet($objectId, $bet/100, $balance - $bet/100)
-            ->win($objectId, $bet/100, $balance)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
+            ->win($objectId, $bet / 100, $balance)
             ->mock($I);
 
         // refund
         $refundPacket = $this->data->getPacketRefundWithoutBet();
-        $I->sendPOST('/endorphina/refund/', $refundPacket);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/refund/', $refundPacket);
 
         // bet
         $packet = $this->data->getPacketBet($bet, $refundPacket['id']);
-        $I->sendPOST('/endorphina/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -242,18 +244,18 @@ class EndorphinaApiCest
         $balanceInCents = $this->params->getBalanceInCents();
 
         (new AccountManagerMock($this->params))
-            ->userInfo(($balanceInCents - $bet)/100)
+            ->userInfo(($balanceInCents - $bet) / 100)
             ->getFreeOperationId($objectId)
-            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
             ->mock($I);
 
         // bet
         $packetBet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/bet/', $packetBet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packetBet);
 
         // bet
         $packet = $this->data->getPacketBet($bet, $packetBet['id']);
-        $I->sendPOST('/endorphina/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -270,32 +272,32 @@ class EndorphinaApiCest
         $balanceInCents = $this->params->getBalanceInCents();
 
         (new AccountManagerMock($this->params))
-            ->userInfo(($balanceInCents - $bet)/100)
+            ->userInfo(($balanceInCents - $bet) / 100)
             ->getFreeOperationId($objectId)
-            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
             ->mock($I, false);
 
         // bet
         $packetBet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/bet/', $packetBet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packetBet);
 
         // change transaction status to 'pending'
         $transaction = Transactions::where([
-                    'foreign_id' => $packetBet['id'],
-                    'transaction_type' => TransactionRequest::TRANS_BET,
-                    'status' => TransactionRequest::STATUS_COMPLETED
-                ])->first();
+                'foreign_id' => $packetBet['id'],
+                'transaction_type' => TransactionRequest::TRANS_BET,
+                'status' => TransactionRequest::STATUS_COMPLETED
+            ])->first();
         $transaction->status = TransactionRequest::STATUS_PENDING;
         $transaction->save();
 
         (new AccountManagerMock($this->params))
-            ->userInfo(($balanceInCents - $bet)/100)
-            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->userInfo(($balanceInCents - $bet) / 100)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
             ->mock($I);
 
         // bet
         $packet = $this->data->getPacketBet($bet, $packetBet['id']);
-        $I->sendPOST('/endorphina/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -314,29 +316,29 @@ class EndorphinaApiCest
         (new AccountManagerMock($this->params))
             ->userInfo()
             ->getFreeOperationId($objectId)
-            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
             ->mock($I, false);
 
         // bet
         $packetBet = $this->data->getPacketBet($bet);
-        $I->sendPOST('/endorphina/bet/', $packetBet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packetBet);
 
         $transaction = Transactions::where([
-                    'foreign_id' => $packetBet['id'],
-                    'transaction_type' => TransactionRequest::TRANS_BET,
-                    'status' => TransactionRequest::STATUS_COMPLETED
-                ])->first();
+                'foreign_id' => $packetBet['id'],
+                'transaction_type' => TransactionRequest::TRANS_BET,
+                'status' => TransactionRequest::STATUS_COMPLETED
+            ])->first();
         $transaction->status = TransactionRequest::STATUS_PENDING;
         $transaction->save();
 
         // bet
         (new AccountManagerMock($this->params))
             ->userInfo()
-            ->bet($objectId, $bet/100, $balance - $bet/100)
+            ->bet($objectId, $bet / 100, $balance - $bet / 100)
             ->mock($I);
 
         $packet = $this->data->getPacketBet($bet, $packetBet['id']);
-        $I->sendPOST('/endorphina/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
 
         $data = $this->getResponseOk($I);
         $I->assertArrayHasKey('balance', $data);
@@ -344,23 +346,22 @@ class EndorphinaApiCest
         $I->assertEquals($balanceInCents - $bet, $data['balance']);
         $this->countRecord($I, $packetBet['id'], TransactionRequest::TRANS_BET, 1);
     }
-    
+
     public function testWrongSign(ApiTester $I)
     {
         $packet = $this->data->getPacketBet();
         $packet['sign'] = md5('wrong');
-        $I->sendPOST('/endorphina/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
         $this->getResponseFail($I, 401, StatusCode::EXTERNAl_ACCESS_DENIED);
     }
-    
+
     public function testWrongPacket(ApiTester $I)
     {
         $packet = $this->data->getWrongPacketBet();
 
-        $I->sendPOST('/endorphina/bet/', $packet);
+        $I->sendPOST('/endorphina' . $this->partUrl . '/bet/', $packet);
         $this->getResponseFail($I, 500, StatusCode::EXTERNAl_INTERNAL_ERROR);
     }
-
 
     private function getResponseOk(ApiTester $I)
     {
@@ -404,10 +405,10 @@ class EndorphinaApiCest
     {
         $I->expect('Can see record of transaction applied');
         $transactions = Transactions::where([
-            'foreign_id' => $transaction_id,
-            'transaction_type' => $method,
-            'status' => TransactionRequest::STATUS_COMPLETED
-        ])->count();
+                'foreign_id' => $transaction_id,
+                'transaction_type' => $method,
+                'status' => TransactionRequest::STATUS_COMPLETED
+            ])->count();
         $I->assertEquals($count, $transactions);
     }
 

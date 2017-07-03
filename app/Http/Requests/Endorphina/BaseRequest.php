@@ -1,16 +1,16 @@
 <?php
-
 namespace App\Http\Requests\Endorphina;
 
 use App\Components\Integrations\Endorphina\CodeMapping;
 use App\Components\Integrations\Endorphina\StatusCode;
-use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\ErrorHandler\Http\Requests\ApiRequest;
 use iHubGrid\ErrorHandler\Http\Requests\ApiValidationInterface;
 use iHubGrid\ErrorHandler\Http\Traits\MetaDataTrait;
+use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use Illuminate\Http\Request;
-
+use function app;
+use function array_get;
 
 class BaseRequest extends ApiRequest implements ApiValidationInterface
 {
@@ -31,6 +31,9 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
         try {
             app('GameSession')->start(strtolower($request->input('token', '')));
         } catch (SessionDoesNotExist $e) {
+            if ($this instanceof WinRequest || $this instanceof RefundRequest) {
+                return true;
+            }
             return false;
         }
 
@@ -57,9 +60,8 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
         $firstError = $this->getFirstError($errors);
 
         throw new ApiHttpException('500', array_get($firstError, 'message', 'Invalid input'), [
-    'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
+        'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
         ]
         );
     }
-
 }
