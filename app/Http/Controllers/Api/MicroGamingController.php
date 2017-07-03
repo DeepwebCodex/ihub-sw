@@ -103,8 +103,15 @@ class MicroGamingController extends BaseApiController
     {
         $user = IntegrationUser::get(app('GameSession')->get('user_id'), $this->getOption('service_id'), 'microgaming');
 
+        $transactionType = MicroGamingHelper::getTransactionType($request->input('methodcall.call.playtype'));
+
         $this->addMetaField('currency', $user->getCurrency());
 
+        if($transactionType === TransactionRequest::TRANS_BET) {
+            if(app('GameSession')->get('currency') !== $user->getCurrency()) {
+                throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
+            }
+        }
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -113,7 +120,7 @@ class MicroGamingController extends BaseApiController
             $user->getCurrency(),
             MicroGamingHelper::getTransactionDirection($request->input('methodcall.call.playtype')),
             TransactionHelper::amountCentsToWhole($request->input('methodcall.call.amount')),
-            MicroGamingHelper::getTransactionType($request->input('methodcall.call.playtype')),
+            $transactionType,
             $request->input('methodcall.call.actionid'),
             $request->input('methodcall.call.gamereference'),
             app('GameSession')->get('partner_id'),
