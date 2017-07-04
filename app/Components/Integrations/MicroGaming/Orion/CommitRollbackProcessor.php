@@ -71,10 +71,10 @@ class CommitRollbackProcessor implements IOperationsProcessor
             $user_id = (int) $value['a:LoginName'];
             if ($value['a:RowId']) {
                 $value['PreparedRowId'] = $value['a:RowId'];
-                $requestName = ManuallyValidateBet::REQUEST_NAME;
+                $requestName = ManuallyCompleteGame::REQUEST_NAME;
             } else {
                 $value['PreparedRowId'] = $value['a:RowIdLong'];
-                $requestName = ManuallyCompleteGame::REQUEST_NAME;
+                $requestName = ManuallyValidateBet::REQUEST_NAME;
             }
             try {
                 $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
