@@ -50,8 +50,7 @@ class CommitRollbackProcessor implements IOperationsProcessor
         'Turkish Lira' => 'TRY',
         'Ugandan Shilling' => 'UGX',
         'Ukranian Hryvnia' => 'UAH',
-        'US Dollar' => 'USD',
-        'UAH' => 'UAH'
+        'US Dollar' => 'USD'
     ];
 
     function __construct(string $unlockType, string $transType)
@@ -121,7 +120,12 @@ class CommitRollbackProcessor implements IOperationsProcessor
     {
         $currency = array_get($this->mapCurrency, $data['a:TransactionCurrency']);
         if (!$currency) {
-            throw new Exception('Cant find currency from currency map');
+            $key = array_search($data['a:TransactionCurrency'], $this->mapCurrency);
+            if ($key === false) {
+                throw new Exception('Cant find currency from currency map');
+            } else {
+                $currency = $data['a:TransactionCurrency'];
+            }
         }
         $transactionRequest = new TransactionRequest(
             Config::get('integrations.microgaming.service_id'), $data['a:TransactionNumber'], $user->id, $currency, MicroGamingHelper::getTransactionDirection($typeOperation), TransactionHelper::amountCentsToWhole($data['a:ChangeAmount']), MicroGamingHelper::getTransactionType($typeOperation), $data['a:MgsReferenceNumber'], $data['a:GameName']
