@@ -28,7 +28,7 @@ class OrionResolverTest extends Unit
     {
         $this->testUser = new TestUser(10);
         $this->testUser2 = new TestUser(660);
-        $this->data = new TestData(new \Testing\Accounting\Params('microgaming'));
+        $this->data = new TestData(new \Testing\Accounting\Params('microgaming'), $this->tester);
     }
 
     protected function _after()
@@ -40,32 +40,32 @@ class OrionResolverTest extends Unit
     /**
      * TODO: Account Manager is not mocked in any test. Please, fix me, Petroff!
      */
-    public function testPetroff_TODO()
-    {
-        throw new \PHPUnit_Framework_SkippedTestError();
-    }
-
-//    public function testCommitOne()
+//    public function testPetroff_TODO()
 //    {
-//        $testData[] = [
-//            'loginName' => $this->testUser->getUser()->id . $this->data->params->currency,
-//            'amount' => 111,
-//            'currency' => $this->data->currencyMg,
-//            'rowId' => $this->data->generateUniqId(),
-//            'transactionNumber' => $this->data->generateUniqId(),
-//            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
-//            'referenceNumber' => $this->data->generateUniqId()
-//        ];
-//        $obj = $this->data->init($testData);
-//
-//        $this->specify("Test correct commit", function() use($obj) {
-//            $response = $this->operation($obj);
-//            verify("Must be array", $response->finishedDataWin)->containsOnly('array');
-//            verify("Must be  count two", $response->finishedDataWin)->count(2);
-//            verify("Must be equls zeroe", $response->finishedDataWin[0]['isDuplicate'])->equals(0);
-//            verify("Resposne must be array", $response->dataResponse)->containsOnly('array');
-//        });
+//        throw new \PHPUnit_Framework_SkippedTestError();
 //    }
+
+    public function testCommitOne()
+    {
+        $testData[] = [
+            'loginName' => $this->testUser->getUser()->id . $this->data->params->currency,
+            'amount' => 111,
+            'currency' => $this->data->currencyMg,
+            'rowId' => $this->data->generateUniqId(),
+            'transactionNumber' => $this->data->generateUniqId(),
+            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->data->generateUniqId()
+        ];
+        $obj = $this->data->init($testData);
+
+        $this->specify("Test correct commit", function() use($obj) {
+            $response = $this->operation($obj);
+            verify("Must be array", $response->finishedDataWin)->containsOnly('array');
+            verify("Must be  count two", $response->finishedDataWin)->count(2);
+            verify("Must be equls zeroe", $response->finishedDataWin[0]['isDuplicate'])->equals(0);
+            verify("Resposne must be array", $response->dataResponse)->containsOnly('array');
+        });
+    }
 //
 //    public function testCommitDuplicate()
 //    {
@@ -217,19 +217,19 @@ class OrionResolverTest extends Unit
 //        });
 //    }
 //
-//    private function operation($obj)
-//    {
-//        $response = new stdClass();
-//        $response->data = $obj->source->getData();
-//        $obj->validatorData->validateBaseStructure($response->data);
-//        $elements = $obj->validatorData->getData($response->data);
-//        $response->finishedDataWin = $obj->operationsProcessor->make($elements);
-//        $packet = $response->finishedDataWin[$obj->requestResolveData::REQUEST_NAME] ?? [];
-//        if ($packet) {
-//            $response->dataResponse = $obj->requestResolveData->getData($packet);
-//            $obj->validationResolveData->validateBaseStructure($response->dataResponse);
-//            $response->finishedDataWin = $packet;
-//        }
-//        return $response;
-//    }
+    private function operation($obj)
+    {
+        $response = new stdClass();
+        $response->data = $obj->source->getData();
+        $obj->validatorData->validateBaseStructure($response->data);
+        $elements = $obj->validatorData->getData($response->data);
+        $response->finishedDataWin = $obj->operationsProcessor->make($elements);
+        $packet = $response->finishedDataWin[$obj->requestResolveData::REQUEST_NAME] ?? [];
+        if ($packet) {
+            $response->dataResponse = $obj->requestResolveData->getData($packet);
+            $obj->validationResolveData->validateBaseStructure($response->dataResponse);
+            $response->finishedDataWin = $packet;
+        }
+        return $response;
+    }
 }
