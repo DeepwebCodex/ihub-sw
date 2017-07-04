@@ -51,7 +51,8 @@ class OrionResolverTest extends Unit
 //            'loginName' => $this->testUser->getUser()->id . $this->data->params->currency,
 //            'amount' => 111,
 //            'currency' => $this->data->currencyMg,
-//            'rowId' => $this->data->generateUniqId(),
+//            'rowId' => 0,
+//            'rowIdLong' => $this->data->generateUniqId(),
 //            'transactionNumber' => $this->data->generateUniqId(),
 //            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
 //            'referenceNumber' => $this->data->generateUniqId()
@@ -71,7 +72,9 @@ class OrionResolverTest extends Unit
 //    {
 //        $testData[] = [
 //            'loginName' => $this->testUser->getUser()->id . $this->data->params->currency,
-//            'amount' => 111, 'currency' => $this->data->currencyMg, 'rowId' => $this->data->generateUniqId(),
+//            'amount' => 111, 'currency' => $this->data->currencyMg, 
+//            'rowId' => 0,
+//            'rowIdLong' => $this->data->generateUniqId(),
 //            'transactionNumber' => $this->data->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
 //            'referenceNumber' => $this->data->generateUniqId()
 //        ];
@@ -128,7 +131,9 @@ class OrionResolverTest extends Unit
 //    {
 //        $testData[] = [
 //            'loginName' => $this->testUser->getUser()->id . $this->data->params->currency,
-//            'amount' => 111, 'currency' => $this->data->currencyMg, 'rowId' => $this->data->generateUniqId(),
+//            'amount' => 111, 'currency' => $this->data->currencyMg, 
+//            'rowId' => 0,
+//            'rowIdLong' => $this->data->generateUniqId(),
 //            'transactionNumber' => $this->data->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
 //            'referenceNumber' => $this->data->generateUniqId()
 //        ];
@@ -147,7 +152,9 @@ class OrionResolverTest extends Unit
 //    {
 //        $testData[] = [
 //            'loginName' => $this->testUser->getUser()->id . $this->data->params->currency,
-//            'amount' => 111, 'currency' => $this->data->currencyMg, 'rowId' => $this->data->generateUniqId(),
+//            'amount' => 111, 'currency' => $this->data->currencyMg, 
+//            'rowId' => 0,
+//            'rowIdLong' => $this->data->generateUniqId(),
 //            'transactionNumber' => $this->data->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
 //            'referenceNumber' => $this->data->generateUniqId()
 //        ];
@@ -185,7 +192,9 @@ class OrionResolverTest extends Unit
 //    {
 //        $testData[] = [
 //            'loginName' => $this->testUser->getUser()->id . $this->data->params->currency,
-//            'amount' => 111, 'currency' => $this->data->currencyMg, 'rowId' => $this->data->generateUniqId(),
+//            'amount' => 111, 'currency' => $this->data->currencyMg, 
+//            'rowId' => 0,
+//            'rowIdLong' => $this->data->generateUniqId(),
 //            'transactionNumber' => $this->data->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
 //            'referenceNumber' => $this->data->generateUniqId()
 //        ];
@@ -204,7 +213,9 @@ class OrionResolverTest extends Unit
 //    {
 //        $testData[] = [
 //            'loginName' => $this->testUser->getUser()->id . $this->data->params->currency,
-//            'amount' => 111, 'currency' => $this->data->currencyMg, 'rowId' => $this->data->generateUniqId(),
+//            'amount' => 111, 'currency' => $this->data->currencyMg,
+//            'rowId' => 0,
+//            'rowIdLong' => $this->data->generateUniqId(),
 //            'transactionNumber' => $this->data->generateUniqId(), 'serverId' => Config::get('integrations.microgamingOrion.serverId'),
 //            'referenceNumber' => $this->data->generateUniqId()
 //        ];
