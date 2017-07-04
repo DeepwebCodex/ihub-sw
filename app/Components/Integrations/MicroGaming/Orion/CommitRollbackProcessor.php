@@ -50,7 +50,8 @@ class CommitRollbackProcessor implements IOperationsProcessor
         'Turkish Lira' => 'TRY',
         'Ugandan Shilling' => 'UGX',
         'Ukranian Hryvnia' => 'UAH',
-        'US Dollar' => 'USD'
+        'US Dollar' => 'USD',
+        'UAH' => 'UAH'
     ];
 
     function __construct(string $unlockType, string $transType)
