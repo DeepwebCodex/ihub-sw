@@ -66,6 +66,10 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^API_MYSTERION_SID=sid/API_MYSTERION_SID=ihub/g" \
        -e "s/^API_MYSTERION_SKEY=skey/API_MYSTERION_SKEY=HeuHG0mjZTLkrdW9M2EjPy8O6GutHS7zgWy9Z6r4maJCombZNBh2AuK1tkwbjNih/g" \
         \
+        -e "s/^FINANCE_SERVICE_ENABLED=false/FINANCE_SERVICE_ENABLED=false/g" \
+        -e "s/^FINANCE_SERVICE_HOST=example.com/FINANCE_SERVICE_HOST=\"http://de2ei01d.dev.favorit\"/g" \
+        -e "s/^FINANCE_SERVICE_PORT=6666/FINANCE_SERVICE_PORT=10009/g" \
+        \
        -e "s/^DYNAMIC_SCHEDULER_API_LOGIN=login/DYNAMIC_SCHEDULER_API_LOGIN=dynamic_scheduler_api_login/g" \
        -e "s/^DYNAMIC_SCHEDULER_API_PASSWORD=\"password\"/DYNAMIC_SCHEDULER_API_PASSWORD=\"gBEWPkx4yGDCZj0P\"/g" \
         \
