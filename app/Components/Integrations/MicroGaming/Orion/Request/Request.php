@@ -28,7 +28,8 @@ abstract class Request
         $this->prepare($data);
         $result = $this->client->sendRequest($this);
         $logRecord = [
-            'data' => var_export($result, true)
+            'data_out' => var_export($result, true),
+            'data_in' => $this->getBody()
         ];
 
         app('AppLog')->info(json_encode($logRecord), '', '', '', 'MicroGaming-Orion');
