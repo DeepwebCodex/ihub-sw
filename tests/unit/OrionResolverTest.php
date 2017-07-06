@@ -4,12 +4,14 @@ namespace unit;
 use App\Exceptions\Internal\Orion\CheckEmptyValidation;
 use Codeception\Specify;
 use Codeception\Test\Unit;
-use Helper\TestUser;
+use Exception;
 use Illuminate\Support\Facades\Config;
 use Nathanmac\Utilities\Parser\Exceptions\ParserException;
 use Orion\TestData;
-use Exception;
 use stdClass;
+use Testing\Accounting\Params;
+use UnitTester;
+use function verify;
 
 class OrionResolverTest extends Unit
 {
@@ -24,7 +26,7 @@ class OrionResolverTest extends Unit
 
     protected function _before()
     {
-        $this->data = new TestData(new \Testing\Accounting\Params('microgaming'), $this->tester);
+        $this->data = new TestData(new Params('microgaming'));
     }
 
     protected function _after()
@@ -48,7 +50,7 @@ class OrionResolverTest extends Unit
             'referenceNumber' => $this->data->generateUniqId()
         ];
         $obj = $this->data->init($testData);
-
+        $this->data->createAccountMock($obj->data, $this->tester, true);
         $this->specify("Test correct commit", function() use($obj) {
             $response = $this->operation($obj);
             verify("Must be array", $response->finishedDataWin)->containsOnly('array');
@@ -69,7 +71,7 @@ class OrionResolverTest extends Unit
             'referenceNumber' => $this->data->generateUniqId()
         ];
         $obj = $this->data->init($testData);
-
+        $this->data->createAccountMock($obj->data, $this->tester, true);
         $this->specify("Test correct commit", function() use($obj) {
             $this->operation($obj);
             $response = $this->operation($obj);
@@ -128,7 +130,7 @@ class OrionResolverTest extends Unit
             'referenceNumber' => $this->data->generateUniqId()
         ];
         $obj = $this->data->initRollback($testData);
-
+        $this->data->createAccountMock($obj->data, $this->tester, true);
         $this->specify("Test correct rollback", function() use($obj) {
             $response = $this->operation($obj);
             verify("Must be array", $response->finishedDataWin)->containsOnly('array');
@@ -138,7 +140,7 @@ class OrionResolverTest extends Unit
         });
     }
 
-    private function testRollbackDuplicate()
+    public function testRollbackDuplicate()
     {
         $testData[] = [
             'loginName' => $this->data->params->userId . $this->data->params->currency,
@@ -149,7 +151,7 @@ class OrionResolverTest extends Unit
             'referenceNumber' => $this->data->generateUniqId()
         ];
         $obj = $this->data->initRollback($testData);
-
+        $this->data->createAccountMock($obj->data, $this->tester, true);
         $this->specify("Test correct duplicate rollback", function() use($obj) {
             $response = $this->operation($obj);
             verify("Must be array", $response->finishedDataWin)->containsOnly('array');
@@ -166,7 +168,7 @@ class OrionResolverTest extends Unit
 
     // test EndGame
 
-    private function testEndGame()
+    public function testEndGame()
     {
         $obj = $this->data->initEndGame();
 
@@ -178,7 +180,7 @@ class OrionResolverTest extends Unit
         });
     }
 
-    private function testRollbackWithoutBet()
+    public function testRollbackWithoutBet()
     {
         $testData[] = [
             'loginName' => $this->data->params->userId . $this->data->params->currency,
@@ -189,7 +191,6 @@ class OrionResolverTest extends Unit
             'referenceNumber' => $this->data->generateUniqId()
         ];
         $obj = $this->data->initRollbackWithoutBet($testData);
-
         $this->specify("Test correct rollback", function() use($obj) {
             $response = $this->operation($obj);
             verify("Must be array", $response->finishedDataWin)->containsOnly('array');
@@ -199,7 +200,7 @@ class OrionResolverTest extends Unit
         });
     }
 
-    private function testCommitWithoutBet()
+    public function testCommitWithoutBet()
     {
         $testData[] = [
             'loginName' => $this->data->params->userId . $this->data->params->currency,
