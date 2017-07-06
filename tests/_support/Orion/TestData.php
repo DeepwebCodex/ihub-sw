@@ -51,14 +51,12 @@ class TestData extends Unit
      */
     protected $tester;
 
-    /** @var Helper */
-    private $helper;
+
 
     public function __construct(Params $params, UnitTester $tester)
     {
         $this->params = $params;
         $this->currencyMg = 'Euro';
-        $this->helper = new Helper($this->params);
         $this->tester = $tester;
     }
 
@@ -256,9 +254,10 @@ class TestData extends Unit
     private function createAccountMock(array $data, bool $withBet = false)
     {
         $accountManagerMock = new AccountManagerMock($this->params);
+        $helper = new Helper($this->params);
         foreach ($data as $value) {
             $balance = $this->params->getBalance();
-            $objectId = $this->helper->getPreparedObjectId($value['a:TransactionNumber']);
+            $objectId = $helper->getPreparedObjectId($value['a:TransactionNumber']);
             $accountManagerMock->userInfo()
                 ->win($objectId, $value['a:ChangeAmount'] / 100, $balance - $value['a:ChangeAmount'] / 100 + $value['a:ChangeAmount'] / 100)
                 ->mock($this->tester);
