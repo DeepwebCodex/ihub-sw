@@ -15,12 +15,14 @@ class OrionResolverCest
 
     function __construct()
     {
-        $this->params = new Params();
+        $this->params = new Params('microgaming');
         $this->testData = new TestData($this->params);
     }
 
     public function testCommandCommit(ApiTester $I)
     {
+        $data = $this->testData->initCommit($I);
+        $this->testData->createAccountMock($data, $I, true);
         Artisan::call('orion:commit');
         $output = Artisan::output();
         $I->assertContains('Success.', trim($output));
@@ -28,6 +30,8 @@ class OrionResolverCest
 
     public function testCommandRollback(ApiTester $I)
     {
+        $data = $this->testData->initRollbackApi($I);
+        $this->testData->createAccountMock($data, $I, true);
         Artisan::call('orion:rollback');
         $output = Artisan::output();
         $I->assertContains('Success.', trim($output));
@@ -35,6 +39,7 @@ class OrionResolverCest
 
     public function testCommandEndGame(ApiTester $I)
     {
+        $data = $this->testData->initEndGameApi($I);
         Artisan::call('orion:endgame');
         $output = Artisan::output();
         $I->assertContains('Success.', trim($output));

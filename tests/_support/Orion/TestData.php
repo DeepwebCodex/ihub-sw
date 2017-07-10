@@ -244,7 +244,7 @@ class TestData extends Unit
         return Array2Xml::createXML('s:Envelope', $data)->saveXML();
     }
 
-    public function createAccountMock(array $data, UnitTester $tester, bool $withBet = false)
+    public function createAccountMock(array $data, $tester, bool $withBet = false)
     {
         $accountManagerMock = new AccountManagerMock($this->params);
         $helper = new Helper($this->params);
@@ -507,6 +507,65 @@ the same binding (including security requirements, e.g. Message, Transport, None
         $mock = Mockery::mock($className);
         $mock->shouldReceive('sendRequest')->withArgs([GetCommitQueueData::class])->andReturn($xml);
         $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
+        $I->getApplication()->instance($className, $mock);
+        $I->haveInstance($className, $mock);
+    }
+
+    public function initCommit(ApiTester $I)
+    {
+        $testData[] = [
+            'loginName' => $this->params->userId . $this->params->currency,
+            'amount' => 111,
+            'currency' => $this->currencyMg,
+            'rowId' => 0,
+            'rowIdLong' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(),
+            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $data = $this->createData($testData, 2, true);
+        $xmlMock = $this->createXml($data, 'commit');
+        $xmlMockB = $this->generatedXmlManualBet($xmlMock);
+        $className = SoapEmulator::class;
+        $mock = Mockery::mock($className);
+        $mock->shouldReceive('sendRequest')->withArgs([GetCommitQueueData::class])->andReturn($xmlMock);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
+        $I->getApplication()->instance($className, $mock);
+        $I->haveInstance($className, $mock);
+        return $data;
+    }
+
+    public function initRollbackApi(ApiTester $I)
+    {
+        $testData[] = [
+            'loginName' => $this->params->userId . $this->params->currency,
+            'amount' => 111,
+            'currency' => $this->currencyMg,
+            'rowId' => 0,
+            'rowIdLong' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(),
+            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $data = $this->createData($testData, 2, true);
+        $xmlMock = $this->createXml($data, 'rollback');
+        $xmlMockB = $this->generatedXmlManualBet($xmlMock);
+        $className = SoapEmulator::class;
+        $mock = Mockery::mock($className);
+        $mock->shouldReceive('sendRequest')->withArgs([GetRollbackQueueData::class])->andReturn($xmlMock);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
+        $I->getApplication()->instance($className, $mock);
+        $I->haveInstance($className, $mock);
+        return $data;
+    }
+
+    public function initEndGameApi(ApiTester $I)
+    {
+         $xml = $this->createXmlEndGame();
+        $className = SoapEmulator::class;
+        $mock = Mockery::mock($className);
+        $mock->shouldReceive('sendRequest')->withArgs([GetFailedEndGameQueue::class])->andReturn($xml->qEndGameData);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyCompleteGame::class])->andReturn($xml->qManualCompleteData);
         $I->getApplication()->instance($className, $mock);
         $I->haveInstance($className, $mock);
     }
