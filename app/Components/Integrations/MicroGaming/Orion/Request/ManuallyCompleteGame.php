@@ -15,7 +15,7 @@ class ManuallyCompleteGame extends Request
         $dataValidateComplete = array();
         foreach ($data as $value) {
             $dataValidateComplete['ori:CompleteGameRequest'] [] = [
-                'ori:RowIdLong' => $value['PreparedRowId'],
+                $value['PreparedRowId']['name'] => $value['PreparedRowId']['value'],
                 'ori:ServerId' => Config::get('integrations.microgamingOrion.serverId'),
             ];
         }

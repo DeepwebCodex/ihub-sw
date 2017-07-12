@@ -470,7 +470,7 @@ the same binding (including security requirements, e.g. Message, Transport, None
         $className = SoapEmulator::class;
         $mock = Mockery::mock($className);
         $mock->shouldReceive('sendRequest')->withArgs([GetCommitQueueData::class])->andReturn($xml);
-        $mock->shouldReceive('sendRequest')->withArgs([ManuallyCompleteGame::class])->andReturn($xmlEndGame->qManualCompleteData);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
         $I->getApplication()->instance($className, $mock);
         $I->haveInstance($className, $mock);
     }

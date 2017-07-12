@@ -20,7 +20,7 @@ class ManuallyValidateBet extends Request
                 'ori:ServerId' => Config::get('integrations.microgamingOrion.serverId'),
                 'ori:UnlockType' => $value['unlockType'],
                 'ori:UserId' => $value['a:UserId'],
-                'ori:RowId' => $value['PreparedRowId']
+                $value['PreparedRowId']['name'] => $value['PreparedRowId']['value']
             ];
             $dataValidateBet['ori:ValidteBetRequest'] [] = $tmp;
         }
