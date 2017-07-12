@@ -69,13 +69,21 @@ class CommitRollbackProcessor implements IOperationsProcessor
         $dataRes = array();
         foreach ($data as $value) {
             $user_id = (int) $value['a:LoginName'];
-            if ($value['a:RowId']) {
-                $value['PreparedRowId'] = $value['a:RowId'];
-                $requestName = ManuallyCompleteGame::REQUEST_NAME;
-            } else {
-                $value['PreparedRowId'] = $value['a:RowIdLong'];
-                $requestName = ManuallyValidateBet::REQUEST_NAME;
-            }
+
+                if ($value['a:RowId'] && Row::is32bitSignedInt($value['a:RowId'])) {
+                    $value['PreparedRowId'] = [
+                        'name' => 'ori:RowId',
+                        'value' => $value['a:RowId']
+                    ];
+                    $requestName = ManuallyValidateBet::REQUEST_NAME;
+                } else {
+                    $value['PreparedRowId'] = [
+                        'name' => 'ori:RowIdLong',
+                        'value' => $value['a:RowIdLong']
+                    ];
+                    $requestName = ManuallyValidateBet::REQUEST_NAME;
+                }
+ 
             try {
                 $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
                 $response = $this->pushOperation($this->transType, $value, $user);

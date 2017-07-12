@@ -20,7 +20,19 @@ class CompleteGameProcessor implements IOperationsProcessor
             if ($this->bar) {
                 $this->bar->advance();
             }
-            $value['PreparedRowId'] = $value['a:RowId'];
+
+            if (Row::is32bitSignedInt($value['a:RowId'])) {
+                $value['PreparedRowId'] = [
+                    'name' => 'ori:RowId',
+                    'value' => $value['a:RowId']
+                ];
+            } else {
+                $value['PreparedRowId'] = [
+                    'name' => 'ori:RowIdLong',
+                    'value' => $value['a:RowId']
+                ];
+            }
+
             $dataReturn[ManuallyCompleteGame::REQUEST_NAME][] = $value;
         }
         return $dataReturn;
