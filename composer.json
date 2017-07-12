@@ -39,8 +39,8 @@
         "ihub-grid/packages/dynamic-scheduler": "1.*",
         "ihub-grid/packages/accounting": "1.*",
         "ihub-grid/packages/error-handler": "1.*",
-        "ihub-grid/packages/seamless-wallet-core": "dev-ihub-624-game-sessions-review as 1.1.2",
-        "ihub-grid/packages/seamless-wallets/euro-games-tech": "dev-ihub-624-game-sessions-review as 1.0.3"
+        "ihub-grid/packages/seamless-wallet-core": "1.*",
+        "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
