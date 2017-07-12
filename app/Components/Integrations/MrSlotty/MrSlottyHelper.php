@@ -37,8 +37,8 @@ class MrSlottyHelper
     /**
      * @param int $bet
      * @param int $win
-     * @param int $bet_transaction
-     * @param int $win_transaction
+     * @param string $bet_transaction
+     * @param string $win_transaction
      * @param array $transactions
      * @return array
      */
@@ -50,15 +50,12 @@ class MrSlottyHelper
             'type' => TransactionRequest::TRANS_BET,
             'direction' => TransactionRequest::D_WITHDRAWAL
         ]);
-
-        if($win > 0) {
-            array_push($transactions, [
-                'amount' => $win,
-                'transaction_id' => $win_transaction,
-                'type' => TransactionRequest::TRANS_WIN,
-                'direction' => TransactionRequest::D_DEPOSIT
-            ]);
-        }
+        array_push($transactions, [
+            'amount' => $win,
+            'transaction_id' => $win_transaction,
+            'type' => TransactionRequest::TRANS_WIN,
+            'direction' => TransactionRequest::D_DEPOSIT
+        ]);
 
         return $transactions;
     }
