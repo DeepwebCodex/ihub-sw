@@ -48,8 +48,11 @@ class EndorphinaController extends BaseApiController
     private function prepareUser(): IntegrationUser
     {
         $service_id = $this->getOption('service_id');
+
         $user = IntegrationUser::get((int)app('GameSession')->get('user_id'), $service_id, 'endorphina');
+
         EndorphinaValidation::checkCurrency($user->getCurrency(), app('GameSession')->get('currency'));
+
         return $user;
     }
 
@@ -66,6 +69,7 @@ class EndorphinaController extends BaseApiController
     public function session(BaseRequest $request)
     {
         $user = $this->prepareUser();
+
         return $this->respondOk(Response::HTTP_OK, '', [
             'player' => (string)$user->id,
             'currency' => $user->getCurrency(),
@@ -76,6 +80,7 @@ class EndorphinaController extends BaseApiController
     public function balance(BalanceRequest $request)
     {
         $user = $this->prepareUser();
+
         return $this->respondOk(Response::HTTP_OK, '', [
             'balance' => $user->getBalanceInCents(),
         ]);
@@ -110,13 +115,16 @@ class EndorphinaController extends BaseApiController
     //This operation can be offline
     public function win(WinRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
+        $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
+        $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
+
+        app('AccountManager')->selectAccounting($partnerId, $cashdeskId);
+
         $service_id = $this->getOption('service_id');
         $userIdRaw = $request->input('player') ?? app('GameSession')->get('user_id');
         $user = IntegrationUser::get((int) $userIdRaw, $service_id, 'endorphina');
 
         //for Backward compatibility
-        $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
-        $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
         $currency = $request->input('currency') ?? $user->getCurrency();
         $gameId = $request->input('game') ?? app('GameSession')->get('game_id');
 
@@ -145,13 +153,16 @@ class EndorphinaController extends BaseApiController
     //This operation can be offline
     public function refund(RefundRequest $request, int $partnerIdRouter = null, int $cashdeskIdRouter = null)
     {
+        $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
+        $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
+
+        app('AccountManager')->selectAccounting($partnerId, $cashdeskId);
+
         $service_id = $this->getOption('service_id');
         $userIdRaw = $request->input('player') ?? app('GameSession')->get('user_id');
         $user = IntegrationUser::get((int) $userIdRaw, $service_id, 'endorphina');
         
         //for Backward compatibility
-        $partnerId = $partnerIdRouter ?? app('GameSession')->get('partner_id');
-        $cashdeskId = $cashdeskIdRouter ?? app('GameSession')->get('cashdesk_id');
         $currency = $request->input('currency') ?? $user->getCurrency();
         $gameId = $request->input('game') ?? app('GameSession')->get('game_id');
         

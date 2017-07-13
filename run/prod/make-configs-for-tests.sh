@@ -32,16 +32,6 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
         \
        -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
        -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
-       -e "s/^API_ACCOUNT_ROH_HOST_59__59=example.com/API_ACCOUNT_ROH_HOST_59__59=de2cs01d.dev.favorit/g" \
-       -e "s/^API_ACCOUNT_ROH_PORT_59__59=6666/API_ACCOUNT_ROH_PORT_59__59=10007/g" \
-       -e "s/^API_ACCOUNT_SESSION_HOST=example.com/API_ACCOUNT_SESSION_HOST=e-proxy.dev/g" \
-       -e "s/^API_ACCOUNT_SESSION_PORT=6666/API_ACCOUNT_SESSION_PORT=8061/g" \
-       -e "s/^API_ACCOUNT_OP_HOST=example.com/API_ACCOUNT_OP_HOST=e-proxy.dev/g" \
-       -e "s/^API_ACCOUNT_OP_PORT=6666/API_ACCOUNT_OP_PORT=8008/g" \
-       -e "s/^API_CARDS_ROH_HOST=example.com/API_CARDS_ROH_HOST=e-proxy.dev/g" \
-       -e "s/^API_CARDS_ROH_PORT=6666/API_CARDS_ROH_PORT=7767/g" \
-       -e "s/^API_CASH_DESK_ROH_HOST=example.com/API_CASH_DESK_ROH_HOST=e-proxy.dev/g" \
-       -e "s/^API_CASH_DESK_ROH_PORT=6666/API_CASH_DESK_ROH_PORT=7767/g" \
         \
        -e "s/^API_HAZLE_SESSIONS=\"example1.com:6666;example.com2:6666\"/API_HAZLE_SESSIONS=\"de2ef01d.dev.favorit:5701;de2ef03d.dev.favorit:5701\"/g" \
         \

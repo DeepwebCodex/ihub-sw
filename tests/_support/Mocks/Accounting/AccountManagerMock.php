@@ -20,6 +20,8 @@ class AccountManagerMock
     {
         $this->params = $params;
         $this->mock = $this->getMock();
+
+        $this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
     }
 
     const SERVICE_IDS = [

@@ -47,6 +47,10 @@ class MrSlottyController extends BaseApiController
 
     public function balance(BalanceRequest $request)
     {
+        parse_str($request->input('extra'), $userParams);
+
+        app('AccountManager')->selectAccounting(array_get($userParams, 'partner_id'), array_get($userParams, 'cashdesk_id'));
+
         $user = IntegrationUser::get($request->input('player_id'), $this->getOption('service_id'), 'MrSlotty');
 
         $this->checkCurrency($user->getCurrency(), $request->input('currency'));
@@ -59,11 +63,13 @@ class MrSlottyController extends BaseApiController
 
     public function bet(BetRequest $request)
     {
+        parse_str($request->input('extra'), $userParams);
+
+        app('AccountManager')->selectAccounting(array_get($userParams, 'partner_id'), array_get($userParams, 'cashdesk_id'));
+
         $user = IntegrationUser::get($request->input('player_id'), $this->getOption('service_id'), 'MrSlotty');
 
         $this->checkCurrency($user->getCurrency(), $request->input('currency'));
-
-        parse_str($request->input('extra'), $userParams);
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -92,11 +98,13 @@ class MrSlottyController extends BaseApiController
 
     public function win(WinRequest $request)
     {
+        parse_str($request->input('extra'), $userParams);
+
+        app('AccountManager')->selectAccounting(array_get($userParams, 'partner_id'), array_get($userParams, 'cashdesk_id'));
+
         $user = IntegrationUser::get($request->input('player_id'), $this->getOption('service_id'), 'MrSlotty');
 
         $this->checkCurrency($user->getCurrency(), $request->input('currency'));
-
-        parse_str($request->input('extra'), $userParams);
 
         $transactionRequest = new TransactionRequest(
             $this->getOption('service_id'),
@@ -125,11 +133,13 @@ class MrSlottyController extends BaseApiController
 
     public function betWin(BetWinRequest $request)
     {
+        parse_str($request->input('extra'), $userParams);
+
+        app('AccountManager')->selectAccounting(array_get($userParams, 'partner_id'), array_get($userParams, 'cashdesk_id'));
+
         $user = IntegrationUser::get($request->input('player_id'), $this->getOption('service_id'), 'MrSlotty');
 
         $this->checkCurrency($user->getCurrency(), $request->input('currency'));
-
-        parse_str($request->input('extra'), $userParams);
 
         $transactions = MrSlottyHelper::getTransactions(
             $request->input('amount'),

@@ -97,7 +97,6 @@ class NetEntertainmentController extends FundistController
     public function win(WinRequest $request)
     {
         $serviceId = $this->getOption('service_id');
-        $user = IntegrationUser::get($request->input('userId'), $serviceId, $this->integration);
 
         $gameId = $this->getObjectId($request->input($this->objectIdKey));
         $betObjectId = NetEntertainmentObjectIdMap::findObjectIdByGameId($gameId);
@@ -110,7 +109,7 @@ class NetEntertainmentController extends FundistController
         }
         $betTransaction = Transactions::getBetTransaction(
             $serviceId,
-            $user->id,
+            $request->input('userId'),
             $betObjectId
         );
         if (!$betTransaction) {
@@ -120,9 +119,12 @@ class NetEntertainmentController extends FundistController
                 CodeMapping::getByErrorCode(StatusCode::BAD_OPERATION_ORDER)
             );
         }
-        if ($betTransaction->user_id != $user->id
-            || $betTransaction->currency != $request->input('currency')
-        ) {
+
+        app('AccountManager')->selectAccounting($betTransaction->partner_id, $betTransaction->cashdesk);
+        $user = IntegrationUser::get($request->input('userId'), $serviceId, $this->integration);
+
+
+        if ($betTransaction->user_id != $user->id || $betTransaction->currency != $request->input('currency')) {
             throw new ApiHttpException(Response::HTTP_OK, null, [
                 'code' => StatusCode::TRANSACTION_MISMATCH,
             ]);

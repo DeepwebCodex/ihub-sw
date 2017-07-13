@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Endorphina;
 
 use App\Components\Integrations\Endorphina\CodeMapping;
@@ -27,7 +28,6 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
      */
     public function authorize(Request $request)
     {
-
         try {
             app('GameSession')->start(strtolower($request->input('token', '')));
         } catch (SessionDoesNotExist $e) {
@@ -38,6 +38,8 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
         }
 
         $userId = app('GameSession')->get('user_id');
+
+        app('AccountManager')->selectAccounting(app('GameSession')->get('partner_id'), app('GameSession')->get('cashdesk_id'));
 
         return ($userId) ? true : false;
     }
@@ -60,8 +62,8 @@ class BaseRequest extends ApiRequest implements ApiValidationInterface
         $firstError = $this->getFirstError($errors);
 
         throw new ApiHttpException('500', array_get($firstError, 'message', 'Invalid input'), [
-        'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
-        ]
+                'code' => array_get($firstError, 'code', StatusCode::SERVER_ERROR)
+            ]
         );
     }
 }

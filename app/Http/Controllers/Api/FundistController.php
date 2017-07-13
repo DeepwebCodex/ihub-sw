@@ -81,6 +81,8 @@ abstract class FundistController extends BaseApiController
     {
         $apiMethod = new ApiMethod($request->input('type'));
         if (!$apiMethod->isOffline()) {
+            app('AccountManager')->selectAccounting(app('GameSession')->get('partner_id'), app('GameSession')->get('cashdesk_id'));
+
             $this->userId = app('GameSession')->get('user_id');
             $this->partnerId = app('GameSession')->get('partner_id');
             $this->cashdeskId = app('GameSession')->get('cashdesk_id');
@@ -144,11 +146,10 @@ abstract class FundistController extends BaseApiController
     public function win(WinRequest $request)
     {
         $service_id = $this->getOption('service_id');
-        $user = IntegrationUser::get($request->input('userId'), $service_id, $this->integration);
 
         $betTransaction = Transactions::getBetTransaction(
             $this->getOption('service_id'),
-            $user->id,
+            $request->input('userId'),
             $this->getObjectId($request->input($this->objectIdKey))
         );
         if (is_null($betTransaction)) {
@@ -157,9 +158,10 @@ abstract class FundistController extends BaseApiController
             ]);
         }
 
-        if ($betTransaction->user_id != $user->id
-            || $betTransaction->currency != $request->input('currency')
-        ) {
+        app('AccountManager')->selectAccounting($betTransaction->partner_id, $betTransaction->cashdesk);
+        $user = IntegrationUser::get($request->input('userId'), $service_id, $this->integration);
+
+        if ($betTransaction->user_id != $user->id || $betTransaction->currency != $request->input('currency')) {
             throw new ApiHttpException(Response::HTTP_OK, null, [
                 'code' => StatusCode::TRANSACTION_MISMATCH,
             ]);
