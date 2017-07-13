@@ -24,14 +24,18 @@ use Codeception\Test\Unit;
 use Exception;
 use Helper\TestUser;
 use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\ErrorHandler\ThirdParty\Array2Xml;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHandler;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionHelper;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Support\Facades\Config;
+use MicroGaming\Helper;
 use Mockery;
 use stdClass;
+use Testing\Accounting\AccountManagerMock;
 use Testing\Accounting\Params;
+use UnitTester;
 use function env;
 
 class TestData extends Unit
@@ -44,218 +48,12 @@ class TestData extends Unit
 
     public function __construct(Params $params)
     {
+        parent::__construct();
         $this->params = $params;
         $this->currencyMg = 'Euro';
     }
 
-    public function generatedXmlManualBet($xml)
-    {
-        $data = [
-            '@attributes' => [
-                'xmlns:s' => 'http://schemas.xmlsoap.org/soap/envelope/',
-            ],
-            's:Body' => [
-                'ManuallyValidateBetResponse' => [
-                    '@attributes' => [
-                        'xmlns' => 'http://mgsops.net/AdminAPI_Admin'
-                    ],
-                    'ManuallyValidateBetResult' => true
-                ]
-            ]
-        ];
-        return Array2Xml::createXML('s:Envelope', $data)->saveXML();
-    }
-
-    public function generatedXml($userArray, $type, $count = 1, $modify = false, $makeBet = false)
-    {
-        $tmpArray = array();
-        foreach ($userArray as $key => $value) {
-            for ($i = 0; $i < $count; $i++) {
-                extract($value);
-                if ($modify) {
-                    $transactionNumber = $transactionNumber + 1;
-                    $referenceNumber = $referenceNumber + 2;
-                }
-                if (isset($loginName)) {
-                    $tmpArray[] = [
-                        'a:LoginName' => $loginName,
-                        'a:UserId' => $this->generateUniqId(),
-                        'a:ChangeAmount' => $amount,
-                        'a:TransactionCurrency' => $currency,
-                        'a:Status' => 'Unknown',
-                        'a:RowId' => $rowId,
-                        'a:TransactionNumber' => $transactionNumber,
-                        'a:GameName' => 'MGS_TombRaider',
-                        'a:DateCreated' => Carbon::now('UTC')->format('Y/m/d H:i:s.000'),
-                        'a:MgsReferenceNumber' => $referenceNumber,
-                        'a:ServerId' => $serverId,
-                        'a:MgsPayoutReferenceNumber' => $referenceNumber,
-                        'a:PayoutAmount' => $amount,
-                        'a:ProgressiveWin' => false,
-                        'a:ProgressiveWinDesc' => '',
-                        'a:FreeGameOfferName' => '',
-                        'a:TournamentId' => 0,
-                        'a:Description' => '',
-                        'a:ExtInfo' => '',
-                        'a:RowIdLong' => ($rowIdLong) ?? $rowId,
-                    ];
-                }
-            }
-        }
-        if ($makeBet) {
-            $this->madeBet($tmpArray);
-        }
-        if ($type == 'commit') {
-            $data = [
-                '@attributes' => [
-                    'xmlns:s' => 'http://schemas.xmlsoap.org/soap/envelope/',
-                ],
-                's:Body' => [
-                    'GetCommitQueueDataResponse' => [
-                        '@attributes' => [
-                            'xmlns' => 'http://mgsops.net/AdminAPI_Admin'
-                        ],
-                        'GetCommitQueueDataResult' => [
-                            '@attributes' => [
-                                'xmlns:a' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures',
-                                'xmlns:i' => 'http://www.w3.org/2001/XMLSchema-instance'
-                            ],
-                            'a:QueueDataResponse' => $tmpArray
-                        ]
-                    ]
-                ]
-            ];
-        } else if ($type == 'rollback') {
-            $data = [
-                '@attributes' => [
-                    'xmlns:s' => 'http://schemas.xmlsoap.org/soap/envelope/',
-                ],
-                's:Body' => [
-                    'GetRollbackQueueDataResponse' => [
-                        '@attributes' => [
-                            'xmlns' => 'http://mgsops.net/AdminAPI_Admin'
-                        ],
-                        'GetRollbackQueueDataResult' => [
-                            '@attributes' => [
-                                'xmlns:a' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures',
-                                'xmlns:i' => 'http://www.w3.org/2001/XMLSchema-instance'
-                            ],
-                            'a:QueueDataResponse' => $tmpArray
-                        ]
-                    ]
-                ]
-            ];
-        } else {
-            $data = [];
-        }
-        return Array2Xml::createXML('s:Envelope', $data)->saveXML();
-    }
-
-    public function generateUniqId()
-    {
-        return mt_rand(100000, 999999);
-    }
-
-    public function madeBet(array $data)
-    {
-        foreach ($data as $key => $value) {
-            $user_id = (int) $value['a:LoginName'];
-            $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
-            $transactionRequest = new TransactionRequest(
-                Config::get('integrations.microgaming.service_id'), $value['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection(TransactionRequest::TRANS_BET), TransactionHelper::amountCentsToWhole($value['a:ChangeAmount']), MicroGamingHelper::getTransactionType(TransactionRequest::TRANS_BET), MicroGamingObjectIdMap::generateHash($user_id, $value['a:TransactionCurrency'], $value['a:TransactionNumber']), $value['a:GameName'], env('TEST_PARTNER_ID'), env('TEST_CASHEDESK')
-            );
-
-            $transactionHandler = new TransactionHandler($transactionRequest, $user);
-
-            $res = $transactionHandler->handle(new ProcessMicroGamingOrion($value));
-        }
-    }
-
-    public function init($testData, $xmlMockB = '')
-    {
-        if (is_array($testData)) {
-            $xmlMock = $this->generatedXml($testData, 'commit', 2, true, true);
-        } else {
-            $xmlMock = $testData;
-        }
-        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
-        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
-
-        if (!$xmlMockB) {
-            $xmlMockB = $this->generatedXmlManualBet($xmlMock);
-        }
-        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
-        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
-
-
-
-        $obj = new stdClass();
-        $sourceProcessor = new SourceProcessor();
-        $obj->source = new GetCommitQueueData($clientMockQ, $sourceProcessor);
-        $obj->validatorData = new CommitValidation();
-        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
-        $obj->validationResolveData = new ManualValidation();
-        $obj->operationsProcessor = new CommitRollbackProcessor('CommitQueue', TransactionRequest::TRANS_WIN);
-        return $obj;
-    }
-
-    public function initRollback($testData, $xmlMockB = '')
-    {
-        if (is_array($testData)) {
-            $xmlMock = $this->generatedXml($testData, 'rollback', 2, true, true);
-        } else {
-            $xmlMock = $testData;
-        }
-        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
-        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
-
-        if (!$xmlMockB) {
-            $xmlMockB = $this->generatedXmlManualBet($xmlMock);
-        }
-        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
-        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
-
-
-
-        $obj = new stdClass();
-        $sourceProcessor = new SourceProcessor();
-        $obj->source = new GetRollbackQueueData($clientMockQ, $sourceProcessor);
-        $obj->validatorData = new RollbackValidation();
-        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
-        $obj->validationResolveData = new ManualValidation();
-        $obj->operationsProcessor = new CommitRollbackProcessor('RollbackQueue', TransactionRequest::TRANS_REFUND);
-        return $obj;
-    }
-
-    public function initRollbackWithoutBet($testData, $xmlMockB = '')
-    {
-        if (is_array($testData)) {
-            $xmlMock = $this->generatedXml($testData, 'rollback', 1, true, false);
-        } else {
-            $xmlMock = $testData;
-        }
-        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
-        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
-
-        if (!$xmlMockB) {
-            $xmlMockB = $this->generatedXmlManualBet($xmlMock);
-        }
-        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
-        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
-
-
-
-        $obj = new stdClass();
-        $sourceProcessor = new SourceProcessor();
-        $obj->source = new GetRollbackQueueData($clientMockQ, $sourceProcessor);
-        $obj->validatorData = new RollbackValidation();
-        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
-        $obj->validationResolveData = new ManualValidation();
-        $obj->operationsProcessor = new CommitRollbackProcessor('RollbackQueue', TransactionRequest::TRANS_REFUND);
-        return $obj;
-    }
-
-    public function createXmlEndGame()
+    private function createXmlEndGame()
     {
         $qEndGameData = [
             '@attributes' => [
@@ -340,6 +138,239 @@ class TestData extends Unit
         return $ret;
     }
 
+    private function generatedXmlManualBet()
+    {
+        $data = [
+            '@attributes' => [
+                'xmlns:s' => 'http://schemas.xmlsoap.org/soap/envelope/',
+            ],
+            's:Body' => [
+                'ManuallyValidateBetResponse' => [
+                    '@attributes' => [
+                        'xmlns' => 'http://mgsops.net/AdminAPI_Admin'
+                    ],
+                    'ManuallyValidateBetResult' => true
+                ]
+            ]
+        ];
+        return Array2Xml::createXML('s:Envelope', $data)->saveXML();
+    }
+
+    private function createData($userArray, $count = 1, $modify = false): array
+    {
+        $tmpArray = array();
+        foreach ($userArray as $value) {
+            for ($i = 0; $i < $count; $i++) {
+                extract($value);
+                if ($modify) {
+                    $transactionNumber = $transactionNumber + 1;
+                    $referenceNumber = $referenceNumber + 2;
+                }
+                if (isset($loginName)) {
+                    $tmpArray[] = [
+                        'a:LoginName' => $loginName,
+                        'a:UserId' => $this->generateUniqId(),
+                        'a:ChangeAmount' => $amount,
+                        'a:TransactionCurrency' => $currency,
+                        'a:Status' => 'Unknown',
+                        'a:RowId' => $rowId,
+                        'a:TransactionNumber' => $transactionNumber,
+                        'a:GameName' => 'MGS_TombRaider',
+                        'a:DateCreated' => Carbon::now('UTC')->format('Y/m/d H:i:s.000'),
+                        'a:MgsReferenceNumber' => $referenceNumber,
+                        'a:ServerId' => $serverId,
+                        'a:MgsPayoutReferenceNumber' => $referenceNumber,
+                        'a:PayoutAmount' => $amount,
+                        'a:ProgressiveWin' => false,
+                        'a:ProgressiveWinDesc' => '',
+                        'a:FreeGameOfferName' => '',
+                        'a:TournamentId' => 0,
+                        'a:Description' => '',
+                        'a:ExtInfo' => '',
+                        'a:RowIdLong' => ($rowIdLong) ?? $rowId,
+                    ];
+                }
+            }
+        }
+
+        return $tmpArray;
+    }
+
+    private function createXml(array $tmpArray, string $type): string
+    {
+        if ($type == 'commit') {
+            $data = [
+                '@attributes' => [
+                    'xmlns:s' => 'http://schemas.xmlsoap.org/soap/envelope/',
+                ],
+                's:Body' => [
+                    'GetCommitQueueDataResponse' => [
+                        '@attributes' => [
+                            'xmlns' => 'http://mgsops.net/AdminAPI_Admin'
+                        ],
+                        'GetCommitQueueDataResult' => [
+                            '@attributes' => [
+                                'xmlns:a' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures',
+                                'xmlns:i' => 'http://www.w3.org/2001/XMLSchema-instance'
+                            ],
+                            'a:QueueDataResponse' => $tmpArray
+                        ]
+                    ]
+                ]
+            ];
+        } else if ($type == 'rollback') {
+            $data = [
+                '@attributes' => [
+                    'xmlns:s' => 'http://schemas.xmlsoap.org/soap/envelope/',
+                ],
+                's:Body' => [
+                    'GetRollbackQueueDataResponse' => [
+                        '@attributes' => [
+                            'xmlns' => 'http://mgsops.net/AdminAPI_Admin'
+                        ],
+                        'GetRollbackQueueDataResult' => [
+                            '@attributes' => [
+                                'xmlns:a' => 'http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures',
+                                'xmlns:i' => 'http://www.w3.org/2001/XMLSchema-instance'
+                            ],
+                            'a:QueueDataResponse' => $tmpArray
+                        ]
+                    ]
+                ]
+            ];
+        } else {
+            $data = [];
+        }
+        return Array2Xml::createXML('s:Envelope', $data)->saveXML();
+    }
+
+    public function createAccountMock(array $data, $tester, bool $withBet = false)
+    {
+        $accountManagerMock = new AccountManagerMock($this->params);
+        $helper = new Helper($this->params);
+        foreach ($data as $value) {
+            $balance = $this->params->getBalance();
+            $objectId = $helper->getPreparedObjectId($value['a:TransactionNumber']);
+            $accountManagerMock->userInfo()
+                ->win($objectId, $value['a:ChangeAmount'] / 100, $balance - $value['a:ChangeAmount'] / 100 + $value['a:ChangeAmount'] / 100)
+                ->mock($tester);
+            if ($withBet) {
+                $accountManagerMock->bet($objectId, $value['a:ChangeAmount'] / 100, $balance - $value['a:ChangeAmount'] / 100);
+                $accountManagerMock->mock($tester);
+                $user_id = (int) $value['a:LoginName'];
+                $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
+                $transactionRequest = new TransactionRequest(
+                    Config::get('integrations.microgaming.service_id'), $value['a:TransactionNumber'], $user->id, $user->getCurrency(), MicroGamingHelper::getTransactionDirection(TransactionRequest::TRANS_BET), TransactionHelper::amountCentsToWhole($value['a:ChangeAmount']), MicroGamingHelper::getTransactionType(TransactionRequest::TRANS_BET), MicroGamingObjectIdMap::generateHash($user_id, $value['a:TransactionCurrency'], $value['a:TransactionNumber']), $value['a:GameName'], env('TEST_PARTNER_ID'), env('TEST_CASHEDESK')
+                );
+
+                $transactionHandler = new TransactionHandler($transactionRequest, $user);
+
+                $transactionHandler->handle(new ProcessMicroGamingOrion($value));
+            }
+        }
+    }
+
+    public function createAccountMockWithException(UnitTester $tester)
+    {
+        $accountManagerMock = new AccountManagerMock($this->params);
+        $accountManagerMock->get()->shouldReceive('createTransaction')
+            ->andThrow(new ApiHttpException(404, '', ['code' => 6000, 'message' => 'Invalid operation order.']))->mock($tester);
+    }
+
+    public function generateUniqId()
+    {
+        return mt_rand(100000, 999999);
+    }
+
+    public function init($testData, $xmlMockB = '')
+    {
+        if (is_array($testData)) {
+            $data = $this->createData($testData, 2, true);
+            $xmlMock = $this->createXml($data, 'commit');
+        } else {
+            $xmlMock = $testData;
+        }
+        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
+        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
+
+        if (!$xmlMockB) {
+            $xmlMockB = $this->generatedXmlManualBet($xmlMock);
+        }
+        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
+        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
+
+
+
+        $obj = new stdClass();
+        $obj->data = $data ?? [];
+        $sourceProcessor = new SourceProcessor();
+        $obj->source = new GetCommitQueueData($clientMockQ, $sourceProcessor);
+        $obj->validatorData = new CommitValidation();
+        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
+        $obj->validationResolveData = new ManualValidation();
+        $obj->operationsProcessor = new CommitRollbackProcessor('CommitQueue', TransactionRequest::TRANS_WIN);
+        return $obj;
+    }
+
+    public function initRollback($testData, $xmlMockB = '')
+    {
+        if (is_array($testData)) {
+            $data = $this->createData($testData, 2, true);
+            $xmlMock = $this->createXml($data, 'rollback');
+        } else {
+            $xmlMock = $testData;
+        }
+        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
+        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
+
+        if (!$xmlMockB) {
+            $xmlMockB = $this->generatedXmlManualBet($xmlMock);
+        }
+        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
+        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
+
+
+
+        $obj = new stdClass();
+        $obj->data = $data ?? [];
+        $sourceProcessor = new SourceProcessor();
+        $obj->source = new GetRollbackQueueData($clientMockQ, $sourceProcessor);
+        $obj->validatorData = new RollbackValidation();
+        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
+        $obj->validationResolveData = new ManualValidation();
+        $obj->operationsProcessor = new CommitRollbackProcessor('RollbackQueue', TransactionRequest::TRANS_REFUND);
+        return $obj;
+    }
+
+    public function initRollbackWithoutBet($testData, $xmlMockB = '')
+    {
+        if (is_array($testData)) {
+            $data = $this->createData($testData, 1, true);
+            $xmlMock = $this->createXml($data, 'rollback');
+        } else {
+            $xmlMock = $testData;
+        }
+        $clientMockQ = $this->createMock(SoapEmulator::class, ['sendRequest']);
+        $clientMockQ->method('sendRequest')->will($this->returnValue($xmlMock));
+
+        if (!$xmlMockB) {
+            $xmlMockB = $this->generatedXmlManualBet($xmlMock);
+        }
+        $clientManualVBMock = $this->createMock(SoapEmulator::class, ['sendRequest']);
+        $clientManualVBMock->method('sendRequest')->will($this->returnValue($xmlMockB));
+
+
+
+        $obj = new stdClass();
+        $sourceProcessor = new SourceProcessor();
+        $obj->source = new GetRollbackQueueData($clientMockQ, $sourceProcessor);
+        $obj->validatorData = new RollbackValidation();
+        $obj->requestResolveData = new ManuallyValidateBet($clientManualVBMock, $sourceProcessor);
+        $obj->validationResolveData = new ManualValidation();
+        $obj->operationsProcessor = new CommitRollbackProcessor('RollbackQueue', TransactionRequest::TRANS_REFUND);
+        return $obj;
+    }
+
     public function initEndGame()
     {
 
@@ -367,7 +398,8 @@ class TestData extends Unit
     public function initCommitWithoutBet($testData, $xmlMockB = '')
     {
         if (is_array($testData)) {
-            $xmlMock = $this->generatedXml($testData, 'commit', 1, true, false);
+            $data = $this->createData($testData, 1, true);
+            $xmlMock = $this->createXml($data, 'commit');
         } else {
             $xmlMock = $testData;
         }
@@ -421,9 +453,8 @@ the same binding (including security requirements, e.g. Message, Transport, None
 
     public function initMockWhenLostRowId(ApiTester $I)
     {
-        $testUser = new TestUser($this->params->userId);
         $testData[] = [
-            'loginName' => $testUser->getUser()->id . $testUser->getCurrency(),
+            'loginName' => $this->params->userId . $this->params->currency,
             'amount' => 111,
             'currency' => $this->currencyMg,
             'rowId' => $this->generateUniqId(),
@@ -432,32 +463,21 @@ the same binding (including security requirements, e.g. Message, Transport, None
             'serverId' => Config::get('integrations.microgamingOrion.serverId'),
             'referenceNumber' => $this->generateUniqId()
         ];
-        $xml = $this->generatedXml($testData, 'commit');
+        $data = $this->createData($testData, 1);
+        $xml = $this->createXml($data, 'commit');
         $xmlEndGame = $this->createXmlEndGame();
         $xmlMockB = $this->generatedXmlManualBet($xml);
         $className = SoapEmulator::class;
         $mock = Mockery::mock($className);
         $mock->shouldReceive('sendRequest')->withArgs([GetCommitQueueData::class])->andReturn($xml);
-        $mock->shouldReceive('sendRequest')->withArgs([ManuallyCompleteGame::class])->andReturn($xmlEndGame->qManualCompleteData);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
         $I->getApplication()->instance($className, $mock);
         $I->haveInstance($className, $mock);
     }
 
     public function initMockEndGameWhenRowIdWithMinus(ApiTester $I)
     {
-        $testUser = new TestUser($this->params->userId);
-        $testData[] = [
-            'loginName' => $testUser->getUser()->id . $testUser->getCurrency(),
-            'amount' => 111,
-            'currency' => $this->currencyMg,
-            'rowId' => 0,
-            'rowIdLong' => $this->generateUniqId(),
-            'transactionNumber' => $this->generateUniqId(),
-            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
-            'referenceNumber' => $this->generateUniqId()
-        ];
         $xml = $this->createXmlEndGame();
-
         $xml_GF = '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><GetFailedEndGameQueueResponse xmlns="http://mgsops.net/AdminAPI_Admin"><GetFailedEndGameQueueResult xmlns:a="http://schemas.datacontract.org/2004/07/Orion.Contracts.VanguardAdmin.DataStructures" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><a:GetFailedGamesResponse><a:ClientId>10002</a:ClientId><a:Description i:nil="true"/><a:ModuleId>12856</a:ModuleId><a:RowId>-6552318455</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:12:11.197</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>29357</a:TransNumber><a:UniqueId>1490523UAH</a:UniqueId><a:UserId>5319901</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>10001</a:ClientId><a:Description i:nil="true"/><a:ModuleId>93</a:ModuleId><a:RowId>-6552334232</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:14:01.26</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>159</a:TransNumber><a:UniqueId>1722374UAH</a:UniqueId><a:UserId>6304721</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>10002</a:ClientId><a:Description i:nil="true"/><a:ModuleId>12856</a:ModuleId><a:RowId>-6552334377</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:14:02.097</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>29378</a:TransNumber><a:UniqueId>1490523UAH</a:UniqueId><a:UserId>5319901</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>10001</a:ClientId><a:Description i:nil="true"/><a:ModuleId>93</a:ModuleId><a:RowId>-6552347934</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:15:36.903</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>161</a:TransNumber><a:UniqueId>1722374UAH</a:UniqueId><a:UserId>6304721</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>10006</a:ClientId><a:Description i:nil="true"/><a:ModuleId>2</a:ModuleId><a:RowId>-6552354424</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:16:22.313</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>437</a:TransNumber><a:UniqueId>1706628RUB</a:UniqueId><a:UserId>6212966</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>10001</a:ClientId><a:Description i:nil="true"/><a:ModuleId>10231</a:ModuleId><a:RowId>-6552354481</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:16:22.673</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>4525</a:TransNumber><a:UniqueId>1673575UAH</a:UniqueId><a:UserId>6016530</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>10001</a:ClientId><a:Description i:nil="true"/><a:ModuleId>10353</a:ModuleId><a:RowId>-6552455289</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:27:39.263</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>44278</a:TransNumber><a:UniqueId>1682703UAH</a:UniqueId><a:UserId>6060237</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>10001</a:ClientId><a:Description i:nil="true"/><a:ModuleId>10347</a:ModuleId><a:RowId>-6552455446</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:27:39.913</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>6931</a:TransNumber><a:UniqueId>1683496UAH</a:UniqueId><a:UserId>6245745</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>10001</a:ClientId><a:Description i:nil="true"/><a:ModuleId>82</a:ModuleId><a:RowId>-6552489629</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:31:29.523</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>19156</a:TransNumber><a:UniqueId>1663083UAH</a:UniqueId><a:UserId>5963772</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>10001</a:ClientId><a:Description i:nil="true"/><a:ModuleId>12512</a:ModuleId><a:RowId>-6552537757</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:36:24.693</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>55845</a:TransNumber><a:UniqueId>1472167UAH</a:UniqueId><a:UserId>5905752</a:UserId></a:GetFailedGamesResponse><a:GetFailedGamesResponse><a:ClientId>40302</a:ClientId><a:Description i:nil="true"/><a:ModuleId>11091</a:ModuleId><a:RowId>-6552598447</a:RowId><a:ServerId>1115</a:ServerId><a:SessionId>0</a:SessionId><a:TimeCompleted i:nil="true"/><a:TimeCreated>2017-03-29T09:42:31.977</a:TimeCreated><a:TournamentId>0</a:TournamentId><a:TransNumber>174912</a:TransNumber><a:UniqueId>1439559UAH</a:UniqueId><a:UserId>4757041</a:UserId></a:GetFailedGamesResponse></GetFailedEndGameQueueResult></GetFailedEndGameQueueResponse></s:Body></s:Envelope>';
         $className = SoapEmulator::class;
         $mock = Mockery::mock($className);
@@ -469,9 +489,9 @@ the same binding (including security requirements, e.g. Message, Transport, None
 
     public function initMockCommitWithoutBet(ApiTester $I)
     {
-        $testUser = new TestUser($this->params->userId);
+
         $testData[] = [
-            'loginName' => $testUser->getUser()->id . $testUser->getCurrency(),
+            'loginName' => $this->params->userId . $this->params->currency,
             'amount' => 111,
             'currency' => $this->currencyMg,
             'rowId' => 0,
@@ -480,12 +500,72 @@ the same binding (including security requirements, e.g. Message, Transport, None
             'serverId' => Config::get('integrations.microgamingOrion.serverId'),
             'referenceNumber' => $this->generateUniqId()
         ];
-        $xml = $this->generatedXml($testData, 'commit', 10);
+        $data = $this->createData($testData, 10);
+        $xml = $this->createXml($data, 'commit');
         $xmlMockB = $this->generatedXmlManualBet($xml);
         $className = SoapEmulator::class;
         $mock = Mockery::mock($className);
         $mock->shouldReceive('sendRequest')->withArgs([GetCommitQueueData::class])->andReturn($xml);
         $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
+        $I->getApplication()->instance($className, $mock);
+        $I->haveInstance($className, $mock);
+    }
+
+    public function initCommit(ApiTester $I)
+    {
+        $testData[] = [
+            'loginName' => $this->params->userId . $this->params->currency,
+            'amount' => 111,
+            'currency' => $this->currencyMg,
+            'rowId' => 0,
+            'rowIdLong' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(),
+            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $data = $this->createData($testData, 2, true);
+        $xmlMock = $this->createXml($data, 'commit');
+        $xmlMockB = $this->generatedXmlManualBet($xmlMock);
+        $className = SoapEmulator::class;
+        $mock = Mockery::mock($className);
+        $mock->shouldReceive('sendRequest')->withArgs([GetCommitQueueData::class])->andReturn($xmlMock);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
+        $I->getApplication()->instance($className, $mock);
+        $I->haveInstance($className, $mock);
+        return $data;
+    }
+
+    public function initRollbackApi(ApiTester $I)
+    {
+        $testData[] = [
+            'loginName' => $this->params->userId . $this->params->currency,
+            'amount' => 111,
+            'currency' => $this->currencyMg,
+            'rowId' => 0,
+            'rowIdLong' => $this->generateUniqId(),
+            'transactionNumber' => $this->generateUniqId(),
+            'serverId' => Config::get('integrations.microgamingOrion.serverId'),
+            'referenceNumber' => $this->generateUniqId()
+        ];
+        $data = $this->createData($testData, 2, true);
+        $xmlMock = $this->createXml($data, 'rollback');
+        $xmlMockB = $this->generatedXmlManualBet($xmlMock);
+        $className = SoapEmulator::class;
+        $mock = Mockery::mock($className);
+        $mock->shouldReceive('sendRequest')->withArgs([GetRollbackQueueData::class])->andReturn($xmlMock);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyValidateBet::class])->andReturn($xmlMockB);
+        $I->getApplication()->instance($className, $mock);
+        $I->haveInstance($className, $mock);
+        return $data;
+    }
+
+    public function initEndGameApi(ApiTester $I)
+    {
+         $xml = $this->createXmlEndGame();
+        $className = SoapEmulator::class;
+        $mock = Mockery::mock($className);
+        $mock->shouldReceive('sendRequest')->withArgs([GetFailedEndGameQueue::class])->andReturn($xml->qEndGameData);
+        $mock->shouldReceive('sendRequest')->withArgs([ManuallyCompleteGame::class])->andReturn($xml->qManualCompleteData);
         $I->getApplication()->instance($className, $mock);
         $I->haveInstance($className, $mock);
     }

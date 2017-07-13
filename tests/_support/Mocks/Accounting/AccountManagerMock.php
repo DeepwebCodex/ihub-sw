@@ -20,6 +20,8 @@ class AccountManagerMock
     {
         $this->params = $params;
         $this->mock = $this->getMock();
+
+        $this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
     }
 
     const SERVICE_IDS = [
@@ -219,8 +221,11 @@ class AccountManagerMock
             "currency" => $this->params->currency
         ]);
     }
-
-    public function mock(\ApiTester $I, $keepMock = true)
+    
+     /**
+     * @param mixed $I
+     */
+    public function mock($I, $keepMock = true)
     {
         if ($this->params->enableMock) {
             $I->getApplication()->instance(AccountManager::class, $this->mock);

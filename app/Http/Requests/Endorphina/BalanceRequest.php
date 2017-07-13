@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Requests\Endorphina\BaseRequest;
-
 namespace App\Http\Requests\Endorphina;
-
 
 class BalanceRequest extends BaseRequest
 {

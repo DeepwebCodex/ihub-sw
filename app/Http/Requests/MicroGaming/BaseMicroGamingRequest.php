@@ -44,6 +44,8 @@ class BaseMicroGamingRequest extends ApiRequest implements ApiValidationInterfac
 
         $userId = app('GameSession')->get('user_id');
 
+        app('AccountManager')->selectAccounting(app('GameSession')->get('partner_id'), app('GameSession')->get('cashdesk_id'));
+
         if(!$userId){
             throw new ApiHttpException(400, null, CodeMapping::getByMeaning(CodeMapping::INVALID_TOKEN));
         }

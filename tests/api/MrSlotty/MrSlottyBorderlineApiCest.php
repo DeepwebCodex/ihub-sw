@@ -204,4 +204,51 @@ class MrSlottyBorderlineApiCest
             'currency' => $this->params->currency
         ]);
     }
+
+    public function testZeroWin(ApiTester $I)
+    {
+        $roundId = (string)time() . random_int(0, 9);
+        $objectId = MrSlottyHelper::getObjectId($roundId);
+        $amount = 100;
+        $win = 0;
+        $balance = $this->params->getBalance();
+
+        (new AccountManagerMock($this->params))
+            ->userInfo($balance - $amount/100)
+            ->getFreeOperationId(123)
+            ->bet($objectId, MrSlottyHelper::amountCentsToWhole($amount), $balance - $amount/100)
+            ->mock($I);
+
+        $request = [
+            'action'   => 'bet_win',
+            'amount' => $amount,
+            'win' => $win,
+            'player_id' => (string)$this->params->userId,
+            'bet_transaction_id' => (string)time(),
+            'win_transaction_id' => (string)(time() + 1),
+            'currency' => $this->params->currency,
+            'type' => 'spin',
+            'game_id' => 'game_name',
+            'round_id' => $roundId,
+            'extra' => http_build_query([
+                'cashdesk_id' => $this->params->cashdeskId,
+                'partner_id' => $this->params->partnerId,
+                'user_ip' => $this->params->userIP
+            ])
+        ];
+        ksort($request);
+
+        $request = array_merge($request, [
+            'hash' => hash_hmac("sha256", http_build_query($request), $this->options['salt'])
+        ]);
+
+        $I->sendGET('/mrslotty', $request);
+        $I->seeResponseCodeIs(200);
+        $I->canSeeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'status' => 200,
+            'balance' => 100 * $balance - $amount,
+            'currency' => $this->params->currency
+        ]);
+    }
 }

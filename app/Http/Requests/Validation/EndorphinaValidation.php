@@ -29,14 +29,10 @@ class EndorphinaValidation
         return true;
     }
 
-    public static function checkCurrency(string $userCurrency, string $packetCurrency): bool
+    public static function checkCurrency(string $userCurrency, string $packetCurrency)
     {
-
         if ($userCurrency != $packetCurrency) {
             throw new ApiHttpException(500, null, CodeMapping::getByMeaning(CodeMapping::INVALID_CURRENCY));
         }
-
-
-        return true;
     }
 }
