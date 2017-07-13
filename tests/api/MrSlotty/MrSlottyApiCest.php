@@ -28,6 +28,13 @@ class MrSlottyApiCest
             'action'   => 'balance',
             'player_id' => (string)$this->params->userId,
             'currency' => $this->params->currency,
+            'extra' => http_build_query(
+                [
+                    'cashdesk_id' => $this->params->cashdeskId,
+                    'partner_id' => $this->params->partnerId,
+                    'user_ip' => $this->params->userIP
+                ]
+            )
         ];
         ksort($request);
 
@@ -66,11 +73,13 @@ class MrSlottyApiCest
             'type' => 'spin',
             'game_id' => 'game_name',
             'round_id' => $roundId,
-            'extra' => http_build_query([
-                'cashdesk_id' => $this->params->cashdeskId,
-                'partner_id' => $this->params->partnerId,
-                'user_ip' => $this->params->userIP
-            ])
+            'extra' => http_build_query(
+                [
+                    'cashdesk_id' => $this->params->cashdeskId,
+                    'partner_id' => $this->params->partnerId,
+                    'user_ip' => $this->params->userIP
+                ]
+            )
         ];
         ksort($request);
 
