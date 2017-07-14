@@ -16,6 +16,10 @@ return [
     'hazlecast_sessions' => [
         'host'  => env('API_HAZLE_SESSIONS_HOST', 'de2ef01d.dev.favorit'),
         'port'  => env('API_HAZLE_SESSIONS_PORT', 5701)
+    ],
+
+    'elasticsearch' => [
+        'host' => env('ELASTICSEARCH_HOST', 'http://localhost:9200'),
     ]
 
 ];
