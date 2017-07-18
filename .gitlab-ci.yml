@@ -1,4 +1,5 @@
 stages:
+- change_log
 - compile_project
 - migrate_database
 - test_project
