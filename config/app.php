@@ -166,7 +166,8 @@ return [
         \App\Providers\QueueRabbitMQServiceProvider::class,
         \iHubGrid\ErrorHandler\Providers\GuzzleServiceProvider::class,
         \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class,
-        \iHubGrid\EuroGamesTech\EuroGamesTechServiceProvider::class
+        \iHubGrid\EuroGamesTech\EuroGamesTechServiceProvider::class,
+        \iHubGrid\MrSlotty\MrSlottyServiceProvider::class,
     ],
 
     /*
