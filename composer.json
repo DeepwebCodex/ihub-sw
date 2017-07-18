@@ -24,6 +24,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/euro-games-tech.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/wirex-gaming.git"
         }
     ],
     "require": {
@@ -40,7 +44,8 @@
         "ihub-grid/packages/accounting": "1.*",
         "ihub-grid/packages/error-handler": "1.*",
         "ihub-grid/packages/seamless-wallet-core": "1.*",
-        "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*"
+        "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*",
+        "ihub-grid/packages/seamless-wallets/wirex-gaming": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
