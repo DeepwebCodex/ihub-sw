@@ -17,10 +17,10 @@ class ManuallyValidateBet extends Request
         foreach ($data as $value) {
             $tmp = [
                 'ori:ExternalReference' => $value['operationId'],
+                $value['PreparedRowId']['name'] => $value['PreparedRowId']['value'],
                 'ori:ServerId' => Config::get('integrations.microgamingOrion.serverId'),
                 'ori:UnlockType' => $value['unlockType'],
-                'ori:UserId' => $value['a:UserId'],
-                $value['PreparedRowId']['name'] => $value['PreparedRowId']['value']
+                'ori:UserId' => $value['a:UserId']      
             ];
             $dataValidateBet['ori:ValidteBetRequest'] [] = $tmp;
         }
