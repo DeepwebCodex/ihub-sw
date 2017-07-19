@@ -83,11 +83,13 @@
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan vendor:publish --tag=tests --force",
+            "php artisan vendor:publish --tag=resources --force",
             "php artisan optimize"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan vendor:publish --tag=tests --force",
+            "php artisan vendor:publish --tag=resources --force",
             "php artisan optimize"
         ]
     },
