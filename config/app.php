@@ -170,6 +170,7 @@ return [
         \iHubGrid\BetGames\BetGamesServiceProvider::class,
         \iHubGrid\MrSlotty\MrSlottyServiceProvider::class,
         \iHubGrid\Fundist\FundistServiceProvider::class,
+        \iHubGrid\Endorphina\EndorphinaServiceProvider::class,
     ],
 
     /*
