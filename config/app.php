@@ -167,6 +167,7 @@ return [
         \iHubGrid\ErrorHandler\Providers\GuzzleServiceProvider::class,
         \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class,
         \iHubGrid\EuroGamesTech\EuroGamesTechServiceProvider::class,
+        \iHubGrid\BetGames\BetGamesServiceProvider::class,
         \iHubGrid\MrSlotty\MrSlottyServiceProvider::class,
     ],
 
