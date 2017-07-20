@@ -69,8 +69,8 @@ class Kernel extends HttpKernel
         'input.dm.parselogin' => \App\Http\Middleware\DriveMedia\ParseLogin::class,
         'log.request.response' => LogRequestResponse::class,
         'check.ip' => \App\Http\Middleware\IPList::class,
-        'input.bg.parsePlayerIdOnWin' => \App\Http\Middleware\BetGames\ParsePlayerIdOnWin::class,
-        'input.bg.setPartnerCashdesk' => \App\Http\Middleware\BetGames\SetPartnerCashdesk::class,
+        'input.bg.parsePlayerIdOnWin' => \iHubGrid\BetGames\Http\Middleware\ParsePlayerIdOnWin::class,
+        'input.bg.setPartnerCashdesk' => \iHubGrid\BetGames\Http\Middleware\SetPartnerCashdesk::class,
         'input.fundist.parsePlayerIdOnOffline' => \App\Http\Middleware\Fundist\ParsePlayerIdOnOffline::class,
     ];
 }
