@@ -169,6 +169,7 @@ return [
         \iHubGrid\EuroGamesTech\EuroGamesTechServiceProvider::class,
         \iHubGrid\BetGames\BetGamesServiceProvider::class,
         \iHubGrid\MrSlotty\MrSlottyServiceProvider::class,
+        \iHubGrid\Fundist\FundistServiceProvider::class,
     ],
 
     /*
