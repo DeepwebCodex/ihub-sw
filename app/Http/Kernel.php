@@ -6,6 +6,7 @@ use App\Components\LoadEnvironmentVariables;
 use iHubGrid\ErrorHandler\Http\Middleware\InputJson;
 use iHubGrid\ErrorHandler\Http\Middleware\InputXml;
 use iHubGrid\ErrorHandler\Http\Middleware\LogRequestResponse;
+use iHubGrid\Fundist\Http\Middleware\ParsePlayerIdOnOffline;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -71,6 +72,6 @@ class Kernel extends HttpKernel
         'check.ip' => \App\Http\Middleware\IPList::class,
         'input.bg.parsePlayerIdOnWin' => \iHubGrid\BetGames\Http\Middleware\ParsePlayerIdOnWin::class,
         'input.bg.setPartnerCashdesk' => \iHubGrid\BetGames\Http\Middleware\SetPartnerCashdesk::class,
-        'input.fundist.parsePlayerIdOnOffline' => \App\Http\Middleware\Fundist\ParsePlayerIdOnOffline::class,
+        'input.fundist.parsePlayerIdOnOffline' => ParsePlayerIdOnOffline::class,
     ];
 }
