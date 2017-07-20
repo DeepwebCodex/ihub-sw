@@ -5,8 +5,11 @@ namespace App\Console;
 use App\Components\LoadEnvironmentVariables;
 use App\Console\Commands\CancelPendingOperations;
 use App\Console\Commands\MaksymenkoTest;
-use App\Console\Commands\MicrogamingSequence;
 use App\Console\Commands\OptimizeLogIndices;
+use iHubGrid\MicroGaming\Commands\MicrogamingSequence;
+use iHubGrid\MicroGaming\Commands\Orion\Commit;
+use iHubGrid\MicroGaming\Commands\Orion\EndGame;
+use iHubGrid\MicroGaming\Commands\Orion\Rollback;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,9 +32,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //FeedListener::class
-        Commands\Orion\Commit::class,
-        Commands\Orion\Rollback::class,
-        Commands\Orion\EndGame::class,
+        Commit::class,
+        Rollback::class,
+        EndGame::class,
         MicrogamingSequence::class,
         CancelPendingOperations::class,
         MaksymenkoTest::class,
