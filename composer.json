@@ -27,6 +27,18 @@
         },
         {
             "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/bet-games.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/mr-slotty.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/fundist.git"
+        },
+        {
+            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/endorphina.git"
         }
     ],
@@ -45,6 +57,9 @@
         "ihub-grid/packages/error-handler": "1.*",
         "ihub-grid/packages/seamless-wallet-core": "1.*",
         "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*",
+        "ihub-grid/packages/seamless-wallets/bet-games": "1.*",
+        "ihub-grid/packages/seamless-wallets/mr-slotty": "1.*",
+        "ihub-grid/packages/seamless-wallets/fundist": "1.*",
         "ihub-grid/packages/seamless-wallets/endorphina": "1.*"
     },
     "require-dev": {

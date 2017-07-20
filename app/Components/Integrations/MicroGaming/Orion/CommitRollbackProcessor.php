@@ -69,21 +69,19 @@ class CommitRollbackProcessor implements IOperationsProcessor
         $dataRes = array();
         foreach ($data as $value) {
             $user_id = (int) $value['a:LoginName'];
+            $requestName = ManuallyValidateBet::REQUEST_NAME;
+            if ($value['a:RowId']) {
+                $value['PreparedRowId'] = [
+                    'name' => 'ori:RowId',
+                    'value' => $value['a:RowId']
+                ];
+            } else {
+                $value['PreparedRowId'] = [
+                    'name' => 'ori:RowId',
+                    'value' => $value['a:RowIdLong']
+                ];
+            }
 
-                if ($value['a:RowId'] && Row::is32bitSignedInt($value['a:RowId'])) {
-                    $value['PreparedRowId'] = [
-                        'name' => 'ori:RowId',
-                        'value' => $value['a:RowId']
-                    ];
-                    $requestName = ManuallyValidateBet::REQUEST_NAME;
-                } else {
-                    $value['PreparedRowId'] = [
-                        'name' => 'ori:RowIdLong',
-                        'value' => $value['a:RowIdLong']
-                    ];
-                    $requestName = ManuallyValidateBet::REQUEST_NAME;
-                }
- 
             try {
                 $user = IntegrationUser::get($user_id, Config::get('integrations.microgaming.service_id'), 'microgaming');
                 $response = $this->pushOperation($this->transType, $value, $user);
@@ -113,6 +111,10 @@ class CommitRollbackProcessor implements IOperationsProcessor
                 ];
                 app('AppLog')->warning(json_encode($logRecords), '', '', '', $group);
             } catch (Exception $e) {
+                $value['unlockType'] = $this->unlockType;
+                $value['operationId'] = app('AccountManager')->getFreeOperationId();
+                $value['isDuplicate'] = false;
+                $dataRes[$requestName][] = $value;
                 $logRecords = [
                     'data' => var_export($value, true),
                     'message' => var_export($e->getMessage(), true)
