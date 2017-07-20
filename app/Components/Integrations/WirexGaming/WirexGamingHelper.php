@@ -43,7 +43,14 @@ class WirexGamingHelper
                 CodeMapping::getByMeaning(CodeMapping::SERVER_ERROR)
             );
         }
-        return ($uid - $previousContextId) >> 16;
+
+        $currencyBitShift = 52;
+        $oidBitShift = 16;
+        // currency code added to pass wirex different user_uid for different currencies
+        $currencyCode = $uid >> $currencyBitShift;
+        $currencyBinVal = $currencyCode << $currencyBitShift;
+
+        return ($uid - $currencyBinVal - $previousContextId) >> $oidBitShift;
     }
 
     /**
