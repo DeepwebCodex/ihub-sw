@@ -43,6 +43,10 @@
         },
         {
             "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/wirex-gaming.git"
+        },
+        {
+            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/micro-gaming.git"
         }
     ],
@@ -65,6 +69,7 @@
         "ihub-grid/packages/seamless-wallets/mr-slotty": "1.*",
         "ihub-grid/packages/seamless-wallets/fundist": "1.*",
         "ihub-grid/packages/seamless-wallets/endorphina": "1.*",
+        "ihub-grid/packages/seamless-wallets/wirex-gaming": "1.*",
         "ihub-grid/packages/seamless-wallets/micro-gaming": "1.*"
     },
     "require-dev": {
@@ -103,11 +108,13 @@
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan vendor:publish --tag=tests --force",
+            "php artisan vendor:publish --tag=resources --force",
             "php artisan optimize"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan vendor:publish --tag=tests --force",
+            "php artisan vendor:publish --tag=resources --force",
             "php artisan optimize"
         ]
     },
