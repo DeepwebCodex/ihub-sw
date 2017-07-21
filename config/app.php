@@ -172,6 +172,7 @@ return [
         \iHubGrid\Fundist\FundistServiceProvider::class,
         \iHubGrid\Endorphina\EndorphinaServiceProvider::class,
         \iHubGrid\WirexGaming\WirexGamingServiceProvider::class,
+        \iHubGrid\MicroGaming\MicroGamingServiceProvider::class,
     ],
 
     /*
