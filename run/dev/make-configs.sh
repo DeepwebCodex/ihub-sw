@@ -49,7 +49,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^RABBITMQ_HOST=example.com/RABBITMQ_HOST=rabbitmq-server.elkr.rancher.internal/g" \
        -e "s/^RABBITMQ_PORT=5672/RABBITMQ_PORT=5672/g" \
        -e "s/^RABBITMQ_USER=user/RABBITMQ_USER=ihub/g" \
-       -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"8jm7JMBmCsqp\"/g" \
+       -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"ihub\"/g" \
        -e "s/^RABBITMQ_PREFIX=/RABBITMQ_PREFIX=\"\"/g" \
        -e "s/^RABBITMQ_MYSTERION_QUEUE=mysterion_transactions/RABBITMQ_MYSTERION_QUEUE=mysterion_transactions/g" \
         \
