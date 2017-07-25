@@ -7,6 +7,6 @@ return [
         'port' => env('FINANCE_SERVICE_PORT')
     ],
     'services' => [
-        27, 48, 13
+        27,
     ]
 ];
