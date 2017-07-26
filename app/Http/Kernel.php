@@ -6,6 +6,7 @@ use App\Components\LoadEnvironmentVariables;
 use iHubGrid\ErrorHandler\Http\Middleware\InputJson;
 use iHubGrid\ErrorHandler\Http\Middleware\InputXml;
 use iHubGrid\ErrorHandler\Http\Middleware\LogRequestResponse;
+use iHubGrid\Fundist\Http\Middleware\ParsePlayerIdOnOffline;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -38,10 +39,6 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             'check.partner_id',
         ],
@@ -73,8 +70,8 @@ class Kernel extends HttpKernel
         'input.dm.parselogin' => \App\Http\Middleware\DriveMedia\ParseLogin::class,
         'log.request.response' => LogRequestResponse::class,
         'check.ip' => \App\Http\Middleware\IPList::class,
-        'input.bg.parsePlayerIdOnWin' => \App\Http\Middleware\BetGames\ParsePlayerIdOnWin::class,
-        'input.bg.setPartnerCashdesk' => \App\Http\Middleware\BetGames\SetPartnerCashdesk::class,
-        'input.fundist.parsePlayerIdOnOffline' => \App\Http\Middleware\Fundist\ParsePlayerIdOnOffline::class,
+        'input.bg.parsePlayerIdOnWin' => \iHubGrid\BetGames\Http\Middleware\ParsePlayerIdOnWin::class,
+        'input.bg.setPartnerCashdesk' => \iHubGrid\BetGames\Http\Middleware\SetPartnerCashdesk::class,
+        'input.fundist.parsePlayerIdOnOffline' => ParsePlayerIdOnOffline::class,
     ];
 }

@@ -2,7 +2,6 @@
 
 use iHubGrid\ErrorHandler\Exceptions\Api\ApiHttpException;
 use iHubGrid\ErrorHandler\Formatters\JsonApiFormatter;
-use App\Components\Formatters\MicroGamingApiFormatter;
 use App\Components\Formatters\TextApiFormatter;
 use iHubGrid\ErrorHandler\Formatters\XmlApiFormatter;
 use iHubGrid\ErrorHandler\ThirdParty\Array2Xml;
@@ -91,30 +90,6 @@ class FormatterTest extends \Codeception\Test\Unit
 
             verify("Is response body is xml", $response->getContent())
                 ->equalsXmlString(Array2Xml::createXML('root', $exitPayload)->saveXML());
-        });
-    }
-
-    public function testMicroGamingXmlFormatter()
-    {
-        $formatter = new MicroGamingApiFormatter();
-
-        $exitPayload = array_merge($this->payload, ['message' => 'Test']);
-        ksort($exitPayload);
-
-        $this->specify("Test exception formatter", function() use($formatter, $exitPayload){
-            /**@var \Illuminate\Http\Response $response*/
-            $response = $formatter->formatResponse(200, "Test", $this->payload);
-
-            verify("Is response body is xml", $response->getContent())
-                ->equalsXmlString(Array2Xml::createXML('pkt', $exitPayload)->saveXML());
-        });
-
-        $this->specify("Test exception formatter", function() use($formatter, $exitPayload){
-            /**@var \Illuminate\Http\Response $response*/
-            $response = $formatter->formatException(new ApiHttpException(400, "Test", $this->payload));
-
-            verify("Is response body is xml", $response->getContent())
-                ->equalsXmlString(Array2Xml::createXML('pkt', $exitPayload)->saveXML());
         });
     }
 

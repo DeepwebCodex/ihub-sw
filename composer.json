@@ -24,6 +24,30 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/euro-games-tech.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/bet-games.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/mr-slotty.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/fundist.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/endorphina.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/wirex-gaming.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/micro-gaming.git"
         }
     ],
     "require": {
@@ -40,7 +64,13 @@
         "ihub-grid/packages/accounting": "1.*",
         "ihub-grid/packages/error-handler": "1.*",
         "ihub-grid/packages/seamless-wallet-core": "1.*",
-        "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*"
+        "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*",
+        "ihub-grid/packages/seamless-wallets/bet-games": "1.*",
+        "ihub-grid/packages/seamless-wallets/mr-slotty": "1.*",
+        "ihub-grid/packages/seamless-wallets/fundist": "1.*",
+        "ihub-grid/packages/seamless-wallets/endorphina": "1.*",
+        "ihub-grid/packages/seamless-wallets/wirex-gaming": "1.*",
+        "ihub-grid/packages/seamless-wallets/micro-gaming": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -78,11 +108,13 @@
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan vendor:publish --tag=tests --force",
+            "php artisan vendor:publish --tag=resources --force",
             "php artisan optimize"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan vendor:publish --tag=tests --force",
+            "php artisan vendor:publish --tag=resources --force",
             "php artisan optimize"
         ]
     },

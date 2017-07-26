@@ -26,36 +26,30 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server.elkr.rancher.internal/g" \
        -e "s/^LOG_RABBIT_PORT=5672/LOG_RABBIT_PORT=5672/g" \
        -e "s/^LOG_RABBIT_USER=log_rabbit/LOG_RABBIT_USER=ihub/g" \
-       -e "s/^LOG_RABBIT_PASS=log_rabbit/LOG_RABBIT_PASS=\"8jm7JMBmCsqp\"/g" \
+       -e "s/^LOG_RABBIT_PASS=log_rabbit/LOG_RABBIT_PASS=\"ihub\"/g" \
        -e "s/^LOG_RABBIT_PREFIX=log_rabbit_prefix/LOG_RABBIT_PREFIX=\"\"/g" \
         \
         -e "s/^LOG_EXTERNAL_REQUESTS=false/LOG_EXTERNAL_REQUESTS=true/g" \
         \
        -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
        -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
+        \
        -e "s/^API_ACCOUNT_ROH_HOST_59__59=example.com/API_ACCOUNT_ROH_HOST_59__59=de2cs01d.dev.favorit/g" \
        -e "s/^API_ACCOUNT_ROH_PORT_59__59=6666/API_ACCOUNT_ROH_PORT_59__59=10007/g" \
-       -e "s/^API_ACCOUNT_SESSION_HOST=example.com/API_ACCOUNT_SESSION_HOST=e-proxy.dev/g" \
-       -e "s/^API_ACCOUNT_SESSION_PORT=6666/API_ACCOUNT_SESSION_PORT=8061/g" \
-       -e "s/^API_ACCOUNT_OP_HOST=example.com/API_ACCOUNT_OP_HOST=e-proxy.dev/g" \
-       -e "s/^API_ACCOUNT_OP_PORT=6666/API_ACCOUNT_OP_PORT=8008/g" \
-       -e "s/^API_CARDS_ROH_HOST=example.com/API_CARDS_ROH_HOST=de2ef01d.dev.favorit/g" \
-       -e "s/^API_CARDS_ROH_PORT=6666/API_CARDS_ROH_PORT=7767/g" \
-       -e "s/^API_CASH_DESK_ROH_HOST=example.com/API_CASH_DESK_ROH_HOST=e-proxy.dev/g" \
-       -e "s/^API_CASH_DESK_ROH_PORT=6666/API_CASH_DESK_ROH_PORT=7767/g" \
         \
-       -e "s/^API_HAZLE_SESSIONS=\"example1.com:6666;example.com2:6666\"/API_HAZLE_SESSIONS=\"de2ef01d.dev.favorit:5701;de2ef03d.dev.favorit:5701\"/g" \
+       -e "s/^API_ACCOUNT_ROH_HOST_51__51=example.com/API_ACCOUNT_ROH_HOST_51__51=de2ef01d.dev.favorit/g" \
+       -e "s/^API_ACCOUNT_ROH_PORT_51__51=6666/API_ACCOUNT_ROH_PORT_51__51=10102/g" \
         \
        -e "s/^GAME_SESSION_API_LOGIN=game_session_api_login/GAME_SESSION_API_LOGIN=\"t4ewr\$zAF@#u6esp\"/g" \
        -e "s/^GAME_SESSION_API_PASSWORD=game_session_api_password/GAME_SESSION_API_PASSWORD=\"t4ewr\$zAF@#u6esp\"/g" \
        -e "s/^GAME_SESSION_STORAGE_SECRET=game_session_storage_secret/GAME_SESSION_STORAGE_SECRET=gBEWPkx4yGDCZj0P/g" \
        -e "s/^GAME_SESSION_STORAGE_KEY_PREFIX=game_session_storage_key_prefix/GAME_SESSION_STORAGE_KEY_PREFIX=game_sessions/g" \
-       -e "s/^GAME_SESSION_STORAGE_TTL=900/GAME_SESSION_STORAGE_TTL=900/g" \
+       -e "s/^GAME_SESSION_STORAGE_TTL=900/GAME_SESSION_STORAGE_TTL=86400/g" \
         \
        -e "s/^RABBITMQ_HOST=example.com/RABBITMQ_HOST=rabbitmq-server.elkr.rancher.internal/g" \
        -e "s/^RABBITMQ_PORT=5672/RABBITMQ_PORT=5672/g" \
        -e "s/^RABBITMQ_USER=user/RABBITMQ_USER=ihub/g" \
-       -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"8jm7JMBmCsqp\"/g" \
+       -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"ihub\"/g" \
        -e "s/^RABBITMQ_PREFIX=/RABBITMQ_PREFIX=\"\"/g" \
        -e "s/^RABBITMQ_MYSTERION_QUEUE=mysterion_transactions/RABBITMQ_MYSTERION_QUEUE=mysterion_transactions/g" \
         \
@@ -72,5 +66,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
         \
        -e "s/^DYNAMIC_SCHEDULER_API_LOGIN=login/DYNAMIC_SCHEDULER_API_LOGIN=dynamic_scheduler_api_login/g" \
        -e "s/^DYNAMIC_SCHEDULER_API_PASSWORD=\"password\"/DYNAMIC_SCHEDULER_API_PASSWORD=\"gBEWPkx4yGDCZj0P\"/g" \
+        \
+       -e "s/^ELASTICSEARCH_HOST=\"http:\/\/localhost:9200\"/ELASTICSEARCH_HOST=\"http:\/\/elasticsearch.elkr.rancher.internal:9200\"/g" \
         \
        ./.env
