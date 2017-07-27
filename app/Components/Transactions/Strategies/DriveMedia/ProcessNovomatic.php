@@ -2,8 +2,8 @@
 
 namespace App\Components\Transactions\Strategies\DriveMedia;
 
+use App\Components\Integrations\DriveMediaNovomatic\CodeMapping;
 use iHubGrid\ErrorHandler\Http\CodeMappingBase;
-use App\Components\Integrations\MicroGaming\CodeMapping;
 use iHubGrid\SeamlessWalletCore\Transactions\BaseSeamlessWalletProcessor;
 use iHubGrid\SeamlessWalletCore\Transactions\Interfaces\TransactionProcessorInterface;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;

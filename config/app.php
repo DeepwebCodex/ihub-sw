@@ -166,7 +166,13 @@ return [
         \App\Providers\QueueRabbitMQServiceProvider::class,
         \iHubGrid\ErrorHandler\Providers\GuzzleServiceProvider::class,
         \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class,
-        \iHubGrid\EuroGamesTech\EuroGamesTechServiceProvider::class
+        \iHubGrid\EuroGamesTech\EuroGamesTechServiceProvider::class,
+        \iHubGrid\BetGames\BetGamesServiceProvider::class,
+        \iHubGrid\MrSlotty\MrSlottyServiceProvider::class,
+        \iHubGrid\Fundist\FundistServiceProvider::class,
+        \iHubGrid\Endorphina\EndorphinaServiceProvider::class,
+        \iHubGrid\WirexGaming\WirexGamingServiceProvider::class,
+        \iHubGrid\MicroGaming\MicroGamingServiceProvider::class,
     ],
 
     /*
@@ -218,4 +224,15 @@ return [
         'Fractal' => Spatie\Fractal\FractalFacade::class
     ],
 
+    'currency_mapping' => [
+        'USD' => 1,
+        'UAH' => 2,
+        'EUR' => 3,
+        'GBP' => 4,
+        'RUB' => 5,
+        'TRY' => 6,
+        'BYR' => 7,
+        'HRK' => 8,
+        'AZN' => 9
+    ]
 ];

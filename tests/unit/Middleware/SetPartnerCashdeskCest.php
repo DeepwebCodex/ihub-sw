@@ -3,7 +3,7 @@
 namespace unit\Components\Exceptions;
 
 
-use App\Http\Middleware\BetGames\SetPartnerCashdesk;
+use iHubGrid\BetGames\Http\Middleware\SetPartnerCashdesk;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 
