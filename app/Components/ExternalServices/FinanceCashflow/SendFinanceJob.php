@@ -2,7 +2,11 @@
 
 namespace App\Components\ExternalServices\FinanceCashflow;
 
+use Carbon\Carbon;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\Events\AfterCompleteTransactionEvent;
+use iHubGrid\SeamlessWalletCore\Transactions\Events\BeforePendingTransactionEvent;
+use iHubGrid\SeamlessWalletCore\Transactions\Events\TransactionEventInterface;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -13,16 +17,20 @@ class SendFinanceJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
+    /**@var TransactionRequest*/
     protected $transaction;
+
+    protected $event;
 
     /**
      * Create a new job instance.
      *
-     * @param $transaction
+     * @param $transactionEvent
      */
-    public function __construct(Transactions $transaction)
+    public function __construct(TransactionEventInterface $transactionEvent)
     {
-        $this->transaction = $transaction;
+        $this->transaction = $transactionEvent->getTransactionRequest();
+        $this->event = $transactionEvent;
     }
 
     /**
@@ -36,13 +44,25 @@ class SendFinanceJob implements ShouldQueue
     {
         $method = $this->selectMethod();
 
+        if($method == 'saveLose') {
+            $betTransaction = Transactions::getLastBetTransaction(
+                $this->transaction->service_id,
+                $this->transaction->user_id,
+                $this->transaction->currency,
+                $this->transaction->partner_id
+                );
+            if($betTransaction) {
+                $this->transaction->amount = $betTransaction->getAttributeValue('amount');
+            }
+        }
+
         $sendService->$method(
             $this->transaction->partner_id,
-            $this->transaction->cashdesk,
+            $this->transaction->cashdesk_id,
             $this->transaction->currency,
-            $this->transaction->operation_id,
-            $this->transaction->updated_at,
-            $this->transaction->amount,
+            $this->transaction->object_id,
+            Carbon::now('UTC')->format('Y-m-d H:i:s'),
+            abs($this->transaction->amount),
             $this->transaction->user_id,
             $this->transaction->service_id
         );
@@ -50,12 +70,24 @@ class SendFinanceJob implements ShouldQueue
 
     protected function selectMethod() : string
     {
-        if($this->transaction->getAttributeValue('transaction_type') == TransactionRequest::TRANS_BET) {
+        if($this->transaction->transaction_type == TransactionRequest::TRANS_BET && $this->event instanceof BeforePendingTransactionEvent) {
             return 'saveBet';
         }
 
-        if($this->transaction->getAttributeValue('amount') > 0) {
+        if(
+            abs($this->transaction->amount) > 0 &&
+            $this->event instanceof BeforePendingTransactionEvent &&
+            $this->transaction !== TransactionRequest::TRANS_BET
+        ) {
             return 'saveWin';
+        }
+
+        if(
+            abs($this->transaction->amount) > 0 &&
+            $this->event instanceof AfterCompleteTransactionEvent &&
+            $this->transaction !== TransactionRequest::TRANS_BET
+        ) {
+            return 'savePayment';
         }
 
         return 'saveLose';

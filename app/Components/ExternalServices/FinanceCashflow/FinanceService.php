@@ -2,7 +2,9 @@
 
 namespace App\Components\ExternalServices\FinanceCashflow;
 
-use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\Events\AfterCompleteTransactionEvent;
+use iHubGrid\SeamlessWalletCore\Transactions\Events\BeforePendingTransactionEvent;
+use iHubGrid\SeamlessWalletCore\Transactions\Events\TransactionEventInterface;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 
 class FinanceService
@@ -12,26 +14,32 @@ class FinanceService
         return (bool) config('finance.enabled');
     }
 
-    public function dispatch(Transactions $transaction)
+    public function dispatch(TransactionEventInterface $transactionEvent)
     {
         if(!$this->isEnabled()) {
             return false;
         }
 
-        if(!$this->validateStatus($transaction) || !$this->validateService($transaction)) {
+        if(!$this->validateStatus($transactionEvent) || !$this->validateService($transactionEvent)) {
             return false;
         }
 
-        dispatch((new SendFinanceJob($transaction))->onConnection('finance_queue'));
+        dispatch((new SendFinanceJob($transactionEvent))->onConnection('finance_queue'));
     }
 
-    protected function validateService(Transactions $transaction)
+    protected function validateService(TransactionEventInterface $transaction)
     {
-        return in_array($transaction->getAttributeValue('service_id'), config('finance.services', []));
+        return in_array(data_get($transaction->getTransactionRequest()->getAttributes(), 'service_id'), config('finance.services', []));
     }
 
-    protected function validateStatus(Transactions $transaction)
+    protected function validateStatus(TransactionEventInterface $transaction)
     {
-        return $transaction->getAttributeValue('status') === TransactionRequest::STATUS_COMPLETED;
+        if($transaction instanceof BeforePendingTransactionEvent) {
+            return true;
+        }
+
+        if($transaction instanceof AfterCompleteTransactionEvent && data_get($transaction->getTransactionRequest()->getAttributes(), 'transaction_type') !== TransactionRequest::TRANS_BET) {
+            return true;
+        }
     }
 }

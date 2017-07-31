@@ -21,7 +21,5 @@ class TransactionsObserver
     public function saved(Transactions $transaction)
     {
         (new TransactionProcessor())->process($transaction);
-
-        (new FinanceService())->dispatch($transaction);
     }
 }
