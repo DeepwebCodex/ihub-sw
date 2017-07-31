@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Components\ExternalServices\FinanceCashflow\FinanceService;
 use App\Components\ExternalServices\Mysterion\TransactionProcessor;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 
@@ -20,5 +21,7 @@ class TransactionsObserver
     public function saved(Transactions $transaction)
     {
         (new TransactionProcessor())->process($transaction);
+
+        (new FinanceService())->dispatch($transaction);
     }
 }

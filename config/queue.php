@@ -64,6 +64,11 @@ return [
             'retry_after' => 90,
         ],
 
+        'finance_queue' => [
+            'driver' => 'rabbitmq',
+            'queue' => env('FINANCE_QUEUE', 'finance_service'),
+        ],
+
         'mysterion_transactions' => [
             'driver' => 'rabbitmq',
             'queue' => env('RABBITMQ_MYSTERION_QUEUE', 'mysterion_transactions'),
