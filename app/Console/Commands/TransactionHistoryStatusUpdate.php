@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Carbon\Carbon;
 use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
+use iHubGrid\SeamlessWalletCore\Transactions\Events\AfterCompleteTransactionEvent;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Console\Command;
 use Stringy\StaticStringy;
 
@@ -106,8 +108,9 @@ class TransactionHistoryStatusUpdate extends Command
     /**
      * @param $expirationDate
      * @param $services
+     * @return array
      */
-    protected function getPendingTransactions($expirationDate, $services)
+    protected function getPendingTransactions($expirationDate, $services): array
     {
         return Transactions::where([
             ['status', 'pending'],
@@ -151,21 +154,48 @@ class TransactionHistoryStatusUpdate extends Command
     }
 
     /**
-     * @param $pendingTransaction
+     * @param Transactions $pendingTransaction
      * @param $newStatus
      */
-    protected function updateTransactionStatus($pendingTransaction, $newStatus)
+    protected function updateTransactionStatus(Transactions $pendingTransaction, $newStatus)
     {
-        if ($newStatus && $newStatus !== $pendingTransaction->status) {
+        if (!empty($newStatus) && $newStatus !== $pendingTransaction->status) {
             $this->info(
                 "New status in Account Manager - status: {$newStatus}, id: {$pendingTransaction->id}, operation_id: {$pendingTransaction->operation_id} \n"
             );
             $pendingTransaction->status = $newStatus;
             $pendingTransaction->save();
+
+            if ($newStatus === 'complete') {
+                $this->dispatchAfterCompleteTransactionEvent($pendingTransaction);
+            }
+
             return;
         }
         $this->info(
             "Same status in Account Manager - status: {$pendingTransaction->status}, id: {$pendingTransaction->id}, operation_id: {$pendingTransaction->operation_id} \n"
         );
+    }
+
+    /**
+     * @param Transactions $pendingTransaction
+     */
+    protected function dispatchAfterCompleteTransactionEvent(Transactions $pendingTransaction)
+    {
+        $transactionRequest = new TransactionRequest(
+            $pendingTransaction->service_id,
+            $pendingTransaction->object_id,
+            $pendingTransaction->user_id,
+            $pendingTransaction->currency,
+            $pendingTransaction->move,
+            $pendingTransaction->amount,
+            $pendingTransaction->transaction_type,
+            $pendingTransaction->foreign_id,
+            $pendingTransaction->game_id,
+            $pendingTransaction->partner_id,
+            $pendingTransaction->cashdesk,
+            $pendingTransaction->client_ip
+        );
+        \event(new AfterCompleteTransactionEvent($transactionRequest));
     }
 }
