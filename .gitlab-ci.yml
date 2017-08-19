@@ -218,7 +218,7 @@ deploy_to_servers_dev:
     - upgrade --environment dev-ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - export http_proxy=$HTTP_PROXY_FOR_DEV
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
-    - apk add --update curl
+    - apk update && apk upgrade && apk add --update curl
     - >-
       curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_DEV}/deployments.json"
       -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
@@ -327,7 +327,7 @@ manual_deploy_to_20_servers_prod:
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service nginx --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTPS_PROXY_FOR_PROD
-    - apk add --update curl
+    - apk update && apk upgrade && apk add --update curl
     - >-
       curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_PROD}/deployments.json"
       -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
