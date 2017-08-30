@@ -14,12 +14,12 @@ class TransactionEventSubscriber
 {
     public function onBeforePending(TransactionEventInterface $event)
     {
-        (new FinanceService())->dispatch($event);
+        //(new FinanceService())->dispatch($event);
     }
 
     public function onBeforeComplected(TransactionEventInterface $event)
     {
-        (new FinanceService())->dispatch($event);
+        //(new FinanceService())->dispatch($event);
     }
 
     public function onAfterPending(TransactionEventInterface $event)

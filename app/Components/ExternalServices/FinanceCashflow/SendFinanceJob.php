@@ -5,7 +5,7 @@ namespace App\Components\ExternalServices\FinanceCashflow;
 use Carbon\Carbon;
 use iHubGrid\SeamlessWalletCore\Models\Transactions;
 use iHubGrid\SeamlessWalletCore\Transactions\Events\AfterCompleteTransactionEvent;
-use iHubGrid\SeamlessWalletCore\Transactions\Events\BeforePendingTransactionEvent;
+use iHubGrid\SeamlessWalletCore\Transactions\Events\AfterPendingTransactionEvent;
 use iHubGrid\SeamlessWalletCore\Transactions\Events\TransactionEventInterface;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Bus\Queueable;
@@ -44,6 +44,10 @@ class SendFinanceJob implements ShouldQueue
     {
         $method = $this->selectMethod();
 
+        if($method == 'none') {
+            return;
+        }
+
         if($method == 'saveLose') {
             $betTransaction = Transactions::getLastBetTransaction(
                 $this->transaction->service_id,
@@ -70,16 +74,21 @@ class SendFinanceJob implements ShouldQueue
 
     protected function selectMethod() : string
     {
-        if($this->transaction->transaction_type == TransactionRequest::TRANS_BET && $this->event instanceof BeforePendingTransactionEvent) {
+        if($this->transaction->transaction_type == TransactionRequest::TRANS_BET && $this->event instanceof AfterPendingTransactionEvent) {
             return 'saveBet';
         }
 
         if(
             abs($this->transaction->amount) > 0 &&
-            $this->event instanceof BeforePendingTransactionEvent &&
+            $this->event instanceof AfterPendingTransactionEvent &&
             $this->transaction !== TransactionRequest::TRANS_BET
         ) {
             return 'saveWin';
+        } elseif (
+            $this->event instanceof AfterPendingTransactionEvent &&
+            $this->transaction !== TransactionRequest::TRANS_BET
+        ) {
+            return 'saveLose';
         }
 
         if(
@@ -90,6 +99,6 @@ class SendFinanceJob implements ShouldQueue
             return 'savePayment';
         }
 
-        return 'saveLose';
+        return 'none';
     }
 }
