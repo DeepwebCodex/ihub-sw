@@ -89,6 +89,7 @@
         "barryvdh/laravel-ide-helper": "^2.0",
         "flow/jsonpath": "^0.3.4"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "classmap": [
             "database"
