@@ -106,6 +106,7 @@
             "Testing\\": "tests/_support/Mocks"
         }
     },
+    "minimum-stability": "dev",
     "scripts": {
         "post-create-project-cmd": [
             "php artisan key:generate"
