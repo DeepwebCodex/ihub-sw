@@ -75,7 +75,7 @@
         "ihub-grid/packages/seamless-wallets/endorphina": "1.*",
         "ihub-grid/packages/seamless-wallets/wirex-gaming": "1.*",
         "ihub-grid/packages/seamless-wallets/micro-gaming": "1.*",
-        "ihub-grid/packages/seamless-wallets/fast-bet": "dev-ihub-924-fastbet as 1.0-dev"
+        "ihub-grid/packages/seamless-wallets/fast-bet": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
