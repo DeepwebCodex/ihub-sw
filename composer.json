@@ -89,7 +89,6 @@
         "barryvdh/laravel-ide-helper": "^2.0",
         "flow/jsonpath": "^0.3.4"
     },
-    "minimum-stability": "dev",
     "autoload": {
         "classmap": [
             "database"
@@ -107,7 +106,6 @@
             "Testing\\": "tests/_support/Mocks"
         }
     },
-    "minimum-stability": "dev",
     "scripts": {
         "post-create-project-cmd": [
             "php artisan key:generate"
