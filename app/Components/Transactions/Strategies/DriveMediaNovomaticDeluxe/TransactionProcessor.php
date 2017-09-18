@@ -89,9 +89,14 @@ abstract class TransactionProcessor extends BaseSeamlessWalletProcessor implemen
         return $model;
     }
 
-    protected function onInsufficientFunds($e) {
-        throw new ApiHttpException($e->getStatusCode(), null, CodeMapping::getByErrorCode
-                (StatusCode::FAIL_BALANCE));
-    }
+    protected function onInsufficientFunds($e)
+    {
+        $exception = (new ApiHttpException(
+            $e->getStatusCode(),
+            null,
+            CodeMapping::getByErrorCode(StatusCode::FAIL_BALANCE)
+        ))->turnOnTypicalErrorFlag();
 
+        throw $exception;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use iHubGrid\ErrorHandler\Exceptions\Api\ITypicalError;
 use iHubGrid\ErrorHandler\Exceptions\Api\Traits\ApiHandlerTrait;
 use iHubGrid\ErrorHandler\Facades\AppLog;
 use Exception;
@@ -70,10 +71,16 @@ class Handler extends ExceptionHandler
         if ($controller = $this->isApiCall($request)) {
             $response = $this->getApiExceptionResponse($controller, $exception);
             if ($response instanceof Response) {
+                $logGroup = '';
+                // write typical errors to group log index
+                if ($exception instanceof ITypicalError && $exception->isTypicalError()) {
+                    $logGroup = 'response-warning';
+                }
                 AppLog::error([
                     'request' => $request->getContent(),
                     'response' => $response->getContent()
-                ], $this->getNodeName(), 'response-error');
+                ], $this->getNodeName(), 'response-error', '', $logGroup);
+
                 return $response;
             }
         }
