@@ -47,7 +47,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
         \
        -e "s/^ACCOUNT_MANAGER_MOCK_IS_ENABLED=true/ACCOUNT_MANAGER_MOCK_IS_ENABLED=true/g" \
         \
-       -e "s/^RABBITMQ_HOST=example.com/RABBITMQ_HOST=rabbitmq-server.elkr.rancher.internal/g" \
+       -e "s/^RABBITMQ_HOST=example.com/RABBITMQ_HOST=de2elk01d.dev.favorit/g" \
        -e "s/^RABBITMQ_PORT=5672/RABBITMQ_PORT=5672/g" \
        -e "s/^RABBITMQ_USER=user/RABBITMQ_USER=ihub/g" \
        -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"ihub\"/g" \
