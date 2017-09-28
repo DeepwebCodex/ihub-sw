@@ -62,7 +62,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
         \
         -e "s/^FINANCE_SERVICE_ENABLED=false/FINANCE_SERVICE_ENABLED=true/g" \
         -e "s/^FINANCE_SERVICE_HOST=example.com/FINANCE_SERVICE_HOST=\"http:\/\/de2ei01d.dev.favorit\"/g" \
-        -e "s/^FINANCE_SERVICE_POscRT=6666/FINANCE_SERVICE_PORT=10009/g" \
+        -e "s/^FINANCE_SERVICE_PORT=6666/FINANCE_SERVICE_PORT=10009/g" \
         \
        -e "s/^DYNAMIC_SCHEDULER_API_LOGIN=login/DYNAMIC_SCHEDULER_API_LOGIN=dynamic_scheduler_api_login/g" \
        -e "s/^DYNAMIC_SCHEDULER_API_PASSWORD=\"password\"/DYNAMIC_SCHEDULER_API_PASSWORD=\"gBEWPkx4yGDCZj0P\"/g" \
