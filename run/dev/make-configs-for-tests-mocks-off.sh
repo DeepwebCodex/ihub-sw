@@ -50,6 +50,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^RABBITMQ_USER=user/RABBITMQ_USER=ihub/g" \
        -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"ihub\"/g" \
        -e "s/^RABBITMQ_PREFIX=/RABBITMQ_PREFIX=\"\"/g" \
+       -e "s/^COMMUNICATION_PROTOCOL_ENABLE=false/COMMUNICATION_PROTOCOL_ENABLE=false\"\"/g" \
        \
        -e "s/^ACCOUNT_MANAGER_MOCK_IS_ENABLED=true/ACCOUNT_MANAGER_MOCK_IS_ENABLED=false/g" \
         \
