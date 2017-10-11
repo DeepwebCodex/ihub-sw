@@ -173,6 +173,7 @@ return [
         \iHubGrid\Endorphina\EndorphinaServiceProvider::class,
         \iHubGrid\WirexGaming\WirexGamingServiceProvider::class,
         \iHubGrid\MicroGaming\MicroGamingServiceProvider::class,
+        \iHubGrid\InternationalLottery\InternationalLotteryServiceProvider::class
     ],
 
     /*
