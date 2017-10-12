@@ -68,6 +68,12 @@ return [
             'driver' => 'rabbitmq',
             'queue' => env('FINANCE_QUEUE', 'finance_service'),
         ],
+        
+        'achievement_queue' => [
+            'driver' => 'rabbitmq',
+            'queue' => env('ACHIEVEMENT_QUEUE', 'achievement_service'),
+        ],
+
 
         'mysterion_transactions' => [
             'driver' => 'rabbitmq',
