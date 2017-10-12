@@ -173,8 +173,10 @@ return [
         \iHubGrid\Endorphina\EndorphinaServiceProvider::class,
         \iHubGrid\WirexGaming\WirexGamingServiceProvider::class,
         \iHubGrid\MicroGaming\MicroGamingServiceProvider::class,
+        \iHubGrid\InternationalLottery\InternationalLotteryServiceProvider::class,
+        \iHubGrid\FastBet\FastBetServiceProvider::class,
         \iHubGrid\QueueCommunicationProtocol\Provider\QueueCommunicationProtocolRabbitMQServiceProvider::class,
-        \iHubGrid\QueueCommunicationProtocol\Provider\QueueCommunicationProtocolProvider::class
+        \iHubGrid\QueueCommunicationProtocol\Provider\QueueCommunicationProtocolProvider::class,
     ],
 
     /*
