@@ -54,7 +54,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^COMMUNICATION_PROTOCOL_ENABLE=false/COMMUNICATION_PROTOCOL_ENABLE=true\"\"/g" \
     -e "s/^ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=false/ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=true\"\"/g" \
     \
-    -e "s/^ACHIEVEMENT_QUEUE=queue_name/ACHIEVEMENT_QUEUE=achievement_service\"\"/g" \
+    -e "s/^ACHIEVEMENT_QUEUE=queue_name/ACHIEVEMENT_QUEUE=achievement_service/g" \
     \
     -e "s/^FINANCE_SERVICE_ENABLED=false/FINANCE_SERVICE_ENABLED=false/g" \
     -e "s/^FINANCE_SERVICE_HOST=example.com/FINANCE_SERVICE_HOST=\"http:\/\/de2ei01d.dev.favorit\"/g" \
