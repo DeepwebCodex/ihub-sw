@@ -17,6 +17,9 @@ class Params
     public $cashdeskId;
     public $partnerId;
     public $userIP = "127.0.0.1";
+    public $paymentInstrumentId = 3;
+    public $walletId = "ziwidif@rootfest.net";
+    public $walletAccountId = "EUR";
 
 
     public function __construct($integration = null)
