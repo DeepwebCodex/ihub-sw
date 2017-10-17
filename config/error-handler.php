@@ -60,5 +60,5 @@ return [
         'is_enabled' => env('LOG_EXTERNAL_REQUESTS', false),
         'exclude_filter' => ['Mysterion'],
     ],
-    'trim-response' => 255
+    'trim-response' => env('LOG_TRIM_RESPONSE_SIZE', 255)
 ];

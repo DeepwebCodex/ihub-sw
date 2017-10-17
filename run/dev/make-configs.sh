@@ -7,6 +7,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^APP_LOG_LEVEL=debug/APP_LOG_LEVEL=debug/g" \
     -e "s/^APP_REQUEST_DEBUG=true/APP_REQUEST_DEBUG=true/g" \
     -e "s/^LOG_EXTERNAL_REQUESTS=false/LOG_EXTERNAL_REQUESTS=true/g" \
+    -e "s/^LOG_TRIM_RESPONSE_SIZE=255/LOG_TRIM_RESPONSE_SIZE=2048/g" \
     \
     -e "s/^SESSION_DRIVER=file/SESSION_DRIVER=redis/g" \
     -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
