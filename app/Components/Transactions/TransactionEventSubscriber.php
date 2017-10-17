@@ -9,6 +9,7 @@ use iHubGrid\SeamlessWalletCore\Transactions\Events\BeforeCompleteTransactionEve
 use iHubGrid\SeamlessWalletCore\Transactions\Events\BeforePendingTransactionEvent;
 use iHubGrid\SeamlessWalletCore\Transactions\Events\TransactionEventInterface;
 use Illuminate\Events\Dispatcher;
+use iHubGrid\QueueCommunicationProtocol\Service\GameOperationService;
 
 class TransactionEventSubscriber
 {
@@ -30,6 +31,7 @@ class TransactionEventSubscriber
     public function onAfterComplected(TransactionEventInterface $event)
     {
         (new FinanceService())->dispatch($event);
+        (new GameOperationService('achievement'))->dispatch($event);
     }
 
     /**

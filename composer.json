@@ -51,7 +51,15 @@
         },
         {
             "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/international-lottery.git"
+        },
+        {
+            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/fast-bet.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/queue-communication-protocol.git"
         }
     ],
     "require": {
@@ -75,7 +83,9 @@
         "ihub-grid/packages/seamless-wallets/endorphina": "1.*",
         "ihub-grid/packages/seamless-wallets/wirex-gaming": "1.*",
         "ihub-grid/packages/seamless-wallets/micro-gaming": "1.*",
-        "ihub-grid/packages/seamless-wallets/fast-bet": "dev-master"
+        "ihub-grid/packages/seamless-wallets/international_lottery" : "1.*",
+        "ihub-grid/packages/seamless-wallets/fast-bet": "1.*",
+        "ihub-grid/packages/queue-communication-protocol": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
