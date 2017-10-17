@@ -4,8 +4,9 @@ cp ./.env.example ./.env.testing
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^APP_ENV=local/APP_ENV=testing/g" \
     -e "s/^APP_DEBUG=true/APP_DEBUG=true/g" \
-    -e "s/^APP_REQUEST_DEBUG=true/APP_REQUEST_DEBUG=true/g" \
     -e "s/^APP_LOG_LEVEL=debug/APP_LOG_LEVEL=warning/g" \
+    -e "s/^APP_REQUEST_DEBUG=true/APP_REQUEST_DEBUG=true/g" \
+    -e "s/^LOG_EXTERNAL_REQUESTS=false/LOG_EXTERNAL_REQUESTS=true/g" \
     \
     -e "s/^SESSION_DRIVER=file/SESSION_DRIVER=redis/g" \
     -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
@@ -33,6 +34,12 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
     -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
     \
+    -e "s/^API_ACCOUNT_ROH_HOST_59__59=example.com/API_ACCOUNT_ROH_HOST_59__59=de2cs01d.dev.favorit/g" \
+    -e "s/^API_ACCOUNT_ROH_PORT_59__59=6666/API_ACCOUNT_ROH_PORT_59__59=10007/g" \
+    \
+    -e "s/^API_ACCOUNT_ROH_HOST_51__51=example.com/API_ACCOUNT_ROH_HOST_51__51=de2ef01d.dev.favorit/g" \
+    -e "s/^API_ACCOUNT_ROH_PORT_51__51=6666/API_ACCOUNT_ROH_PORT_51__51=10102/g" \
+    \
     -e "s/^GAME_SESSION_API_LOGIN=game_session_api_login/GAME_SESSION_API_LOGIN=\"t4ewr\$zAF@#u6esp\"/g" \
     -e "s/^GAME_SESSION_API_PASSWORD=game_session_api_password/GAME_SESSION_API_PASSWORD=\"t4ewr\$zAF@#u6esp\"/g" \
     -e "s/^GAME_SESSION_STORAGE_SECRET=game_session_storage_secret/GAME_SESSION_STORAGE_SECRET=gBEWPkx4yGDCZj0P/g" \
@@ -48,17 +55,19 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^RABBITMQ_PORT=5672/RABBITMQ_PORT=5672/g" \
     -e "s/^RABBITMQ_USER=user/RABBITMQ_USER=communication/g" \
     -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"communication\"/g" \
-    -e "s/^RABBITMQ_PREFIX=/RABBITMQ_PREFIX=\"\"/g" \
+    -e "s/^RABBITMQ_PREFIX=rabbit_prefix/RABBITMQ_PREFIX=\"\"/g" \
     -e "s/^RABBITMQ_VHOST=\"\/\"/RABBITMQ_VHOST=\"communication\"/g" \
     \
-    -e "s/^COMMUNICATION_PROTOCOL_ENABLE=false/COMMUNICATION_PROTOCOL_ENABLE=true/g" \
-    -e "s/^ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=false/ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=true/g" \
+    -e "s/^COMMUNICATION_PROTOCOL_ENABLE=false/COMMUNICATION_PROTOCOL_ENABLE=false/g" \
+    -e "s/^ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=false/ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=false/g" \
     \
     -e "s/^ACHIEVEMENT_QUEUE=queue_name/ACHIEVEMENT_QUEUE=achievement_service/g" \
     \
-    -e "s/^FINANCE_SERVICE_ENABLED=false/FINANCE_SERVICE_ENABLED=false/g" \
+    -e "s/^FINANCE_SERVICE_ENABLED=false/FINANCE_SERVICE_ENABLED=true/g" \
     -e "s/^FINANCE_SERVICE_HOST=example.com/FINANCE_SERVICE_HOST=\"http:\/\/de2ei01d.dev.favorit\"/g" \
     -e "s/^FINANCE_SERVICE_PORT=6666/FINANCE_SERVICE_PORT=10009/g" \
+    \
+    -e "s/^ELASTICSEARCH_HOST=\"http:\/\/localhost:9200\"/ELASTICSEARCH_HOST=\"http:\/\/elasticsearch.elkr.rancher.internal:9200\"/g" \
     \
     -e "s/^ACCOUNT_MANAGER_MOCK_IS_ENABLED=true/ACCOUNT_MANAGER_MOCK_IS_ENABLED=true/g" \
     \
