@@ -8,8 +8,9 @@ return [
                 'port' => env('LOG_RABBIT_PORT', false),
                 'user' => env('LOG_RABBIT_USER', false),
                 'password' => env('LOG_RABBIT_PASS', false),
-                'prefix' => '',
+                'prefix' => env('LOG_RABBIT_PREFIX', ""),
                 'default_exchange' => 'log_exchange',
+                'vhost' => env('LOG_RABBIT_VHOST', "/"),
                 'queueList' => [
                     [
                         'event_levels' => ['error', 'critical', 'alert', 'emergency'],
@@ -40,7 +41,7 @@ return [
                     ]
                 ]
             ],
-            'file'  => [
+            'file' => [
                 'log' => env('APP_LOG', 'single'),
                 'log_level' => env('APP_LOG_LEVEL', 'debug')
             ],
@@ -51,8 +52,13 @@ return [
             ]
         ]
     ],
+    'request-response-log' => [
+        'status-codes' => null, // array if log only some
+        'log-only-api-calls' => true
+    ],
     'external-services-requests' => [
         'is_enabled' => env('LOG_EXTERNAL_REQUESTS', false),
         'exclude_filter' => ['Mysterion'],
-    ]
+    ],
+    'trim-response' => env('LOG_TRIM_RESPONSE_SIZE', 255)
 ];
