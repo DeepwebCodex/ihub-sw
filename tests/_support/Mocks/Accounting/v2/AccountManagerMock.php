@@ -24,7 +24,7 @@ class AccountManagerMock
         if($makePartial){
             $this->mock->makePartial();
         }
-        //$this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
+        $this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
     }
 
     const SERVICE_IDS = [
