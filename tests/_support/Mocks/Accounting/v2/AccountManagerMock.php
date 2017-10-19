@@ -17,12 +17,14 @@ class AccountManagerMock
     private $bet_operation_id = 9543958;
     private $win_operation_id = 2834034;
 
-    public function __construct(Params $params)
+    public function __construct(Params $params, bool $makePartial = false)
     {
         $this->params = $params;
         $this->mock = $this->getMock();
-
-        $this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
+        if($makePartial){
+            $this->mock->makePartial();
+        }
+        //$this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
     }
 
     const SERVICE_IDS = [
@@ -45,6 +47,13 @@ class AccountManagerMock
 
         return $this;
     }
+    
+    public function getOperationByQuery(array $answer)
+    {
+        $this->mock->shouldReceive('getOperationByQuery')->withAnyArgs()->andReturn($answer);
+
+        return $this;
+    }
 
     public function selectAccounting()
     {
@@ -58,26 +67,33 @@ class AccountManagerMock
         if(is_null($balance)){
             $balance = $this->params->getBalance();
         }
-
-        $this->mock->shouldReceive('getUserInfo')
-            ->withArgs([$this->params->userId])->andReturn(
-            [
-                    "id" => $this->params->userId,
-                "wallets" => [
+        $wallets = [
                     [
                         "__record" => "wallet",
                         "currency" => $this->params->currency,
                         "is_active" => 1,
                         "deposit" => $balance,
-                        "payment_instrument_id" => $this->params->paymentInstrumentId,
-                        "wallet_id" => $this->params->walletId,
-                        "wallet_account_id" => $this->params->walletAccountId
                     ],
-                ],
+                    [
+                        "__record" => "wallet",
+                        "currency" => 'USD',
+                        "is_active" => 0,
+                        "deposit" => $balance,
+                    ],
+                ];
+        $userInfoData = [
+                    "id" => $this->params->userId,
+
                 "user_services" => $this->getServices(),
                 "first_name" => "Апаропао",
                 "last_name" => "Паопаопаопао",
-            ]
+            ];
+        $wallets[0] = array_merge($wallets[0], $this->params->walletData[0]);
+        $wallets[1] = array_merge($wallets[1], $this->params->walletData[1]);
+        $userInfoData['wallets'] = $wallets;
+        $this->mock->shouldReceive('getUserInfo')
+            ->withArgs([$this->params->userId])->andReturn(
+            $userInfoData
         );
 
         return $this;
