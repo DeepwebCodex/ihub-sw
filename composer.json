@@ -75,7 +75,7 @@
         "ihub-grid/packages/dynamic-scheduler": "1.*",
         "ihub-grid/packages/accounting": "1.*",
         "ihub-grid/packages/error-handler": "1.*",
-        "ihub-grid/packages/seamless-wallet-core": "dev-ihub-1026-function-helper-chhose-wallet",
+        "ihub-grid/packages/seamless-wallet-core": "1.*",
         "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*",
         "ihub-grid/packages/seamless-wallets/bet-games": "1.*",
         "ihub-grid/packages/seamless-wallets/mr-slotty": "1.*",
