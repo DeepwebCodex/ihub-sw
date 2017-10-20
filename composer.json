@@ -78,7 +78,7 @@
         "ihub-grid/packages/seamless-wallet-core": "1.*",
         "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*",
         "ihub-grid/packages/seamless-wallets/bet-games": "1.*",
-        "ihub-grid/packages/seamless-wallets/mr-slotty": "1.*",
+        "ihub-grid/packages/seamless-wallets/mr-slotty": "dev-ihub-1028-added-support-freespins",
         "ihub-grid/packages/seamless-wallets/fundist": "dev-netent-gift-spins",
         "ihub-grid/packages/seamless-wallets/endorphina": "1.*",
         "ihub-grid/packages/seamless-wallets/wirex-gaming": "1.*",
