@@ -20,7 +20,7 @@ class AddTransactionHistoryUniqIndx extends Migration
         if (Schema::hasTable(self::TABLE_NAME) && !$this->isNewIndexExists()) {
             \DB::statement('COMMIT;');
             \DB::statement(
-                'CREATE INDEX CONCURRENTLY ' . self::NEW_INDEX_NAME . ' ON ' . self::TABLE_NAME
+                'CREATE UNIQUE INDEX CONCURRENTLY ' . self::NEW_INDEX_NAME . ' ON ' . self::TABLE_NAME
                 . ' (foreign_id, service_id, transaction_type)'
             );
             \DB::statement('BEGIN;');

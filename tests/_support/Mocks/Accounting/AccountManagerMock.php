@@ -22,6 +22,9 @@ class AccountManagerMock
         $this->mock = $this->getMock();
 
         $this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
+        
+        //mock default
+        $this->getUserService();
     }
 
     const SERVICE_IDS = [
@@ -233,5 +236,22 @@ class AccountManagerMock
                 $I->haveInstance(AccountManager::class, $this->mock);
             }
         }
+    }
+    
+    public function getUserService()
+    {
+        $data = [
+            'user_id' => $this->params->userId,
+            'service_id' => $this->params->serviceId,
+            'is_enabled' => 1,
+            'delay' => 0,
+            'limit_min' => 1,
+            'limit_max' => 1000,
+            'is_blocked' => 0,
+            'block_text' => null,
+            'flags' => 1
+        ];
+        $this->mock->shouldReceive('getUserService')->withAnyArgs()->andReturn($data);
+        return $this;
     }
 }
