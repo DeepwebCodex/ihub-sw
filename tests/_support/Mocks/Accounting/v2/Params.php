@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Testing\Accounting;
+namespace Testing\Accounting\v2;
 
 use iHubGrid\Accounting\Users\IntegrationUser;
 
@@ -17,6 +17,23 @@ class Params
     public $cashdeskId;
     public $partnerId;
     public $userIP = "127.0.0.1";
+    public $walletData = [
+        0 => [
+            'payment_instrument_id' => 3,
+            'wallet_id' => "ziwidif@rootfest.net",
+            'wallet_account_id' => "EUR",
+            'partner_id' => 34
+        ],
+        1 => [
+            'payment_instrument_id' => 4,
+            'wallet_id' => "usd@rootfest.net",
+            'wallet_account_id' => "USD",
+            'partner_id' => 35
+        ]
+    ];
+    public $paymentInstrumentId;
+    public $walletId;
+    public $walletAccountId;
 
 
     public function __construct($integration = null)
@@ -25,7 +42,11 @@ class Params
 
         $this->userId = (int)env('TEST_USER_ID');
         $this->cashdeskId = (int)env('TEST_CASHEDESK');
-        $this->partnerId = (int)env('TEST_PARTNER_ID');
+        $this->partnerId = $this->walletData[0]['partner_id'];
+        $this->paymentInstrumentId = $this->walletData[0]['payment_instrument_id'];
+        $this->walletId = $this->walletData[0]['wallet_id'];
+        $this->walletAccountId = $this->walletData[0]['wallet_account_id'];
+        
         $this->serviceId = ($integration)
             ? (int)config("integrations.{$integration}.service_id") : 0;
     }

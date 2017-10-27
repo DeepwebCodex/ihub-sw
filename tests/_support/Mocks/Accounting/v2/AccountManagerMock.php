@@ -6,7 +6,9 @@ use iHubGrid\Accounting\ExternalServices\AccountManager;
 use iHubGrid\ErrorHandler\Exceptions\Api\GenericApiHttpException;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Mockery;
-use Testing\Accounting\Params;
+use Testing\Accounting\v2\Params;
+use function GuzzleHttp\json_encode;
+
 
 
 class AccountManagerMock
@@ -25,6 +27,9 @@ class AccountManagerMock
             $this->mock->makePartial();
         }
         $this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
+        
+        //mock default
+        $this->getUserService();
     }
 
     const SERVICE_IDS = [
@@ -64,30 +69,29 @@ class AccountManagerMock
 
     public function userInfo($balance = null)
     {
-        if(is_null($balance)){
+        if (is_null($balance)) {
             $balance = $this->params->getBalance();
         }
         $wallets = [
-                    [
-                        "__record" => "wallet",
-                        "currency" => $this->params->currency,
-                        "is_active" => 1,
-                        "deposit" => $balance,
-                    ],
-                    [
-                        "__record" => "wallet",
-                        "currency" => 'USD',
-                        "is_active" => 0,
-                        "deposit" => $balance,
-                    ],
-                ];
+            [
+                "__record" => "wallet",
+                "currency" => $this->params->currency,
+                "is_active" => 1,
+                "deposit" => $balance,
+            ],
+            [
+                "__record" => "wallet",
+                "currency" => 'USD',
+                "is_active" => 0,
+                "deposit" => $balance,
+            ],
+        ];
         $userInfoData = [
-                    "id" => $this->params->userId,
-
-                "user_services" => $this->getServices(),
-                "first_name" => "Апаропао",
-                "last_name" => "Паопаопаопао",
-            ];
+            "id" => $this->params->userId,
+            "user_services" => $this->getServices(),
+            "first_name" => "Апаропао",
+            "last_name" => "Паопаопаопао",
+        ];
         $wallets[0] = array_merge($wallets[0], $this->params->walletData[0]);
         $wallets[1] = array_merge($wallets[1], $this->params->walletData[1]);
         $userInfoData['wallets'] = $wallets;
@@ -257,4 +261,22 @@ class AccountManagerMock
             }
         }
     }
+    
+    public function getUserService()
+    {
+        $data = [
+            'user_id' => $this->params->userId,
+            'service_id' => $this->params->serviceId,
+            'is_enabled' => 1,
+            'delay' => 0,
+            'limit_min' => 1,
+            'limit_max' => 1000,
+            'is_blocked' => 0,
+            'block_text' => null,
+            'flags' => 1
+        ];
+        $this->mock->shouldReceive('getUserService')->withAnyArgs()->andReturn($data);
+        return $this;
+    }
+
 }
