@@ -72,7 +72,7 @@
         "spatie/laravel-fractal": "^1.9",
         "danielstjules/stringy": "~2.3",
         "doctrine/dbal": "^2.5",
-        "ihub-grid/packages/dynamic-scheduler": "1.*",
+        "ihub-grid/packages/dynamic-scheduler": "^1.1.0",
         "ihub-grid/packages/accounting": "1.*",
         "ihub-grid/error-handler": "1.1.20",
         "ihub-grid/packages/seamless-wallet-core": "1.*",
