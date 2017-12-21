@@ -175,6 +175,7 @@ return [
         \iHubGrid\MicroGaming\MicroGamingServiceProvider::class,
         \iHubGrid\InternationalLottery\InternationalLotteryServiceProvider::class,
         \iHubGrid\FastBet\FastBetServiceProvider::class,
+        \iHubGrid\BestGolBet\BestGolBetServiceProvider::class,
         \iHubGrid\QueueCommunicationProtocol\Provider\QueueCommunicationProtocolRabbitMQServiceProvider::class,
         \iHubGrid\QueueCommunicationProtocol\Provider\QueueCommunicationProtocolProvider::class,
     ],
