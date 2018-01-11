@@ -5,6 +5,8 @@ namespace Testing;
 use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
 use iHubGrid\SeamlessWalletCore\GameSession\GameSessionService;
 use Mockery;
+use Mockery\Mock;
+use function env;
 
 /**
  * Class GameSessionsMock
@@ -12,10 +14,13 @@ use Mockery;
  */
 class GameSessionsMock
 {
-    public static function getMock()
+    /** @var Mockery\Mock $game_session */
+    public static function getMock($game_session = null)
     {
-        /** @var Mockery\Mock $game_session */
-        $game_session = Mockery::mock(GameSessionService::class);
+        if (!$game_session) {
+            /** @var Mockery\Mock $game_session */
+            $game_session = Mockery::mock(GameSessionService::class);
+        }
 
         $game_session->shouldReceive('start')->once();
         $game_session->shouldReceive('start')->withArgs(['authorization_must_fails'])->andThrow(new SessionDoesNotExist());
