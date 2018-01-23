@@ -93,6 +93,7 @@ variables:
       - ./tests/_output
       - ./storage/logs
       - ./.env.testing
+      - ./vendor/ihub-grid/packages/accounting/src/ExternalServices/AccountManager.php
     expire_in: 1 hour
   script:
     - ./vendor/bin/codecept run api
