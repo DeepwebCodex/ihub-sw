@@ -1,5 +1,4 @@
 <?php
-
 namespace Testing;
 
 use iHubGrid\SeamlessWalletCore\GameSession\Exceptions\SessionDoesNotExist;
@@ -14,7 +13,9 @@ use function env;
  */
 class GameSessionsMock
 {
-    public static function getMock(Mock $game_session = null)
+
+
+    public static function getMock($game_session = null)
     {
         if (!$game_session) {
             /** @var Mockery\Mock $game_session */
