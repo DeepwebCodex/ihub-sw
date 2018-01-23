@@ -27,7 +27,7 @@ variables:
   NEWRELIC_DEPLOYMENT_API_KEY: "72add31ff74c0f5d4e8fc61ba1c38ac38bdb0e6dc9f226e"
   NEWRELIC_DEPLOYMENT_APP_ID_DEV: "44669872"
   NEWRELIC_DEPLOYMENT_APP_ID_PROD: "42805419"
-
+  NO_PROXY: "gitlab.favorit"
 
 #====================== templates ======================#
 .template_dev: &template_dev
@@ -154,6 +154,7 @@ compile_feature:
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
     - rm -rf composer.lock
     - composer install --optimize-autoloader
+    - composer show -i
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
@@ -199,6 +200,7 @@ compile_dev:
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache || true
     - rm -rf composer.lock
     - composer install --optimize-autoloader
+    - composer show -i
 
 migrate_dev:
   <<: *template_dev
@@ -271,6 +273,7 @@ compile_prod:
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache || true
     - rm -rf composer.lock
     - composer install --optimize-autoloader
+    - composer show -i
     - php artisan route:cache
 
 test_on_dev_configs_prod:
