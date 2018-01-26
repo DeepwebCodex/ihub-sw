@@ -194,7 +194,7 @@ class AccountManagerMock
             $direction,
             $object_id,
             $this->getComment($object_id, $amount, $direction),
-            $this->params->partnerId,
+            null,
             $this->params->userIP,
         ];
     }
