@@ -74,7 +74,8 @@ class SendFinanceJob implements ShouldQueue
 
     protected function selectMethod() : string
     {
-        if($this->transaction->transaction_type == TransactionRequest::TRANS_BET && $this->event instanceof AfterPendingTransactionEvent) {
+        if($this->transaction->transaction_type == TransactionRequest::TRANS_BET && 
+            $this->event instanceof AfterPendingTransactionEvent) {
             return 'saveBet';
         }
 
