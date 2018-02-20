@@ -49,7 +49,7 @@ class SendFinanceJob implements ShouldQueue
         }
 
         if($method == 'saveLose') {
-            $betTransaction = Transactions::getLastBetTransaction(
+            $betTransaction = Transactions::getNearestBetTransaction(
                 $this->transaction->service_id,
                 $this->transaction->user_id,
                 $this->transaction->currency,
