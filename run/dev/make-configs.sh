@@ -23,7 +23,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     \
     -e "s/^REDIS_HOST=example.com/REDIS_HOST=redis-ihub.system.rancher.internal/g" \
     -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
-    -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=ihubGrid:ihub-sw/g" \
+    -e "s/^REDIS_PREFIX=integrations/REDIS_PREFIX=ihubGrid:ihub-sw/g" \
     \
     -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server.elkr.rancher.internal/g" \
     -e "s/^LOG_RABBIT_PORT=5672/LOG_RABBIT_PORT=5672/g" \
