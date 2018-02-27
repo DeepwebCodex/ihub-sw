@@ -48,7 +48,7 @@ class SendFinanceJob implements ShouldQueue
             return;
         }
 
-        if($method == 'saveLose') {
+        if ($method == 'saveLose') {
             $betTransaction = Transactions::getNearestBetTransaction(
                 $this->transaction->service_id,
                 $this->transaction->user_id,
@@ -70,6 +70,19 @@ class SendFinanceJob implements ShouldQueue
             $this->transaction->user_id,
             $this->transaction->service_id
         );
+        
+        if ($method == 'saveBet') {
+            $sendService->saveCalculation(
+                $this->transaction->partner_id,
+                $this->transaction->cashdesk_id,
+                $this->transaction->currency,
+                $this->transaction->object_id,
+                Carbon::now('UTC')->format('Y-m-d H:i:s'),
+                abs($this->transaction->amount),
+                $this->transaction->user_id,
+                $this->transaction->service_id
+            );
+        }
     }
 
     protected function selectMethod() : string
@@ -85,12 +98,13 @@ class SendFinanceJob implements ShouldQueue
             $this->transaction !== TransactionRequest::TRANS_BET
         ) {
             return 'saveWin';
-        } elseif (
-            $this->event instanceof AfterPendingTransactionEvent &&
-            $this->transaction !== TransactionRequest::TRANS_BET
-        ) {
-            return 'saveLose';
-        }
+        } 
+//        elseif (
+//            $this->event instanceof AfterPendingTransactionEvent &&
+//            $this->transaction !== TransactionRequest::TRANS_BET
+//        ) {
+//            return 'saveLose';
+//        }
 
         if(
             abs($this->transaction->amount) > 0 &&
