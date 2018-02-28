@@ -19,11 +19,11 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^DB_PORT=5432/DB_PORT=6432/g" \
     -e "s/^DB_DATABASE=db/DB_DATABASE=ihub/g" \
     -e "s/^DB_USERNAME=pgsql/DB_USERNAME=u_ihub/g" \
-    -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"​/g" \
+    -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"/g" \
     \
-    -e "s/^REDIS_HOST=example.com/REDIS_HOST=de2red01d.dev.favorit/g" \
+    -e "s/^REDIS_HOST=example.com/REDIS_HOST=redis-ihub.system.rancher.internal/g" \
     -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
-    -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=integrations_hub/g" \
+    -e "s/^REDIS_PREFIX=redis_prefix/REDIS_PREFIX=ihubGrid:ihub-sw/g" \
     \
     -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server.elkr.rancher.internal/g" \
     -e "s/^LOG_RABBIT_PORT=5672/LOG_RABBIT_PORT=5672/g" \
