@@ -16,6 +16,7 @@ class FinanceServiceSender
     const BET_LOSE = 4;
     const BET_WIN  = 5;
     const BET_PAYMENT = 6;
+    const BET_CALCULATION = 29;
 
     public function __construct()
     {
@@ -117,6 +118,32 @@ class FinanceServiceSender
     )
     {
         return $this->saveTransaction(static::BET_PAYMENT, [
+            'partner_id' => $partner_id,
+            'cashdesk'   => $cashdesk_id,
+            'currency'   => $currency,
+            'id'         => $operation_id,
+            'tax_type'   => 0,
+            'tax_sum'    => 0,
+            'dt'         => $date,
+            'amount'     => $amount,
+            'user_type'  => 1,
+            'user_id'    => $user_id,
+            'service_id' => $service_id
+        ]);
+    }
+    
+    public function saveCalculation(
+        int $partner_id,
+        int $cashdesk_id,
+        string $currency,
+        int $operation_id,
+        string $date,
+        float $amount,
+        int $user_id,
+        int $service_id
+    )
+    {
+        return $this->saveTransaction(static::BET_CALCULATION, [
             'partner_id' => $partner_id,
             'cashdesk'   => $cashdesk_id,
             'currency'   => $currency,
