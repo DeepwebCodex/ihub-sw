@@ -55,6 +55,10 @@
         },
         {
             "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/best-gold-bet.git"
+        },
+        {
+            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/queue-communication-protocol.git"
         }
     ],
@@ -80,6 +84,7 @@
         "ihub-grid/packages/seamless-wallets/micro-gaming": "1.*",
         "ihub-grid/packages/seamless-wallets/international_lottery" : "1.*",
         "ihub-grid/packages/seamless-wallets/fast-bet": "1.*",
+        "ihub-grid/packages/seamless-wallets/best-gold-bet": "1.*",
         "ihub-grid/packages/queue-communication-protocol": "1.*"
     },
     "require-dev": {
