@@ -33,15 +33,11 @@ return [
         'sync' => [
             'driver' => 'sync',
         ],
-
-        'finance_queue' => [
-            'driver' => 'rabbitmq',
-            'queue' => env('FINANCE_QUEUE', 'finance_service'),
-        ],
         
-        'achievement_queue' => [
+        'transaction' => [
             'driver' => 'rabbitmq',
-            'queue' => env('ACHIEVEMENT_QUEUE', 'achievement_service'),
+            'queue' => null,
+            'rabbit_config' => 'transaction_publisher_rabbitmq',
         ],
 
         'mysterion_transactions' => [

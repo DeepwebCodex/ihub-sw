@@ -2,36 +2,34 @@
 
 namespace App\Components\Transactions;
 
-use App\Components\ExternalServices\FinanceCashflow\FinanceService;
+use iHubGrid\QueueCommunicationProtocol\Implementation\Transaction\Publisher;
 use iHubGrid\SeamlessWalletCore\Transactions\Events\AfterCompleteTransactionEvent;
 use iHubGrid\SeamlessWalletCore\Transactions\Events\AfterPendingTransactionEvent;
 use iHubGrid\SeamlessWalletCore\Transactions\Events\BeforeCompleteTransactionEvent;
 use iHubGrid\SeamlessWalletCore\Transactions\Events\BeforePendingTransactionEvent;
 use iHubGrid\SeamlessWalletCore\Transactions\Events\TransactionEventInterface;
 use Illuminate\Events\Dispatcher;
-use iHubGrid\QueueCommunicationProtocol\Service\GameOperationService;
 
 class TransactionEventSubscriber
 {
     public function onBeforePending(TransactionEventInterface $event)
     {
-        //(new FinanceService())->dispatch($event);
+        
     }
 
     public function onBeforeComplected(TransactionEventInterface $event)
     {
-        //(new FinanceService())->dispatch($event);
+        
     }
 
     public function onAfterPending(TransactionEventInterface $event)
     {
-        (new FinanceService())->dispatch($event);
+        (new Publisher())->dispatch($event);
     }
 
     public function onAfterComplected(TransactionEventInterface $event)
     {
-        (new FinanceService())->dispatch($event);
-        (new GameOperationService('achievement'))->dispatch($event);
+        (new Publisher())->dispatch($event);
     }
 
     /**
