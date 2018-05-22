@@ -61,6 +61,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     \
     -e "s/^COMMUNICATION_PROTOCOL_ENABLE=false/COMMUNICATION_PROTOCOL_ENABLE=true/g" \
     -e "s/^ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=false/ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=true/g" \
+    -e "s/^TRANSACTION_COMMUNICATION_PROTOCOL_ENABLE=false/TRANSACTION_COMMUNICATION_PROTOCOL_ENABLE=true/g" \
     \
     -e "s/^ACHIEVEMENT_QUEUE=queue_name/ACHIEVEMENT_QUEUE=achievement_service/g" \
     \
