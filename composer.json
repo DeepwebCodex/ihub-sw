@@ -89,7 +89,7 @@
         "ihub-grid/packages/seamless-wallets/international_lottery" : "1.*",
         "ihub-grid/packages/seamless-wallets/fast-bet": "1.*",
         "ihub-grid/packages/seamless-wallets/best-gold-bet": "1.*",
-        "ihub-grid/packages/queue-communication-protocol": "1.*"
+        "ihub-grid/packages/queue-communication-protocol": "1.1.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
