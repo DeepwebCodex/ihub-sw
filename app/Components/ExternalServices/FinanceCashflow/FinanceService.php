@@ -3,9 +3,12 @@
 namespace App\Components\ExternalServices\FinanceCashflow;
 
 use iHubGrid\SeamlessWalletCore\Transactions\Events\AfterCompleteTransactionEvent;
-use iHubGrid\SeamlessWalletCore\Transactions\Events\BeforePendingTransactionEvent;
+use iHubGrid\SeamlessWalletCore\Transactions\Events\AfterPendingTransactionEvent;
 use iHubGrid\SeamlessWalletCore\Transactions\Events\TransactionEventInterface;
 use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
+use function config;
+use function data_get;
+use function dispatch;
 
 class FinanceService
 {
@@ -34,7 +37,7 @@ class FinanceService
 
     protected function validateStatus(TransactionEventInterface $transaction)
     {
-        if($transaction instanceof BeforePendingTransactionEvent) {
+        if($transaction instanceof AfterPendingTransactionEvent) {
             return true;
         }
 

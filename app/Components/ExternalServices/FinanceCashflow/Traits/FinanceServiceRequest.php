@@ -40,15 +40,6 @@ trait FinanceServiceRequest
             }
 
         } catch (\Exception $e) {
-            $statusCode = $this->getHttpCode($e->getCode());
-
-            /*Retry operation on fail*/
-
-            if ($retry > 0 && ($statusCode >= Response::HTTP_INTERNAL_SERVER_ERROR || $statusCode == Response::HTTP_SERVICE_UNAVAILABLE)) {
-                $retry--;
-                sleep(1);
-                return $this->sendPostRoh($url, $params, $retry);
-            }
 
             \app('AppLog')->warning(
                 [
@@ -61,7 +52,7 @@ trait FinanceServiceRequest
                 'finance-api'
             );
 
-            throw new GenericApiHttpException($statusCode, $e->getMessage(), [], null, [], $e->getCode());
+            throw new GenericApiHttpException(500, $e->getMessage(), [], null, [], $e->getCode());
         }
     }
 }
