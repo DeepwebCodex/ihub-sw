@@ -14,7 +14,7 @@ use function env;
 class GameSessionsMock
 {
 
-    /** @var Mockery\Mock $game_session */
+
     public static function getMock($game_session = null)
     {
         if (!$game_session) {
