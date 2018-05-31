@@ -21,7 +21,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^DB_USERNAME=pgsql/DB_USERNAME=u_ihub/g" \
     -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"/g" \
     \
-    -e "s/^REDIS_HOST=example.com/REDIS_HOST=redis-ihub.system.rancher.internal/g" \
+    -e "s/^REDIS_HOST=example.com/REDIS_HOST=redis-ihub.redis.rancher.internal/g" \
     -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
     -e "s/^REDIS_PREFIX=redis_prefix/REDIS_PREFIX=ihubGrid:ihub-sw/g" \
     \
@@ -60,13 +60,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^RABBITMQ_VHOST=\"\/\"/RABBITMQ_VHOST=\"communication\"/g" \
     \
     -e "s/^COMMUNICATION_PROTOCOL_ENABLE=false/COMMUNICATION_PROTOCOL_ENABLE=true/g" \
-    -e "s/^ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=false/ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=true/g" \
-    \
-    -e "s/^ACHIEVEMENT_QUEUE=queue_name/ACHIEVEMENT_QUEUE=achievement_service/g" \
-    \
-    -e "s/^FINANCE_SERVICE_ENABLED=false/FINANCE_SERVICE_ENABLED=true/g" \
-    -e "s/^FINANCE_SERVICE_HOST=example.com/FINANCE_SERVICE_HOST=\"http:\/\/de2ei01d.dev.favorit\"/g" \
-    -e "s/^FINANCE_SERVICE_PORT=6666/FINANCE_SERVICE_PORT=10009/g" \
+    -e "s/^TRANSACTION_COMMUNICATION_PROTOCOL_ENABLE=false/TRANSACTION_COMMUNICATION_PROTOCOL_ENABLE=true/g" \
     \
     -e "s/^ELASTICSEARCH_HOST=\"http:\/\/localhost:9200\"/ELASTICSEARCH_HOST=\"http:\/\/elasticsearch.elkr.rancher.internal:9200\"/g" \
     \

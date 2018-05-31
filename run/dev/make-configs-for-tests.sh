@@ -8,8 +8,8 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^APP_REQUEST_DEBUG=true/APP_REQUEST_DEBUG=true/g" \
     -e "s/^LOG_EXTERNAL_REQUESTS=false/LOG_EXTERNAL_REQUESTS=true/g" \
     \
-    -e "s/^SESSION_DRIVER=file/SESSION_DRIVER=redis/g" \
-    -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
+    -e "s/^SESSION_DRIVER=file/SESSION_DRIVER=file/g" \
+    -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=file/g" \
     -e "s/^LOG_DRIVER=file/LOG_DRIVER=file/g" \
     -e "s/^BROADCAST_DRIVER=log/BROADCAST_DRIVER=log/g" \
     -e "s/^QUEUE_DRIVER=sync/QUEUE_DRIVER=sync/g" \
@@ -23,13 +23,6 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^REDIS_HOST=example.com/REDIS_HOST=de2red01d.dev.favorit/g" \
     -e "s/^REDIS_PORT=6379/REDIS_PORT=6379/g" \
     -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=integrations_hub/g" \
-    \
-    -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server.elkr.rancher.internal/g" \
-    -e "s/^LOG_RABBIT_PORT=5672/LOG_RABBIT_PORT=5672/g" \
-    -e "s/^LOG_RABBIT_USER=log_rabbit/LOG_RABBIT_USER=ihub/g" \
-    -e "s/^LOG_RABBIT_PASS=log_rabbit/LOG_RABBIT_PASS=\"ihub\"/g" \
-    -e "s/^LOG_RABBIT_PREFIX=log_rabbit_prefix/LOG_RABBIT_PREFIX=\"\"/g" \
-    -e "s/^LOG_RABBIT_VHOST=\"\/\"/LOG_RABBIT_VHOST=\"ihub_sw\"/g" \
     \
     -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
     -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
@@ -47,27 +40,6 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^GAME_SESSION_STORAGE_TTL=900/GAME_SESSION_STORAGE_TTL=86400/g" \
     \
     -e "s/^BETGAMES_DISCONNECT_TIME=0/BETGAMES_DISCONNECT_TIME=10/g" \
-    \
-    -e "s/^DYNAMIC_SCHEDULER_API_LOGIN=login/DYNAMIC_SCHEDULER_API_LOGIN=dynamic_scheduler_api_login/g" \
-    -e "s/^DYNAMIC_SCHEDULER_API_PASSWORD=\"password\"/DYNAMIC_SCHEDULER_API_PASSWORD=\"gBEWPkx4yGDCZj0P\"/g" \
-    \
-    -e "s/^RABBITMQ_HOST=example.com/RABBITMQ_HOST=rabbitmq-server.elkr.rancher.internal/g" \
-    -e "s/^RABBITMQ_PORT=5672/RABBITMQ_PORT=5672/g" \
-    -e "s/^RABBITMQ_USER=user/RABBITMQ_USER=communication/g" \
-    -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"communication\"/g" \
-    -e "s/^RABBITMQ_PREFIX=rabbit_prefix/RABBITMQ_PREFIX=\"\"/g" \
-    -e "s/^RABBITMQ_VHOST=\"\/\"/RABBITMQ_VHOST=\"communication\"/g" \
-    \
-    -e "s/^COMMUNICATION_PROTOCOL_ENABLE=false/COMMUNICATION_PROTOCOL_ENABLE=false/g" \
-    -e "s/^ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=false/ACHIEVEMENT_COMMUNICATION_PROTOCOL_ENABLE=false/g" \
-    \
-    -e "s/^ACHIEVEMENT_QUEUE=queue_name/ACHIEVEMENT_QUEUE=achievement_service/g" \
-    \
-    -e "s/^FINANCE_SERVICE_ENABLED=false/FINANCE_SERVICE_ENABLED=false/g" \
-    -e "s/^FINANCE_SERVICE_HOST=example.com/FINANCE_SERVICE_HOST=\"http:\/\/de2ei01d.dev.favorit\"/g" \
-    -e "s/^FINANCE_SERVICE_PORT=6666/FINANCE_SERVICE_PORT=10009/g" \
-    \
-    -e "s/^ELASTICSEARCH_HOST=\"http:\/\/localhost:9200\"/ELASTICSEARCH_HOST=\"http:\/\/elasticsearch.elkr.rancher.internal:9200\"/g" \
     \
     -e "s/^ACCOUNT_MANAGER_MOCK_IS_ENABLED=true/ACCOUNT_MANAGER_MOCK_IS_ENABLED=true/g" \
     \
