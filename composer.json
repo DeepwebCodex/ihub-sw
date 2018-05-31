@@ -60,6 +60,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/queue-communication-protocol.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/best-gold-bet.git"
         }
     ],
     "require": {
