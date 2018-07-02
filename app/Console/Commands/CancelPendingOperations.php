@@ -65,7 +65,7 @@ class CancelPendingOperations extends Command
                 'where' => [
                     ['status', 'pending'],
                     ['service_id', array_keys($services)],
-                    ['dt', "<{$expirationDate}"],
+                    ['dt', '>', "{$expirationDate}"],
                     ['move', TransactionRequest::D_WITHDRAWAL]
                 ],
                 'limit' => $this->batchSize
