@@ -64,6 +64,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/best-gold-bet.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/novobet.git"
         }
     ],
     "require": {
@@ -84,6 +88,7 @@
         "ihub-grid/packages/seamless-wallets/bet-games": "1.*",
         "ihub-grid/packages/seamless-wallets/mr-slotty": "1.*",
         "ihub-grid/packages/seamless-wallets/fundist": "1.*",
+        "ihub-grid/packages/seamless-wallets/novobet": "1.*",
         "ihub-grid/packages/seamless-wallets/endorphina": "1.*",
         "ihub-grid/packages/seamless-wallets/micro-gaming": "1.*",
         "ihub-grid/packages/seamless-wallets/international_lottery" : "1.*",

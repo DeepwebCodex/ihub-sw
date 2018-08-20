@@ -171,6 +171,7 @@ return [
         \iHubGrid\MrSlotty\MrSlottyServiceProvider::class,
         \iHubGrid\Fundist\FundistServiceProvider::class,
         \iHubGrid\Endorphina\EndorphinaServiceProvider::class,
+        \iHubGrid\NovoBet\NovoBetServiceProvider::class,
         \iHubGrid\MicroGaming\MicroGamingServiceProvider::class,
         \iHubGrid\InternationalLottery\InternationalLotteryServiceProvider::class,
         \iHubGrid\FastBet\FastBetServiceProvider::class,
