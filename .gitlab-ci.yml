@@ -114,6 +114,7 @@ variables:
 .template_deploy: &template_deploy
   stage: deploy_to_servers
   image: $RANCHER_REST_WRAPPER_IMAGE
+  dependencies: []
   variables:
     GIT_STRATEGY: none
 
