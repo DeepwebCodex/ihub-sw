@@ -270,6 +270,7 @@ compile_prod:
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTPS_PROXY_FOR_PROD
     - bash ./run/prod/decode.sh
+    - cat ./run/prod/make-configs.sh
     - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
     - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache || true
     - rm -rf composer.lock
