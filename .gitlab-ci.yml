@@ -307,7 +307,7 @@ build_prod:
   <<: *template_prod
   <<: *template_build
   except:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
 
 manual_deploy_to_01_servers_system_prod:
   <<: *template_prod
@@ -317,7 +317,7 @@ manual_deploy_to_01_servers_system_prod:
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   when: manual
   except:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
 
 manual_deploy_to_10_servers_cron_prod:
   <<: *template_prod
@@ -327,7 +327,7 @@ manual_deploy_to_10_servers_cron_prod:
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   when: manual
   except:
-  - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
 
 manual_deploy_to_20_servers_prod:
   <<: *template_prod
@@ -358,7 +358,7 @@ manual_deploy_to_20_servers_prod:
     - tags
   when: manual
   except:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
 
 # ====================================== END PROD ==================================
 
@@ -371,5 +371,5 @@ send_to_obs:
     - export REPO=$CI_PROJECT_PATH.git && export BRANCH=$CI_BUILD_REF_NAME && export CI_BUILD_DIR=$CI_PROJECT_DIR && export TAG_VERSION=$CI_BUILD_TAG
     - cd ~ && "./obs-wrapper"
   only:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
   when: manual
