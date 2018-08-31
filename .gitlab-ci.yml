@@ -306,6 +306,8 @@ test_on_dev_configs_e2e_prod:
 build_docker_image_prod:
   <<: *template_prod
   <<: *template_build_docker_image
+  except:
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
 
 manual_deploy_to_01_servers_system_prod:
   <<: *template_prod
@@ -314,6 +316,8 @@ manual_deploy_to_01_servers_system_prod:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   when: manual
+  except:
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
 
 manual_deploy_to_10_servers_cron_prod:
   <<: *template_prod
@@ -322,6 +326,8 @@ manual_deploy_to_10_servers_cron_prod:
     - export RANCHER_URL=$RANCHER_PROD_URL && export RANCHER_ACCESS_KEY=$RANCHER_PROD_ACCESS_KEY && export RANCHER_SECRET_KEY=$RANCHER_PROD_SECRET_KEY
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   when: manual
+  except:
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
 
 manual_deploy_to_20_servers_prod:
   <<: *template_prod
@@ -351,5 +357,19 @@ manual_deploy_to_20_servers_prod:
   only:
     - tags
   when: manual
+  except:
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
 
 # ====================================== END PROD ==================================
+
+send_to_obs:
+  stage: build
+  tags:
+  - obs-gitlab
+  allow_failure: true
+  script:
+  - export REPO=$CI_PROJECT_PATH.git && export BRANCH=$CI_BUILD_REF_NAME && export CI_BUILD_DIR=$CI_PROJECT_DIR && export TAG_VERSION=$CI_BUILD_TAG
+  - cd ~ && "./obs-wrapper"
+  only:
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{2}-external-partners*$/
+  when: manual
