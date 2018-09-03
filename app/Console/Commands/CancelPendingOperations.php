@@ -96,6 +96,12 @@ class CancelPendingOperations extends Command
 
                 $id = data_get($operationItem, 'id');
                 $objectId = data_get($operationItem, 'object_id');
+                
+                //hard fix for bel
+                if(data_get($operationItem, 'currency') === 'BYN' || data_get($operationItem, 'currency') === 'BYR'){
+                    $this->info("\n Passed  currency of belarus");
+                    continue;
+                }
 
                 try {
 
