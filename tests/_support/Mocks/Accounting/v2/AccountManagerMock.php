@@ -48,7 +48,7 @@ class AccountManagerMock
 
     public function getFreeOperationId($free_operation_id)
     {
-        $this->mock->shouldReceive('getFreeOperationId')->withNoArgs()->andReturn($free_operation_id);
+        $this->mock->shouldReceive('getFreeOperationId')->andReturn($free_operation_id);
 
         return $this;
     }
