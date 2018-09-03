@@ -25,6 +25,8 @@ class CheckPartnerId
             return $next($request);
         }
 
+        $request->server->set('PARTNER_ID', 0);
+
         if (is_numeric($request->server('PARTNER_ID'))) {
             return $next($request);
         }
