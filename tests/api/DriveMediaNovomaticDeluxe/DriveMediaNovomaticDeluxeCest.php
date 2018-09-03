@@ -72,7 +72,7 @@ class DriveMediaNovomaticDeluxeCest {
         $object_id = 12345;
         if($this->params->enableMock) {
             $mockCommonSerial = $this->mock(CommonSerial::class);
-            $mockCommonSerial->shouldReceive('getSerial')->withNoArgs()
+            $mockCommonSerial->shouldReceive('getSerial')
                 ->andReturn($object_id);
         }
 
@@ -109,7 +109,7 @@ class DriveMediaNovomaticDeluxeCest {
         $object_id = 12345;
         if($this->params->enableMock) {
             $mockCommonSerial = $this->mock(CommonSerial::class);
-            $mockCommonSerial->shouldReceive('getSerial')->withNoArgs()
+            $mockCommonSerial->shouldReceive('getSerial')
                 ->andReturn($object_id);
         }
 
@@ -147,7 +147,7 @@ class DriveMediaNovomaticDeluxeCest {
         $object_id = 12345;
         if($this->params->enableMock) {
             $mockCommonSerial = $this->mock(CommonSerial::class);
-            $mockCommonSerial->shouldReceive('getSerial')->withNoArgs()
+            $mockCommonSerial->shouldReceive('getSerial')
                 ->andReturn($object_id);
         }
 
@@ -198,7 +198,7 @@ class DriveMediaNovomaticDeluxeCest {
 
         if($this->params->enableMock) {
             $mockCommonSerial = $this->mock(CommonSerial::class);
-            $mockCommonSerial->shouldReceive('getSerial')->withNoArgs()
+            $mockCommonSerial->shouldReceive('getSerial')
                 ->andReturn($object_id);
         }
 
