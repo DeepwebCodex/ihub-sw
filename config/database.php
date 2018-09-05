@@ -55,7 +55,9 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'sslmode' => 'prefer',
-            'schema' => 'ihub',
+            'schema' => 'ihub','options'   => [
+                \PDO::ATTR_TIMEOUT => 5,
+            ],
         ]
     ],
 

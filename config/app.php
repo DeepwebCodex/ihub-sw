@@ -178,6 +178,7 @@ return [
         \iHubGrid\BestGoldBet\BestGoldBetServiceProvider::class,
         \iHubGrid\QueueCommunicationProtocol\Provider\QueueCommunicationProtocolRabbitMQServiceProvider::class,
         \iHubGrid\QueueCommunicationProtocol\Provider\QueueCommunicationProtocolProvider::class,
+        \iHubGrid\HealthCheck\HealthCheckServiceProvider::class
     ],
 
     /*

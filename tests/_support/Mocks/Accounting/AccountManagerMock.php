@@ -43,7 +43,9 @@ class AccountManagerMock
 
     public function getFreeOperationId($free_operation_id)
     {
-        $this->mock->shouldReceive('getFreeOperationId')->withNoArgs()->andReturn($free_operation_id);
+        $this->mock->shouldReceive('getFreeOperationId')
+            //->withNoArgs() //for php 7.2 throws exception 'count(): parameter must be an array or an object that implements Countable'
+            ->andReturn($free_operation_id);
 
         return $this;
     }
