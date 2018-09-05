@@ -106,7 +106,7 @@ variables:
     GIT_STRATEGY: none
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
-    - rm -rf .git .gitlab-ci.yml .gitignore .env.example .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md
+    - rm -rf .git .gitlab-ci.yml .gitignore .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md
     - rm -rf ./tests ./run/dev ./run/prod
     - docker build -t $CONTAINER_CODE_IMAGE .
     - docker push $CONTAINER_CODE_IMAGE
