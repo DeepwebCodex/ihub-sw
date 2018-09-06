@@ -111,7 +111,7 @@ class CancelPendingOperations extends Command
                     $message = "Failed to cancel operation id: {$id}, object_id: {$objectId} \n";
                     app('AppLog')->warning($message);
                     $this->error($message);
-                    return -1;
+//                    return -1;
                 }
 
                 $bar->advance();
