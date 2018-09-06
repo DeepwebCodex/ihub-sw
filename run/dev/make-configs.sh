@@ -2,7 +2,8 @@
 
 cp ./.env.example ./.env
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
-    -e "s/^APP_ENV=local/APP_ENV=dev/g" \
+    -e "s/^APP_ENV=example/APP_ENV=dev/g" \
+    -e "s/^APP_KEY=example/APP_KEY=\"base64:axrMo7RS1BV9f589cGtb+iQejqRmQdeI071MMMIleE4=\"/g" \
     -e "s/^APP_DEBUG=true/APP_DEBUG=true/g" \
     -e "s/^APP_LOG_LEVEL=debug/APP_LOG_LEVEL=debug/g" \
     -e "s/^APP_REQUEST_DEBUG=true/APP_REQUEST_DEBUG=true/g" \
@@ -26,7 +27,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^REDIS_PREFIX=redis_prefix/REDIS_PREFIX=ihubGrid:ihub-sw/g" \
     \
     -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server.elkr.rancher.internal/g" \
-    -e "s/^LOG_RABBIT_PORT=5672/LOG_RABBIT_PORT=5672/g" \
+    -e "s/^LOG_RABBIT_PORT=6666/LOG_RABBIT_PORT=5672/g" \
     -e "s/^LOG_RABBIT_USER=log_rabbit/LOG_RABBIT_USER=ihub/g" \
     -e "s/^LOG_RABBIT_PASS=log_rabbit/LOG_RABBIT_PASS=\"ihub\"/g" \
     -e "s/^LOG_RABBIT_PREFIX=log_rabbit_prefix/LOG_RABBIT_PREFIX=\"\"/g" \
@@ -53,7 +54,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^DYNAMIC_SCHEDULER_API_PASSWORD=\"password\"/DYNAMIC_SCHEDULER_API_PASSWORD=\"gBEWPkx4yGDCZj0P\"/g" \
     \
     -e "s/^RABBITMQ_HOST=example.com/RABBITMQ_HOST=rabbitmq-server.elkr.rancher.internal/g" \
-    -e "s/^RABBITMQ_PORT=5672/RABBITMQ_PORT=5672/g" \
+    -e "s/^RABBITMQ_PORT=6666/RABBITMQ_PORT=5672/g" \
     -e "s/^RABBITMQ_USER=user/RABBITMQ_USER=communication/g" \
     -e "s/^RABBITMQ_PASS=pass/RABBITMQ_PASS=\"communication\"/g" \
     -e "s/^RABBITMQ_PREFIX=rabbit_prefix/RABBITMQ_PREFIX=\"\"/g" \

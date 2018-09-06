@@ -2,7 +2,8 @@
 
 cp ./.env.example ./.env.testing
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
-    -e "s/^APP_ENV=local/APP_ENV=testing/g" \
+    -e "s/^APP_ENV=example/APP_ENV=testing/g" \
+    -e "s/^APP_KEY=example/APP_KEY=\"base64:axrMo7RS1BV9f589cGtb+iQejqRmQdeI071MMMIleE4=\"/g" \
     -e "s/^APP_DEBUG=true/APP_DEBUG=true/g" \
     -e "s/^APP_LOG_LEVEL=debug/APP_LOG_LEVEL=warning/g" \
     -e "s/^APP_REQUEST_DEBUG=true/APP_REQUEST_DEBUG=true/g" \
