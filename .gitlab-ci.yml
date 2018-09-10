@@ -484,6 +484,9 @@ send_to_obs:
   script:
     - export REPO=$CI_PROJECT_PATH.git && export BRANCH=$CI_BUILD_REF_NAME && export CI_BUILD_DIR=$CI_PROJECT_DIR && export TAG_VERSION=$CI_BUILD_TAG
     - cd ~ && "./obs-wrapper"
+  dependencies:
+  - compile_prod
+  - prepare_for_send_to_obs
   only:
     - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
   when: manual
