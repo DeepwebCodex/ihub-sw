@@ -1,9 +1,12 @@
 stages:
 - change_log
 - compile_project
+- migrate_database_empty_db
+- migrate_database_empty_db_2
 - migrate_database
 - test_project
 - make_documentation
+- prepair_for_build
 - build
 - deploy_to_servers
 
@@ -35,28 +38,21 @@ variables:
     - de2gl03d_dind_1
   only:
     - dev
+    - /^dev-[0-9]{1,4}$/
 
 .template_prod: &template_prod
   tags:
     - de2gl03p_dind_1
   only:
     - master
+    - master-pp
+    - /^master-[0-9]{1,4}$/
     - tags
 
-.template_add_ssh_auth: &template_add_ssh_auth
-  before_script:
-    - mkdir ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
-    - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa || true
-
 .template_compile: &template_compile
-  <<: *template_add_ssh_auth
   stage: compile_project
-  image: $CONTAINER_PHP_FPM_IMAGE_DEV
   cache:
-    key: $CI_BUILD_REF_NAME
+    key: $GITLAB_PROJECT_NAME
     untracked: true
     paths:
       - ./vendor
@@ -65,8 +61,25 @@ variables:
     paths:
       - ./
     expire_in: 1 hour
+  before_script:
+    - mkdir ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
+    - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa || true
 
-.template_migrate: &template_migrate
+.template_compile_dev: &template_compile_dev
+  image: $CONTAINER_PHP_FPM_IMAGE_DEV
+  script:
+    - export http_proxy=$HTTP_PROXY_FOR_DEV
+    - export https_proxy=$HTTPS_PROXY_FOR_DEV
+    - cp ./run/dev/composer.json ./composer.json
+    - rm -rf composer.lock
+    - composer install --no-ansi --no-interaction --no-progress -o -a
+    - composer dump-autoload --no-interaction -o -a
+    - composer show -i
+
+.template_migrate_dev: &template_migrate_dev
   stage: migrate_database
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   variables:
@@ -78,8 +91,29 @@ variables:
       - ./storage/logs
       - ./.env
     expire_in: 1 hour
+  before_script:
+    - bash ./run/dev/make-configs-for-migrate.sh
   script:
     - php artisan migrate
+    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
+
+.template_migrate_prod: &template_migrate_prod
+  stage: migrate_database
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  variables:
+    GIT_STRATEGY: none
+  artifacts:
+    when: on_failure
+    name: $CI_BUILD_REF_NAME
+    paths:
+      - ./storage/logs
+      - ./.env
+    expire_in: 1 hour
+  before_script:
+    - bash ./run/prod/make-configs-for-migrate.sh
+  script:
+    - php artisan migrate --force
+    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
 
 .template_test: &template_test
   stage: test_project
@@ -99,15 +133,28 @@ variables:
     - ./vendor/bin/codecept run functional
     - ./vendor/bin/codecept run unit
 
-.template_build: &template_build
+.template_prepare_before_build: &template_prepare_before_build
+  stage: prepair_for_build
+  artifacts:
+    name: $CI_BUILD_REF_NAME
+    paths:
+    - ./
+    expire_in: 1 hour
+  script:
+    - rm -rf .gitlab-ci.yml .gitignore .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md apidoc.json codeception.yml
+    - rm -rf ./tests ./run/dev ./run/prod ./.git
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
+    - php artisan config:cache
+    - (cat ./bootstrap/cache/config.php | grep 'builds/integrations/ihub-grid/icms' -m1 && echo 'ok') || echo 'Build error'
+    - sed -i -e "s/builds\/integrations\/ihub-grid\/icms/www/g" ./bootstrap/cache/config.php
+
+.template_build_docker_image: &template_build_docker_image
   stage: build
   image: docker:latest
   variables:
     GIT_STRATEGY: none
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.favorit:4567
-    - rm -rf .git .gitlab-ci.yml .gitignore .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md
-    - rm -rf ./tests ./run/dev ./run/prod
     - docker build -t $CONTAINER_CODE_IMAGE .
     - docker push $CONTAINER_CODE_IMAGE
 
@@ -137,10 +184,13 @@ fail_build_for_incorrect_branches:
     - echo "======= !!!!! ======= **************** ======= !!!!! ======="
     - exit 1
   only:
-    - /^(?![a-zA-Z]{1,6}-[0-9]{1,4}-).*$/
+    - /^(?![a-zA-Z]{1,6}-[0-9]{1,5}-).*$/
   except:
     - dev
+    - /^dev-[0-9]{1,5}$/
     - master
+    - master-pp
+    - /^master-[0-9]{1,5}$/
     - tags
 
 # ====================================== FEATURE ==================================
@@ -148,32 +198,32 @@ fail_build_for_incorrect_branches:
 compile_feature:
   <<: *template_dev
   <<: *template_compile
+  <<: *template_compile_dev
+  only:
+    - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
+
+migrate_feature:blank_db:
+  <<: *template_dev
+  stage: migrate_database_empty_db
+  image: $CONTAINER_PHP_FPM_IMAGE_DEV
+  services:
+  - name: gitlab.favorit:4567/integrations/ihub-grid/icms-infrastructure:postgres
+    alias: postgres
+  variables:
+    POSTGRES_DB: ihub
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: mysecretpassword
+  before_script:
+    - bash ./run/dev/make-configs-for-migrate-in-CI.sh
   script:
-    - export http_proxy=$HTTP_PROXY_FOR_DEV
-    - export https_proxy=$HTTPS_PROXY_FOR_DEV
-    - bash ./run/dev/make-configs.sh
-    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
-    - rm -rf composer.lock
-    - composer install --optimize-autoloader
-    - composer show -i
+    - php artisan migrate
+    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
 migrate_feature:
   <<: *template_dev
-  <<: *template_migrate
-  script:
-    - php artisan migrate
-  only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
-
-test_feature:
-  <<: *template_dev
-  <<: *template_test
-  before_script:
-    - export http_proxy=""
-    - export https_proxy=""
-    - bash ./run/dev/make-configs-for-tests.sh
+  <<: *template_migrate_dev
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
@@ -194,22 +244,18 @@ test_feature_e2e:
 compile_dev:
   <<: *template_dev
   <<: *template_compile
-  script:
-    - export http_proxy=$HTTP_PROXY_FOR_DEV
-    - export https_proxy=$HTTPS_PROXY_FOR_DEV
-    - bash ./run/dev/make-configs.sh ${CI_PIPELINE_ID}
-    - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache || true
-    - rm -rf composer.lock
-    - composer install --optimize-autoloader
-    - composer show -i
+  <<: *template_compile_dev
 
-migrate_dev:
+prepare_for_build_docker_image_dev:
   <<: *template_dev
-  <<: *template_migrate
+  <<: *template_prepare_before_build
+  image: $CONTAINER_PHP_FPM_IMAGE_DEV
+  before_script:
+    - sh ./run/dev/make-configs-for-build.sh ${CI_PIPELINE_ID}
 
-build_dev:
+build_docker_image_dev:
   <<: *template_dev
-  <<: *template_build
+  <<: *template_build_docker_image
 
 deploy_to_servers_dev:
   <<: *template_dev
@@ -235,6 +281,8 @@ deploy_to_servers_dev:
       \"user\": \"${GITLAB_USER_EMAIL}\"
       }
       }"
+  except:
+    - /^dev-[0-9]{1,5}$/
 
 # ====================================== END DEV ===================================
 
@@ -250,6 +298,8 @@ change_log_master:
     - git log --oneline $(git for-each-ref --sort=taggerdate --format '%(tag)' | tail -1)..HEAD | grep ".* Merge branch '[a-zA-Z]\{1,6\}-[0-9]\{1,4\}-.*' into 'master'" || true
   only:
     - master
+    - master-pp
+    - /^master-[0-9]{1,5}$/
 
 change_log_tag:
   <<: *template_prod
@@ -269,25 +319,101 @@ compile_prod:
   script:
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTPS_PROXY_FOR_PROD
-    - bash ./run/prod/decode.sh
-    - cat ./run/prod/make-configs.sh
-    - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
-    - chmod -R 777 ./storage && chmod -R 777 ./bootstrap/cache || true
+    - cp ./run/prod/composer.json ./composer.json
     - rm -rf composer.lock
-    - composer install --optimize-autoloader
+    - composer install --no-ansi --no-interaction --no-progress -o -a
+    - composer dump-autoload --no-interaction -o -a
     - composer show -i
-    - php artisan route:cache
+
+migrate_prod:blank_db:
+  <<: *template_prod
+  stage: migrate_database_empty_db
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  dependencies: []
+  services:
+  - name: gitlab.favorit:4567/integrations/ihub-grid/icms-infrastructure:postgres
+    alias: postgres
+  variables:
+    POSTGRES_DB: ihub
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: mysecretpassword
+  before_script:
+    - mkdir ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
+    - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa || true
+    - export http_proxy=$HTTP_PROXY_FOR_PROD
+    - export https_proxy=$HTTPS_PROXY_FOR_PROD
+  script:
+    - cp ./run/prod/composer.json ./composer.json
+    - rm -rf composer.lock
+    - composer install --no-ansi --no-interaction --no-progress -o -a
+    - bash ./run/prod/decode.sh
+    - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
+    - bash ./run/prod/make-configs-for-migrate-in-CI.sh
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
+    - php artisan migrate --force
+    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
+
+migrate_prod:blank_db_partner_feed:
+  <<: *template_prod
+  stage: migrate_database_empty_db
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  dependencies: []
+  services:
+  - name: gitlab.favorit:4567/integrations/ihub-grid/icms-infrastructure:postgres
+    alias: postgres
+  variables:
+    POSTGRES_DB: ihub
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: mysecretpassword
+  before_script:
+    - mkdir ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
+    - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa || true
+    - rm -rf composer.lock
+  script:
+    - export http_proxy=$HTTP_PROXY_FOR_PROD
+    - export https_proxy=$HTTPS_PROXY_FOR_PROD
+    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
+    - bash ./run/prod/decode.sh
+    - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
+    - bash ./run/prod/make-configs-for-migrate-in-CI.sh
+    - cp ./run/prod/composer.feed.json ./composer.json
+    - composer install --no-ansi --no-interaction --no-progress -o -a
+    - php artisan migrate --force
+    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
+  only:
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+
+migrate_prod_manual:
+  <<: *template_prod
+  <<: *template_migrate_prod
+  only:
+    - master
+    - master-pp
+    - /^master-[0-9]{1,5}$/
+    - tags
+  except:
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+  when: manual
 
 test_on_dev_configs_prod:
   <<: *template_dev
   <<: *template_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  allow_failure: true
   before_script:
     - export http_proxy=""
     - export https_proxy=""
     - bash ./run/prod/make-configs-for-tests.sh
   only:
     - master
+    - master-pp
+    - /^master-[0-9]{1,5}$/
     - tags
 
 test_on_dev_configs_e2e_prod:
@@ -296,16 +422,28 @@ test_on_dev_configs_e2e_prod:
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   allow_failure: true
   before_script:
-    - export http_proxy=""
-    - export https_proxy=""
+    - export http_proxy=$HTTP_PROXY_FOR_PROD
+    - export https_proxy=$HTTPS_PROXY_FOR_PROD
     - bash ./run/prod/make-configs-for-tests-mocks-off.sh
   only:
     - master
+    - master-pp
+    - /^master-[0-9]{1,5}$/
     - tags
 
-build_prod:
+prepare_for_build_docker_image_prod:
   <<: *template_prod
-  <<: *template_build
+  <<: *template_prepare_before_build
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  before_script:
+  - bash ./run/prod/decode.sh
+  - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
+  except:
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+
+build_docker_image_prod:
+  <<: *template_prod
+  <<: *template_build_docker_image
   except:
     - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
 
@@ -362,10 +500,16 @@ manual_deploy_to_20_servers_prod:
 
 # ====================================== END PROD ==================================
 
+prepare_for_send_to_obs:
+  <<: *template_prepare_before_build
+  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  only:
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+
 send_to_obs:
   stage: build
   tags:
-    - obs-gitlab
+   - obs-gitlab
   allow_failure: true
   script:
     - export REPO=$CI_PROJECT_PATH.git && export BRANCH=$CI_BUILD_REF_NAME && export CI_BUILD_DIR=$CI_PROJECT_DIR && export TAG_VERSION=$CI_BUILD_TAG
