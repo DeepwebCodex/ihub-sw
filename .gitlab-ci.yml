@@ -471,6 +471,8 @@ manual_deploy_to_20_servers_prod:
 prepare_for_send_to_obs:
   <<: *template_prepare_before_build
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
+  before_script:
+    - rm -rf .env .env.testing
   only:
   - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
 
