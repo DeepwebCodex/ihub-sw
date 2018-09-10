@@ -16,7 +16,6 @@ tests/_output/*
 /run/prod/install-rancher.sh
 /tests/_support/_generated/
 
-/run/prod/make-configs.sh
 /composer.lock
 /resources/soap/
-/run/prod/make-configs.sh.bak
+/composer.json
