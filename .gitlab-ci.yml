@@ -145,9 +145,9 @@ variables:
     - rm -rf .gitlab-ci.yml .gitignore .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md apidoc.json codeception.yml
     - rm -rf ./tests ./run/dev ./run/prod ./.git
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
-    - php artisan config:cache
-    - (cat ./bootstrap/cache/config.php | grep 'builds/integrations/ihub-grid/icms' -m1 && echo 'ok') || echo 'Build error'
-    - sed -i -e "s/builds\/integrations\/ihub-grid\/icms/www/g" ./bootstrap/cache/config.php
+#    - php artisan config:cache
+#    - (cat ./bootstrap/cache/config.php | grep 'builds/integrations/ihub-grid/icms' -m1 && echo 'ok') || echo 'Build error'
+#    - sed -i -e "s/builds\/integrations\/ihub-grid\/icms/www/g" ./bootstrap/cache/config.php
 
 .template_build_docker_image: &template_build_docker_image
   stage: build
