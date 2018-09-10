@@ -24,6 +24,7 @@ variables:
   GITLAB_PROJECT_PATH: "integrations/ihub-grid"
   GITLAB_PROJECT_NAME: "ihub-sw"
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
+  CONTAINER_POSTGRES_IMAGE: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:postgres
   CONTAINER_PHP_FPM_IMAGE_MASTER: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:php-fpm-master
   CONTAINER_PHP_FPM_IMAGE_DEV: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:php-fpm-dev
   CONTAINER_CODE_IMAGE: $CI_REGISTRY/$GITLAB_PROJECT_PATH/$GITLAB_PROJECT_NAME:$CI_BUILD_REF_NAME
@@ -207,7 +208,7 @@ migrate_feature:blank_db:
   stage: migrate_database_empty_db
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   services:
-  - name: gitlab.favorit:4567/integrations/ihub-grid/icms-infrastructure:postgres
+  - name: $CONTAINER_POSTGRES_IMAGE
     alias: postgres
   variables:
     POSTGRES_DB: ihub
@@ -331,7 +332,7 @@ migrate_prod:blank_db:
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   dependencies: []
   services:
-  - name: gitlab.favorit:4567/integrations/ihub-grid/icms-infrastructure:postgres
+  - name: $CONTAINER_POSTGRES_IMAGE
     alias: postgres
   variables:
     POSTGRES_DB: ihub
@@ -355,39 +356,6 @@ migrate_prod:blank_db:
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
     - php artisan migrate --force
     - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
-
-migrate_prod:blank_db_partner_feed:
-  <<: *template_prod
-  stage: migrate_database_empty_db
-  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  dependencies: []
-  services:
-  - name: gitlab.favorit:4567/integrations/ihub-grid/icms-infrastructure:postgres
-    alias: postgres
-  variables:
-    POSTGRES_DB: ihub
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: mysecretpassword
-  before_script:
-    - mkdir ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
-    - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa || true
-    - rm -rf composer.lock
-  script:
-    - export http_proxy=$HTTP_PROXY_FOR_PROD
-    - export https_proxy=$HTTPS_PROXY_FOR_PROD
-    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
-    - bash ./run/prod/decode.sh
-    - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
-    - bash ./run/prod/make-configs-for-migrate-in-CI.sh
-    - cp ./run/prod/composer.feed.json ./composer.json
-    - composer install --no-ansi --no-interaction --no-progress -o -a
-    - php artisan migrate --force
-    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
-  only:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
 
 migrate_prod_manual:
   <<: *template_prod
