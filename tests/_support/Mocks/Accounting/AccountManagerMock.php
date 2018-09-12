@@ -13,7 +13,7 @@ class AccountManagerMock
     const BET = 1;
     const WIN = 0;
 
-    private $bet_operation_id = 9543958;
+    private $bet_operation_id = 123;
     private $win_operation_id = 2834034;
 
     public function __construct(Params $params)
@@ -22,7 +22,7 @@ class AccountManagerMock
         $this->mock = $this->getMock();
 
         $this->mock->shouldReceive('selectAccounting')->withAnyArgs()->andReturn(null);
-        
+
         //mock default
         $this->getUserService();
     }
@@ -59,25 +59,25 @@ class AccountManagerMock
 
     public function userInfo($balance = null)
     {
-        if(is_null($balance)){
+        if (is_null($balance)) {
             $balance = $this->params->getBalance();
         }
 
         $this->mock->shouldReceive('getUserInfo')
             ->withArgs([$this->params->userId])->andReturn(
                 [
-                    "id"            => $this->params->userId,
-                    "wallets"       => [
+                    "id" => $this->params->userId,
+                    "wallets" => [
                         [
-                            "__record"  => "wallet",
-                            "currency"  => $this->params->currency,
+                            "__record" => "wallet",
+                            "currency" => $this->params->currency,
                             "is_active" => 1,
-                            "deposit"   => $balance,
+                            "deposit" => $balance,
                         ],
                     ],
                     "user_services" => $this->getServices(),
-                    "first_name"    => "Апаропао",
-                    "last_name"     => "Паопаопаопао",
+                    "first_name" => "Апаропао",
+                    "last_name" => "Паопаопаопао",
                 ]
             );
 
@@ -91,11 +91,11 @@ class AccountManagerMock
 
     private function getServices()
     {
-        return array_map(function($service_id){
+        return array_map(function ($service_id) {
             return [
-                "__record"              => "user_service",
-                "service_id"            => $service_id,
-                "is_enabled"            => 1,
+                "__record" => "user_service",
+                "service_id" => $service_id,
+                "is_enabled" => 1,
             ];
         }, self::SERVICE_IDS);
     }
@@ -115,7 +115,7 @@ class AccountManagerMock
 
     public function bet($object_id, $amount, $balance = null)
     {
-        if(is_null($balance)){
+        if (is_null($balance)) {
             $balance = $this->params->getBalance();
         }
 
@@ -125,10 +125,9 @@ class AccountManagerMock
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
                     $this->bet_operation_id, $amount, $balance));
-
+        $params = $this->getCompletedParams($object_id, self::BET, $this->bet_operation_id, $amount);
         $this->mock->shouldReceive('commitTransaction')
-            ->withArgs(
-                $this->getCompletedParams($object_id, self::BET, $this->bet_operation_id, $amount))
+            ->withArgs($params)
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $object_id,
                     $this->bet_operation_id, $amount, $balance));
@@ -148,7 +147,7 @@ class AccountManagerMock
 
     public function win($object_id, $amount, $balance = null)
     {
-        if(is_null($balance)){
+        if (is_null($balance)) {
             $balance = $this->params->getBalance();
         }
         $this->mock->shouldReceive('createTransaction')
@@ -176,7 +175,7 @@ class AccountManagerMock
             $object_id,
             $this->params->currency,
             $this->getComment($object_id, $amount, $direction),
-            $this->params->userIP,
+            $this->params->userIP
         ];
     }
 
@@ -204,17 +203,17 @@ class AccountManagerMock
     private function returnOk($status, $direction, $object_id, $operation_id, $amount, $balance)
     {
         return [
-            "operation_id"          => $operation_id,
-            "service_id"            => $this->params->serviceId,
-            "cashdesk"              => $this->params->cashdeskId,
-            "user_id"               => $this->params->userId,
-            "partner_id"            => $this->params->partnerId,
-            "move"                  => $direction,
-            "status"                => $status,
-            "object_id"             => $object_id,
-            "amount"                => $amount,
-            "currency"              => $this->params->currency,
-            "deposit_rest"          => $balance,
+            "operation_id" => $operation_id,
+            "service_id" => $this->params->serviceId,
+            "cashdesk" => $this->params->cashdeskId,
+            "user_id" => $this->params->userId,
+            "partner_id" => $this->params->partnerId,
+            "move" => $direction,
+            "status" => $status,
+            "object_id" => $object_id,
+            "amount" => $amount,
+            "currency" => $this->params->currency,
+            "deposit_rest" => $balance,
         ];
     }
 
@@ -223,11 +222,12 @@ class AccountManagerMock
         return json_encode([
             "comment" => ($direction ? 'Withdrawal' : 'Deposit') . ' for object_id: ' . $object_id,
             "amount" => $amount,
-            "currency" => $this->params->currency
+            "currency" => $this->params->currency,
+            "type" => ($direction ? 'bet' : 'win')
         ]);
     }
-    
-     /**
+
+    /**
      * @param mixed $I
      */
     public function mock($I, $keepMock = true)
@@ -239,7 +239,7 @@ class AccountManagerMock
             }
         }
     }
-    
+
     public function getUserService()
     {
         $data = [

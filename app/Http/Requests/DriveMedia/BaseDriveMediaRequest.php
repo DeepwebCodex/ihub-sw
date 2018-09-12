@@ -23,4 +23,8 @@ class BaseDriveMediaRequest extends ApiRequest implements ApiValidationInterface
         return [];
     }
 
+    function response(array $errors)
+    {
+        // TODO: Implement response() method.
+    }
 }
