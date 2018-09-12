@@ -228,6 +228,16 @@ migrate_feature:
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
+test_feature:
+  <<: *template_dev
+  <<: *template_test
+  before_script:
+  - export http_proxy=""
+  - export https_proxy=""
+  - bash ./run/dev/make-configs-for-tests.sh
+  only:
+  - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
+
 test_feature_e2e:
   <<: *template_dev
   <<: *template_test
