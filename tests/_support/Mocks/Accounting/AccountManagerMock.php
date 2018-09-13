@@ -13,7 +13,7 @@ class AccountManagerMock
     const BET = 1;
     const WIN = 0;
 
-    private $bet_operation_id = 123;
+    private $bet_operation_id = 9543958;
     private $win_operation_id = 2834034;
 
     public function __construct(Params $params)
@@ -135,6 +135,16 @@ class AccountManagerMock
         return $this;
     }
 
+    public function emptyCreateTransaction($object_id, $amount, $balance = null)
+    {
+        $this->mock->shouldReceive('createTransaction')
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
+                    $this->bet_operation_id, $amount, $balance));
+
+        return $this;
+    }
+
     public function betExceeded($object_id, $amount)
     {
         $this->mock->shouldReceive('createTransaction')
@@ -222,8 +232,7 @@ class AccountManagerMock
         return json_encode([
             "comment" => ($direction ? 'Withdrawal' : 'Deposit') . ' for object_id: ' . $object_id,
             "amount" => $amount,
-            "currency" => $this->params->currency,
-            "type" => ($direction ? 'bet' : 'win')
+            "currency" => $this->params->currency
         ]);
     }
 
