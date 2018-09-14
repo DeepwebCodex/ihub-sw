@@ -172,6 +172,7 @@ return [
         \iHubGrid\Fundist\FundistServiceProvider::class,
         \iHubGrid\Endorphina\EndorphinaServiceProvider::class,
         \iHubGrid\NovoBet\NovoBetServiceProvider::class,
+        \iHubGrid\SoftSwiss\SoftSwissServiceProvider::class,
         \iHubGrid\MicroGaming\MicroGamingServiceProvider::class,
         \iHubGrid\InternationalLottery\InternationalLotteryServiceProvider::class,
         \iHubGrid\FastBet\FastBetServiceProvider::class,
