@@ -248,6 +248,17 @@ test_feature_e2e:
     - bash ./run/prod/make-configs-for-tests-mocks-off.sh
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
+
+test_feature_rancher:
+  <<: *template_dev
+  <<: *template_test
+  allow_failure: true
+  before_script:
+    - export http_proxy=""
+    - export https_proxy=""
+    - bash ./run/prod/make-configs-for-tests-rancher.sh
+  only:
+    - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 # ====================================== END FEATURE ==============================
 
 # ====================================== DEV ======================================
