@@ -245,7 +245,7 @@ test_feature_e2e:
   before_script:
     - export http_proxy=""
     - export https_proxy=""
-    - bash ./run/prod/make-configs-for-tests-mocks-off.sh
+    - bash ./run/dev/make-configs-for-tests-mocks-off.sh
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
@@ -256,7 +256,7 @@ test_feature_rancher:
   before_script:
     - export http_proxy=""
     - export https_proxy=""
-    - bash ./run/prod/make-configs-for-tests-rancher.sh
+    - bash ./run/dev/make-configs-for-tests-rancher.sh
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 # ====================================== END FEATURE ==============================
