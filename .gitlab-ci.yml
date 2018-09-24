@@ -6,7 +6,6 @@ stages:
 - migrate_database
 - test_project
 - make_documentation
-- prepair_for_build
 - build
 - deploy_to_servers
 
@@ -135,13 +134,7 @@ variables:
     - ./vendor/bin/codecept run unit
 
 .template_prepare_before_build: &template_prepare_before_build
-  stage: prepair_for_build
-  artifacts:
-    name: $CI_BUILD_REF_NAME
-    paths:
-    - ./
-    expire_in: 1 hour
-  script:
+  before_script:
     - rm -rf .gitlab-ci.yml .gitignore .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md apidoc.json codeception.yml
     - rm -rf ./tests ./run/dev ./run/prod ./.git
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
@@ -150,6 +143,7 @@ variables:
 #    - sed -i -e "s/builds\/integrations\/ihub-grid\/icms/www/g" ./bootstrap/cache/config.php
 
 .template_build_docker_image: &template_build_docker_image
+  <<: *template_prepare_before_build
   stage: build
   image: docker:latest
   variables:
@@ -478,20 +472,15 @@ manual_deploy_to_20_servers_prod:
 
 # ====================================== END PROD ==================================
 
-prepare_for_send_to_obs:
-  <<: *template_prepare_before_build
-  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  before_script:
-    - rm -rf .env .env.testing
-  only:
-  - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
-
 send_to_obs:
+  <<: *template_prepare_before_build
   stage: build
   tags:
    - obs-gitlab
   allow_failure: true
   script:
+    - rm -rf .env .env.testing
+  after_script:
     - export REPO=$CI_PROJECT_PATH.git && export BRANCH=$CI_BUILD_REF_NAME && export CI_BUILD_DIR=$CI_PROJECT_DIR && export TAG_VERSION=$CI_BUILD_TAG
     - cd ~ && "./obs-wrapper"
   dependencies:
