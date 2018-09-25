@@ -91,7 +91,7 @@
         "ihub-grid/packages/accounting": "1.1.*",
         "ihub-grid/error-handler": "1.1.20",
         "ihub-grid/packages/health-check": "1.0.1",
-        "ihub-grid/packages/seamless-wallet-core": "dev-dev",
+        "ihub-grid/packages/seamless-wallet-core": "dev-dev as 1.0.0",
         "ihub-grid/packages/seamless-wallets/euro-games-tech": "dev-dev",
         "ihub-grid/packages/seamless-wallets/bet-games": "dev-dev",
         "ihub-grid/packages/seamless-wallets/mr-slotty": "dev-dev",
