@@ -52,11 +52,6 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
-
-$app->configureMonologUsing(function ($monolog) use($app) {
-    new Logger(config('error-handler.logger'), $monolog, $app);
-});
-
 /*
 |--------------------------------------------------------------------------
 | Return The Application

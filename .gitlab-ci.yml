@@ -39,7 +39,7 @@ variables:
     - de2gl03d_dind_1
   only:
     - dev
-    - /^dev-[0-9]{1,4}$/
+    - /^dev-[0-9]{1,5}$/
 
 .template_prod: &template_prod
   tags:
@@ -47,13 +47,13 @@ variables:
   only:
     - master
     - master-pp
-    - /^master-[0-9]{1,4}$/
+    - /^master-[0-9]{1,5}$/
     - tags
 
 .template_compile: &template_compile
   stage: compile_project
   cache:
-    key: $GITLAB_PROJECT_NAME
+    key: $CI_BUILD_REF_NAME
     untracked: true
     paths:
       - ./vendor
@@ -75,7 +75,6 @@ variables:
     - export http_proxy=$HTTP_PROXY_FOR_DEV
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - cp ./run/dev/composer.json ./composer.json
-    - rm -rf composer.lock
     - composer install --no-ansi --no-interaction --no-progress -o -a
     - composer dump-autoload --no-interaction -o -a
     - composer show -i
@@ -145,9 +144,6 @@ variables:
     - rm -rf .gitlab-ci.yml .gitignore .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md apidoc.json codeception.yml
     - rm -rf ./tests ./run/dev ./run/prod ./.git
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
-#    - php artisan config:cache
-#    - (cat ./bootstrap/cache/config.php | grep 'builds/integrations/ihub-grid/icms' -m1 && echo 'ok') || echo 'Build error'
-#    - sed -i -e "s/builds\/integrations\/ihub-grid\/icms/www/g" ./bootstrap/cache/config.php
 
 .template_build_docker_image: &template_build_docker_image
   stage: build
@@ -178,7 +174,7 @@ fail_build_for_incorrect_branches:
     - echo "======= !!!!! ======= YOU MAKE MISTAKE ======= !!!!! ======="
     - echo "======= !!!!! === READ INFORMATION BELOW! ==== !!!!! ======="
     - echo "\n\n\n"
-    - echo ">> Not corrected branch name. You should pass /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/ << "
+    - echo ">> Not corrected branch name. You should pass /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/ << "
     - echo ">> Your current branch name is ${CI_BUILD_REF_NAME} <<"
     - echo "\n\n\n"
     - echo "======= !!!!! ======= **************** ======= !!!!! ======="
@@ -200,8 +196,15 @@ compile_feature:
   <<: *template_dev
   <<: *template_compile
   <<: *template_compile_dev
+  script:
+  - export http_proxy=$HTTP_PROXY_FOR_DEV
+  - export https_proxy=$HTTPS_PROXY_FOR_DEV
+  - cp ./run/prod/composer.json ./composer.json
+  - composer install --no-ansi --no-interaction --no-progress -o -a
+  - composer dump-autoload --no-interaction -o -a
+  - composer show -i
   only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
+    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
 migrate_feature:blank_db:
   <<: *template_dev
@@ -220,13 +223,13 @@ migrate_feature:blank_db:
     - php artisan migrate
     - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
   only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
+    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
 migrate_feature:
   <<: *template_dev
   <<: *template_migrate_dev
   only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
+    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
 test_feature:
   <<: *template_dev
@@ -236,7 +239,7 @@ test_feature:
   - export https_proxy=""
   - bash ./run/dev/make-configs-for-tests.sh
   only:
-  - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
+  - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
 test_feature_e2e:
   <<: *template_dev
@@ -245,9 +248,20 @@ test_feature_e2e:
   before_script:
     - export http_proxy=""
     - export https_proxy=""
-    - bash ./run/prod/make-configs-for-tests-mocks-off.sh
+    - bash ./run/dev/make-configs-for-tests-mocks-off.sh
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
+
+test_feature_rancher:
+  <<: *template_dev
+  <<: *template_test
+  allow_failure: true
+  before_script:
+    - export http_proxy=""
+    - export https_proxy=""
+    - bash ./run/dev/make-configs-for-tests-rancher.sh
+  only:
+    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 # ====================================== END FEATURE ==============================
 
 # ====================================== DEV ======================================
@@ -256,6 +270,10 @@ compile_dev:
   <<: *template_dev
   <<: *template_compile
   <<: *template_compile_dev
+
+migrate_dev:
+  <<: *template_dev
+  <<: *template_migrate_dev
 
 prepare_for_build_docker_image_dev:
   <<: *template_dev
@@ -376,7 +394,7 @@ migrate_prod_manual:
     - /^master-[0-9]{1,5}$/
     - tags
   except:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
   when: manual
 
 test_on_dev_configs_prod:
@@ -417,13 +435,13 @@ prepare_for_build_docker_image_prod:
   - bash ./run/prod/decode.sh
   - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
   except:
-  - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
 build_docker_image_prod:
   <<: *template_prod
   <<: *template_build_docker_image
   except:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
 manual_deploy_to_01_servers_system_prod:
   <<: *template_prod
@@ -433,7 +451,7 @@ manual_deploy_to_01_servers_system_prod:
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-fpm-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   when: manual
   except:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
 manual_deploy_to_10_servers_cron_prod:
   <<: *template_prod
@@ -443,7 +461,7 @@ manual_deploy_to_10_servers_cron_prod:
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   when: manual
   except:
-  - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
 manual_deploy_to_20_servers_prod:
   <<: *template_prod
@@ -474,17 +492,18 @@ manual_deploy_to_20_servers_prod:
     - tags
   when: manual
   except:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
 # ====================================== END PROD ==================================
 
 prepare_for_send_to_obs:
   <<: *template_prepare_before_build
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  before_script:
-    - rm -rf .env .env.testing
+  after_script:
+    - php artisan config:clear
+    - php artisan route:clear
   only:
-  - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+  - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
 send_to_obs:
   stage: build
@@ -494,9 +513,6 @@ send_to_obs:
   script:
     - export REPO=$CI_PROJECT_PATH.git && export BRANCH=$CI_BUILD_REF_NAME && export CI_BUILD_DIR=$CI_PROJECT_DIR && export TAG_VERSION=$CI_BUILD_TAG
     - cd ~ && "./obs-wrapper"
-  dependencies:
-  - compile_prod
-  - prepare_for_send_to_obs
   only:
-    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,4}-external-partners*$/
+    - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
   when: manual
