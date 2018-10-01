@@ -199,7 +199,7 @@ compile_feature:
   script:
   - export http_proxy=$HTTP_PROXY_FOR_DEV
   - export https_proxy=$HTTPS_PROXY_FOR_DEV
-  - cp ./run/prod/composer.json ./composer.json
+  - cp ./run/feature/composer.json ./composer.json
   - composer install --no-ansi --no-interaction --no-progress -o -a
   - composer dump-autoload --no-interaction -o -a
   - composer show -i
