@@ -53,7 +53,7 @@ variables:
 .template_compile: &template_compile
   stage: compile_project
   cache:
-    key: $GITLAB_PROJECT_NAME
+    key: $CI_BUILD_REF_NAME
     untracked: true
     paths:
       - ./vendor
@@ -75,7 +75,6 @@ variables:
     - export http_proxy=$HTTP_PROXY_FOR_DEV
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - cp ./run/dev/composer.json ./composer.json
-    - rm -rf composer.lock
     - composer install --no-ansi --no-interaction --no-progress -o -a
     - composer dump-autoload --no-interaction -o -a
     - composer show -i
@@ -197,6 +196,13 @@ compile_feature:
   <<: *template_dev
   <<: *template_compile
   <<: *template_compile_dev
+  script:
+  - export http_proxy=$HTTP_PROXY_FOR_DEV
+  - export https_proxy=$HTTPS_PROXY_FOR_DEV
+  - cp ./run/prod/composer.json ./composer.json
+  - composer install --no-ansi --no-interaction --no-progress -o -a
+  - composer dump-autoload --no-interaction -o -a
+  - composer show -i
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
