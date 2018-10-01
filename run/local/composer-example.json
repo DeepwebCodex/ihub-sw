@@ -75,6 +75,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/health-check.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/softswiss.git"
         }
     ],
     "require": {
@@ -102,7 +106,8 @@
         "ihub-grid/packages/seamless-wallets/international_lottery": "dev-master",
         "ihub-grid/packages/seamless-wallets/fast-bet": "dev-master",
         "ihub-grid/packages/seamless-wallets/best-gold-bet": "dev-master",
-        "ihub-grid/packages/queue-communication-protocol": "dev-master"
+        "ihub-grid/packages/queue-communication-protocol": "dev-master",
+        "ihub-grid/packages/seamless-wallets/softswiss": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
