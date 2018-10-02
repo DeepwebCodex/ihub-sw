@@ -79,18 +79,17 @@
     ],
     "require": {
         "php": ">=7.1.3",
-        "laravel/framework": "5.4.*",
+        "laravel/framework": "5.6.*",
         "predis/predis": "~1.0",
-        "filp/whoops": "~1.0",
         "kozz/laravel-guzzle-provider": "~6.0",
         "Nathanmac/Parser": "4.*",
         "spatie/laravel-fractal": "^1.9",
         "danielstjules/stringy": "~2.3",
         "doctrine/dbal": "^2.5",
-        "ihub-grid/packages/dynamic-scheduler": "1.2.2",
-        "ihub-grid/packages/accounting": "1.1.*",
-        "ihub-grid/error-handler": "1.1.20",
-        "ihub-grid/packages/health-check": "1.0.1",
+        "ihub-grid/packages/dynamic-scheduler": "1.*",
+        "ihub-grid/packages/accounting": "1.*",
+        "ihub-grid/error-handler": "1.*",
+        "ihub-grid/packages/health-check": "1.*",
         "ihub-grid/packages/seamless-wallet-core": "dev-master",
         "ihub-grid/packages/seamless-wallets/euro-games-tech": "dev-master",
         "ihub-grid/packages/seamless-wallets/bet-games": "dev-master",
@@ -107,12 +106,13 @@
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7",
-        "codeception/codeception": "2.2.x-dev",
+        "phpunit/phpunit": "^7.0",
+        "filp/whoops": "~2",
+        "codeception/codeception": "~2",
         "codeception/specify": "*",
         "codeception/verify": "*",
-        "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*",
+        "symfony/css-selector": "~4",
+        "symfony/dom-crawler": "~4",
         "barryvdh/laravel-ide-helper": "^2.0",
         "flow/jsonpath": "^0.3.4"
     },
@@ -141,13 +141,13 @@
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan vendor:publish --tag=tests --force",
             "php artisan vendor:publish --tag=resources --force",
-            "php artisan optimize"
+            "php artisan package:discover"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan vendor:publish --tag=tests --force",
             "php artisan vendor:publish --tag=resources --force",
-            "php artisan optimize"
+            "php artisan package:discover"
         ]
     },
     "config": {
