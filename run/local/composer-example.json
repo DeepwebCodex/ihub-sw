@@ -75,6 +75,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/health-check.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/softswiss.git"
         }
     ],
     "require": {
@@ -86,10 +90,10 @@
         "spatie/laravel-fractal": "^1.9",
         "danielstjules/stringy": "~2.3",
         "doctrine/dbal": "^2.5",
-        "ihub-grid/packages/dynamic-scheduler": "1.*",
-        "ihub-grid/packages/accounting": "1.*",
-        "ihub-grid/error-handler": "1.*",
-        "ihub-grid/packages/health-check": "1.*",
+        "ihub-grid/packages/dynamic-scheduler": "dev-master",
+        "ihub-grid/packages/accounting": "dev-master",
+        "ihub-grid/error-handler": "dev-master",
+        "ihub-grid/packages/health-check": "dev-master",
         "ihub-grid/packages/seamless-wallet-core": "dev-master",
         "ihub-grid/packages/seamless-wallets/euro-games-tech": "dev-master",
         "ihub-grid/packages/seamless-wallets/bet-games": "dev-master",
@@ -101,6 +105,7 @@
         "ihub-grid/packages/seamless-wallets/international_lottery": "dev-master",
         "ihub-grid/packages/seamless-wallets/fast-bet": "dev-master",
         "ihub-grid/packages/seamless-wallets/best-gold-bet": "dev-master",
+        "ihub-grid/packages/seamless-wallets/softswiss": "dev-master",
         "ihub-grid/packages/queue-communication-protocol": "dev-master"
     },
     "require-dev": {
