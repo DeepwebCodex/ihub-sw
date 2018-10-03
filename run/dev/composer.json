@@ -105,8 +105,8 @@
         "ihub-grid/packages/seamless-wallets/international_lottery": "dev-dev",
         "ihub-grid/packages/seamless-wallets/fast-bet": "dev-dev",
         "ihub-grid/packages/seamless-wallets/best-gold-bet": "dev-dev",
-        "ihub-grid/packages/queue-communication-protocol": "dev-dev",
-        "ihub-grid/packages/seamless-wallets/softswiss": "dev-dev"
+        "ihub-grid/packages/seamless-wallets/softswiss": "dev-dev",
+        "ihub-grid/packages/queue-communication-protocol": "dev-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
