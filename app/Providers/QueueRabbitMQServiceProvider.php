@@ -25,7 +25,7 @@ class QueueRabbitMQServiceProvider extends ServiceProvider
         $queue->stopping(function () use ($connector) {
             $connector->connection()->disconnect();
         });
-        $queue->addConnector('rabbitmq', function () use ($connector) {
+        $queue->addConnector('rabbitmq-default', function () use ($connector) {
             return $connector;
         });
     }
