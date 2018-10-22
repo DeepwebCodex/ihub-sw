@@ -48,7 +48,8 @@ class CancelPendingOperations extends Command
         $this->batchSize = (int)$this->argument('batch');
         $this->expirationDays = (int)$this->argument('expire');
 
-        $expirationDate = Carbon::now()->subDay($this->expirationDays)->format('Y-m-d');
+        $expirationDate = Carbon::now()->subDay($this->expirationDays)->format('Y-m-d H:m:s');
+        $expirationDateTo = Carbon::now()->subHour()->format('Y-m-d H:m:s');
 
         //Service ids for deep integration are excluded from query to prevent uncorrectable results
         $services = $this->getServices([config('integrations.inspired.service_id'), config('integrations.virtualBoxing.service_id')]);
@@ -66,6 +67,7 @@ class CancelPendingOperations extends Command
                     ['status', 'pending'],
                     ['service_id', array_keys($services)],
                     ['dt', '>', "{$expirationDate}"],
+                    ['dt', '<', "{$expirationDateTo}"],
                     ['move', TransactionRequest::D_WITHDRAWAL]
                 ],
                 'limit' => $this->batchSize
@@ -96,7 +98,7 @@ class CancelPendingOperations extends Command
 
                 $id = data_get($operationItem, 'id');
                 $objectId = data_get($operationItem, 'object_id');
-                
+
                 //hard fix for bel
                 if(data_get($operationItem, 'currency') === 'BYN' || data_get($operationItem, 'currency') === 'BYR'){
                     $this->info("\n Passed  currency of belarus");
