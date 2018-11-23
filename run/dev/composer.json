@@ -79,6 +79,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/softswiss.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
         }
     ],
     "require": {
@@ -106,7 +110,8 @@
         "ihub-grid/packages/seamless-wallets/fast-bet": "dev-dev",
         "ihub-grid/packages/seamless-wallets/best-gold-bet": "dev-dev",
         "ihub-grid/packages/seamless-wallets/softswiss": "dev-dev",
-        "ihub-grid/packages/queue-communication-protocol": "dev-dev"
+        "ihub-grid/packages/queue-communication-protocol": "dev-dev",
+        "ihub-grid/packages/finance-monitoring": "dev-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
