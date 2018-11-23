@@ -352,6 +352,7 @@ compile_prod:
     - composer install --no-ansi --no-interaction --no-progress -o -a
     - composer dump-autoload --no-interaction -o -a
     - composer show -i
+    - mkdir -p ./storage/app/
     - git describe --tags $(git rev-list --tags --max-count=1)  > ./storage/app/version.txt
 
 migrate_prod:blank_db:
