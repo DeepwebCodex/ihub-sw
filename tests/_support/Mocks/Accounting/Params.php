@@ -18,6 +18,8 @@ class Params
     public $partnerId;
     public $userIP = "127.0.0.1";
 
+    public $shop = '1303';
+
 
     public function __construct($integration = null)
     {
