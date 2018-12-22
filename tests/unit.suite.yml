@@ -9,7 +9,7 @@ modules:
         - \Helper\Unit
         - Laravel5Extended:
             environment_file: .env.testing
-            cleanup: true
+            cleanup: false
             server:
               PARTNER_ID: %TEST_PARTNER_ID%
               FRONTEND_NUM: %TEST_CASHEDESK%
