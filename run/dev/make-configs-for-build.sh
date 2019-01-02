@@ -77,8 +77,8 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^API_CASHDESK_HOST=example.com/API_CASHDESK_HOST=icms.ihub.favbet.devel/g" \
     -e "s/^API_CASHDESK_PORT=6666/API_CASHDESK_PORT=80/g" \
     \
-    -e "s/^API_CASH_DESK_ROH_HOST=example.com/API_CASH_DESK_ROH_HOST=e-proxy.devel/g" \
-    -e "s/^API_CASH_DESK_ROH_PORT=6666/API_CASH_DESK_ROH_PORT=7767/g" \
+    -e "s/^API_CASH_DESK_ROH_HOST=example.com/API_CASH_DESK_ROH_HOST=by1ef01d.dev.favorit/g" \
+    -e "s/^API_CASH_DESK_ROH_PORT=6666/API_CASH_DESK_ROH_PORT=7766/g" \
     \
     -e "s/^API_CARDS_ROH_HOST=example.com/API_CARDS_ROH_HOST=de2ef01d.dev.favorit/g" \
     -e "s/^API_CARDS_ROH_PORT=6666/API_CARDS_ROH_PORT=10102/g" \
