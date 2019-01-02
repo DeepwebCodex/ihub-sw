@@ -116,7 +116,7 @@
         "ihub-grid/packages/seamless-wallets/softswiss": "dev-dev",
         "ihub-grid/packages/queue-communication-protocol": "dev-dev",
         "ihub-grid/packages/finance-monitoring": "dev-dev",
-        "ihub-grid/packages/cashdesk-wallet": "dev-master"
+        "ihub-grid/packages/cashdesk-wallet": "dev-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
