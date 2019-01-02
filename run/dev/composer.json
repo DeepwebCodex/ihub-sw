@@ -83,6 +83,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/cashdesk-wallet.git"
         }
     ],
     "require": {
@@ -111,7 +115,8 @@
         "ihub-grid/packages/seamless-wallets/best-gold-bet": "dev-dev",
         "ihub-grid/packages/seamless-wallets/softswiss": "dev-dev",
         "ihub-grid/packages/queue-communication-protocol": "dev-dev",
-        "ihub-grid/packages/finance-monitoring": "dev-dev"
+        "ihub-grid/packages/finance-monitoring": "dev-dev",
+        "ihub-grid/packages/cashdesk-wallet": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
