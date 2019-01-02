@@ -79,6 +79,14 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/softswiss.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/cashdesk-wallet.git"
         }
     ],
     "require": {
@@ -95,6 +103,8 @@
         "ihub-grid/error-handler": "dev-dev",
         "ihub-grid/packages/health-check": "dev-dev",
         "ihub-grid/packages/seamless-wallet-core": "dev-dev",
+        "ihub-grid/packages/finance-monitoring": "dev-master",
+        "ihub-grid/packages/cashdesk-wallet": "dev-master",
         "ihub-grid/packages/seamless-wallets/euro-games-tech": "dev-dev",
         "ihub-grid/packages/seamless-wallets/bet-games": "dev-dev",
         "ihub-grid/packages/seamless-wallets/mr-slotty": "dev-dev",
