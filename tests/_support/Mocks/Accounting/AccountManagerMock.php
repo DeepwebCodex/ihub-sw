@@ -151,6 +151,21 @@ class AccountManagerMock
         return $this;
     }
 
+    public function completedWithdraw($object_id, $amount, $balance = null)
+    {
+
+        $balance = $balance ?? $this->params->getBalance();
+
+        $params = $this->getCompletedParams($object_id, self::BET, $this->bet_operation_id, $amount);
+        $this->mock->shouldReceive('commitTransaction')
+            ->withArgs($params)
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $object_id,
+                    $this->bet_operation_id, $amount, $balance));
+
+        return $this;
+    }
+
 
     public function emptyCreateTransaction($object_id, $amount, $balance = null)
     {
