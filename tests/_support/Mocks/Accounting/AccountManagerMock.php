@@ -135,6 +135,23 @@ class AccountManagerMock
         return $this;
     }
 
+
+    public function pendingWithdraw($object_id, $amount, $balance = null)
+    {
+
+        $balance = $balance ?? $this->params->getBalance();
+
+        $this->mock->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($object_id, $amount, self::BET))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
+                    $this->bet_operation_id, $amount, $balance));
+
+        return $this;
+    }
+
+
     public function emptyCreateTransaction($object_id, $amount, $balance = null)
     {
         $this->mock->shouldReceive('createTransaction')
