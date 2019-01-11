@@ -36,6 +36,11 @@ class Params
             return $this->balance;
         }
 
+        return $this->userBalance();
+    }
+
+    public function userBalance()
+    {
         return IntegrationUser::get($this->userId, 0, 'tests')->getBalance();
     }
 
