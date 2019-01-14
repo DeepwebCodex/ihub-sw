@@ -192,15 +192,15 @@ class AccountManagerMock
 
         $balance = $balance ?? $this->params->getBalance();
 
-        $this->cancelTransactionHard($object_id, $amount, self::BET, $balance);
+        $this->cancelTransactionHard($object_id, $object_id, '', $amount, self::BET, $balance);
 
         return $this;
     }
 
-    public function cancelTransactionHard(int $operation_id, $amount, $direction, $balance = null)
+    public function cancelTransactionHard(int $operation_id, $object_id, $comment, $amount, $direction, $balance = null)
     {
         $this->mock->shouldReceive('cancelTransactionHard')
-            ->withArgs([$operation_id, $operation_id, ''])
+            ->withArgs([$operation_id, $object_id, $comment])
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_CANCELED, $direction, $operation_id,
                     $this->withdraw_operation_id, $amount, $balance));
