@@ -13,8 +13,8 @@ class AccountManagerMock
     const BET = 1;
     const WIN = 0;
 
-    private $bet_operation_id = 9543958;
-    private $win_operation_id = 2834034;
+    private $withdraw_operation_id = 9543958;
+    private $deposit_operation_id = 2834034;
 
     public function __construct(Params $params)
     {
@@ -84,6 +84,26 @@ class AccountManagerMock
         return $this;
     }
 
+    /**
+     * @param int $withdraw_operation_id
+     * @return self
+     */
+    public function setWithdrawOperationId(int $withdraw_operation_id): self
+    {
+        $this->withdraw_operation_id = $withdraw_operation_id;
+        return $this;
+    }
+
+    /**
+     * @param int $deposit_operation_id
+     * @return self
+     */
+    public function setDepositOperationId(int $deposit_operation_id): self
+    {
+        $this->deposit_operation_id = $deposit_operation_id;
+        return $this;
+    }
+
     private function getUniqueId()
     {
         return round(microtime(true)) + mt_rand(1, 10000);
@@ -124,13 +144,13 @@ class AccountManagerMock
                 $this->getPendingParams($object_id, $amount, self::BET))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
-                    $this->bet_operation_id, $amount, $balance));
-        $params = $this->getCompletedParams($object_id, self::BET, $this->bet_operation_id, $amount);
+                    $this->withdraw_operation_id, $amount, $balance));
+        $params = $this->getCompletedParams($object_id, self::BET, $this->withdraw_operation_id, $amount);
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs($params)
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $object_id,
-                    $this->bet_operation_id, $amount, $balance));
+                    $this->withdraw_operation_id, $amount, $balance));
 
         return $this;
     }
@@ -146,7 +166,7 @@ class AccountManagerMock
                 $this->getPendingParams($object_id, $amount, self::BET))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
-                    $this->bet_operation_id, $amount, $balance));
+                    $this->withdraw_operation_id, $amount, $balance));
 
         return $this;
     }
@@ -156,12 +176,34 @@ class AccountManagerMock
 
         $balance = $balance ?? $this->params->getBalance();
 
-        $params = $this->getCompletedParams($object_id, self::BET, $this->bet_operation_id, $amount);
+        $params = $this->getCompletedParams($object_id, self::BET, $this->withdraw_operation_id, $amount);
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs($params)
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $object_id,
-                    $this->bet_operation_id, $amount, $balance));
+                    $this->withdraw_operation_id, $amount, $balance));
+
+        return $this;
+    }
+
+
+    public function cancelWithdraw($object_id, $amount, $balance = null)
+    {
+
+        $balance = $balance ?? $this->params->getBalance();
+
+        $this->cancelTransactionHard($object_id, $amount, self::BET, $balance);
+
+        return $this;
+    }
+
+    public function cancelTransactionHard(int $operation_id, $amount, $direction, $balance = null)
+    {
+        $this->mock->shouldReceive('cancelTransactionHard')
+            ->withArgs([$operation_id, $operation_id, ''])
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_CANCELED, $direction, $operation_id,
+                    $this->withdraw_operation_id, $amount, $balance));
 
         return $this;
     }
@@ -172,7 +214,7 @@ class AccountManagerMock
         $this->mock->shouldReceive('createTransaction')
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
-                    $this->bet_operation_id, $amount, $balance));
+                    $this->withdraw_operation_id, $amount, $balance));
 
         return $this;
     }
@@ -197,13 +239,13 @@ class AccountManagerMock
                 $this->getPendingParams($object_id, $amount, self::WIN))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN,
-                    $object_id, $this->win_operation_id, $amount, $balance));
+                    $object_id, $this->deposit_operation_id, $amount, $balance));
 
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs(
-                $this->getCompletedParams($object_id, self::WIN, $this->win_operation_id, $amount))
+                $this->getCompletedParams($object_id, self::WIN, $this->deposit_operation_id, $amount))
             ->andReturn(
-                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->win_operation_id, $amount, $balance));
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->deposit_operation_id, $amount, $balance));
 
         return $this;
     }
