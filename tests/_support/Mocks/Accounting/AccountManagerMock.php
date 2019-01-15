@@ -176,7 +176,7 @@ class AccountManagerMock
 
         $balance = $balance ?? $this->params->getBalance();
 
-        $params = $this->getCompletedParams($object_id, self::BET, $object_id, $amount);
+        $params = $this->getCompletedParams($object_id, self::BET, $operation_id, $amount);
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs($params)
             ->andReturn(
