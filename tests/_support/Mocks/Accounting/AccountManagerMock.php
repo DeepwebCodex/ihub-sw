@@ -187,12 +187,12 @@ class AccountManagerMock
     }
 
 
-    public function cancelWithdraw($object_id, $amount, $balance = null)
+    public function cancelWithdraw($operation_id, $object_id, $amount, $balance = null)
     {
 
         $balance = $balance ?? $this->params->getBalance();
 
-        $this->cancelTransactionHard($object_id, $object_id, '', $amount, self::BET, $balance);
+        $this->cancelTransactionHard($operation_id, $object_id, '', $amount, self::BET, $balance);
 
         return $this;
     }
