@@ -156,7 +156,7 @@ class AccountManagerMock
     }
 
 
-    public function pendingWithdraw($object_id, $amount, $balance = null)
+    public function pendingWithdraw($object_id, $operation_id, $amount, $balance = null)
     {
 
         $balance = $balance ?? $this->params->getBalance();
@@ -166,22 +166,22 @@ class AccountManagerMock
                 $this->getPendingParams($object_id, $amount, self::BET))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
-                    $this->withdraw_operation_id, $amount, $balance));
+                    $operation_id, $amount, $balance));
 
         return $this;
     }
 
-    public function completedWithdraw($object_id, $amount, $balance = null)
+    public function completedWithdraw($object_id, $operation_id, $amount, $balance = null)
     {
 
         $balance = $balance ?? $this->params->getBalance();
 
-        $params = $this->getCompletedParams($object_id, self::BET, $this->withdraw_operation_id, $amount);
+        $params = $this->getCompletedParams($object_id, self::BET, $object_id, $amount);
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs($params)
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::BET, $object_id,
-                    $this->withdraw_operation_id, $amount, $balance));
+                    $operation_id, $amount, $balance));
 
         return $this;
     }
@@ -202,8 +202,8 @@ class AccountManagerMock
         $this->mock->shouldReceive('cancelTransactionHard')
             ->withArgs([$operation_id, $object_id, $comment])
             ->andReturn(
-                $this->returnOk(TransactionRequest::STATUS_CANCELED, $direction, $operation_id,
-                    $this->withdraw_operation_id, $amount, $balance));
+                $this->returnOk(TransactionRequest::STATUS_CANCELED, $direction, $object_id,
+                    $operation_id, $amount, $balance));
 
         return $this;
     }
