@@ -75,6 +75,7 @@ variables:
     - export http_proxy=$HTTP_PROXY_FOR_DEV
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - cp ./run/dev/composer.json ./composer.json
+    - rm -rf composer.lock
     - composer install --no-ansi --no-interaction --no-progress -o -a
     - composer dump-autoload --no-interaction -o -a
     - composer show -i
@@ -200,6 +201,7 @@ compile_feature:
   - export http_proxy=$HTTP_PROXY_FOR_DEV
   - export https_proxy=$HTTPS_PROXY_FOR_DEV
   - cp ./run/feature/composer.json ./composer.json
+  - rm -rf composer.lock
   - composer install --no-ansi --no-interaction --no-progress -o -a
   - composer dump-autoload --no-interaction -o -a
   - composer show -i
