@@ -13,7 +13,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=file/g" \
        -e "s/^LOG_DRIVER=file/LOG_DRIVER=file/g" \
        -e "s/^BROADCAST_DRIVER=log/BROADCAST_DRIVER=log/g" \
-       -e "s/^QUEUE_DRIVER=sync/QUEUE_DRIVER=sync/g" \
+       -e "s/^QUEUE_CONNECTION=sync/QUEUE_CONNECTION=sync/g" \
         \
        -e "s/^DB_HOST=example.com/DB_HOST=de2db02d.dev.favorit/g" \
        -e "s/^DB_PORT=5432/DB_PORT=5432/g" \
