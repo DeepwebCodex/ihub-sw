@@ -75,6 +75,7 @@ variables:
     - export http_proxy=$HTTP_PROXY_FOR_DEV
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - cp ./run/dev/composer.json ./composer.json
+    - rm -rf composer.lock
     - composer install --no-ansi --no-interaction --no-progress -o -a
     - composer dump-autoload --no-interaction -o -a
     - composer show -i
@@ -200,6 +201,7 @@ compile_feature:
   - export http_proxy=$HTTP_PROXY_FOR_DEV
   - export https_proxy=$HTTPS_PROXY_FOR_DEV
   - cp ./run/feature/composer.json ./composer.json
+  - rm -rf composer.lock
   - composer install --no-ansi --no-interaction --no-progress -o -a
   - composer dump-autoload --no-interaction -o -a
   - composer show -i
@@ -218,7 +220,7 @@ migrate_feature:blank_db:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: mysecretpassword
   before_script:
-    - bash ./run/dev/make-configs-for-migrate-in-CI.sh
+    - bash ./run/feature/make-configs-for-migrate-in-CI.sh
   script:
     - php artisan migrate
     - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
@@ -237,7 +239,7 @@ test_feature:
   before_script:
   - export http_proxy=""
   - export https_proxy=""
-  - bash ./run/dev/make-configs-for-tests.sh
+  - bash ./run/feature/make-configs-for-tests.sh
   only:
   - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
@@ -248,7 +250,7 @@ test_feature_e2e:
   before_script:
     - export http_proxy=""
     - export https_proxy=""
-    - bash ./run/dev/make-configs-for-tests-mocks-off.sh
+    - bash ./run/feature/make-configs-for-tests-mocks-off.sh
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
@@ -259,7 +261,7 @@ test_feature_rancher:
   before_script:
     - export http_proxy=""
     - export https_proxy=""
-    - bash ./run/dev/make-configs-for-tests-rancher.sh
+    - bash ./run/feature/make-configs-for-tests-rancher.sh
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 # ====================================== END FEATURE ==============================
