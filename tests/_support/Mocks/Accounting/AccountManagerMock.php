@@ -59,7 +59,7 @@ class AccountManagerMock
 
     public function userInfo($balance = null)
     {
-        if (is_null($balance)) {
+        if ($balance === null) {
             $balance = $this->params->getBalance();
         }
 
@@ -193,6 +193,20 @@ class AccountManagerMock
         $balance = $balance ?? $this->params->getBalance();
 
         $this->cancelTransactionHard($operation_id, $object_id, '', $amount, self::BET, $balance);
+
+        return $this;
+    }
+
+    public function pendingDeposit($object_id, $operation_id, $amount, $balance = null)
+    {
+        $balance = $balance ?? $this->params->getBalance();
+
+        $this->mock->shouldReceive('createTransaction')
+            ->withArgs(
+                $this->getPendingParams($object_id, $amount, self::WIN))
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $object_id,
+                    $operation_id, $amount, $balance));
 
         return $this;
     }
