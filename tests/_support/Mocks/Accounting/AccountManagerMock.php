@@ -73,6 +73,10 @@ class AccountManagerMock
                             "currency" => $this->params->currency,
                             "is_active" => 1,
                             "deposit" => $balance,
+                            "payment_instrument_id" => 3,
+                            "wallet_account_id" => $this->params->currency,
+                            "wallet_id" => "ziwidif@rootfest.net",
+                            "partner_id" => $this->params->partnerId
                         ],
                     ],
                     "user_services" => $this->getServices(),
@@ -186,6 +190,21 @@ class AccountManagerMock
         return $this;
     }
 
+    public function commitDeposit($object_id, $operation_id, $amount, $balance = null)
+    {
+
+        $balance = $balance ?? $this->params->getBalance();
+
+        $params = $this->getCompletedParams($object_id, self::WIN, $operation_id, $amount);
+        $this->mock->shouldReceive('commitTransaction')
+            ->withArgs($params)
+            ->andReturn(
+                $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id,
+                    $operation_id, $amount, $balance));
+
+        return $this;
+    }
+
 
     public function cancelWithdraw($operation_id, $object_id, $amount, $balance = null)
     {
@@ -203,7 +222,22 @@ class AccountManagerMock
 
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
-                $this->getPendingParams($object_id, $amount, self::WIN))
+                [
+                    TransactionRequest::STATUS_PENDING,
+                    $this->params->serviceId,
+                    $this->params->cashdeskId,
+                    $this->params->userId,
+                    $amount,
+                    $this->params->currency,
+                    self::WIN,
+                    $object_id,
+                    $this->getComment($object_id, $amount, self::WIN),
+                    $this->params->partnerId,
+                    $this->params->userIP,
+                    3,
+                    'ziwidif@rootfest.net',
+                    $this->params->currency
+                ])
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $object_id,
                     $operation_id, $amount, $balance));
