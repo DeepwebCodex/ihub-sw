@@ -222,22 +222,7 @@ class AccountManagerMock
 
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
-                [
-                    TransactionRequest::STATUS_PENDING,
-                    $this->params->serviceId,
-                    $this->params->cashdeskId,
-                    $this->params->userId,
-                    $amount,
-                    $this->params->currency,
-                    self::WIN,
-                    $object_id,
-                    $this->getComment($object_id, $amount, self::WIN),
-                    $this->params->partnerId,
-                    $this->params->userIP,
-                    $this->params->payment_instrument_id,
-                    $this->params->wallet_id,
-                    $this->params->wallet_account_id
-                ])
+                $this->pendingGiftParams($object_id, $amount, self::WIN))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $object_id,
                     $operation_id, $amount, $balance));
