@@ -73,9 +73,9 @@ class AccountManagerMock
                             "currency" => $this->params->currency,
                             "is_active" => 1,
                             "deposit" => $balance,
-                            "payment_instrument_id" => 3,
-                            "wallet_account_id" => $this->params->currency,
-                            "wallet_id" => "ziwidif@rootfest.net",
+                            "payment_instrument_id" => $this->params->payment_instrument_id,
+                            "wallet_account_id" => $this->params->wallet_account_id,
+                            "wallet_id" => $this->params->wallet_id,
                             "partner_id" => $this->params->partnerId
                         ],
                     ],
@@ -167,7 +167,7 @@ class AccountManagerMock
 
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
-                $this->getPendingParams($object_id, $amount, self::BET))
+                $this->pendingGiftParams($object_id, $amount, self::BET))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
                     $operation_id, $amount, $balance));
@@ -234,9 +234,9 @@ class AccountManagerMock
                     $this->getComment($object_id, $amount, self::WIN),
                     $this->params->partnerId,
                     $this->params->userIP,
-                    3,
-                    'ziwidif@rootfest.net',
-                    $this->params->currency
+                    $this->params->payment_instrument_id,
+                    $this->params->wallet_id,
+                    $this->params->wallet_account_id
                 ])
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $object_id,
@@ -329,6 +329,26 @@ class AccountManagerMock
             $this->getComment($object_id, $amount, $direction),
             null,
             $this->params->userIP,
+        ];
+    }
+
+    private function pendingGiftParams($object_id, $amount, $direction)
+    {
+        return [
+            TransactionRequest::STATUS_PENDING,
+            $this->params->serviceId,
+            $this->params->cashdeskId,
+            $this->params->userId,
+            $amount,
+            $this->params->currency,
+            $direction,
+            $object_id,
+            $this->getComment($object_id, $amount, $direction),
+            $this->params->partnerId,
+            $this->params->userIP,
+            $this->params->payment_instrument_id,
+            $this->params->wallet_id,
+            $this->params->wallet_account_id,
         ];
     }
 

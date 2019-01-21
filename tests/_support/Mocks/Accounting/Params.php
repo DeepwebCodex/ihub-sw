@@ -4,6 +4,7 @@
 namespace Testing\Accounting;
 
 use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 
 class Params
 {
@@ -16,7 +17,10 @@ class Params
     public $userId;
     public $cashdeskId;
     public $partnerId;
-    public $userIP = "127.0.0.1";
+    public $userIP = '127.0.0.1';
+    public $wallet_account_id = 'EUR';
+    public $wallet_id = 'ziwidif@rootfest.net';
+    public $payment_instrument_id = 3;
 
 
     public function __construct($integration = null)
