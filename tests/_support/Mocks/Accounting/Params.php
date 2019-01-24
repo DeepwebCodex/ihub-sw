@@ -53,6 +53,11 @@ class Params
         return IntegrationUser::get($this->userId, 0, 'tests')->getCurrency();
     }
 
+    public function user(): IntegrationUser
+    {
+        return IntegrationUser::get($this->userId, 0, 'tests');
+    }
+
     public function getBalanceInCents(): int
     {
         return 100 * $this->getBalance();
