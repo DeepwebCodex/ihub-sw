@@ -100,8 +100,6 @@ variables:
 .template_migrate_prod: &template_migrate_prod
   stage: migrate_database
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  variables:
-    GIT_STRATEGY: none
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
