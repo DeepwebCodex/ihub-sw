@@ -206,13 +206,13 @@ compile:feature:
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-migrate:feature:
+cumulative:migrate:feature:
   <<: *template_dev
   <<: *template_migrate_dev
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-migrate:blank_db:feature:
+blank_db:migrate:feature:
   <<: *template_dev
   <<: *template_migrate_dev
   services:
@@ -227,7 +227,7 @@ migrate:blank_db:feature:
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-test:feature:
+mocked:test:feature:
   <<: *template_dev
   <<: *template_test
   before_script:
@@ -237,7 +237,7 @@ test:feature:
   only:
   - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-test:e2e:feature:
+e2e:test:feature:
   <<: *template_dev
   <<: *template_test
   allow_failure: true
@@ -246,9 +246,9 @@ test:e2e:feature:
     - export https_proxy=""
     - bash ./run/feature/make-configs-for-tests-mocks-off.sh
   only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
+    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-test:rancher:feature:
+rancher:test:feature:
   <<: *template_dev
   <<: *template_test
   allow_failure: true
@@ -258,31 +258,32 @@ test:rancher:feature:
     - bash ./run/feature/make-configs-for-tests-rancher.sh
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
+
 # ====================================== END FEATURE ==============================
 
 # ====================================== DEV ======================================
 
-compile_dev:
+compile:dev:
   <<: *template_dev
   <<: *template_compile
   <<: *template_compile_dev
 
-migrate_dev:
+migrate:dev:
   <<: *template_dev
   <<: *template_migrate_dev
 
-prepare_for_build_docker_image_dev:
+prepare_for_build_docker_image:dev:
   <<: *template_dev
   <<: *template_prepare_before_build
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   before_script:
     - sh ./run/dev/make-configs-for-build.sh ${CI_PIPELINE_ID}
 
-build_docker_image_dev:
+build_docker_image:dev:
   <<: *template_dev
   <<: *template_build_docker_image
 
-deploy_to_servers_dev:
+deploy_to_servers:dev:
   <<: *template_dev
   <<: *template_deploy
   script:
@@ -312,7 +313,7 @@ deploy_to_servers_dev:
 
 # ====================================== PROD ======================================
 
-change_log_master:
+change_log:master:
   <<: *template_prod
   stage: change_log
   script:
@@ -325,7 +326,7 @@ change_log_master:
     - master-pp
     - /^master-[0-9]{1,5}$/
 
-change_log_tag:
+change_log:tag:
   <<: *template_prod
   stage: change_log
   script:
@@ -336,7 +337,7 @@ change_log_tag:
   only:
     - tags
 
-compile_prod:
+compile:prod:
   <<: *template_prod
   <<: *template_compile
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
@@ -351,38 +352,7 @@ compile_prod:
     - mkdir -p ./storage/app/
     - git describe --tags $(git rev-list --tags --max-count=1)  > ./storage/app/version.txt
 
-migrate_prod:blank_db:
-  <<: *template_prod
-  stage: migrate_database
-  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  dependencies: []
-  services:
-  - name: $CONTAINER_POSTGRES_IMAGE
-    alias: postgres
-  variables:
-    POSTGRES_DB: ihub
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: mysecretpassword
-  before_script:
-    - mkdir ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
-    - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa || true
-    - export http_proxy=$HTTP_PROXY_FOR_PROD
-    - export https_proxy=$HTTPS_PROXY_FOR_PROD
-  script:
-    - cp ./run/prod/composer.json ./composer.json
-    - rm -rf composer.lock
-    - composer install --no-ansi --no-interaction --no-progress -o -a
-    - bash ./run/prod/decode.sh
-    - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
-    - bash ./run/prod/make-configs-for-migrate-in-CI.sh
-    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
-    - php artisan migrate --force
-    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
-
-migrate_prod_manual:
+cumulative:migrate:manual:prod:
   <<: *template_prod
   <<: *template_migrate_prod
   only:
@@ -394,7 +364,22 @@ migrate_prod_manual:
     - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
   when: manual
 
-test_on_dev_configs_prod:
+blank_db:migrate:prod:
+  <<: *template_prod
+  <<: *template_migrate_prod
+  services:
+  - name: $CONTAINER_POSTGRES_IMAGE
+    alias: postgres
+  variables:
+    POSTGRES_DB: ihub
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: mysecretpassword
+  before_script:
+    - bash ./run/prod/decode.sh
+    - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
+    - bash ./run/prod/make-configs-for-migrate-in-CI.sh
+
+on_dev_configs:test:prod:
   <<: *template_dev
   <<: *template_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
@@ -409,7 +394,7 @@ test_on_dev_configs_prod:
     - /^master-[0-9]{1,5}$/
     - tags
 
-test_on_dev_configs_e2e_prod:
+on_dev_configs_e2e:test:prod:
   <<: *template_dev
   <<: *template_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
@@ -424,7 +409,7 @@ test_on_dev_configs_e2e_prod:
     - /^master-[0-9]{1,5}$/
     - tags
 
-prepare_for_build_docker_image_prod:
+prepare_for_build_docker_image:prod:
   <<: *template_prod
   <<: *template_prepare_before_build
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
@@ -434,13 +419,13 @@ prepare_for_build_docker_image_prod:
   except:
   - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
-build_docker_image_prod:
+build_docker_image:prod:
   <<: *template_prod
   <<: *template_build_docker_image
   except:
     - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
-manual_deploy_to_10_servers_cron_prod:
+deploy_to_10_servers_cron:manual:prod:
   <<: *template_prod
   <<: *template_deploy
   script:
@@ -450,7 +435,7 @@ manual_deploy_to_10_servers_cron_prod:
   except:
     - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
-manual_deploy_to_20_servers_prod:
+deploy_to_20_servers:manual:prod:
   <<: *template_prod
   <<: *template_deploy
   script:
