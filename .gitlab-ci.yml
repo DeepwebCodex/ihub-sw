@@ -129,7 +129,6 @@ variables:
     expire_in: 1 hour
   script:
     - ./vendor/bin/codecept run api
-    - ./vendor/bin/codecept run functional
     - ./vendor/bin/codecept run unit
 
 .template_prepare_before_build: &template_prepare_before_build
