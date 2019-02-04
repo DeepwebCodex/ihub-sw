@@ -115,14 +115,13 @@ variables:
 .template_test: &template_test
   stage: test_project
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
-  variables:
-    GIT_STRATEGY: none
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
     paths:
       - ./tests/_output
       - ./storage/logs
+      - ./run/
       - ./.env.testing
     expire_in: 1 hour
   script:
