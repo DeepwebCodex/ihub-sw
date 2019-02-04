@@ -1,8 +1,6 @@
 stages:
 - change_log
 - compile_project
-- migrate_database_empty_db
-- migrate_database_empty_db_2
 - migrate_database
 - test_project
 - make_documentation
@@ -193,7 +191,7 @@ fail_build_for_incorrect_branches:
 
 # ====================================== FEATURE ==================================
 
-compile_feature:
+compile:feature:
   <<: *template_dev
   <<: *template_compile
   <<: *template_compile_dev
@@ -208,10 +206,15 @@ compile_feature:
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-migrate_feature:blank_db:
+migrate:feature:
   <<: *template_dev
-  stage: migrate_database_empty_db
-  image: $CONTAINER_PHP_FPM_IMAGE_DEV
+  <<: *template_migrate_dev
+  only:
+    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
+
+migrate:blank_db:feature:
+  <<: *template_dev
+  <<: *template_migrate_dev
   services:
   - name: $CONTAINER_POSTGRES_IMAGE
     alias: postgres
@@ -221,19 +224,10 @@ migrate_feature:blank_db:
     POSTGRES_PASSWORD: mysecretpassword
   before_script:
     - bash ./run/feature/make-configs-for-migrate-in-CI.sh
-  script:
-    - php artisan migrate
-    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-migrate_feature:
-  <<: *template_dev
-  <<: *template_migrate_dev
-  only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
-
-test_feature:
+test:feature:
   <<: *template_dev
   <<: *template_test
   before_script:
@@ -243,7 +237,7 @@ test_feature:
   only:
   - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-test_feature_e2e:
+test:e2e:feature:
   <<: *template_dev
   <<: *template_test
   allow_failure: true
@@ -254,7 +248,7 @@ test_feature_e2e:
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
 
-test_feature_rancher:
+test:rancher:feature:
   <<: *template_dev
   <<: *template_test
   allow_failure: true
@@ -359,7 +353,7 @@ compile_prod:
 
 migrate_prod:blank_db:
   <<: *template_prod
-  stage: migrate_database_empty_db
+  stage: migrate_database
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
   dependencies: []
   services:
