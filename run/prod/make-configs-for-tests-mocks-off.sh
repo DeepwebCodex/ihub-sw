@@ -4,7 +4,7 @@ cp ./.env.example ./.env
 cp ./.env.example ./.env.testing
 sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^APP_ENV=example/APP_ENV=testing/g" \
-       -e "s/^APP_KEY=example/APP_KEY='base64:axrMo7RS1BV9f589cGtb+iQejqRmQdeI071MMMIleE4='/g" \
+       -e "s/^APP_KEY=example/APP_KEY=\"base64:axrMo7RS1BV9f589cGtb+iQejqRmQdeI071MMMIleE4=\"/g" \
        -e "s/^APP_DEBUG=true/APP_DEBUG=true/g" \
        -e "s/^APP_REQUEST_DEBUG=true/APP_REQUEST_DEBUG=true/g" \
        -e "s/^APP_LOG_LEVEL=debug/APP_LOG_LEVEL=debug/g" \
@@ -19,7 +19,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^DB_PORT=5432/DB_PORT=5432/g" \
        -e "s/^DB_DATABASE=db/DB_DATABASE=ihub/g" \
        -e "s/^DB_USERNAME=pgsql/DB_USERNAME=u_ihub/g" \
-       -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD='b9c3q46-9bv08967'​/g" \
+       -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"/g" \
         \
        -e "s/^REDIS_PREFIX=integrations_cms/REDIS_PREFIX=integrations_hub/g" \
        -e "s/^REDIS_HOST=example.com/REDIS_HOST=de2red01d.dev.favorit/g" \
@@ -28,8 +28,8 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
        -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
        -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
         \
-       -e "s/^GAME_SESSION_API_LOGIN=game_session_api_login/GAME_SESSION_API_LOGIN='t4ewr\$zAF@#u6esp'/g" \
-       -e "s/^GAME_SESSION_API_PASSWORD=game_session_api_password/GAME_SESSION_API_PASSWORD='t4ewr\$zAF@#u6esp'/g" \
+       -e "s/^GAME_SESSION_API_LOGIN=game_session_api_login/GAME_SESSION_API_LOGIN=\"t4ewr\$zAF@#u6esp\"/g" \
+       -e "s/^GAME_SESSION_API_PASSWORD=game_session_api_password/GAME_SESSION_API_PASSWORD=\"t4ewr\$zAF@#u6esp\"/g" \
        -e "s/^GAME_SESSION_STORAGE_SECRET=game_session_storage_secret/GAME_SESSION_STORAGE_SECRET=gBEWPkx4yGDCZj0P/g" \
        -e "s/^GAME_SESSION_STORAGE_KEY_PREFIX=game_session_storage_key_prefix/GAME_SESSION_STORAGE_KEY_PREFIX=game_sessions/g" \
        -e "s/^GAME_SESSION_STORAGE_TTL=900/GAME_SESSION_STORAGE_TTL=900/g" \
