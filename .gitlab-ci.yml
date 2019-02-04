@@ -55,6 +55,9 @@ variables:
     untracked: true
     paths:
       - ./vendor
+      - ./tests
+      - ./bootstrap
+      - ./storage
   artifacts:
     name: $CI_BUILD_REF_NAME
     paths:
