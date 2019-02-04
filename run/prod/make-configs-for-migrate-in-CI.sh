@@ -13,7 +13,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favorit/g" \
     -e "s/^DB_PORT=5432/DB_PORT=5432/g" \
     -e "s/^DB_DATABASE=db/DB_DATABASE=ihub/g" \
     -e "s/^DB_USERNAME=pgsql/DB_USERNAME=postgres/g" \
-    -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"mysecretpassword\"/g" \
+    -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD='mysecretpassword'/g" \
     \
     ./.env
 
