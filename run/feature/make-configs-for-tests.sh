@@ -41,6 +41,6 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     ./.env.testing
 
 echo "" >> ./.env.testing
-echo "TEST_USER_ID=1555" >> ./.env.testing
+echo "TEST_USER_ID=89" >> ./.env.testing
 echo "TEST_PARTNER_ID=1" >> ./.env.testing
 echo "TEST_CASHEDESK=-5" >> ./.env.testing

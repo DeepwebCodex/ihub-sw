@@ -14,7 +14,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^CACHE_DRIVER=file/CACHE_DRIVER=redis/g" \
     -e "s/^LOG_DRIVER=file/LOG_DRIVER=rabbit/g" \
     -e "s/^BROADCAST_DRIVER=log/BROADCAST_DRIVER=log/g" \
-    -e "s/^QUEUE_DRIVER=sync/QUEUE_DRIVER=sync/g" \
+    -e "s/^QUEUE_CONNECTION=sync/QUEUE_CONNECTION=sync/g" \
     \
     -e "s/^DB_HOST=example.com/DB_HOST=de2db02d.dev.favorit/g" \
     -e "s/^DB_PORT=5432/DB_PORT=6432/g" \
@@ -34,12 +34,6 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     \
     -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
     -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
-    \
-    -e "s/^API_ACCOUNT_ROH_HOST_59__59=example.com/API_ACCOUNT_ROH_HOST_59__59=de2cs01d.dev.favorit/g" \
-    -e "s/^API_ACCOUNT_ROH_PORT_59__59=6666/API_ACCOUNT_ROH_PORT_59__59=10007/g" \
-    \
-    -e "s/^API_ACCOUNT_ROH_HOST_51__51=example.com/API_ACCOUNT_ROH_HOST_51__51=de2ef01d.dev.favorit/g" \
-    -e "s/^API_ACCOUNT_ROH_PORT_51__51=6666/API_ACCOUNT_ROH_PORT_51__51=10102/g" \
     \
     -e "s/^GAME_SESSION_API_LOGIN=game_session_api_login/GAME_SESSION_API_LOGIN=\"t4ewr\$zAF@#u6esp\"/g" \
     -e "s/^GAME_SESSION_API_PASSWORD=game_session_api_password/GAME_SESSION_API_PASSWORD=\"t4ewr\$zAF@#u6esp\"/g" \
