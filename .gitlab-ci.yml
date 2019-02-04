@@ -62,6 +62,9 @@ variables:
     name: $CI_BUILD_REF_NAME
     paths:
       - ./vendor
+      - ./tests
+      - ./bootstrap
+      - ./storage
     expire_in: 1 hour
   before_script:
     - mkdir ~/.ssh
