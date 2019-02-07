@@ -154,18 +154,14 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
-        \iHubGrid\Accounting\AccountManagerServiceProvider::class,
-        \iHubGrid\ErrorHandler\ErrorHandlerServiceProvider::class,
-        \iHubGrid\SeamlessWalletCore\SeamlessWalletCoreServiceProvider::class,
-        Spatie\Fractal\FractalServiceProvider::class,
-        \iHubGrid\SeamlessWalletCore\Providers\GameSessionServiceProvider::class,
+        \App\Providers\AppServiceProvider::class,
+        \App\Providers\EventServiceProvider::class,
+        \App\Providers\RouteServiceProvider::class,
         \App\Providers\QueueRabbitMQServiceProvider::class,
-        \iHubGrid\ErrorHandler\Providers\GuzzleServiceProvider::class,
-        \iHubGrid\DynamicScheduler\Providers\DynamicSchedulerServiceProvider::class,
+        \Spatie\Fractal\FractalServiceProvider::class,
+        \Nathanmac\Utilities\Parser\ParserServiceProvider::class,
+        \iHubGrid\SeamlessWalletCore\SeamlessWalletCoreServiceProvider::class,
+        \iHubGrid\SeamlessWalletCore\Providers\GameSessionServiceProvider::class,
         \iHubGrid\EuroGamesTech\EuroGamesTechServiceProvider::class,
         \iHubGrid\BetGames\BetGamesServiceProvider::class,
         \iHubGrid\MrSlotty\MrSlottyServiceProvider::class,
@@ -175,12 +171,7 @@ return [
         \iHubGrid\SoftSwiss\SoftSwissServiceProvider::class,
         \iHubGrid\MicroGaming\MicroGamingServiceProvider::class,
         \iHubGrid\InternationalLottery\InternationalLotteryServiceProvider::class,
-        \iHubGrid\FastBet\FastBetServiceProvider::class,
-        \iHubGrid\BestGoldBet\BestGoldBetServiceProvider::class,
-        \iHubGrid\QueueCommunicationProtocol\Provider\QueueCommunicationProtocolRabbitMQServiceProvider::class,
-        \iHubGrid\QueueCommunicationProtocol\Provider\QueueCommunicationProtocolProvider::class,
         \iHubGrid\BingoBoom\BingoBoomServiceProvider::class,
-        \iHubGrid\HealthCheck\HealthCheckServiceProvider::class
     ],
 
     /*
