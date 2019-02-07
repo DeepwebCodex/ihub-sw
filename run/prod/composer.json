@@ -90,6 +90,7 @@
         "spatie/laravel-fractal": "^1.9",
         "danielstjules/stringy": "~2.3",
         "doctrine/dbal": "^2.5",
+        "ihub-grid/packages/queue-communication-protocol": "2.*",
         "ihub-grid/packages/dynamic-scheduler": "1.*",
         "ihub-grid/packages/accounting": "1.*",
         "ihub-grid/error-handler": "1.*",
@@ -105,8 +106,7 @@
         "ihub-grid/packages/seamless-wallets/international_lottery": "1.*",
         "ihub-grid/packages/seamless-wallets/fast-bet": "1.*",
         "ihub-grid/packages/seamless-wallets/best-gold-bet": "1.*",
-        "ihub-grid/packages/seamless-wallets/softswiss": "2.*",
-        "ihub-grid/packages/queue-communication-protocol": "2.*"
+        "ihub-grid/packages/seamless-wallets/softswiss": "2.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

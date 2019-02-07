@@ -94,6 +94,7 @@
         "spatie/laravel-fractal": "^1.9",
         "danielstjules/stringy": "~2.3",
         "doctrine/dbal": "^2.5",
+        "ihub-grid/packages/queue-communication-protocol": "dev-dev",
         "ihub-grid/packages/dynamic-scheduler": "dev-dev",
         "ihub-grid/packages/accounting": "dev-dev",
         "ihub-grid/error-handler": "dev-dev",
@@ -107,11 +108,8 @@
         "ihub-grid/packages/seamless-wallets/endorphina": "dev-dev",
         "ihub-grid/packages/seamless-wallets/micro-gaming": "dev-dev",
         "ihub-grid/packages/seamless-wallets/international_lottery": "dev-dev",
-        "ihub-grid/packages/seamless-wallets/fast-bet": "dev-dev",
-        "ihub-grid/packages/seamless-wallets/best-gold-bet": "dev-dev",
         "ihub-grid/packages/seamless-wallets/softswiss": "dev-dev",
-        "ihub-grid/packages/seamless-wallets/bingo-boom": "dev-dev",
-        "ihub-grid/packages/queue-communication-protocol": "dev-dev"
+        "ihub-grid/packages/seamless-wallets/bingo-boom": "dev-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
