@@ -20,6 +20,9 @@ sed -i -e "s/^APP_ENV=null/APP_ENV=testing/g" \
     -e "s/^DB_USERNAME=pgsql/DB_USERNAME=u_ihub/g" \
     -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"/g" \
     \
+    -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
+    -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
+    \
     -e "s/^BETGAMES_DISCONNECT_TIME=0/BETGAMES_DISCONNECT_TIME=10/g" \
     \
     ./.env.testing

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-cp ./.env.example ./.env
 cp ./.env.example ./.env.testing
 sed -i -e "s/^APP_ENV=null/APP_ENV=testing/g" \
        -e "s/^APP_KEY=example/APP_KEY=\"base64:axrMo7RS1BV9f589cGtb+iQejqRmQdeI071MMMIleE4=\"/g" \
