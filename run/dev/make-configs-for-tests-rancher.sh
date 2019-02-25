@@ -30,13 +30,16 @@ sed -i -e "s/^APP_ENV=null/APP_ENV=testing/g" \
     -e "s/^#LOG_RABBIT_PASS=log_rabbit/LOG_RABBIT_PASS=\"ihub\"/g" \
     -e "s/^#LOG_RABBIT_VHOST=\"\/\"/LOG_RABBIT_VHOST=\"ihub_sw\"/g" \
     \
+    -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
+    -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
+    \
     -e "s/^BETGAMES_DISCONNECT_TIME=0/BETGAMES_DISCONNECT_TIME=10/g" \
     \
     -e "s/^#RABBITMQ_HOST=example.com/RABBITMQ_HOST=10.141.11.56/g" \
     -e "s/^#RABBITMQ_PORT=6666/RABBITMQ_PORT=5672/g" \
     -e "s/^#RABBITMQ_USER=user/RABBITMQ_USER=communication/g" \
     -e "s/^#RABBITMQ_PASS=pass/RABBITMQ_PASS=\"communication\"/g" \
-    -e "s/^#RABBITMQ_VHOST=\"\/\"/RABBITMQ_VHOST=\"communication\"/g" \
+    -e "s/^#RABBITMQ_VHOST=null/RABBITMQ_VHOST=\"communication\"/g" \
     \
     -e "s/^COMMUNICATION_PROTOCOL_ENABLE=false/COMMUNICATION_PROTOCOL_ENABLE=true/g" \
     -e "s/^TRANSACTION_COMMUNICATION_PROTOCOL_ENABLE=false/TRANSACTION_COMMUNICATION_PROTOCOL_ENABLE=true/g" \

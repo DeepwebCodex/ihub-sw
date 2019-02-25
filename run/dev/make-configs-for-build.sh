@@ -50,7 +50,7 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^#RABBITMQ_PORT=6666/RABBITMQ_PORT=5672/g" \
     -e "s/^#RABBITMQ_USER=user/RABBITMQ_USER=communication/g" \
     -e "s/^#RABBITMQ_PASS=pass/RABBITMQ_PASS=\"communication\"/g" \
-    -e "s/^#RABBITMQ_VHOST=\"\/\"/RABBITMQ_VHOST=\"communication\"/g" \
+    -e "s/^#RABBITMQ_VHOST=null/RABBITMQ_VHOST=\"communication\"/g" \
     \
     -e "s/^COMMUNICATION_PROTOCOL_ENABLE=false/COMMUNICATION_PROTOCOL_ENABLE=true/g" \
     -e "s/^TRANSACTION_COMMUNICATION_PROTOCOL_ENABLE=false/TRANSACTION_COMMUNICATION_PROTOCOL_ENABLE=true/g" \
