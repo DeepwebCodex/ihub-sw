@@ -17,9 +17,9 @@ variables:
   HTTP_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   HTTPS_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   RANCHER_STACK_NAME: "ihub"
-  GITLAB_INFRASTRUCTURE_PROJECT_PATH: "integrations/ihub-grid"
+  GITLAB_INFRASTRUCTURE_PROJECT_PATH: "integrations/ihub-grid/ihub-sw"
   GITLAB_INFRASTRUCTURE_PROJECT_NAME: "ihub-sw-infrastructure"
-  GITLAB_PROJECT_PATH: "integrations/ihub-grid"
+  GITLAB_PROJECT_PATH: "integrations/ihub-grid/ihub-sw"
   GITLAB_PROJECT_NAME: "ihub-sw"
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
   CONTAINER_POSTGRES_IMAGE: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:postgres
