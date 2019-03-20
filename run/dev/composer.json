@@ -107,8 +107,6 @@
         "ihub-grid/packages/seamless-wallets/endorphina": "dev-dev",
         "ihub-grid/packages/seamless-wallets/micro-gaming": "dev-dev",
         "ihub-grid/packages/seamless-wallets/international_lottery": "dev-dev",
-        "ihub-grid/packages/seamless-wallets/fast-bet": "dev-dev",
-        "ihub-grid/packages/seamless-wallets/best-gold-bet": "dev-dev",
         "ihub-grid/packages/seamless-wallets/softswiss": "dev-dev",
         "ihub-grid/packages/queue-communication-protocol": "dev-dev",
         "ihub-grid/packages/finance-monitoring": "dev-dev"

@@ -55,25 +55,11 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'sslmode' => 'prefer',
-            'schema' => 'ihub','options'   => [
-                \PDO::ATTR_TIMEOUT => 5,
-            ],
-        ],
-        'erlybet' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST_ERLYBET', ''),
-            'port' => env('DB_PORT_ERLYBET', ''),
-            'database' => env('DB_DATABASE_ERLYBET', ''),
-            'username' => env('DB_USERNAME_ERLYBET', ''),
-            'password' => env('DB_PASSWORD_ERLYBET', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'sslmode' => 'prefer',
+            'schema' => 'ihub',
             'options' => [
                 \PDO::ATTR_TIMEOUT => 5,
             ],
         ],
-
     ],
 
     /*
@@ -105,9 +91,9 @@ return [
         'cluster' => false,
 
         'default' => [
-            'host' => env('REDIS_HOST', 'localhost'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', 6379),
+            'host' => env('REDIS_HOST'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT'),
             'database' => 0,
         ]
 
