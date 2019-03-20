@@ -26,11 +26,11 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=http:\/\/ihub.favbet.dev/g" \
     -e "s/^REDIS_PORT=6666/REDIS_PORT=6379/g" \
     -e "s/^REDIS_PREFIX=redis_prefix/REDIS_PREFIX=ihubGrid:ihub-sw/g" \
     \
-    -e "s/^#LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server.elkr.rancher.internal/g" \
-    -e "s/^#LOG_RABBIT_PORT=6666/LOG_RABBIT_PORT=5672/g" \
-    -e "s/^#LOG_RABBIT_USER=log_rabbit/LOG_RABBIT_USER=ihub/g" \
-    -e "s/^#LOG_RABBIT_PASS=log_rabbit/LOG_RABBIT_PASS=\"ihub\"/g" \
-    -e "s/^#LOG_RABBIT_VHOST=\"\/\"/LOG_RABBIT_VHOST=\"ihub_sw\"/g" \
+    -e "s/^LOG_RABBIT_HOST=example.com/LOG_RABBIT_HOST=rabbitmq-server.elkr.rancher.internal/g" \
+    -e "s/^LOG_RABBIT_PORT=6666/LOG_RABBIT_PORT=5672/g" \
+    -e "s/^LOG_RABBIT_USER=log_rabbit/LOG_RABBIT_USER=ihub/g" \
+    -e "s/^LOG_RABBIT_PASS=log_rabbit/LOG_RABBIT_PASS=\"ihub\"/g" \
+    -e "s/^LOG_RABBIT_VHOST=null/LOG_RABBIT_VHOST=\"ihub_sw\"/g" \
     \
     -e "s/^API_ACCOUNT_ROH_HOST=example.com/API_ACCOUNT_ROH_HOST=de2ef01d.dev.favorit/g" \
     -e "s/^API_ACCOUNT_ROH_PORT=6666/API_ACCOUNT_ROH_PORT=10102/g" \
