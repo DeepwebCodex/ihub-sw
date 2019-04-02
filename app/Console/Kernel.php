@@ -6,7 +6,8 @@ use App\Components\LoadEnvironmentVariables;
 use App\Console\Commands\CancelPendingOperations;
 use App\Console\Commands\MaksymenkoTest;
 use App\Console\Commands\OptimizeLogIndices;
-use App\Console\Commands\TransactionHistoryStatusUpdate;
+use App\Console\Commands\TransactionHistoryUpdatePendingTransactions;
+use App\Console\Commands\TransactionHistoryUpdateTransactionsStatus;
 use iHubGrid\MicroGaming\Commands\MicrogamingSequence;
 use iHubGrid\MicroGaming\Commands\Orion\Commit;
 use iHubGrid\MicroGaming\Commands\Orion\EndGame;
@@ -40,7 +41,8 @@ class Kernel extends ConsoleKernel
         CancelPendingOperations::class,
         MaksymenkoTest::class,
         OptimizeLogIndices::class,
-        TransactionHistoryStatusUpdate::class,
+        TransactionHistoryUpdatePendingTransactions::class,
+        TransactionHistoryUpdateTransactionsStatus::class,
     ];
 
     /**

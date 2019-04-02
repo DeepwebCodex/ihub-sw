@@ -10,25 +10,21 @@ use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 use Illuminate\Console\Command;
 use Stringy\StaticStringy;
 
-/**
- * Class TransactionHistoryStatusUpdate
- * @package App\Console\Commands
- */
-class TransactionHistoryStatusUpdate extends Command
+class TransactionHistoryUpdatePendingTransactions extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'transaction-history:status-update {batch=80 : One time operations batch size} {expire=2 : expiration date limit in days}';
+    protected $signature = 'transaction-history:pending-status-update {batch=80 : One time operations batch size} {expire=2 : expiration date limit in days}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update transaction history records status with info from accounting';
+    protected $description = 'Update pending transactions records status with info from accounting';
 
     protected $batchSize = 80;
     protected $expirationDays = 1; //set in days
