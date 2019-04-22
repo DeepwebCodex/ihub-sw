@@ -17,9 +17,9 @@ variables:
   HTTP_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   HTTPS_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   RANCHER_STACK_NAME: "ihub"
-  GITLAB_INFRASTRUCTURE_PROJECT_PATH: "integrations/ihub-grid"
+  GITLAB_INFRASTRUCTURE_PROJECT_PATH: "integrations/ihub-grid/ihub-sw"
   GITLAB_INFRASTRUCTURE_PROJECT_NAME: "ihub-sw-infrastructure"
-  GITLAB_PROJECT_PATH: "integrations/ihub-grid"
+  GITLAB_PROJECT_PATH: "integrations/ihub-grid/ihub-sw"
   GITLAB_PROJECT_NAME: "ihub-sw"
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
   CONTAINER_POSTGRES_IMAGE: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:postgres
@@ -137,8 +137,8 @@ variables:
     - ./
     expire_in: 1 hour
   script:
-    - rm -rf .gitlab-ci.yml .gitignore .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md apidoc.json codeception.yml
-    - rm -rf ./tests ./run/dev ./run/prod ./.git
+    - rm -rf .gitlab-ci.yml .gitignore .gitattributes composer.lock phpspec.yml phpunit.xml readme.md apidoc.json codeception.yml
+    - rm -rf ./tests ./run/dev ./.git
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
 
 .template_build_docker_image: &template_build_docker_image
@@ -176,9 +176,8 @@ fail_build_for_incorrect_branches:
     - echo "======= !!!!! ======= **************** ======= !!!!! ======="
     - echo "======= !!!!! ======= **************** ======= !!!!! ======="
     - exit 1
-  only:
-    - /^(?![a-zA-Z]{1,6}-[0-9]{1,5}-).*$/
   except:
+    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
     - dev
     - /^dev-[0-9]{1,5}$/
     - master
@@ -289,10 +288,9 @@ to_servers:deploy:dev:
     - upgrade --environment dev-ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - export http_proxy=$HTTP_PROXY_FOR_DEV
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
-    - apk update && apk upgrade && apk add --update curl
     - >-
-      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_DEV}/deployments.json"
-      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
+      curl -sS -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_DEV}/deployments.json"
+      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}"
       -H 'Content-Type: application/json'
       -d
       "{
@@ -302,7 +300,7 @@ to_servers:deploy:dev:
       \"description\": \"https://gitlab.favorit/$GITLAB_PROJECT_PATH/$GITLAB_PROJECT_NAME/pipelines/${CI_PIPELINE_ID}\",
       \"user\": \"${GITLAB_USER_EMAIL}\"
       }
-      }"
+      }" | jq
   except:
     - /^dev-[0-9]{1,5}$/
 
@@ -440,10 +438,9 @@ build_docker_image:prod:
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service webserver --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTPS_PROXY_FOR_PROD
-    - apk update && apk upgrade && apk add --update curl
     - >-
-      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_PROD}/deployments.json"
-      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
+      curl -sS -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_PROD}/deployments.json"
+      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}"
       -H 'Content-Type: application/json'
       -d
       "{
@@ -453,7 +450,7 @@ build_docker_image:prod:
       \"description\": \"https://gitlab.favorit/$GITLAB_PROJECT_PATH/$GITLAB_PROJECT_NAME/pipelines/${CI_PIPELINE_ID}\",
       \"user\": \"${GITLAB_USER_EMAIL}\"
       }
-      }"
+      }" | jq
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service webserver-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   only:
