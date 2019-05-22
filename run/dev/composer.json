@@ -71,6 +71,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/softswiss.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/bonus-shop.git"
         }
     ],
     "require": {
@@ -96,7 +100,8 @@
         "ihub-grid/seamless-wallets-endorphina": "dev-dev",
         "ihub-grid/seamless-wallets-micro-gaming": "dev-dev",
         "ihub-grid/seamless-wallets-international_lottery": "dev-dev",
-        "ihub-grid/seamless-wallets-softswiss": "dev-dev"
+        "ihub-grid/seamless-wallets-softswiss": "dev-dev",
+        "ihub-grid/seamless-wallets-bonus-shop": "dev-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
