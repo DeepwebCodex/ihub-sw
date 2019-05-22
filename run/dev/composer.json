@@ -70,7 +70,11 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/softswiss.git"
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/softswiss.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
         },
         {
             "type": "vcs",
@@ -101,6 +105,7 @@
         "ihub-grid/seamless-wallets-micro-gaming": "dev-dev",
         "ihub-grid/seamless-wallets-international_lottery": "dev-dev",
         "ihub-grid/seamless-wallets-softswiss": "dev-dev",
+        "ihub-grid/packages-finance-monitoring": "dev-dev",
         "ihub-grid/seamless-wallets-bonus-shop": "dev-dev"
     },
     "require-dev": {
