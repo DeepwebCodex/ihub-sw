@@ -16,7 +16,11 @@ class Params
     public $userId;
     public $cashdeskId;
     public $partnerId;
-    public $userIP = "127.0.0.1";
+    public $userIP = '127.0.0.1';
+    public $wallet_account_id = 'EUR';
+    public $wallet_id = 'ziwidif@rootfest.net';
+    public $payment_instrument_id = 3;
+    public $comment;
 
 
     public function __construct($integration = null)
@@ -36,11 +40,33 @@ class Params
             return $this->balance;
         }
 
+        return $this->userBalance();
+    }
+
+    public function userBalance()
+    {
         return IntegrationUser::get($this->userId, 0, 'tests')->getBalance();
+    }
+
+    public function userCurrency()
+    {
+        return IntegrationUser::get($this->userId, 0, 'tests')->getCurrency();
+    }
+
+    public function user(): IntegrationUser
+    {
+        return IntegrationUser::get($this->userId, 0, 'tests');
     }
 
     public function getBalanceInCents(): int
     {
         return 100 * $this->getBalance();
+    }
+
+    /** for bonuses */
+
+    public function getBonusBalance()
+    {
+        return IntegrationUser::get($this->userId, 0, 'tests')->getBonusBalance();
     }
 }
