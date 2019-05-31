@@ -21,6 +21,7 @@ class Params
     public $wallet_account_id = 'EUR';
     public $wallet_id = 'ziwidif@rootfest.net';
     public $payment_instrument_id = 3;
+    public $comment;
 
 
     public function __construct($integration = null)
@@ -61,5 +62,12 @@ class Params
     public function getBalanceInCents(): int
     {
         return 100 * $this->getBalance();
+    }
+
+    /** for bonuses */
+
+    public function getBonusBalance()
+    {
+        return IntegrationUser::get($this->userId, 0, 'tests')->getBonusBalance();
     }
 }

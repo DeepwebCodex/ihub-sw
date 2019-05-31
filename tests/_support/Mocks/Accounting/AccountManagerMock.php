@@ -78,6 +78,23 @@ class AccountManagerMock
                             "wallet_id" => $this->params->wallet_id,
                             "partner_id" => $this->params->partnerId
                         ],
+                        [
+                            '__record' => 'wallet',
+                            'user_id' => $this->params->userId,
+                            'payment_instrument_id' => $this->params->payment_instrument_id,
+                            'payment_instrument_name' => 'Bonuses',
+                            'wallet_id' => $this->params->wallet_id,
+                            'wallet_account_id' => 'BNS',
+                            'partner_id' => 1,
+                            'currency' => 'BNS',
+                            'is_default' => 0,
+                            'is_active' => 0,
+                            'deposit' => $balance,
+                            'creation_date' => '2016-11-08 14:51:34',
+                            'payment_instrument_transfer_time' => '00.00',
+                            'cashdesk' => $this->params->cashdeskId,
+                            'deleted' => 0
+                        ]
                     ],
                     "user_services" => $this->getServices(),
                     "first_name" => "Апаропао",
@@ -356,11 +373,13 @@ class AccountManagerMock
 
     private function getComment($object_id, $amount, $direction)
     {
-        return json_encode([
+        $default = json_encode([
             "comment" => ($direction ? 'Withdrawal' : 'Deposit') . ' for object_id: ' . $object_id,
             "amount" => $amount,
             "currency" => $this->params->currency
         ]);
+
+        return $this->params->comment ?? $default;
     }
 
     /**
