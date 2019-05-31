@@ -177,14 +177,14 @@ class AccountManagerMock
     }
 
 
-    public function pendingWithdraw($object_id, $operation_id, $amount, $balance = null)
+    public function pendingWithdraw($object_id, $operation_id, $amount, $balance = null, $comment=null)
     {
 
         $balance = $balance ?? $this->params->getBalance();
 
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
-                $this->pendingGiftParams($object_id, $amount, self::BET))
+                $this->pendingGiftParams($object_id, $amount, self::BET, $comment))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
                     $operation_id, $amount, $balance));
@@ -192,12 +192,12 @@ class AccountManagerMock
         return $this;
     }
 
-    public function completedWithdraw($object_id, $operation_id, $amount, $balance = null)
+    public function completedWithdraw($object_id, $operation_id, $amount, $balance = null, $comment=null)
     {
 
         $balance = $balance ?? $this->params->getBalance();
 
-        $params = $this->getCompletedParams($object_id, self::BET, $operation_id, $amount);
+        $params = $this->getCompletedParams($object_id, self::BET, $operation_id, $amount, $comment);
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs($params)
             ->andReturn(
@@ -300,7 +300,7 @@ class AccountManagerMock
         return $this;
     }
 
-    private function getCompletedParams($object_id, $direction, $operation_id, $amount)
+    private function getCompletedParams($object_id, $direction, $operation_id, $amount, $comment=null)
     {
         return [
             $this->params->userId,
@@ -308,7 +308,7 @@ class AccountManagerMock
             $direction,
             $object_id,
             $this->params->currency,
-            $this->getComment($object_id, $amount, $direction),
+            $comment ?? $this->getComment($object_id, $amount, $direction),
             $this->params->userIP
         ];
     }
@@ -334,7 +334,7 @@ class AccountManagerMock
         ];
     }
 
-    private function pendingGiftParams($object_id, $amount, $direction)
+    private function pendingGiftParams($object_id, $amount, $direction, $comment=null)
     {
         return [
             TransactionRequest::STATUS_PENDING,
@@ -345,7 +345,7 @@ class AccountManagerMock
             $this->params->currency,
             $direction,
             $object_id,
-            $this->getComment($object_id, $amount, $direction),
+            $comment ?? $this->getComment($object_id, $amount, $direction),
             $this->params->partnerId,
             $this->params->userIP,
             $this->params->payment_instrument_id,
