@@ -70,7 +70,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/softswiss.git"
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/softswiss.git"
         }
     ],
     "require": {
