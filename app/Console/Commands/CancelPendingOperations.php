@@ -16,7 +16,7 @@ class CancelPendingOperations extends Command
      *
      * @var string
      */
-    protected $signature = 'accounting:cancel-pending {batch=80 : One time operations batch size} {expire=2 : expiration date limit in days}';
+    protected $signature = 'accounting:cancel-pending {batch=80 : One time operations batch size} {expire=2 : expiration date limit in days} {--partner_id=1 : Partner id} {--cashdesk_id=-5 : Cashdesk id}';
 
     /**
      * The console command description.
@@ -48,6 +48,9 @@ class CancelPendingOperations extends Command
         $this->batchSize = (int)$this->argument('batch');
         $this->expirationDays = (int)$this->argument('expire');
 
+        $partnerId = (int)$this->option('partner_id');
+        $cashdeskId = (int)$this->option('cashdesk_id');
+
         $expirationDate = Carbon::now()->subDay($this->expirationDays)->format('Y-m-d H:m:s');
         $expirationDateTo = Carbon::now()->subHour()->format('Y-m-d H:m:s');
 
@@ -60,6 +63,8 @@ class CancelPendingOperations extends Command
         }
 
         try {
+
+            app('AccountManager')->selectAccounting($partnerId, $cashdeskId);
 
             $operations = app('AccountManager')->getOperationByQuery([
                 'select' => ['id', 'object_id', 'service_id'],
