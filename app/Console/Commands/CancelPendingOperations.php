@@ -16,7 +16,7 @@ class CancelPendingOperations extends Command
      *
      * @var string
      */
-    protected $signature = 'accounting:cancel-pending {batch=80 : One time operations batch size} {expire=2 : expiration date limit in days} {--partner_id=1 : Partner id} {--cashdesk_id=-5 : Cashdesk id}';
+    protected $signature = 'accounting:cancel-pending {batch=80 : One time operations batch size} {expire=2 : expiration date limit in days} {--partner_id= : Partner id} {--cashdesk_id= : Cashdesk id}';
 
     /**
      * The console command description.
@@ -64,7 +64,9 @@ class CancelPendingOperations extends Command
 
         try {
 
-            app('AccountManager')->selectAccounting($partnerId, $cashdeskId);
+            if ($partnerId && $cashdeskId) {
+                app('AccountManager')->selectAccounting($partnerId, $cashdeskId);
+            }
 
             $operations = app('AccountManager')->getOperationByQuery([
                 'select' => ['id', 'object_id', 'service_id'],
