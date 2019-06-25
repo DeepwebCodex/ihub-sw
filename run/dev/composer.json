@@ -30,6 +30,10 @@
         },
         {
             "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
+        },
+        {
+            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/seamless-wallet-core.git"
         },
         {
@@ -74,7 +78,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/bonus-shop.git"
         }
     ],
     "require": {
@@ -91,6 +95,7 @@
         "ihub-grid/packages-queue-communication-protocol": "dev-dev",
         "ihub-grid/packages-dynamic-scheduler": "dev-dev",
         "ihub-grid/packages-accounting": "dev-dev",
+        "ihub-grid/packages-finance-monitoring": "dev-dev",
         "ihub-grid/seamless-wallet-core": "dev-dev",
         "ihub-grid/seamless-wallets-euro-games-tech": "dev-dev",
         "ihub-grid/seamless-wallets-bet-games": "dev-dev",
@@ -101,7 +106,7 @@
         "ihub-grid/seamless-wallets-micro-gaming": "dev-dev",
         "ihub-grid/seamless-wallets-international_lottery": "dev-dev",
         "ihub-grid/seamless-wallets-softswiss": "dev-dev",
-        "ihub-grid/packages-finance-monitoring": "dev-dev"
+        "ihub-grid/seamless-wallets-bonus-shop": "dev-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
