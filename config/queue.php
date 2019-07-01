@@ -43,7 +43,20 @@ return [
         'mysterion_transactions' => [
             'driver' => 'rabbitmq',
             'queue' => env('RABBITMQ_MYSTERION_QUEUE', 'mysterion_transactions'),
-        ]
+        ],
+
+        'loose_transaction_publisher' => [
+            'driver' => 'rabbitmq',
+            'queue' => null,
+            'rabbit_config' => 'loose_transaction_publisher_rabbitmq',
+        ],
+
+        'loose_transaction' => [
+            'driver' => 'rabbitmq',
+            'queue' => 'loose_transaction',
+            'rabbit_config' => 'loose_transaction_subscriber_rabbitmq',
+            'handler' => 'iHubGrid\SeamlessWalletCore\Components\LooseTransactionSubscriber',
+        ],
 
     ],
 
