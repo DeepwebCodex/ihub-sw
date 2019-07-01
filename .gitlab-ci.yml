@@ -233,28 +233,6 @@ mocked:test:feature:
   only:
   - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-#e2e:test:feature:
-#  <<: *template_dev
-#  <<: *template_test
-#  allow_failure: true
-#  before_script:
-#    - export http_proxy=""
-#    - export https_proxy=""
-#    - bash ./run/feature/make-configs-for-tests-mocks-off.sh
-#  only:
-#    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
-
-rancher:test:feature:
-  <<: *template_dev
-  <<: *template_test
-  allow_failure: true
-  before_script:
-    - export http_proxy=""
-    - export https_proxy=""
-    - bash ./run/feature/make-configs-for-tests-rancher.sh
-  only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
-
 # ====================================== END FEATURE ==============================
 
 # ====================================== DEV ======================================
@@ -378,7 +356,6 @@ mocked:on_dev_configs:test:prod:
   <<: *template_dev
   <<: *template_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  allow_failure: true
   before_script:
     - export http_proxy=""
     - export https_proxy=""
@@ -388,21 +365,6 @@ mocked:on_dev_configs:test:prod:
     - master-pp
     - /^master-[0-9]{1,5}$/
     - tags
-
-#e2e:on_dev_configs:test:prod:
-#  <<: *template_dev
-#  <<: *template_test
-#  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-#  allow_failure: true
-#  before_script:
-#    - export http_proxy=$HTTP_PROXY_FOR_PROD
-#    - export https_proxy=$HTTPS_PROXY_FOR_PROD
-#    - bash ./run/prod/make-configs-for-tests-mocks-off.sh
-#  only:
-#    - master
-#    - master-pp
-#    - /^master-[0-9]{1,5}$/
-#    - tags
 
 prepare_for_build_docker_image:prod:
   <<: *template_prod
