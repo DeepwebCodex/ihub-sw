@@ -4,6 +4,7 @@
 namespace Testing\Accounting;
 
 use iHubGrid\Accounting\Users\IntegrationUser;
+use iHubGrid\SeamlessWalletCore\Transactions\TransactionRequest;
 
 class Params
 {

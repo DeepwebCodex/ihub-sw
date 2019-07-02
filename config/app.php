@@ -171,6 +171,7 @@ return [
         \iHubGrid\SoftSwiss\SoftSwissServiceProvider::class,
         \iHubGrid\MicroGaming\MicroGamingServiceProvider::class,
         \iHubGrid\InternationalLottery\InternationalLotteryServiceProvider::class,
+        \iHubGrid\BingoBoom\BingoBoomServiceProvider::class,
     ],
 
     /*
