@@ -30,10 +30,6 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
-        },
-        {
-            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/seamless-wallet-core.git"
         },
         {
@@ -66,10 +62,6 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/best-gold-bet.git"
-        },
-        {
-            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/novobet.git"
         },
         {
@@ -95,7 +87,6 @@
         "ihub-grid/packages-queue-communication-protocol": "dev-dev",
         "ihub-grid/packages-dynamic-scheduler": "dev-dev",
         "ihub-grid/packages-accounting": "dev-dev",
-        "ihub-grid/packages-finance-monitoring": "dev-dev",
         "ihub-grid/seamless-wallet-core": "dev-dev",
         "ihub-grid/seamless-wallets-euro-games-tech": "dev-dev",
         "ihub-grid/seamless-wallets-bet-games": "dev-dev",
