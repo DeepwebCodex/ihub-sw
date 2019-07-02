@@ -30,6 +30,10 @@
         },
         {
             "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
+        },
+        {
+            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/seamless-wallet-core.git"
         },
         {
@@ -87,6 +91,7 @@
         "ihub-grid/packages-queue-communication-protocol": "dev-master",
         "ihub-grid/packages-dynamic-scheduler": "dev-master",
         "ihub-grid/packages-accounting": "dev-master",
+        "ihub-grid/packages-finance-monitoring": "dev-master",
         "ihub-grid/seamless-wallet-core": "dev-master",
         "ihub-grid/seamless-wallets-euro-games-tech": "dev-master",
         "ihub-grid/seamless-wallets-bet-games": "dev-master",
