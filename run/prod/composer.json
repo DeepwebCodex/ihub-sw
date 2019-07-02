@@ -30,6 +30,10 @@
         },
         {
             "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
+        },
+        {
+            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/seamless-wallet-core.git"
         },
         {
@@ -62,15 +66,15 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/best-gold-bet.git"
-        },
-        {
-            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/novobet.git"
         },
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/softswiss.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/bonus-shop.git"
         }
     ],
     "require": {
@@ -87,6 +91,7 @@
         "ihub-grid/packages-queue-communication-protocol": "2.*",
         "ihub-grid/packages-dynamic-scheduler": "1.*",
         "ihub-grid/packages-accounting": "1.*",
+        "ihub-grid/packages-finance-monitoring": "1.*",
         "ihub-grid/seamless-wallet-core": "1.*",
         "ihub-grid/seamless-wallets-euro-games-tech": "1.*",
         "ihub-grid/seamless-wallets-bet-games": "1.*",
@@ -96,7 +101,8 @@
         "ihub-grid/seamless-wallets-endorphina": "1.*",
         "ihub-grid/seamless-wallets-micro-gaming": "1.*",
         "ihub-grid/seamless-wallets-international_lottery": "1.*",
-        "ihub-grid/seamless-wallets-softswiss": "2.*"
+        "ihub-grid/seamless-wallets-softswiss": "2.*",
+        "ihub-grid/seamless-wallets-bonus-shop": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
