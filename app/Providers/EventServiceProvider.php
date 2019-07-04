@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Components\Transactions\LooseTransactionEventSubscriber;
 use App\Components\Transactions\TransactionEventSubscriber;
+use iHubGrid\CashdeskWallet\Subscribers\CashDeskTransactionsSubscriber;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider

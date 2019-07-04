@@ -85,3 +85,10 @@ if (! function_exists('transliterate')) {
     }
 
 }
+
+if (!function_exists('ini')) {
+    function ini(string $key = null, $default = null)
+    {
+        return array_get($_SERVER['ini'], $key, $default);
+    }
+}

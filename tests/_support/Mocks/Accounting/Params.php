@@ -24,6 +24,7 @@ class Params
     public $comment;
 
 
+
     public function __construct($integration = null)
     {
         $this->enableMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
