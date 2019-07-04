@@ -20,12 +20,6 @@ sed -i -e "s/^APP_ENV=null/APP_ENV=testing/g" \
     -e "s/^DB_USERNAME=pgsql/DB_USERNAME=u_ihub/g" \
     -e "s/^DB_PASSWORD=pgsql/DB_PASSWORD=\"b9c3q46-9bv08967\"/g" \
     \
-    -e "s/^DB_HOST_ERLYBET=example.com/DB_HOST_ERLYBET=de2db02d.dev.favorit/g" \
-    -e "s/^DB_PORT_ERLYBET=5432/DB_PORT_ERLYBET=5432/g" \
-    -e "s/^DB_DATABASE_ERLYBET=db/DB_DATABASE_ERLYBET=erlybet/g" \
-    -e "s/^DB_USERNAME_ERLYBET=pgsql/DB_USERNAME_ERLYBET=g_develop/g" \
-    -e "s/^DB_PASSWORD_ERLYBET=pgsql/DB_PASSWORD_ERLYBET=hb8g7t34fbv09to/g" \
-    \
     -e "s/^#REDIS_HOST=example.com/REDIS_HOST=de2red01d.dev.favorit/g" \
     -e "s/^#REDIS_PORT=6666/REDIS_PORT=6379/g" \
     -e "s/^#REDIS_PREFIX=redis_prefix/REDIS_PREFIX=ihubGrid:ihub-sw/g" \
@@ -52,12 +46,9 @@ sed -i -e "s/^APP_ENV=null/APP_ENV=testing/g" \
     -e "s/^API_CONFAGENT_ROH_HOST=example.com/API_CONFAGENT_ROH_HOST=de2ef01d.dev.favorit/g" \
     -e "s/^API_CONFAGENT_ROH_PORT=6666/API_CONFAGENT_ROH_PORT=10102/g" \
     \
-    -e "s/^API_CASHDESK_HOST=example.com/API_CASHDESK_HOST=icms.ihub.favbet.devel/g" \
-    -e "s/^API_CASHDESK_PORT=6666/API_CASHDESK_PORT=80/g" \
-    \
     ./.env.testing
 
 echo "" >> ./.env.testing
-echo "TEST_USER_ID=1555" >> ./.env.testing
+echo "TEST_USER_ID=89" >> ./.env.testing
 echo "TEST_PARTNER_ID=1" >> ./.env.testing
 echo "TEST_CASHEDESK=-5" >> ./.env.testing

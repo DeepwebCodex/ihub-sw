@@ -1,8 +1,6 @@
 stages:
 - change_log
 - compile_project
-- migrate_database_empty_db
-- migrate_database_empty_db_2
 - migrate_database
 - test_project
 - make_documentation
@@ -19,9 +17,9 @@ variables:
   HTTP_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   HTTPS_PROXY_FOR_DEV: "http://10.141.11.57:3128"
   RANCHER_STACK_NAME: "ihub"
-  GITLAB_INFRASTRUCTURE_PROJECT_PATH: "integrations/ihub-grid"
+  GITLAB_INFRASTRUCTURE_PROJECT_PATH: "integrations/ihub-grid/ihub-sw"
   GITLAB_INFRASTRUCTURE_PROJECT_NAME: "ihub-sw-infrastructure"
-  GITLAB_PROJECT_PATH: "integrations/ihub-grid"
+  GITLAB_PROJECT_PATH: "integrations/ihub-grid/ihub-sw"
   GITLAB_PROJECT_NAME: "ihub-sw"
   RANCHER_REST_WRAPPER_IMAGE: $CI_REGISTRY/integrations/ihub-grid/rancher-rest-wrapper:master
   CONTAINER_POSTGRES_IMAGE: $CI_REGISTRY/$GITLAB_INFRASTRUCTURE_PROJECT_PATH/$GITLAB_INFRASTRUCTURE_PROJECT_NAME:postgres
@@ -60,7 +58,10 @@ variables:
   artifacts:
     name: $CI_BUILD_REF_NAME
     paths:
-      - ./
+      - ./vendor
+      - ./tests
+      - ./bootstrap
+      - ./storage
     expire_in: 1 hour
   before_script:
     - mkdir ~/.ssh
@@ -75,6 +76,7 @@ variables:
     - export http_proxy=$HTTP_PROXY_FOR_DEV
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
     - cp ./run/dev/composer.json ./composer.json
+    - rm -rf composer.lock
     - composer install --no-ansi --no-interaction --no-progress -o -a
     - composer dump-autoload --no-interaction -o -a
     - composer show -i
@@ -82,8 +84,6 @@ variables:
 .template_migrate_dev: &template_migrate_dev
   stage: migrate_database
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
-  variables:
-    GIT_STRATEGY: none
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
@@ -100,8 +100,6 @@ variables:
 .template_migrate_prod: &template_migrate_prod
   stage: migrate_database
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  variables:
-    GIT_STRATEGY: none
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
@@ -118,19 +116,17 @@ variables:
 .template_test: &template_test
   stage: test_project
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
-  variables:
-    GIT_STRATEGY: none
   artifacts:
     when: on_failure
     name: $CI_BUILD_REF_NAME
     paths:
       - ./tests/_output
       - ./storage/logs
+      - ./run/
       - ./.env.testing
     expire_in: 1 hour
   script:
     - ./vendor/bin/codecept run api
-    - ./vendor/bin/codecept run functional
     - ./vendor/bin/codecept run unit
 
 .template_prepare_before_build: &template_prepare_before_build
@@ -141,8 +137,8 @@ variables:
     - ./
     expire_in: 1 hour
   script:
-    - rm -rf .gitlab-ci.yml .gitignore .gitattributes composer.json composer.lock phpspec.yml phpunit.xml readme.md apidoc.json codeception.yml
-    - rm -rf ./tests ./run/dev ./run/prod ./.git
+    - rm -rf .gitlab-ci.yml .gitignore .gitattributes composer.lock phpspec.yml phpunit.xml readme.md apidoc.json codeception.yml
+    - rm -rf ./tests ./run/dev ./.git
     - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
 
 .template_build_docker_image: &template_build_docker_image
@@ -180,9 +176,8 @@ fail_build_for_incorrect_branches:
     - echo "======= !!!!! ======= **************** ======= !!!!! ======="
     - echo "======= !!!!! ======= **************** ======= !!!!! ======="
     - exit 1
-  only:
-    - /^(?![a-zA-Z]{1,6}-[0-9]{1,5}-).*$/
   except:
+    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
     - dev
     - /^dev-[0-9]{1,5}$/
     - master
@@ -192,7 +187,7 @@ fail_build_for_incorrect_branches:
 
 # ====================================== FEATURE ==================================
 
-compile_feature:
+compile:feature:
   <<: *template_dev
   <<: *template_compile
   <<: *template_compile_dev
@@ -200,16 +195,22 @@ compile_feature:
   - export http_proxy=$HTTP_PROXY_FOR_DEV
   - export https_proxy=$HTTPS_PROXY_FOR_DEV
   - cp ./run/feature/composer.json ./composer.json
+  - rm -rf composer.lock
   - composer install --no-ansi --no-interaction --no-progress -o -a
   - composer dump-autoload --no-interaction -o -a
   - composer show -i
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-migrate_feature:blank_db:
+cumulative:migrate:feature:
   <<: *template_dev
-  stage: migrate_database_empty_db
-  image: $CONTAINER_PHP_FPM_IMAGE_DEV
+  <<: *template_migrate_dev
+  only:
+    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
+
+blank_db:migrate:feature:
+  <<: *template_dev
+  <<: *template_migrate_dev
   services:
   - name: $CONTAINER_POSTGRES_IMAGE
     alias: postgres
@@ -218,75 +219,45 @@ migrate_feature:blank_db:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: mysecretpassword
   before_script:
-    - bash ./run/dev/make-configs-for-migrate-in-CI.sh
-  script:
-    - php artisan migrate
-    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
+    - bash ./run/feature/make-configs-for-migrate-in-CI.sh
   only:
     - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-migrate_feature:
-  <<: *template_dev
-  <<: *template_migrate_dev
-  only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
-
-test_feature:
+mocked:test:feature:
   <<: *template_dev
   <<: *template_test
   before_script:
   - export http_proxy=""
   - export https_proxy=""
-  - bash ./run/dev/make-configs-for-tests.sh
+  - bash ./run/feature/make-configs-for-tests.sh
   only:
   - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 
-test_feature_e2e:
-  <<: *template_dev
-  <<: *template_test
-  allow_failure: true
-  before_script:
-    - export http_proxy=""
-    - export https_proxy=""
-    - bash ./run/dev/make-configs-for-tests-mocks-off.sh
-  only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,4}-.*$/
-
-test_feature_rancher:
-  <<: *template_dev
-  <<: *template_test
-  allow_failure: true
-  before_script:
-    - export http_proxy=""
-    - export https_proxy=""
-    - bash ./run/dev/make-configs-for-tests-rancher.sh
-  only:
-    - /^[a-zA-Z]{1,6}-[0-9]{1,5}-.*$/
 # ====================================== END FEATURE ==============================
 
 # ====================================== DEV ======================================
 
-compile_dev:
+compile:dev:
   <<: *template_dev
   <<: *template_compile
   <<: *template_compile_dev
 
-migrate_dev:
+migrate:dev:
   <<: *template_dev
   <<: *template_migrate_dev
 
-prepare_for_build_docker_image_dev:
+prepare_for_build_docker_image:dev:
   <<: *template_dev
   <<: *template_prepare_before_build
   image: $CONTAINER_PHP_FPM_IMAGE_DEV
   before_script:
     - sh ./run/dev/make-configs-for-build.sh ${CI_PIPELINE_ID}
 
-build_docker_image_dev:
+docker_image:build:dev:
   <<: *template_dev
   <<: *template_build_docker_image
 
-deploy_to_servers_dev:
+to_servers:deploy:dev:
   <<: *template_dev
   <<: *template_deploy
   script:
@@ -295,10 +266,9 @@ deploy_to_servers_dev:
     - upgrade --environment dev-ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - export http_proxy=$HTTP_PROXY_FOR_DEV
     - export https_proxy=$HTTPS_PROXY_FOR_DEV
-    - apk update && apk upgrade && apk add --update curl
     - >-
-      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_DEV}/deployments.json"
-      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
+      curl -sS -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_DEV}/deployments.json"
+      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}"
       -H 'Content-Type: application/json'
       -d
       "{
@@ -308,7 +278,7 @@ deploy_to_servers_dev:
       \"description\": \"https://gitlab.favorit/$GITLAB_PROJECT_PATH/$GITLAB_PROJECT_NAME/pipelines/${CI_PIPELINE_ID}\",
       \"user\": \"${GITLAB_USER_EMAIL}\"
       }
-      }"
+      }" | jq
   except:
     - /^dev-[0-9]{1,5}$/
 
@@ -316,7 +286,7 @@ deploy_to_servers_dev:
 
 # ====================================== PROD ======================================
 
-change_log_master:
+change_log:master:
   <<: *template_prod
   stage: change_log
   script:
@@ -329,7 +299,7 @@ change_log_master:
     - master-pp
     - /^master-[0-9]{1,5}$/
 
-change_log_tag:
+change_log:tag:
   <<: *template_prod
   stage: change_log
   script:
@@ -340,7 +310,7 @@ change_log_tag:
   only:
     - tags
 
-compile_prod:
+compile:prod:
   <<: *template_prod
   <<: *template_compile
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
@@ -355,38 +325,7 @@ compile_prod:
     - mkdir -p ./storage/app/
     - git describe --tags $(git rev-list --tags --max-count=1)  > ./storage/app/version.txt
 
-migrate_prod:blank_db:
-  <<: *template_prod
-  stage: migrate_database_empty_db
-  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  dependencies: []
-  services:
-  - name: $CONTAINER_POSTGRES_IMAGE
-    alias: postgres
-  variables:
-    POSTGRES_DB: ihub
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: mysecretpassword
-  before_script:
-    - mkdir ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - git config core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
-    - echo "$COMPOSER_INSTALL_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa || true
-    - export http_proxy=$HTTP_PROXY_FOR_PROD
-    - export https_proxy=$HTTPS_PROXY_FOR_PROD
-  script:
-    - cp ./run/prod/composer.json ./composer.json
-    - rm -rf composer.lock
-    - composer install --no-ansi --no-interaction --no-progress -o -a
-    - bash ./run/prod/decode.sh
-    - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
-    - bash ./run/prod/make-configs-for-migrate-in-CI.sh
-    - chmod -Rf 777 ./storage && chmod -Rf 777 ./bootstrap/cache || true
-    - php artisan migrate --force
-    - php artisan migrate:status | grep -m1 '| N' && exit 1 || exit 0
-
-migrate_prod_manual:
+cumulative:migrate:manual:prod:
   <<: *template_prod
   <<: *template_migrate_prod
   only:
@@ -398,11 +337,25 @@ migrate_prod_manual:
     - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
   when: manual
 
-test_on_dev_configs_prod:
+blank_db:migrate:prod:
+  <<: *template_prod
+  <<: *template_migrate_prod
+  services:
+  - name: $CONTAINER_POSTGRES_IMAGE
+    alias: postgres
+  variables:
+    POSTGRES_DB: ihub
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: mysecretpassword
+  before_script:
+    - bash ./run/prod/decode.sh
+    - bash ./run/prod/make-configs.sh ${CI_PIPELINE_ID}
+    - bash ./run/prod/make-configs-for-migrate-in-CI.sh
+
+mocked:on_dev_configs:test:prod:
   <<: *template_dev
   <<: *template_test
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  allow_failure: true
   before_script:
     - export http_proxy=""
     - export https_proxy=""
@@ -413,22 +366,7 @@ test_on_dev_configs_prod:
     - /^master-[0-9]{1,5}$/
     - tags
 
-test_on_dev_configs_e2e_prod:
-  <<: *template_dev
-  <<: *template_test
-  image: $CONTAINER_PHP_FPM_IMAGE_MASTER
-  allow_failure: true
-  before_script:
-    - export http_proxy=$HTTP_PROXY_FOR_PROD
-    - export https_proxy=$HTTPS_PROXY_FOR_PROD
-    - bash ./run/prod/make-configs-for-tests-mocks-off.sh
-  only:
-    - master
-    - master-pp
-    - /^master-[0-9]{1,5}$/
-    - tags
-
-prepare_for_build_docker_image_prod:
+prepare_for_build_docker_image:prod:
   <<: *template_prod
   <<: *template_prepare_before_build
   image: $CONTAINER_PHP_FPM_IMAGE_MASTER
@@ -438,13 +376,13 @@ prepare_for_build_docker_image_prod:
   except:
   - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
-build_docker_image_prod:
+build_docker_image:prod:
   <<: *template_prod
   <<: *template_build_docker_image
   except:
     - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
-manual_deploy_to_10_servers_cron_prod:
+10_cron_servers:deploy:manual:prod:
   <<: *template_prod
   <<: *template_deploy
   script:
@@ -454,7 +392,7 @@ manual_deploy_to_10_servers_cron_prod:
   except:
     - /^v[0-9]{2}.[0-9]{2}.[0-9]{1,5}.[0-9]{1,3}-external-partners*$/
 
-manual_deploy_to_20_servers_prod:
+20_all_servers:deploy:manual:prod:
   <<: *template_prod
   <<: *template_deploy
   script:
@@ -462,10 +400,9 @@ manual_deploy_to_20_servers_prod:
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service webserver --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - export http_proxy=$HTTP_PROXY_FOR_PROD
     - export https_proxy=$HTTPS_PROXY_FOR_PROD
-    - apk update && apk upgrade && apk add --update curl
     - >-
-      curl -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_PROD}/deployments.json"
-      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}" -i
+      curl -sS -X POST "https://api.newrelic.com/v2/applications/${NEWRELIC_DEPLOYMENT_APP_ID_PROD}/deployments.json"
+      -H "X-Api-Key:${NEWRELIC_DEPLOYMENT_API_KEY}"
       -H 'Content-Type: application/json'
       -d
       "{
@@ -475,7 +412,7 @@ manual_deploy_to_20_servers_prod:
       \"description\": \"https://gitlab.favorit/$GITLAB_PROJECT_PATH/$GITLAB_PROJECT_NAME/pipelines/${CI_PIPELINE_ID}\",
       \"user\": \"${GITLAB_USER_EMAIL}\"
       }
-      }"
+      }" | jq
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service webserver-system --new-sidekicks0-image $CONTAINER_CODE_IMAGE
     - upgrade --environment ihub --stack $RANCHER_STACK_NAME --service php-supervisor --new-sidekicks0-image $CONTAINER_CODE_IMAGE
   only:

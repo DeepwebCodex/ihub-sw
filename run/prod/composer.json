@@ -10,67 +10,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/dynamic-scheduler.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git"
-        },
-        {
-            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/packages/error-handler.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallet-core.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/euro-games-tech.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/bet-games.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/mr-slotty.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/fundist.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/endorphina.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/micro-gaming.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/international-lottery.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/fast-bet.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/best-gold-bet.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/queue-communication-protocol.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/best-gold-bet.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/novobet.git"
         },
         {
             "type": "vcs",
@@ -78,42 +18,98 @@
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/seamless-wallets/softswiss.git"
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/dynamic-scheduler.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/queue-communication-protocol.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/accounting.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/packages/finance-monitoring.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/seamless-wallet-core.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/euro-games-tech.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/bet-games.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/mr-slotty.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/fundist.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/endorphina.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/micro-gaming.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/international-lottery.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/novobet.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/softswiss.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/bonus-shop.git"
         }
     ],
     "require": {
         "php": ">=7.1.3",
-        "laravel/framework": "5.6.*",
+        "laravel/framework": "5.7.*",
         "predis/predis": "~1.0",
         "kozz/laravel-guzzle-provider": "~6.0",
         "Nathanmac/Parser": "4.*",
         "spatie/laravel-fractal": "^1.9",
         "danielstjules/stringy": "~2.3",
         "doctrine/dbal": "^2.5",
-        "ihub-grid/packages/dynamic-scheduler": "1.*",
-        "ihub-grid/packages/accounting": "1.*",
-        "ihub-grid/error-handler": "1.*",
-        "ihub-grid/packages/health-check": "1.*",
-        "ihub-grid/packages/seamless-wallet-core": "1.*",
-        "ihub-grid/packages/seamless-wallets/euro-games-tech": "1.*",
-        "ihub-grid/packages/seamless-wallets/bet-games": "1.*",
-        "ihub-grid/packages/seamless-wallets/mr-slotty": "1.*",
-        "ihub-grid/packages/seamless-wallets/fundist": "1.*",
-        "ihub-grid/packages/seamless-wallets/novobet": "1.*",
-        "ihub-grid/packages/seamless-wallets/endorphina": "1.*",
-        "ihub-grid/packages/seamless-wallets/micro-gaming": "1.*",
-        "ihub-grid/packages/seamless-wallets/international_lottery": "1.*",
-        "ihub-grid/packages/seamless-wallets/fast-bet": "1.*",
-        "ihub-grid/packages/seamless-wallets/best-gold-bet": "1.*",
-        "ihub-grid/packages/seamless-wallets/softswiss": "2.*",
-        "ihub-grid/packages/queue-communication-protocol": "2.*"
+        "ihub-grid/packages-error-handler": "1.*",
+        "ihub-grid/packages-health-check": "1.*",
+        "ihub-grid/packages-queue-communication-protocol": "2.*",
+        "ihub-grid/packages-dynamic-scheduler": "1.*",
+        "ihub-grid/packages-accounting": "1.*",
+        "ihub-grid/packages-finance-monitoring": "1.*",
+        "ihub-grid/seamless-wallet-core": "1.*",
+        "ihub-grid/seamless-wallets-euro-games-tech": "1.*",
+        "ihub-grid/seamless-wallets-bet-games": "1.*",
+        "ihub-grid/seamless-wallets-mr-slotty": "1.*",
+        "ihub-grid/seamless-wallets-fundist": "1.*",
+        "ihub-grid/seamless-wallets-novobet": "1.*",
+        "ihub-grid/seamless-wallets-endorphina": "1.*",
+        "ihub-grid/seamless-wallets-micro-gaming": "1.*",
+        "ihub-grid/seamless-wallets-international_lottery": "1.*",
+        "ihub-grid/seamless-wallets-softswiss": "2.*",
+        "ihub-grid/seamless-wallets-bonus-shop": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "^7.0",
         "filp/whoops": "~2",
-        "codeception/codeception": "~2",
+        "codeception/codeception": "2.5.2",
         "codeception/specify": "*",
         "codeception/verify": "*",
         "symfony/css-selector": "~4",
