@@ -12,6 +12,7 @@ class AccountManagerMock
 {
     const BET = 1;
     const WIN = 0;
+    private const COMMENT = 'dummy-comment';
 
     private $withdraw_operation_id = 9543958;
     private $deposit_operation_id = 2834034;
@@ -162,11 +163,11 @@ class AccountManagerMock
 
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
-                $this->getPendingParams($object_id, $amount, self::BET))
+                $this->getPendingParams($object_id, $amount, self::BET, TransactionRequest::TRANS_BET))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
                     $this->withdraw_operation_id, $amount, $balance));
-        $params = $this->getCompletedParams($object_id, self::BET, $this->withdraw_operation_id, $amount);
+        $params = $this->getCompletedParams($object_id, self::BET, $this->withdraw_operation_id, $amount, TransactionRequest::TRANS_BET);
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs($params)
             ->andReturn(
@@ -177,14 +178,14 @@ class AccountManagerMock
     }
 
 
-    public function pendingWithdraw($object_id, $operation_id, $amount, $balance = null, $comment=null)
+    public function pendingWithdraw($object_id, $operation_id, $amount, $balance = null, $comment = self::COMMENT)
     {
 
         $balance = $balance ?? $this->params->getBalance();
 
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
-                $this->pendingGiftParams($object_id, $amount, self::BET, $comment))
+                $this->pendingGiftParams($object_id, $amount, self::BET, TransactionRequest::TRANS_BET, $comment))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::BET, $object_id,
                     $operation_id, $amount, $balance));
@@ -192,12 +193,12 @@ class AccountManagerMock
         return $this;
     }
 
-    public function completedWithdraw($object_id, $operation_id, $amount, $balance = null, $comment=null)
+    public function completedWithdraw($object_id, $operation_id, $amount, $balance = null, $comment = self::COMMENT)
     {
 
         $balance = $balance ?? $this->params->getBalance();
 
-        $params = $this->getCompletedParams($object_id, self::BET, $operation_id, $amount, $comment);
+        $params = $this->getCompletedParams($object_id, self::BET, $operation_id, $amount, TransactionRequest::TRANS_BET, $comment);
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs($params)
             ->andReturn(
@@ -212,7 +213,7 @@ class AccountManagerMock
 
         $balance = $balance ?? $this->params->getBalance();
 
-        $params = $this->getCompletedParams($object_id, self::WIN, $operation_id, $amount);
+        $params = $this->getCompletedParams($object_id, self::WIN, $operation_id, $amount, TransactionRequest::TRANS_WIN);
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs($params)
             ->andReturn(
@@ -233,13 +234,13 @@ class AccountManagerMock
         return $this;
     }
 
-    public function pendingDeposit($object_id, $operation_id, $amount, $balance = null)
+    public function pendingDeposit($object_id, $operation_id, $amount, $balance = null, $comment = self::COMMENT)
     {
         $balance = $balance ?? $this->params->getBalance();
 
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
-                $this->pendingGiftParams($object_id, $amount, self::WIN))
+                $this->pendingGiftParams($object_id, $amount, self::WIN, TransactionRequest::TRANS_WIN, $comment))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN, $object_id,
                     $operation_id, $amount, $balance));
@@ -273,34 +274,34 @@ class AccountManagerMock
     {
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
-                $this->getPendingParams($object_id, $amount, self::BET))
+                $this->getPendingParams($object_id, $amount, self::BET, TransactionRequest::TRANS_BET))
             ->andThrow(new GenericApiHttpException(400, '{"code":1027,"message":""}', [], null, [], 1027));
 
         return $this;
     }
 
-    public function win($object_id, $amount, $balance = null)
+    public function win($object_id, $amount, $balance = null, $winTransactionType = TransactionRequest::TRANS_WIN)
     {
         if (is_null($balance)) {
             $balance = $this->params->getBalance();
         }
         $this->mock->shouldReceive('createTransaction')
             ->withArgs(
-                $this->getPendingParams($object_id, $amount, self::WIN))
+                $this->getPendingParams($object_id, $amount, self::WIN,  $winTransactionType))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_PENDING, self::WIN,
                     $object_id, $this->deposit_operation_id, $amount, $balance));
 
         $this->mock->shouldReceive('commitTransaction')
             ->withArgs(
-                $this->getCompletedParams($object_id, self::WIN, $this->deposit_operation_id, $amount))
+                $this->getCompletedParams($object_id, self::WIN, $this->deposit_operation_id, $amount, $winTransactionType))
             ->andReturn(
                 $this->returnOk(TransactionRequest::STATUS_COMPLETED, self::WIN, $object_id, $this->deposit_operation_id, $amount, $balance));
 
         return $this;
     }
 
-    private function getCompletedParams($object_id, $direction, $operation_id, $amount, $comment=null)
+    private function getCompletedParams($object_id, $direction, $operation_id, $amount, $transactionType, $comment = self::COMMENT)
     {
         return [
             $this->params->userId,
@@ -308,7 +309,9 @@ class AccountManagerMock
             $direction,
             $object_id,
             $this->params->currency,
-            $comment ?? $this->getComment($object_id, $amount, $direction),
+            $comment === self::COMMENT
+                ? TransactionRequest::generateComment($direction, $object_id, $amount, $this->params->currency, $transactionType)
+                : $comment,
             $this->params->userIP
         ];
     }
@@ -317,24 +320,7 @@ class AccountManagerMock
      * status, service_id, cashdesk, user_id, amount,
      * currency, direction, object_id, comment, partner_id
      */
-    private function getPendingParams($object_id, $amount, $direction, $status = TransactionRequest::STATUS_PENDING)
-    {
-        return [
-            $status,
-            $this->params->serviceId,
-            $this->params->cashdeskId,
-            $this->params->userId,
-            $amount,
-            $this->params->currency,
-            $direction,
-            $object_id,
-            $this->getComment($object_id, $amount, $direction),
-            null,
-            $this->params->userIP,
-        ];
-    }
-
-    private function pendingGiftParams($object_id, $amount, $direction, $comment=null)
+    private function getPendingParams($object_id, $amount, $direction, $transactionType): array
     {
         return [
             TransactionRequest::STATUS_PENDING,
@@ -345,7 +331,26 @@ class AccountManagerMock
             $this->params->currency,
             $direction,
             $object_id,
-            $comment ?? $this->getComment($object_id, $amount, $direction),
+            TransactionRequest::generateComment($direction, $object_id, $amount, $this->params->currency, $transactionType),
+            null,
+            $this->params->userIP,
+        ];
+    }
+
+    private function pendingGiftParams($object_id, $amount, $direction, $transactionType, $comment = self::COMMENT)
+    {
+        return [
+            TransactionRequest::STATUS_PENDING,
+            $this->params->serviceId,
+            $this->params->cashdeskId,
+            $this->params->userId,
+            $amount,
+            $this->params->currency,
+            $direction,
+            $object_id,
+            $comment === self::COMMENT
+                ? TransactionRequest::generateComment($direction, $object_id, $amount, $this->params->currency, $transactionType)
+                : $comment,
             $this->params->partnerId,
             $this->params->userIP,
             $this->params->payment_instrument_id,
