@@ -55,7 +55,13 @@ class CancelPendingOperations extends Command
         $expirationDateTo = Carbon::now()->subHour()->format('Y-m-d H:m:s');
 
         //Service ids for deep integration are excluded from query to prevent uncorrectable results
-        $services = $this->getServices([config('integrations.inspired.service_id'), config('integrations.virtualBoxing.service_id')]);
+        $services = $this->getServices(
+            [
+                config('integrations.inspired.service_id'),
+                config('integrations.virtualBoxing.service_id'),
+                config('integrations.bonus_shop.service_id')
+            ]
+        );
 
         if (!$services) {
             $this->error("There is no services found in config \n");
