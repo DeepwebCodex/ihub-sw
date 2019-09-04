@@ -75,6 +75,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/bonus-shop.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/tvbet.git"
         }
     ],
     "require": {
@@ -102,7 +106,8 @@
         "ihub-grid/seamless-wallets-micro-gaming": "1.*",
         "ihub-grid/seamless-wallets-international_lottery": "1.*",
         "ihub-grid/seamless-wallets-softswiss": "2.*",
-        "ihub-grid/seamless-wallets-bonus-shop": "1.*"
+        "ihub-grid/seamless-wallets-bonus-shop": "1.*",
+        "ihub-grid/seamless-wallets-tvbet": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
