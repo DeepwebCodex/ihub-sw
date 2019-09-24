@@ -122,7 +122,7 @@
         "ihub-grid/seamless-wallets-bingo-boom": "dev-dev",
         "ihub-grid/packages-cashdesk-wallet": "dev-dev",
         "ihub-grid/seamless-wallets-tvbet": "dev-dev",
-        "ihub-grid/seamless-wallets-paly_n_go": "dev-dev"
+        "ihub-grid/seamless-wallets-play_n_go": "dev-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
