@@ -87,6 +87,10 @@
         {
             "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/tvbet.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/playngo.git"
         }
     ],
     "require": {
@@ -117,8 +121,8 @@
         "ihub-grid/seamless-wallets-bonus-shop": "dev-dev",
         "ihub-grid/seamless-wallets-bingo-boom": "dev-dev",
         "ihub-grid/packages-cashdesk-wallet": "dev-dev",
-        "ihub-grid/seamless-wallets-tvbet": "dev-dev"
-
+        "ihub-grid/seamless-wallets-tvbet": "dev-dev",
+        "ihub-grid/seamless-wallets-paly_n_go": "dev-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
