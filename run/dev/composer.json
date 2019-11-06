@@ -90,6 +90,10 @@
         },
         {
             "type": "vcs",
+            "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/bingo-boom.git"
+        },
+        {
+            "type": "vcs",
             "url": "git@gitlab.favorit:integrations/ihub-grid/ihub-sw/seamless-wallets/oryx-hub.git"
         }
     ],
@@ -119,9 +123,9 @@
         "ihub-grid/seamless-wallets-international_lottery": "dev-dev",
         "ihub-grid/seamless-wallets-softswiss": "dev-dev",
         "ihub-grid/seamless-wallets-bonus-shop": "dev-dev",
+        "ihub-grid/seamless-wallets-tvbet": "dev-dev",
         "ihub-grid/seamless-wallets-bingo-boom": "dev-dev",
         "ihub-grid/packages-cashdesk-wallet": "dev-dev",
-        "ihub-grid/seamless-wallets-tvbet": "dev-dev",
         "ihub-grid/seamless-wallets-oryx-hub": "dev-dev"
     },
     "require-dev": {
