@@ -17,20 +17,7 @@ class Params
     public $cashdeskId;
     public $partnerId;
     public $userIP = "127.0.0.1";
-    public $walletData = [
-        0 => [
-            'payment_instrument_id' => 3,
-            'wallet_id' => "ziwidif@rootfest.net",
-            'wallet_account_id' => "EUR",
-            'partner_id' => 34
-        ],
-        1 => [
-            'payment_instrument_id' => 4,
-            'wallet_id' => "usd@rootfest.net",
-            'wallet_account_id' => "USD",
-            'partner_id' => 35
-        ]
-    ];
+    public $walletData;
     public $paymentInstrumentId;
     public $walletId;
     public $walletAccountId;
@@ -39,9 +26,22 @@ class Params
     public function __construct($integration = null)
     {
         $this->enableMock = env('ACCOUNT_MANAGER_MOCK_IS_ENABLED') ?? true;
-
         $this->userId = (int)env('TEST_USER_ID');
         $this->cashdeskId = (int)env('TEST_CASHEDESK');
+        $this->walletData = [
+            0 => [
+                'payment_instrument_id' => 3,
+                'wallet_id' => "ziwidif@rootfest.net",
+                'wallet_account_id' => "EUR",
+                'partner_id' => env('TEST_PARTNER_ID')
+            ],
+            1 => [
+                'payment_instrument_id' => 4,
+                'wallet_id' => "usd@rootfest.net",
+                'wallet_account_id' => "USD",
+                'partner_id' => 35
+            ]
+        ];
         $this->partnerId = $this->walletData[0]['partner_id'];
         $this->paymentInstrumentId = $this->walletData[0]['payment_instrument_id'];
         $this->walletId = $this->walletData[0]['wallet_id'];
