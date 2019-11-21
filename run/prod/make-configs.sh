@@ -60,6 +60,9 @@ sed -i -e "s/^APP_URL=http:\/\/localhost/APP_URL=https:\/\/ihub.bet/g" \
     -e "s/^#API_ACCOUNT_ROH_HOST_59=example.com/API_ACCOUNT_ROH_HOST_59=e-proxy.iq2.favorit/g" \
     -e "s/^#API_ACCOUNT_ROH_PORT_59=6666/API_ACCOUNT_ROH_PORT_59=10002/g" \
     \
+    -e "s/^#API_ACCOUNT_ROH_HOST_91=example.com/API_ACCOUNT_ROH_HOST_91=e-proxy.en2.favorit/g" \
+    -e "s/^#API_ACCOUNT_ROH_PORT_91=6666/API_ACCOUNT_ROH_PORT_91=10002/g" \
+    \
     -e "s/^GAME_SESSION_API_LOGIN=game_session_api_login/GAME_SESSION_API_LOGIN=\"t4ewr\$zAF@#u6esp\"/g" \
     -e "s/^GAME_SESSION_API_PASSWORD=game_session_api_password/GAME_SESSION_API_PASSWORD=\"t4ewr\$zAF@#u6esp\"/g" \
     -e "s/^GAME_SESSION_STORAGE_SECRET=game_session_storage_secret/GAME_SESSION_STORAGE_SECRET=gBEWPkx4yGDCZj0P/g" \
