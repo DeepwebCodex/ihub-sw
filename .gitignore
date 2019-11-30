@@ -19,3 +19,5 @@ tests/_output/*
 /composer.lock
 /resources/soap/
 /composer.json
+
+.DS_Store
